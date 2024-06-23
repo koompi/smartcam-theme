@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/layouts/Header";
+import { MainNavbar } from "@/components/layouts/Main-Navbar";
+import { Menubar } from "@/components/layouts/Menubar";
 
 const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Smartcam Group",
@@ -51,7 +58,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={poppins.className} suppressHydrationWarning>
+        <Header />
+        <MainNavbar />
+        <Menubar />
         {children}
       </body>
     </html>

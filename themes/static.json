@@ -1,0 +1,37 @@
+{
+  "colors": {
+    "primary": {
+      "50": "#E7ECFA",
+      "100": "#CFD8F5",
+      "200": "#9FB2EB",
+      "300": "#6F8BE0",
+      "400": "#3F65D6",
+      "500": "#0F3ECC",
+      "600": "#0C32A3",
+      "700": "#09257A",
+      "800": "#061952",
+      "900": "#030C29",
+      "DEFAULT": "#0F3ECC"
+    },
+    "focus": "#0F3ECC",
+    "danger": {
+      "50": "#EE2224",
+      "100": "#FCD3D3",
+      "200": "#F8A7A7",
+      "300": "#F57A7C",
+      "400": "#F14E50",
+      "500": "#EE2224",
+      "600": "#BE1B1D",
+      "700": "#8F1416",
+      "800": "#5F0E0E",
+      "900": "#300707",
+      "DEFAULT": "#EE2224"
+    }
+  },
+  "background": {
+    "backgroundImage": {
+      "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+      "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))"
+    }
+  }
+}
