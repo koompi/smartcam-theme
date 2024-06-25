@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/layouts/Header";
 import { MainNavbar } from "@/components/layouts/Main-Navbar";
 import { Menubar } from "@/components/layouts/Menubar";
+import MainFooter from "@/components/layouts/MainFooter";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -63,6 +64,7 @@ export default function RootLayout({
         <MainNavbar />
         <Menubar />
         {children}
+        <MainFooter />
       </body>
     </html>
   );

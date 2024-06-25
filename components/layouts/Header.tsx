@@ -7,9 +7,9 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <div className="flex justify-between w-full items-center gap-x-3 bg-gradient-to-r from-primary to-primary-800 px-6 py-1">
+    <div className="flex justify-between w-full items-center gap-x-3 bg-gradient-to-r from-primary to-primary-800 px-6 py-1 text-foreground">
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 ">
           <Icon icon="solar:phone-bold" fontSize={21} />
           <p>(+855) 17 819 419</p>
         </div>

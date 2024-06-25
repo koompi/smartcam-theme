@@ -11,6 +11,14 @@ import {
   Spacer,
   Badge,
   Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Card,
+  CardBody,
+  Tab,
+  Tabs,
+  Tooltip,
 } from "@nextui-org/react";
 import Link from "next/link";
 import React from "react";
@@ -29,9 +37,22 @@ export const MainNavbar = () => {
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Button isIconOnly radius="full" color="primary" variant="flat">
-            <Icon icon="solar:widget-5-bold" fontSize={21} />
-          </Button>
+          <Popover placement="bottom" showArrow={true}>
+            <PopoverTrigger>
+              <Button isIconOnly radius="full" color="primary" variant="flat">
+                <Icon icon="solar:widget-5-bold" fontSize={21} />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="p-0">
+              <ul className=" p-6 list-none flex flex-col gap-3 text-lg">
+                <Tooltip content=" Computer" placement="right-end">
+                  <li>Computer</li>
+                </Tooltip>
+                <li>Printers</li>
+                <li>Accessories</li>
+              </ul>
+            </PopoverContent>
+          </Popover>
         </NavbarItem>
         <NavbarItem>
           <Input
