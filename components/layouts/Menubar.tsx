@@ -18,6 +18,7 @@ import React, { FC } from "react";
 import PopoverFilterWrapper from "../CustomComponent/PopoverFilterWrapper";
 import PriceSlider from "../CustomComponent/PriceSlider";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { usePathname } from "next/navigation";
 
 interface SubMenuType {
   url: string;
@@ -40,6 +41,8 @@ export const SubMenu: FC<SubMenuType> = (props) => {
 };
 
 export const Menubar = () => {
+  const pathname = usePathname();
+
   const aboutus_menu = [
     {
       url: "#",
@@ -157,32 +160,24 @@ export const Menubar = () => {
     },
   ];
 
+  // console.log("path", pathname);
+
   return (
-    <Navbar shouldHideOnScroll maxWidth="full" className="bg-foreground h-12">
+    <Navbar maxWidth="full" className="bg-foreground h-12">
       <NavbarContent
         className="hidden sm:flex gap-4 text-primary"
         justify="center"
       >
-        <NavbarItem isActive>
-          <Link href="#">Home</Link>
+        <NavbarItem isActive={pathname === "/"}>
+          <Link href="/">Home</Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link href="#" aria-current="page">
+        <NavbarItem isActive={pathname === "/products"}>
+          <Link href="/products" aria-current="page">
             Products
           </Link>
         </NavbarItem>
         <NavbarItem>
-          {/* <Link href="#">Special Offer</Link> */}
-          {/* <Button
-            as={Link}
-            href="#"
-            radius="lg"
-            variant="light"
-            className="bg-transparent "
-          >
-            Special Offer
-          </Button> */}
-          <a
+          <Link
             href="#_"
             className="relative px-5 py-2 font-medium text-white group"
           >
@@ -191,7 +186,7 @@ export const Menubar = () => {
             <span className="absolute bottom-0 left-0 hidden w-10 h-20 transition-all duration-100 ease-out transform -translate-x-8 translate-y-10 bg-primary/60 -rotate-12"></span>
             <span className="absolute bottom-0 right-0 hidden w-10 h-20 transition-all duration-100 ease-out transform translate-x-10 translate-y-8 bg-primary/60 -rotate-12"></span>
             <span className="relative"> Special Offer</span>
-          </a>
+          </Link>
         </NavbarItem>
         <NavbarItem>
           <Popover placement="bottom" showArrow offset={12}>

@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layouts/Header";
 import { MainNavbar } from "@/components/layouts/Main-Navbar";
-import { Menubar } from "@/components/layouts/Menubar";
 import MainFooter from "@/components/layouts/MainFooter";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -60,9 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className} suppressHydrationWarning>
-        <Header />
         <MainNavbar />
-        <Menubar />
         {children}
         <MainFooter />
       </body>
