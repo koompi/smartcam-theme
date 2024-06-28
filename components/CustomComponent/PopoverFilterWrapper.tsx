@@ -28,7 +28,7 @@ const PopoverFilterWrapper = React.forwardRef<
     <Popover ref={ref} isOpen={isOpen} onOpenChange={onOpenChange} {...props}>
       <PopoverTrigger>
         <Button
-          className="border-default-200 text-default-foreground"
+          className="border-gray-200 text-gray-foreground"
           endContent={<Icon icon="solar:alt-arrow-down-linear" />}
           variant="bordered"
           radius="full"
@@ -37,11 +37,11 @@ const PopoverFilterWrapper = React.forwardRef<
         </Button>
       </PopoverTrigger>
       <PopoverContent className="flex max-w-xs flex-col items-start gap-2 px-4 pt-4">
-        <span className="mb-2 text-medium font-medium text-default-600">
+        <span className="mb-2 text-medium font-medium text-gray-600">
           {title}
         </span>
         <div className="w-full px-2">{children}</div>
-        <Divider className="mt-3 bg-default-100" />
+        <Divider className="mt-3 bg-gray-100" />
         <div className="flex w-full justify-end gap-2 py-2">
           <Button
             size="sm"

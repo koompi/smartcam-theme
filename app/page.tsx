@@ -8,6 +8,7 @@ import SectionListProducts from "./components/SectionListProducts";
 import ProductCard from "@/components/globals/ProductCard";
 import { products } from "@/data/products";
 import Banner from "./components/Banner";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -157,7 +158,8 @@ export const BrandsScrolling = () => {
     <section className="mx-auto w-full bg-foreground h-36 flex items-center justify-start">
       <ScrollingBanner shouldPauseOnHover gap="40px">
         {logo.map((b, idx) => (
-          <div
+          <Link
+            href="/products"
             key={idx}
             className="flex items-center justify-center text-foreground w-20"
           >
@@ -167,7 +169,7 @@ export const BrandsScrolling = () => {
               src={`/images/brands/${b.src}`}
               className="w-full h-full object-cover"
             />
-          </div>
+          </Link>
         ))}
       </ScrollingBanner>
     </section>

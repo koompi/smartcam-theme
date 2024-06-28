@@ -53,7 +53,7 @@ const ProductCard: FC<ProductCardProps> = ({
         <Chip
           size="sm"
           color="danger"
-          className="rounded-br-lg absolute top-0 left-0"
+          className="rounded-br-lg absolute top-0 left-0 z-20"
           radius="none"
           variant="shadow"
         >
@@ -62,7 +62,7 @@ const ProductCard: FC<ProductCardProps> = ({
         </Chip>
       )}
       <CardBody>
-        <Image alt="products" src={thumbnail} />
+        <Image alt="products" src={thumbnail} isZoomed />
         <Spacer y={2} />
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }, (_, i) => {
@@ -73,7 +73,7 @@ const ProductCard: FC<ProductCardProps> = ({
                 key={i}
                 className={cn(
                   "text-lg sm:text-xl",
-                  isSelected ? "text-danger" : "text-default-300"
+                  isSelected ? "text-danger" : "text-gray-300"
                 )}
                 icon="solar:star-bold"
               />
@@ -83,7 +83,7 @@ const ProductCard: FC<ProductCardProps> = ({
         <Spacer y={2} />
         <h2 className="text-black font-medium text-lg line-clamp-2">{title}</h2>
         <Spacer y={3} />
-        <ul className="list-disc text-default-500 text-sm pl-6">
+        <ul className="list-disc text-gray-500 text-sm pl-6">
           <li>CPU: Apple M3 Pro chip 12-core</li>
           <li>OS: macOS</li>
           <li>RAM: 36GB unified memory</li>
@@ -138,7 +138,7 @@ const ProductCard: FC<ProductCardProps> = ({
           <Icon
             icon="solar:heart-outline"
             fontSize={30}
-            className="text-default-500"
+            className="text-gray-500"
           />
         </Button>
       </CardFooter>

@@ -5,6 +5,7 @@
 @layer base {
   html {
     @apply text-black !important;
+    scroll-behavior: smooth !important;
   }
 }
 

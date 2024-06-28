@@ -60,7 +60,7 @@ const PriceSliderPip: React.FC<PriceSliderPipProps> = ({
     if (animation === "height") {
       return (
         <span
-          className="relative h-12 w-1 rounded-full bg-default-100 after:absolute after:bottom-0 after:h-0 after:w-full after:rounded-full after:bg-primary after:transition-all after:!duration-500 after:content-[''] data-[in-range=true]:after:h-full"
+          className="relative h-12 w-1 rounded-full bg-gray-100 after:absolute after:bottom-0 after:h-0 after:w-full after:rounded-full after:bg-primary after:transition-all after:!duration-500 after:content-[''] data-[in-range=true]:after:h-full"
           data-in-range={isInRange}
           style={{
             height,
@@ -75,7 +75,7 @@ const PriceSliderPip: React.FC<PriceSliderPipProps> = ({
         style={{
           background: isInRange
             ? "hsl(var(--nextui-primary-500))"
-            : "hsl(var(--nextui-default-100))",
+            : "hsl(var(--nextui-gray-100))",
           height,
         }}
       />
@@ -174,7 +174,7 @@ const PriceSlider = React.forwardRef<HTMLDivElement, PriceSliderProps>(
           <Input
             aria-label="Min price"
             labelPlacement="outside"
-            startContent={<p className="text-default-400">$</p>}
+            startContent={<p className="text-gray-400">$</p>}
             type="number"
             value={`${value[0]}`}
             onValueChange={onMinInputValueChange}
@@ -183,7 +183,7 @@ const PriceSlider = React.forwardRef<HTMLDivElement, PriceSliderProps>(
           <Input
             aria-label="Max price"
             labelPlacement="outside"
-            startContent={<p className="text-default-400">$</p>}
+            startContent={<p className="text-gray-400">$</p>}
             type="number"
             value={`${value[1]}`}
             onValueChange={onMaxInputValueChange}

@@ -1,15 +1,13 @@
 "use client";
 
 import React from "react";
-import PromotionCard from "../components/PromotionCard";
 import ProductCard from "@/components/globals/ProductCard";
 import { products } from "@/data/products";
 
 const ProductPage = () => {
   return (
-    <main>
-      <PromotionCard />
-      <div className="grid grid-cols-5 place-items-stretch gap-3 px-6 pb-12">
+    <section>
+      <div className="grid grid-cols-5 place-items-stretch gap-3">
         {Array.from(products, (res, idx) => {
           return (
             <ProductCard
@@ -28,7 +26,7 @@ const ProductPage = () => {
           );
         })}
       </div>
-    </main>
+    </section>
   );
 };
 

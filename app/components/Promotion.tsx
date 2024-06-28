@@ -44,7 +44,7 @@ export const Promotion = () => {
                 <h1 className="text-2xl font-semibold text-black">
                   Special Offers
                 </h1>
-                <p className="text-default-600">Enjoy your exclusive price</p>
+                <p className="text-gray-600">Enjoy your exclusive price</p>
                 <Link
                   href="#"
                   className="text-primary flex items-center gap-1 hover:underline absolute bottom-0"
@@ -62,7 +62,7 @@ export const Promotion = () => {
                 <h1 className="text-2xl font-semibold text-black">
                   Newcomer Discount
                 </h1>
-                <p className="text-default-600">Your exclusive price</p>
+                <p className="text-gray-600">Your exclusive price</p>
                 <Link href="#">
                   <ProductCardImageOnly
                     src="apple-m3-black.png"
@@ -103,7 +103,7 @@ export const Promotion = () => {
                 <h1 className="text-2xl font-semibold text-black">
                   Limited Time Offer
                 </h1>
-                <p className="text-default-600">Expired 30days</p>
+                <p className="text-gray-600">Expired 30days</p>
                 <div className="grid grid-cols-3 items-stretch">
                   {promotion.map((res, idx) => {
                     return (
@@ -124,7 +124,7 @@ export const Promotion = () => {
             <Card shadow="none" className="rounded-3xl p-6 bg-background">
               <CardBody>
                 <h1 className="text-2xl font-semibold text-black">New</h1>
-                <p className="text-default-600">New promotion</p>
+                <p className="text-gray-600">New promotion</p>
                 <div className="grid grid-cols-3 items-stretch">
                   {promotion.map((res, idx) => {
                     return (

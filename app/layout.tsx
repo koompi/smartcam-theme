@@ -3,6 +3,7 @@ import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { MainNavbar } from "@/components/layouts/Main-Navbar";
 import MainFooter from "@/components/layouts/MainFooter";
+import { BackToTop } from "@/components/globals/BackTop";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -60,6 +61,7 @@ export default function RootLayout({
       <body className={poppins.className} suppressHydrationWarning>
         <MainNavbar />
         {children}
+        <BackToTop />
         <MainFooter />
       </body>
     </html>

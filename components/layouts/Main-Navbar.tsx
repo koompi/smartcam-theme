@@ -23,7 +23,7 @@ import { Menubar } from "./Menubar";
 
 export const MainNavbar = () => {
   return (
-    <header className="sticky top-0 inset-x-0 flex flex-col flex-wrap z-50 w-full bg-background border-b border-default-200">
+    <header className="sticky top-0 inset-x-0 flex flex-col flex-wrap z-50 w-full bg-background border-b border-gray-200">
       <Header />
       <Navbar maxWidth="full" className="bg-background flex flex-col">
         <NavbarBrand>
