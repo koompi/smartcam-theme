@@ -59,18 +59,18 @@ export const Menubar = () => {
       desc: "Authorized Reseller",
     },
     {
-      url: "#",
+      url: "/contact",
       title: "Contact US",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, quam?",
+      desc: "Considering a new IT purchase? Our sales team is ready to discuss your needs and recommend the perfect solutions.",
     },
     {
-      url: "#",
+      url: "/events",
       title: "Events",
       desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, quam?",
     },
 
     {
-      url: "#",
+      url: "/careers",
       title: "Careers",
       desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, quam?",
     },
@@ -259,7 +259,14 @@ export const Menubar = () => {
           </Popover>
         </NavbarItem>
         <NavbarItem>
-          <Popover placement="bottom" showArrow offset={12}>
+          <Popover
+            placement="bottom"
+            showArrow
+            offset={12}
+            triggerType="grid"
+            shouldFlip
+            triggerScaleOnOpen
+          >
             <PopoverTrigger>
               <Button
                 variant="light"
