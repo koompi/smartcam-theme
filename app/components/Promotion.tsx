@@ -46,7 +46,7 @@ export const Promotion = () => {
                 </h1>
                 <p className="text-gray-600">Enjoy your exclusive price</p>
                 <Link
-                  href="#"
+                  href="/promotions"
                   className="text-primary flex items-center gap-1 hover:underline absolute bottom-0"
                 >
                   See more

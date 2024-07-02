@@ -26,7 +26,7 @@ export const MainNavbar = () => {
     <header className="sticky top-0 inset-x-0 flex flex-col flex-wrap z-50 w-full bg-background border-b border-gray-200">
       <Header />
       <Navbar maxWidth="full" className="bg-background flex flex-col">
-        <NavbarBrand>
+        <NavbarBrand as={Link} href="/">
           <Image alt="logo" src="/images/smartcam-logo.png" className="h-12" />
           <Spacer x={3} />
           <Image
@@ -69,9 +69,11 @@ export const MainNavbar = () => {
         </NavbarContent>
         <NavbarContent justify="end" className="flex items-center gap-6">
           <NavbarItem>
-            <Link href="#">
-              <Badge color="danger" content={9} shape="circle">
-                <p className="text-black">Compare</p>
+            <Link href="/compare">
+              <Badge color="danger" content={3} shape="circle">
+                <p className="text-black hover:underline hover:text-primary">
+                  Compare
+                </p>
               </Badge>
             </Link>
           </NavbarItem>
