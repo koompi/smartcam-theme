@@ -5,7 +5,6 @@ import { Image } from "@nextui-org/react";
 import { Promotion } from "./components/Promotion";
 import ScrollingBanner from "@/components/CustomComponent/ScrollingBrandsBanner";
 import SectionListProducts from "./components/SectionListProducts";
-import ProductCard from "@/components/globals/ProductCard";
 import { products } from "@/data/products";
 import Banner from "./components/Banner";
 import Link from "next/link";
@@ -17,71 +16,13 @@ export default function Home() {
       <BrandsScrolling />
       <Promotion />
       {/* most popular */}
-      <SectionListProducts title="Most Popular">
-        <div className="grid grid-cols-5 place-items-stretch gap-3">
-          {Array.from(products.slice(0, 5), (res, idx) => {
-            return (
-              <ProductCard
-                key={idx}
-                url={res.url}
-                thumbnail={`/images/products/${res.thumbnail}`}
-                title={res.title}
-                desc={undefined}
-                rating={res.rating}
-                price={res?.price}
-                discountType={res?.discountType}
-                promotionPercentage={res?.promotionPercentage}
-                promotionPrice={res?.promotionPrice}
-                totalPrice={res?.totalPrice}
-              />
-            );
-          })}
-        </div>
-      </SectionListProducts>
+      <SectionListProducts title="Most Popular" data={products.slice(0, 7)} />
+
       {/* new arrival */}
-      <SectionListProducts title="New Arrival">
-        <div className="grid grid-cols-5 place-items-stretch gap-3">
-          {Array.from(products.slice(0, 5), (res, idx) => {
-            return (
-              <ProductCard
-                key={idx}
-                url={res.url}
-                thumbnail={`/images/products/${res.thumbnail}`}
-                title={res.title}
-                desc={undefined}
-                rating={res.rating}
-                price={res?.price}
-                discountType={res?.discountType}
-                promotionPercentage={res?.promotionPercentage}
-                promotionPrice={res?.promotionPrice}
-                totalPrice={res?.totalPrice}
-              />
-            );
-          })}
-        </div>
-      </SectionListProducts>
+      <SectionListProducts title="New Arrival" data={products.slice(0, 7)} />
+
       {/* recommended */}
-      <SectionListProducts title="Recommended">
-        <div className="grid grid-cols-5 place-items-stretch gap-3">
-          {Array.from(products.slice(0, 5), (res, idx) => {
-            return (
-              <ProductCard
-                key={idx}
-                url={res.url}
-                thumbnail={`/images/products/${res.thumbnail}`}
-                title={res.title}
-                desc={undefined}
-                rating={res.rating}
-                price={res?.price}
-                discountType={res?.discountType}
-                promotionPercentage={res?.promotionPercentage}
-                promotionPrice={res?.promotionPrice}
-                totalPrice={res?.totalPrice}
-              />
-            );
-          })}
-        </div>
-      </SectionListProducts>
+      <SectionListProducts title="Recommended" data={products.slice(0, 7)} />
     </main>
   );
 }

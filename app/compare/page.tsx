@@ -168,7 +168,7 @@ const ComparisonPage = () => {
                     isIconOnly
                     className="h-20 w-20"
                     as={Link}
-                    href="#"
+                    href="/products"
                   >
                     <Icon icon="solar:add-circle-bold" fontSize={80} />
                   </Button>

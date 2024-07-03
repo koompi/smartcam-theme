@@ -19,11 +19,11 @@ import {
 import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 
-interface ProductCardProps {
+interface WishListProps {
   url: string;
   thumbnail: string;
   title: string;
-  desc: ReactNode;
+  description: ReactNode;
   rating: number;
   price: number;
   discountType: string | null;
@@ -32,11 +32,11 @@ interface ProductCardProps {
   totalPrice: number;
 }
 
-const ProductCard: FC<ProductCardProps> = ({
+const WishingListCard: FC<WishListProps> = ({
   url,
   thumbnail,
   title,
-  desc,
+  description,
   rating,
   price,
   discountType,
@@ -105,13 +105,15 @@ const ProductCard: FC<ProductCardProps> = ({
               Add to Compare
             </DropdownItem>
             <DropdownItem
-              key="buy"
-              color="primary"
-              className="text-primary"
-              description="Get product now"
-              startContent={<Icon icon="solar:bag-3-bold" fontSize={21} />}
+              key="remove"
+              className="text-danger"
+              color="danger"
+              description="Remove from the list"
+              startContent={
+                <Icon icon="solar:trash-bin-2-bold" fontSize={21} />
+              }
             >
-              Buy Now
+              Remove
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -165,23 +167,21 @@ const ProductCard: FC<ProductCardProps> = ({
           )}
         </div>
       </CardBody>
-      <CardFooter className="flex items-center justify-between">
+      <CardFooter className="flex gap-3 items-center justify-between">
         <Button
           radius="full"
           color="primary"
-          startContent={
-            <Icon icon="solar:cart-large-minimalistic-bold" fontSize={21} />
-          }
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
           }}
+          fullWidth
         >
-          Add to Cart
+          Buy Now
         </Button>
         <Button
           isIconOnly
-          variant="light"
+          variant="flat"
           radius="full"
           onClick={(e) => {
             e.preventDefault();
@@ -189,8 +189,8 @@ const ProductCard: FC<ProductCardProps> = ({
           }}
         >
           <Icon
-            icon="solar:heart-outline"
-            fontSize={30}
+            icon="solar:cart-large-minimalistic-bold"
+            fontSize={24}
             className="text-gray-500"
           />
         </Button>
@@ -199,4 +199,4 @@ const ProductCard: FC<ProductCardProps> = ({
   );
 };
 
-export default ProductCard;
+export default WishingListCard;
