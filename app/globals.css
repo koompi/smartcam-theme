@@ -13,6 +13,11 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .hide-scroll-bar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 .swiper {

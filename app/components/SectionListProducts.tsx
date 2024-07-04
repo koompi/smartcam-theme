@@ -89,7 +89,7 @@ const SectionListProducts: FC<Props> = ({ title, data }) => {
           return (
             <SwiperSlide key={idx} className="bg-background">
               <ProductCard
-                url={res.url}
+                url={`/products/${idx}`}
                 thumbnail={`/images/products/${res.thumbnail}`}
                 title={res.title}
                 desc={undefined}
