@@ -96,13 +96,13 @@ export const BrandsScrolling = () => {
   ];
 
   return (
-    <section className="mx-auto w-full bg-foreground h-36 flex items-center justify-start">
+    <section className="mx-auto w-full bg-foreground h-20 sm:h-20 lg:h-36 flex items-center justify-start">
       <ScrollingBanner shouldPauseOnHover gap="40px">
         {logo.map((b, idx) => (
           <Link
             href="/products"
             key={idx}
-            className="flex items-center justify-center text-foreground w-20"
+            className="flex items-center justify-center text-foreground w-12 sm:w-12 lg:w-20"
           >
             <Image
               alt={b.title}

@@ -15,9 +15,12 @@ import {
   PopoverContent,
   PopoverTrigger,
   Tooltip,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 import { Menubar } from "./Menubar";
 import { usePathname } from "next/navigation";
@@ -26,19 +29,88 @@ import { cn } from "@/utils/cn";
 export const MainNavbar = () => {
   const pathname = usePathname();
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const menuItems = [
+    {
+      url: "/",
+      title: "Home",
+    },
+    {
+      url: "/products",
+      title: "Products",
+    },
+    {
+      url: "/promotions",
+      title: "Special Offer",
+    },
+    {
+      url: "/about",
+      title: "Who We Are?",
+    },
+    {
+      url: "/contact",
+      title: "Contact US",
+    },
+    {
+      url: "/events",
+      title: "Events",
+    },
+
+    {
+      url: "/careers",
+      title: "Careers",
+    },
+
+    {
+      url: "/support/video-support",
+      title: "Video Support",
+    },
+    {
+      url: "/support/software_support",
+      title: "Sofware Support",
+    },
+    {
+      url: "/support/others",
+      title: "Helps",
+    },
+  ];
+
   return (
     <header className="sticky top-0 inset-x-0 flex flex-col flex-wrap z-50 w-full bg-background border-b border-gray-200">
       <Header />
-      <Navbar maxWidth="full" className="bg-background flex flex-col">
-        <NavbarBrand as={Link} href="/">
-          <Image alt="logo" src="/images/smartcam-logo.png" className="h-12" />
-          <Spacer x={3} />
+      <Navbar
+        maxWidth="full"
+        isMenuOpen={isMenuOpen}
+        onMenuOpenChange={setIsMenuOpen}
+        className="bg-background flex flex-col h-14 sm:h-auto"
+      >
+        <NavbarContent className="sm:hidden" justify="start">
+          <NavbarMenuToggle
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          />
           <Image
             alt="logo"
-            src="/images/smartcam-solutions.png"
-            className="h-16"
+            src="/images/smartcam.png"
+            className="h-8 sm:h-12"
           />
-        </NavbarBrand>
+        </NavbarContent>
+        <NavbarContent className="hidden sm:flex" justify="start">
+          <NavbarBrand as={Link} href="/">
+            <Image
+              alt="logo"
+              src="/images/smartcam-logo.png"
+              className="h-11 sm:h-12"
+            />
+            <Spacer x={3} />
+            <Image
+              alt="logo"
+              src="/images/smartcam-solutions.png"
+              className="hidden sm:flex h-16"
+            />
+          </NavbarBrand>
+        </NavbarContent>
+
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
           <NavbarItem>
             <Popover placement="bottom" showArrow={true}>
@@ -71,7 +143,42 @@ export const MainNavbar = () => {
             />
           </NavbarItem>
         </NavbarContent>
-        <NavbarContent justify="end" className="flex items-center gap-6">
+        <NavbarContent
+          justify="end"
+          className="flex sm:hidden items-center gap-6"
+        >
+          <NavbarItem className="mt-2" as={Link} href="#">
+            <Badge color="danger" content={50} shape="circle">
+              <Button
+                color="primary"
+                variant="light"
+                radius="full"
+                className="font-semibold"
+                size="sm"
+                isIconOnly
+              >
+                <Icon icon="solar:cart-large-minimalistic-bold" fontSize={24} />
+              </Button>
+            </Badge>
+          </NavbarItem>
+          <NavbarItem>
+            <Button
+              as={Link}
+              color="primary"
+              href="#"
+              variant="flat"
+              radius="full"
+              size="md"
+              isIconOnly
+            >
+              <Icon icon="solar:user-rounded-bold" fontSize={24} />
+            </Button>
+          </NavbarItem>
+        </NavbarContent>
+        <NavbarContent
+          justify="end"
+          className="hidden sm:flex items-center gap-6"
+        >
           <NavbarItem isActive={pathname === "/compare"}>
             <Link href="/compare">
               <Badge color="danger" content={3} shape="circle">
@@ -148,8 +255,35 @@ export const MainNavbar = () => {
             </Button>
           </NavbarItem>
         </NavbarContent>
+        <NavbarMenu className="pt-16">
+          {menuItems.map((item, index) => (
+            <NavbarMenuItem
+              key={`${item}-${index}`}
+              className="my-1 font-semibold"
+            >
+              <Link className="w-full" href={item?.url}>
+                {item.title}
+              </Link>
+            </NavbarMenuItem>
+          ))}
+          <Button
+            variant="shadow"
+            size="lg"
+            isIconOnly
+            as={Link}
+            href="https://t.me/T_thith"
+            target="_blank"
+            radius="full"
+            color="primary"
+            className="absolute bottom-6 right-6"
+          >
+            <Icon icon="mingcute:telegram-fill" fontSize={27} />
+          </Button>
+        </NavbarMenu>
       </Navbar>
-      <Menubar />
+      <div className="hidden sm:inline">
+        <Menubar />
+      </div>
     </header>
   );
 };

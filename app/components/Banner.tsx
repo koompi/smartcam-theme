@@ -12,7 +12,7 @@ import "swiper/css/navigation";
 const Banner = () => {
   return (
     <section>
-      <div className="h-[45rem]">
+      <div className="h-[12rem] sm:h-[12rem] lg:h-[45rem]">
         <Swiper
           spaceBetween={30}
           centeredSlides={true}

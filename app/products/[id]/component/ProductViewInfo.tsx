@@ -17,6 +17,9 @@ import {
   CardBody,
   Tab,
   Tabs,
+  Select,
+  SelectItem,
+  useDisclosure,
 } from "@nextui-org/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -39,7 +42,7 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { VariantRadio } from "./VariantRadio";
 import { formatToUSD } from "@/utils/formatUSD";
-import Link from "next/link";
+import productReviews from "@/data/productReviews";
 import {
   TwitterShareButton,
   TwitterIcon,
@@ -48,11 +51,38 @@ import {
   FacebookShareButton,
   FacebookIcon,
 } from "next-share";
+import ModalReview from "./ReviewModal";
+import Review from "./Reviews";
+import SummaryRatingCard from "./SummaryRatingCard";
+
+const ratings = [
+  {
+    rating: 5,
+    count: 120,
+  },
+  {
+    rating: 4,
+    count: 50,
+  },
+  {
+    rating: 3,
+    count: 25,
+  },
+  {
+    rating: 2,
+    count: 33,
+  },
+  {
+    rating: 1,
+    count: 30,
+  },
+];
 
 const ProductViewInfo = () => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const swiperRef = useRef<SwiperType | null>(null);
   const fullHost = window.location.href;
+  const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
   useEffect(() => {
     const zoomButton = document.getElementById("zoom-button");
@@ -304,29 +334,65 @@ const ProductViewInfo = () => {
                   <Tab key="rerviews" title="Reviews">
                     <Card className="rounded-3xl" shadow="none">
                       <CardBody className="p-12">
-                        <p className="text-black leading-9">
-                          -CPU / Processor: Apple M3 Pro chip 12-core CPU with 6
-                          performance cores and 6 efficiency cores 18-core GPU
-                          Hardware-accelerated ray tracing 16-core Neural Engine
-                          150GB/s memory bandwidth-Operating System : macOS-RAM
-                          / Memory: 36GB unified memory-Storage: 512GB
-                          SSD-Graphic: Apple Integrated 18-core GPU-Display:
-                          16.2-inch (diagonal) Liquid Retina XDR display
-                          3456-by-2234 native resolution at 254 pixels per
-                          inch-Optical Drive: None-Wireless: Wi-Fi 6E (802.11ax)
-                          + Bluetooth 5.3-Audio: High-fidelity six-speaker sound
-                          system with force-cancelling woofers Wide stereo
-                          sound-Webcame: 1080p FaceTime HD camera Advanced image
-                          signal processor with computational video-Ports :-SDXC
-                          card slot , HDMI port, 3.5 mm headphone jack, MagSafe
-                          3 port.           Three Thunderbolt 4 (USB-C) ports
-                          with support for: *Charging, DisplayPort, Thunderbolt
-                          4 (up to 40Gb/s), USB 4 (up to 40Gb/s).-Battery: M3
-                          Pro Chip Up to 22 hours Apple TV app movie playback   
-                                     Up to 15 hours wireless web-Keyboard:
-                          Backlit Magic Keyboard Touch ID-Weight: 4.7 pounds
-                          (2.14 kg)-Warranty: 1year warranty
-                        </p>
+                        <section className="mx-auto w-full max-w-6xl px-2 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-12 lg:px-6">
+                          <div className="lg:col-span-4">
+                            <SummaryRatingCard
+                              averageRating={4.4}
+                              ratings={ratings}
+                              totalRatingCount={139}
+                              onWriteReview={onOpen}
+                            />
+                          </div>
+                          <div className="mt-16 lg:col-span-8 lg:mt-0">
+                            <header className="flex flex-wrap items-center justify-between gap-4">
+                              <h1 className="text-large font-semibold text-black">
+                                136 Reviews
+                              </h1>
+                              <Select
+                                aria-label="Sort by"
+                                className="w-40 text-black"
+                                defaultSelectedKeys={["most_recent"]}
+                                labelPlacement="outside"
+                                radius="full"
+                                variant="bordered"
+                              >
+                                <SelectItem
+                                  key="most_recent"
+                                  value="most_recent"
+                                >
+                                  Most recent
+                                </SelectItem>
+                                <SelectItem
+                                  key="most_helpful"
+                                  value="most_helpful"
+                                >
+                                  Most helpful
+                                </SelectItem>
+                                <SelectItem
+                                  key="highest_rating"
+                                  value="highest_rating"
+                                >
+                                  Highest rating
+                                </SelectItem>
+                              </Select>
+                            </header>
+                            <div className="mt-4 flex flex-col">
+                              {productReviews.map((review, index) => (
+                                <div
+                                  key={index}
+                                  className="border-divider px-2 py-10 [&:not(:last-child)]:border-b-1"
+                                >
+                                  <Review {...review} />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <ModalReview
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            onOpenChange={onOpenChange}
+                          />
+                        </section>
                       </CardBody>
                     </Card>
                   </Tab>
