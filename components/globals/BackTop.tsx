@@ -33,7 +33,7 @@ export const BackToTop = () => {
   }, []);
 
   return (
-    <div className="fixed z-50 bottom-6 right-6">
+    <div className="hidden sm:hidden lg:block fixed z-50 bottom-6 right-6">
       <Button
         isIconOnly
         onPress={scrollToTop}

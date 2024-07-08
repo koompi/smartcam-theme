@@ -35,7 +35,7 @@ export const Promotion = () => {
   ];
 
   return (
-    <section className="py-9 bg-foreground">
+    <section className="hidden sm:hidden lg:block py-9 bg-foreground">
       <div className="container mx-auto">
         <div className="grid grid-cols-12 gap-6 place-items-stretch">
           <div className="col-span-3 flex flex-col gap-6">

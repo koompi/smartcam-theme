@@ -8,7 +8,7 @@ const GRAPHQL_ENDPOINT = `${ENDPOINT}/graphql/store?store_id=${
 }`;
 
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
-import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
+import { registerApolloClient } from "@apollo/experimental-nextjs-app-support";
 
 const httpLink = createHttpLink({
   uri: GRAPHQL_ENDPOINT,

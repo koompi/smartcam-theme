@@ -147,17 +147,29 @@ export const MainNavbar = () => {
           justify="end"
           className="flex sm:hidden items-center gap-6"
         >
-          <NavbarItem className="mt-2" as={Link} href="#">
-            <Badge color="danger" content={50} shape="circle">
+          <NavbarItem
+            className="mt-2"
+            as={Link}
+            href="/wishlist"
+            isActive={pathname === "/wishlist"}
+          >
+            <Badge color="danger" content={50} size="sm" shape="circle">
               <Button
                 color="primary"
                 variant="light"
                 radius="full"
-                className="font-semibold"
+                className="font-semibold mt-1"
                 size="sm"
                 isIconOnly
               >
-                <Icon icon="solar:cart-large-minimalistic-bold" fontSize={24} />
+                <Icon
+                  icon={
+                    pathname === "/wishlist"
+                      ? "solar:heart-bold"
+                      : "solar:heart-linear"
+                  }
+                  fontSize={30}
+                />
               </Button>
             </Badge>
           </NavbarItem>

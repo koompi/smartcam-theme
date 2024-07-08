@@ -4,6 +4,8 @@ import "./globals.css";
 import { MainNavbar } from "@/components/layouts/Main-Navbar";
 import MainFooter from "@/components/layouts/MainFooter";
 import { BackToTop } from "@/components/globals/BackTop";
+import { ApolloWrapper } from "@/libs/apollo-wrapper";
+import MobileNavigator from "@/components/layouts/MobileNavigator";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -59,10 +61,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className} suppressHydrationWarning>
-        <MainNavbar />
-        {children}
-        <BackToTop />
-        <MainFooter />
+        <ApolloWrapper>
+          <MainNavbar />
+          {children}
+          <BackToTop />
+          <MainFooter />
+          <MobileNavigator />
+        </ApolloWrapper>
       </body>
     </html>
   );

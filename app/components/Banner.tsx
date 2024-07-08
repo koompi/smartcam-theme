@@ -30,16 +30,32 @@ const Banner = () => {
             <Image alt="banner" radius="none" src="/images/banner/banner.png" />
           </SwiperSlide>
           <SwiperSlide>
-            <Image alt="banner" radius="none" src="/images/banner/banner.png" />
+            <Image
+              alt="banner"
+              radius="none"
+              src="/images/banner/banner2.png"
+            />
           </SwiperSlide>
           <SwiperSlide>
-            <Image alt="banner" radius="none" src="/images/banner/banner.png" />
+            <Image
+              alt="banner"
+              radius="none"
+              src="/images/banner/banner3.png"
+            />
           </SwiperSlide>
           <SwiperSlide>
-            <Image alt="banner" radius="none" src="/images/banner/banner.png" />
+            <Image
+              alt="banner"
+              radius="none"
+              src="/images/banner/banner4.png"
+            />
           </SwiperSlide>
           <SwiperSlide>
-            <Image alt="banner" radius="none" src="/images/banner/banner.png" />
+            <Image
+              alt="banner"
+              radius="none"
+              src="/images/banner/banner5.png"
+            />
           </SwiperSlide>
         </Swiper>
       </div>

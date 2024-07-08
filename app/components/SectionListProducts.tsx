@@ -12,21 +12,12 @@ import { Pagination, Navigation } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
+import { ProductType } from "@/types/product";
+import { PromotionType } from "@/types/promotion";
 
 interface ProductProps {
-  id: string;
-  url: string;
-  thumbnail: string;
-  title: string;
-  description: string;
-  rating: number;
-  price: number;
-  discountType: string;
-  promotionPercentage: number;
-  promotionPrice: number;
-  totalPrice: number;
-  brand: string;
-  category: string;
+  product: ProductType;
+  promotion: PromotionType;
 }
 
 interface Props {
@@ -40,14 +31,26 @@ const SectionListProducts: FC<Props> = ({ title, data }) => {
   const [_, setInit] = useState<boolean>();
 
   return (
-    <section className="px-6 py-6">
+    <section className="px-3 sm:px-3 lg:px-6 py-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">{title}</h2>
+        <h2 className="text-md sm:text-md lg:text-xl font-semibold">{title}</h2>
         <div className="flex items-center gap-3">
-          <Button ref={prevRef} isIconOnly variant="flat" color="primary">
+          <Button
+            size="sm"
+            ref={prevRef}
+            isIconOnly
+            variant="flat"
+            color="primary"
+          >
             <Icon icon="solar:arrow-left-bold" />
           </Button>
-          <Button ref={nextRef} isIconOnly variant="flat" color="primary">
+          <Button
+            size="sm"
+            ref={nextRef}
+            isIconOnly
+            variant="flat"
+            color="primary"
+          >
             <Icon icon="solar:arrow-right-bold" />
           </Button>
           <Link
@@ -61,8 +64,8 @@ const SectionListProducts: FC<Props> = ({ title, data }) => {
       </div>
       <Spacer y={3} />
       <Swiper
-        slidesPerView={1}
-        spaceBetween={10}
+        slidesPerView={2}
+        spaceBetween={12}
         navigation={{
           prevEl: prevRef.current,
           nextEl: nextRef.current,
@@ -71,11 +74,11 @@ const SectionListProducts: FC<Props> = ({ title, data }) => {
         breakpoints={{
           640: {
             slidesPerView: 2,
-            spaceBetween: 20,
+            spaceBetween: 12,
           },
           768: {
             slidesPerView: 4,
-            spaceBetween: 40,
+            spaceBetween: 12,
           },
           1024: {
             slidesPerView: 5,
@@ -83,22 +86,32 @@ const SectionListProducts: FC<Props> = ({ title, data }) => {
           },
         }}
         modules={[Pagination, Navigation]}
-        className="grid grid-cols-5 place-items-stretch gap-3 bg-background"
+        // className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 place-items-stretch gap-3 bg-background"
       >
         {Array.from(data, (res: ProductProps, idx) => {
+          const { thumbnail, title, desc, rating, price, currencyPrice, id } =
+            res?.product;
+
           return (
             <SwiperSlide key={idx} className="bg-background">
               <ProductCard
-                url={`/products/${idx}`}
-                thumbnail={`/images/products/${res.thumbnail}`}
-                title={res.title}
-                desc={undefined}
-                rating={res.rating}
-                price={res?.price}
-                discountType={res?.discountType}
-                promotionPercentage={res?.promotionPercentage}
-                promotionPrice={res?.promotionPrice}
-                totalPrice={res?.totalPrice}
+                id={id}
+                thumbnail={`/images/products/${thumbnail}`}
+                title={title}
+                desc={desc}
+                rating={rating ? rating : 4}
+                price={price}
+                promotion={{
+                  isMembership: res.promotion?.isMembership,
+                  discount: {
+                    discountPercentage:
+                      res.promotion?.discount?.discountPercentage,
+                    discountPrice: res.promotion?.discount?.discountPrice,
+                    discountType: res.promotion?.discount?.discountType,
+                    originalPrice: res.promotion?.discount?.originalPrice,
+                    totalDiscount: res.promotion?.discount?.totalDiscount,
+                  },
+                }}
               />
             </SwiperSlide>
           );

@@ -1,6 +1,7 @@
 "use client";
 
-import { formatToUSD } from "@/utils/formatUSD";
+import { PromotionType } from "@/types/promotion";
+import { usd } from "@/utils/formatUSD";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import {
   Card,
@@ -20,29 +21,23 @@ import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 
 interface ProductCardProps {
-  url: string;
+  id: string;
   thumbnail: string;
   title: string;
   desc: ReactNode;
   rating: number;
   price: number;
-  discountType: string | null;
-  promotionPercentage: number;
-  promotionPrice: number;
-  totalPrice: number;
+  promotion: PromotionType;
 }
 
 const ProductCard: FC<ProductCardProps> = ({
-  url,
+  id,
   thumbnail,
   title,
   desc,
   rating,
   price,
-  discountType,
-  promotionPercentage,
-  promotionPrice,
-  totalPrice,
+  promotion,
 }) => {
   return (
     <Card
@@ -50,10 +45,10 @@ const ProductCard: FC<ProductCardProps> = ({
       isPressable
       isHoverable
       as={Link}
-      href={url}
+      href={`/products/${id}`}
       className="col-span-1 h-full group"
     >
-      {discountType && (
+      {promotion?.discount?.discountType && (
         <Chip
           size="sm"
           color="danger"
@@ -61,8 +56,11 @@ const ProductCard: FC<ProductCardProps> = ({
           radius="none"
           variant="shadow"
         >
-          OFF {discountType === "PRICE" && formatToUSD(promotionPrice)}
-          {discountType === "PERCENTAGE" && promotionPercentage + "%"}
+          OFF{" "}
+          {promotion?.discount?.discountType === "PRICE" &&
+            usd(promotion?.discount?.discountPrice)}
+          {promotion?.discount?.discountType === "PERCENTAGE" &&
+            promotion?.discount?.discountPercentage + "%"}
         </Chip>
       )}
       <CardBody>
@@ -76,7 +74,7 @@ const ProductCard: FC<ProductCardProps> = ({
         >
           <DropdownTrigger>
             <Button
-              className="absolute right-1 top-1 z-20 hidden group-hover:flex"
+              className="absolute right-1 top-1 z-20  hidden group-hover:hidden sm:group-hover:hidden lg:group-hover:flex"
               variant="light"
               isIconOnly
               size="sm"
@@ -115,7 +113,15 @@ const ProductCard: FC<ProductCardProps> = ({
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <Image alt="products" src={thumbnail} isZoomed />
+        <Image
+          alt="products"
+          src={
+            !thumbnail
+              ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${thumbnail}`
+              : "/images/default-thumbnail.png"
+          }
+          isZoomed
+        />
         <Spacer y={2} />
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }, (_, i) => {
@@ -125,7 +131,7 @@ const ProductCard: FC<ProductCardProps> = ({
               <Icon
                 key={i}
                 className={cn(
-                  "text-lg sm:text-xl",
+                  "text-sm sm:text-sm lg:text-lg",
                   isSelected ? "text-danger" : "text-gray-300"
                 )}
                 icon="solar:star-bold"
@@ -134,38 +140,30 @@ const ProductCard: FC<ProductCardProps> = ({
           })}
         </div>
         <Spacer y={2} />
-        <h2 className="text-black font-medium text-lg line-clamp-2">{title}</h2>
-        <Spacer y={3} />
-        <ul className="list-disc text-gray-500 text-sm pl-6">
-          <li>CPU: Apple M3 Pro chip 12-core</li>
-          <li>OS: macOS</li>
-          <li>RAM: 36GB unified memory</li>
-          <li>Storage: 512GB SSD</li>
-          <li>Graphic: Integrated 18-core</li>
-          <li>GPU -Display: 16.2-inch (3456-by-2234)</li>
-          <li>Battery: Up to 15hours</li>
-          <li>Weight: 2.14kg</li>
-          <li>Warranty: 1 year</li>
-        </ul>
-        <Spacer y={3} />
-        <div className="flex items-center gap-3">
-          {discountType ? (
+        <h2 className="text-black font-medium text-sm sm:text-sm lg:text-lg line-clamp-2">
+          {title}
+        </h2>
+        <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-4 mt-2 sm:mt-2 lg:mt-3">
+          {desc}
+        </p>
+        <div className="flex items-center gap-3 mt-2 sm:mt-2 lg:mt-3">
+          {promotion?.discount?.discountType ? (
             <>
-              <p className="text-black text-md line-through">
-                {formatToUSD(price)}
+              <p className="text-black text-xs sm:text-xs lg:text-md line-through">
+                {usd(promotion?.discount?.originalPrice)}
               </p>
-              <p className="text-black text-2xl font-bold">
-                {formatToUSD(totalPrice)}
+              <p className="text-black  text-lg sm:text-lg lg:text-2xl font-bold">
+                {usd(promotion?.discount?.totalDiscount)}
               </p>
             </>
           ) : (
-            <p className="text-black text-2xl font-bold">
-              {formatToUSD(price)}
+            <p className="text-black  text-lg sm:text-lg lg:text-2xl font-bold">
+              {usd(promotion?.discount?.originalPrice)}
             </p>
           )}
         </div>
       </CardBody>
-      <CardFooter className="flex items-center justify-between">
+      <CardFooter className="items-center justify-between hidden sm:hidden lg:flex">
         <Button
           radius="full"
           color="primary"
