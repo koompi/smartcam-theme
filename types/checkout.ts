@@ -43,8 +43,16 @@ export type CustomerAddressType = {
 export type CheckoutCartType = {
   productId: string;
   qty: number;
-  unitPrice: number;
   product: ProductType;
+  unitPrice: {
+    khr: number;
+    usd: number;
+  };
+  discountPrice: {
+    khr: number;
+    usd: number;
+  };
+  discountPercentage: number;
 };
 
 export type OrdersType = {
@@ -56,7 +64,13 @@ export type OrdersType = {
   ownerId: string;
   status: string;
   tax: string;
-  totalDiscount: number;
-  totalPrice: number;
+  discountUnitPrice: {
+    khr: number;
+    usd: number;
+  };
+  totalUnitPrice: {
+    khr: number;
+    usd: number;
+  };
   refetch: Function;
 };

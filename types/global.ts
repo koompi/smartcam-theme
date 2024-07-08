@@ -9,14 +9,15 @@ export type ContextAuth = {
 };
 
 export type CartItem = {
-  product: ItemProduct;
-  quantity: number;
+  productId: string;
+  qty: number;
 };
 
 export type CartContextType = {
   cartItems: CartItem[];
-  addToCart: (product: ItemProduct) => void;
-  minusCart: (product: ItemProduct) => void;
+  membershipId: string;
+  addToCart: (product_id: string) => void;
+  minusCart: (product_id: string) => void;
   removeFromCart: (id: String) => void;
   addCarts: (cartItems: CartItem[]) => void;
   cleanCartItems: Function;

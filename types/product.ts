@@ -1,4 +1,5 @@
 import { Category, SubCategory } from "./category";
+import { PromotionType } from "./promotion";
 
 export interface Attribute {
   type: string;
@@ -13,10 +14,17 @@ export interface Variants {
   attributes: Attribute[];
 }
 
+export interface Promotion {
+  type: string;
+  discount: number;
+  price: number;
+}
+
 export type ItemProduct = {
   thumbnail?: any;
   variant?: Variants;
   title?: string;
+  promotion: PromotionType | null;
   id: string;
   name: string;
   price: number;
@@ -32,6 +40,11 @@ export type StockType = {
   status: string;
 };
 
+export type MessageProduct = {
+  product: ProductType;
+  promotion: PromotionType;
+};
+
 export type ProductType = {
   id: string;
   status: boolean;
@@ -43,6 +56,11 @@ export type ProductType = {
   price: number;
   slug: string;
   previews: string[];
+  currencyPrice: {
+    khr: number;
+    usd: number;
+  };
+  promotion: PromotionType;
   tags: string[];
   quantity: number;
   variants: Variants[];

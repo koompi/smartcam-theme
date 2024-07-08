@@ -1,0 +1,97 @@
+{
+  "globals": {
+    "name": "STEVEN-T",
+    "handle": "@steven-t",
+    "officialName": "STEVEN.T"
+  },
+  "banner": {
+    "title": "We are never afraid to take risks.",
+    "desc": "When you’re fast, you set the pace. The game moves slower. The ball looks bigger. This is how the greats change the game.",
+    "message": "Sneaker Sale up to 50% OFF!",
+    "promotes": [
+      "ALKmdQhSvBZCiGDLcGaDVMRj1ORqKoVRcxNYgauXbbrNXq.image/png",
+      "DHWtzsAJvxtQMrRjAyNyFVStNEYKeumQLWZoryavSFuuSk.image/png",
+      "XoDtpSvFMqxO1mUSUaQFYUyfbOaJ1XSJMxxqAmflbSVYAp.image/png"
+    ]
+  },
+  "header": {
+    "logo": "https://drive.backend.riverbase.org/api/drive?hash=amMKuSti1gc1SSoxGUWcToFGsZNIpDeacTVCygQAvg1jxm.image/png",
+    "name": "Steven-T",
+    "enable": true
+  },
+  "about": {
+    "title": "The Faces Behind Our Success",
+    "description": "We Couldn't Do It Without Them",
+    "members": [
+      {
+        "name": "Soklay VANN",
+        "position": "CEO",
+        "photo": "https://ipfs.backend.riverbase.org/api/ipfs?hash=QmaearZ1zJWBWJCTqtGUgv3YX2XnUZ8MJwz9XZMbf7J6jW"
+      },
+      {
+        "name": "Soklay 2",
+        "position": "Full stack web developer",
+        "photo": "https://ipfs.backend.riverbase.org/api/ipfs?hash=QmaearZ1zJWBWJCTqtGUgv3YX2XnUZ8MJwz9XZMbf7J6jW"
+      },
+      {
+        "name": "Soklay3",
+        "position": "Web developer",
+        "photo": "https://ipfs.backend.riverbase.org/api/ipfs?hash=QmaearZ1zJWBWJCTqtGUgv3YX2XnUZ8MJwz9XZMbf7J6jW"
+      },
+      {
+        "name": "Soklay4",
+        "position": "Business Onwer",
+        "photo": "https://ipfs.backend.riverbase.org/api/ipfs?hash=QmaearZ1zJWBWJCTqtGUgv3YX2XnUZ8MJwz9XZMbf7J6jW"
+      },
+      {
+        "name": "Soklay5",
+        "position": "Tester",
+        "photo": "https://ipfs.backend.riverbase.org/api/ipfs?hash=QmaearZ1zJWBWJCTqtGUgv3YX2XnUZ8MJwz9XZMbf7J6jW"
+      }
+    ]
+  },
+  "footer": {
+    "socials": [
+      {
+        "name": "facebook",
+        "enable": true,
+        "link": "https://riverbase.org/@steven-t"
+      },
+      {
+        "name": "youtube",
+        "enable": true,
+        "link": "https://riverbase.org/@steven-t"
+      },
+      {
+        "name": "instagram",
+        "enable": true,
+        "link": "https://riverbase.org/@steven-t"
+      },
+      {
+        "name": "linkedin",
+        "enable": true,
+        "link": "https://riverbase.org/@steven-t"
+      },
+      {
+        "name": "telegram",
+        "enable": true,
+        "link": "https://riverbase.org/@steven-t"
+      },
+      {
+        "name": "tiktok",
+        "enable": true,
+        "link": "https://riverbase.org/@steven-t"
+      },
+      {
+        "name": "twitter",
+        "enable": true,
+        "link": "https://riverbase.org/@steven-t"
+      }
+    ],
+    "contact": {
+      "address": "Phnom Penh, Cambodia Phnom Penh, Cambodia Phnom Penh, Cambodia Phnom Penh, Cambodia Phnom Penh, Cambodia",
+      "email": "helloworld@steven.t.com",
+      "phone": "000000000007"
+    }
+  }
+}

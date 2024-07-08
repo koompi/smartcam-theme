@@ -1,0 +1,11 @@
+services:
+  app:
+    container_name: ${CONTAINER_NAME}
+    build:
+      context: ${BASEPATH}
+      args:
+        ROOTPROJ: ${ROOTPROJ}
+        THEMEPATH: ${THEMEPATH}
+      dockerfile: ${THEMEPATH}/Dockerfile
+    ports:
+      - ${PORT_NUMBER}:3000
