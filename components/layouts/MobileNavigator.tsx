@@ -51,7 +51,7 @@ const MobileNavigator = () => {
   ];
 
   return (
-    <section className="border-t-1 grid grid-cols-4 sm:grid lg:hidden fixed bottom-0 z-30 bg-foreground w-full min-h-14 container mx-auto px-3">
+    <section className="border-t-1 grid grid-cols-4 sm:grid lg:hidden fixed bottom-0 z-30 bg-white w-full min-h-14 container mx-auto px-3">
       {navigator.map((nav: MobileNavigator, idx: number) => {
         return (
           <div

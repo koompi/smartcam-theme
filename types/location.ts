@@ -31,4 +31,5 @@ export type LocationType = {
   updatedAt: string;
   address: Address;
   photos: string[];
+  label: string;
 };

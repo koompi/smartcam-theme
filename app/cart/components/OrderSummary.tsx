@@ -5,14 +5,40 @@ import { Divider } from "@nextui-org/react";
 import OrderSummaryItem from "./OrderSummaryItem";
 // import { useCart } from "@/context/useCart";
 import { Toaster } from "sonner";
+// import { useQuery } from "@apollo/client";
+// import { ESTIMATION_PRICE } from "@/graphql/order";
+import { ProductType } from "@/types/product";
+import { PromotionType } from "@/types/promotion";
+
+interface OrderCart {
+  product: ProductType;
+  promotion: PromotionType;
+  qty: number;
+}
 
 export type OrderSummaryProps = React.HTMLAttributes<HTMLDivElement> & {
   hideTitle?: boolean;
+  orders?: any;
 };
+
+interface Product {
+  product: ProductType;
+  promotion: PromotionType;
+  qty: number;
+}
 
 const OrderSummary = React.forwardRef<HTMLDivElement, OrderSummaryProps>(
   ({ hideTitle, ...props }, ref) => {
-    // const { cartItems } = useCart();
+    // const { cartItems, membershipId } = useCart();
+
+    // const { data: orders, loading } = useQuery(ESTIMATION_PRICE, {
+    //   variables: {
+    //     input: [...cartItems],
+    //     membershipId: membershipId,
+    //   },
+    // });
+
+    // console.log("props", props.orders);
 
     return (
       <div ref={ref} {...props}>
@@ -25,9 +51,9 @@ const OrderSummary = React.forwardRef<HTMLDivElement, OrderSummaryProps>(
         )}
         <h3 className="sr-only">Items in your cart</h3>
         <ul>
-          {/* {cartItems?.map((item, idx: number) => (
+          {props?.orders?.map((item: Product, idx: number) => (
             <OrderSummaryItem key={idx} {...item} />
-          ))} */}
+          ))}
         </ul>
       </div>
     );

@@ -334,7 +334,7 @@ const ProductViewInfo = () => {
                   <Tab key="rerviews" title="Reviews">
                     <Card className="rounded-3xl" shadow="none">
                       <CardBody className="p-12">
-                        <section className="mx-auto w-full max-w-6xl px-2 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-12 lg:px-6">
+                        <section className="mx-auto w-full max-w-6xl lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-12 ">
                           <div className="lg:col-span-4">
                             <SummaryRatingCard
                               averageRating={4.4}
@@ -348,33 +348,6 @@ const ProductViewInfo = () => {
                               <h1 className="text-large font-semibold text-black">
                                 136 Reviews
                               </h1>
-                              <Select
-                                aria-label="Sort by"
-                                className="w-40 text-black"
-                                defaultSelectedKeys={["most_recent"]}
-                                labelPlacement="outside"
-                                radius="full"
-                                variant="bordered"
-                              >
-                                <SelectItem
-                                  key="most_recent"
-                                  value="most_recent"
-                                >
-                                  Most recent
-                                </SelectItem>
-                                <SelectItem
-                                  key="most_helpful"
-                                  value="most_helpful"
-                                >
-                                  Most helpful
-                                </SelectItem>
-                                <SelectItem
-                                  key="highest_rating"
-                                  value="highest_rating"
-                                >
-                                  Highest rating
-                                </SelectItem>
-                              </Select>
                             </header>
                             <div className="mt-4 flex flex-col">
                               {productReviews.map((review, index) => (
@@ -404,7 +377,7 @@ const ProductViewInfo = () => {
 
         {/* desc info */}
         <div className="w-1/4">
-          <div className="sticky top-40 bg-foreground rounded-3xl shadow-sm p-6">
+          <div className="sticky top-40 bg-white rounded-3xl shadow-sm p-6">
             <h2 className="text-xl font-semibold">
               Apple Macbook Pro 16.2" M3 Pro chip CPU 12-core and 18-core
               GPU-36GB-512GB-Space
@@ -542,7 +515,7 @@ const ProductViewInfo = () => {
                   defaultValue="1"
                   variant="flat"
                   radius="full"
-                  className="bg-foreground"
+                  className="bg-white"
                 ></Input>
                 <Button
                   isIconOnly

@@ -172,7 +172,7 @@ export const Menubar = () => {
   // console.log("path", pathname);
 
   return (
-    <Navbar maxWidth="full" className="bg-foreground h-12">
+    <Navbar maxWidth="full" className="bg-white h-12">
       <NavbarContent
         className="hidden sm:flex gap-4 text-primary"
         justify="center"

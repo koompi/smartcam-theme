@@ -35,7 +35,7 @@ export const Promotion = () => {
   ];
 
   return (
-    <section className="hidden sm:hidden lg:block py-9 bg-foreground">
+    <section className="hidden sm:hidden lg:block py-9 bg-white">
       <div className="container mx-auto">
         <div className="grid grid-cols-12 gap-6 place-items-stretch">
           <div className="col-span-3 flex flex-col gap-6">
@@ -84,7 +84,7 @@ export const Promotion = () => {
                 Special Savings
               </h1>
               <Spacer y={6} />
-              <div className="rounded-2xl bg-foreground p-3 h-full flex flex-col justify-center">
+              <div className="rounded-2xl bg-white p-3 h-full flex flex-col justify-center">
                 <Link href="#">
                   <ProductCardImageOnly
                     src="imac.png"

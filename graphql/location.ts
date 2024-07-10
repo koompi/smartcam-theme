@@ -18,6 +18,8 @@ export const GET_ALL_LOCATIONS = gql`
       provinceId
       createdAt
       updatedAt
+      photos
+      label
       address {
         id
         houseNo

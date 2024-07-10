@@ -244,7 +244,12 @@ export const MainNavbar = () => {
           </NavbarItem>
           <NavbarItem className="mr-12">
             <Link href="/cart">
-              <Badge color="danger" content={9} shape="circle">
+              <Badge
+                color="danger"
+                content={cartItems?.length}
+                isInvisible={cartItems?.length <= 0}
+                shape="circle"
+              >
                 <Button
                   isIconOnly
                   radius="full"

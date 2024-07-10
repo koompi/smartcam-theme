@@ -13,7 +13,7 @@ const checkbox = tv({
     isSelected: {
       true: {
         base: "border-primary bg-primary hover:bg-primary-500 hover:border-primary-500",
-        content: "text-primary-foreground pl-1",
+        content: "text-primary-white pl-1",
       },
     },
     isFocusVisible: {
@@ -47,7 +47,7 @@ export const CustomCheckbox: FC<any> = (props) => {
         color="primary"
         startContent={
           isSelected ? (
-            <Icon icon="material-symbols:check" className="text-foreground" />
+            <Icon icon="material-symbols:check" className="text-white" />
           ) : null
         }
         variant="bordered"

@@ -157,7 +157,7 @@ const ComparisonPage = () => {
       <div className="overflow-x-auto">
         <table className="min-w-full">
           <thead>
-            <tr className="bg-foreground">
+            <tr className="bg-white">
               <th className="py-2 text-left">
                 <div className="w-full flex flex-col items-center justify-center">
                   <Button
@@ -201,7 +201,7 @@ const ComparisonPage = () => {
               <tr
                 key={topic}
                 className={cn("px-4", {
-                  "bg-foreground": idx % 2,
+                  "bg-white": idx % 2,
                 })}
               >
                 <td className="py-6 px-4 font-bold">{topic}</td>
@@ -252,7 +252,7 @@ const ComparisonPage = () => {
         <TableHeader>
           <TableColumn
             width={300}
-            className="bg-foreground rounded-lg"
+            className="bg-white rounded-lg"
             isRowHeader
           >
             <div className="w-full flex flex-col items-center justify-center">

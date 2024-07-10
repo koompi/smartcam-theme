@@ -5,15 +5,22 @@ import { Button, Chip, Image, Link } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { cn } from "@/utils/cn";
 // import { CartItem } from "@/types/global";
-// import { useCart } from "@/context/useCart";
-import { formatToUSD } from "@/utils/formatUSD";
+import { useCart } from "@/context/useCart";
+// import { formatToUSD } from "@/utils/usd";
+import { ProductType } from "@/types/product";
+import { PromotionType } from "@/types/promotion";
 
-// CartItem
-export type OrderSummaryItemProps = React.HTMLAttributes<HTMLLIElement> & any;
+interface Product {
+  product: ProductType;
+  promotion: PromotionType;
+  qty: number;
+}
+export type OrderSummaryItemProps = React.HTMLAttributes<HTMLLIElement> &
+  Product;
 
 const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
-  ({ children, quantity, product, className, ...props }, ref) => {
-    // const { addToCart, minusCart, removeFromCart } = useCart();
+  ({ children, product, promotion, qty, className, ...props }, ref) => {
+    const { addToCart, minusCart, removeFromCart } = useCart();
 
     return (
       <li
@@ -24,41 +31,84 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
         )}
         {...props}
       >
+        {/* {productId} */}
         <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center">
           <Image
-            alt={product?.name}
-            src={`${
-              process.env.NEXT_PUBLIC_DRIVE ??
-              "https://drive.backend.riverbase.org"
-            }/api/drive?hash=${product?.preview}`}
+            alt={product?.title}
+            src={
+              product?.thumbnail
+                ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${product?.thumbnail}`
+                : "/images/default-thumbnail.png"
+            }
             isZoomed
+            className="h-full w-full"
           />
         </div>
         <div className="flex flex-1 flex-col">
           <h4 className="text-small">
             <Link
-              className="font-medium text-foreground line-clamp-1"
+              className="font-medium text-black line-clamp-1"
               href="#"
               underline="hover"
             >
-              {product?.name || children}
+              {product?.title || children}
             </Link>
           </h4>
 
           <div className="mt-2 flex items-center gap-2">
-            <span className="text-small font-semibold text-default-700">
-              {formatToUSD(product?.price)}
-            </span>
-            <span className="text-small text-danger">x {quantity}</span>
+            {promotion.discount ? (
+              <div className="space-x-2 flex items-center">
+                {/* <div className="font-bold">
+                  <div className="line-through text-sm">
+                    ${promotion.discount.originalPrice.toFixed(2)}
+                  </div>
+                  <div>${(promotion?.discount.originalPrice).toFixed(2)}</div>
+                </div> */}
+                <div className="font-bold">
+                  <div className="line-through text-sm">
+                    ${(promotion?.discount.originalPrice * qty).toFixed(2)}
+                    {/* <span className="text-danger"> x {qty}</span> */}
+                  </div>
+                  <div>
+                    (
+                    {promotion?.discount &&
+                      (promotion?.discount.discountType == "PERCENTAGE" ? (
+                        <label color="danger">
+                          {promotion?.discount.discountPercentage}% OFF
+                        </label>
+                      ) : (
+                        <label color="danger">
+                          ${promotion?.discount.discountPrice} OFF
+                        </label>
+                      ))}
+                    ) - ${(promotion?.discount.totalDiscount * qty).toFixed(2)}{" "}
+                    x ({qty} QTY)
+                  </div>
+                  <div className="text-danger">
+                    ${product?.price.toFixed(2)}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div>
+                {product?.price.toFixed(2)}
+                <span className="text-danger"> x {qty}</span>
+              </div>
+            )}
           </div>
 
           <div className="flex space-x-2 mt-2">
-            {!product.variant?.id && (
-              <Chip radius="sm" size="sm" variant="flat" color="secondary">
-                Default
-              </Chip>
-            )}
-            {product?.variant?.attributes.map((atr, idx: number) => {
+            {product?.promotion &&
+              (promotion?.discount.discountType == "PERCENTAGE" ? (
+                <Chip radius="sm" size="sm" variant="flat" color="danger">
+                  {promotion?.discount.discountPercentage}%
+                </Chip>
+              ) : (
+                <Chip radius="sm" size="sm" variant="flat" color="danger">
+                  ${promotion?.discount.discountPrice}
+                </Chip>
+              ))}
+            {/* {product?.variant?.attributes.map((atr, idx: number) => {
               return (
                 <Chip
                   radius="sm"
@@ -70,7 +120,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
                   {atr.option}
                 </Chip>
               );
-            })}
+            })} */}
           </div>
         </div>
         <div className="flex gap-3">
@@ -79,8 +129,8 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
             className="h-6 w-6 min-w-[1.5rem]"
             radius="full"
             variant="flat"
-            isDisabled={quantity <= 1}
-            // onPress={() => minusCart(product)}
+            isDisabled={qty <= 1}
+            onPress={() => minusCart(product.id)}
           >
             <Icon icon="lucide:minus" width={14} />
           </Button>
@@ -90,7 +140,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
             radius="full"
             variant="flat"
             color="success"
-            // onPress={() => addToCart(product)}
+            onPress={() => addToCart(product.id)}
           >
             <Icon icon="lucide:plus" width={14} />
           </Button>
@@ -100,60 +150,13 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
             radius="full"
             variant="flat"
             color="danger"
-            // onPress={() => {
-            //   removeFromCart(product.id);
-            // }}
+            onPress={() => {
+              removeFromCart(product.id);
+            }}
           >
             <Icon icon="lucide:x" width={14} />
           </Button>
         </div>
-        {/* <div className="flex gap-3">
-          <Tooltip content="Minus" placement="top">
-            <Button
-              isIconOnly
-              className="h-6 w-6 min-w-[1.5rem]"
-              radius="full"
-              variant="flat"
-              isDisabled={quantity <= 1}
-              onPress={() =>
-                minusCart(product, product.variant?.id != "1" ? true : false)
-              }
-            >
-              <Icon icon="lucide:minus" width={14} />
-            </Button>
-          </Tooltip>
-          <Tooltip content="Add" placement="top">
-            <Button
-              isIconOnly
-              className="h-6 w-6 min-w-[1.5rem]"
-              radius="full"
-              variant="flat"
-              color="success"
-              onPress={() =>
-                addToCart(product, product.variant?.id ? true : false)
-              }
-            >
-              <Icon icon="lucide:plus" width={14} />
-            </Button>
-          </Tooltip>
-          <Tooltip content="Remove" placement="top">
-            <Button
-              isIconOnly
-              className="h-6 w-6 min-w-[1.5rem]"
-              radius="full"
-              variant="flat"
-              color="danger"
-              onPress={() => {
-                removeFromCart(
-                  product.variant?.id ? product.variant?.id : product.id,
-                  product.variant?.id ? true : false
-                );
-              }}
-            >
-              <Icon icon="lucide:x" width={14} />
-            </Button>
-          </Tooltip>
-        </div> */}
       </li>
     );
   }

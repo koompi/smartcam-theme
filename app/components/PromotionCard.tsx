@@ -40,7 +40,7 @@ const PromotionCard = () => {
             Get Now
           </Button>
         </div>
-        <div className="col-span-8 bg-foreground w-full h-full rounded-2xl">
+        <div className="col-span-8 bg-white w-full h-full rounded-2xl">
           <div className="h-[30rem]">
             <Swiper
               spaceBetween={30}

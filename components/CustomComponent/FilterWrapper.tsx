@@ -238,7 +238,7 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
                 color="primary"
                 startContent={
                   <Icon
-                    className="text-primary-foreground [&>g]:stroke-[3px]"
+                    className="text-primary-white [&>g]:stroke-[3px]"
                     icon="solar:magnifer-linear"
                     width={16}
                   />

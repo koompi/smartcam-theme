@@ -17,7 +17,7 @@ import React from "react";
 const SupprtPage = () => {
   return (
     <section className="px-6">
-      <h1 className="text-xl font-semibold bg-gradient-to-br from-foreground-800 to-foreground-500 bg-clip-text tracking-tight">
+      <h1 className="text-xl font-semibold bg-gradient-to-br from-white-800 to-white-500 bg-clip-text tracking-tight">
         Frequently Asked Questions
       </h1>
       <Spacer y={6} />

@@ -4,9 +4,9 @@ import React, { FC } from "react";
 import { Card, CardBody, Image, Link } from "@nextui-org/react";
 import { ProductType } from "@/types/product";
 import { formatToUSD } from "@/utils/formatUSD";
-import { useCart } from "@/context/useCart";
-import { useRouter } from "next/navigation";
-import RatingRadioGroup from "@/app/products/components/RatingRadioGroup";
+// import { useCart } from "@/context/useCart";
+// import { useRouter } from "next/navigation";
+import RatingRadioGroup from "@/app/products/[id]/component/RatingRadioGroup";
 
 const RecommendProducts = ({ products }: { products: ProductType[] }) => {
   return (
@@ -24,8 +24,8 @@ const RecommendProducts = ({ products }: { products: ProductType[] }) => {
 export default RecommendProducts;
 
 const RecommendCard: FC<{ props: ProductType }> = ({ props }) => {
-  const { addToCart } = useCart();
-  const router = useRouter();
+  // const { addToCart } = useCart();
+  // const router = useRouter();
 
   return (
     <>
@@ -51,13 +51,13 @@ const RecommendCard: FC<{ props: ProductType }> = ({ props }) => {
               <div className="flex flex-col col-span-6 md:col-span-8">
                 <div className="flex justify-between items-start">
                   <div className="flex flex-col gap-0">
-                    <h3 className="font-semibold text-foreground/90 group-hover:underline">
+                    <h3 className="font-semibold text-white/90 group-hover:underline">
                       {props.title}
                     </h3>
-                    <p className="text-small text-foreground/80 line-clamp-1 mb-3">
+                    <p className="text-small text-white/80 line-clamp-1 mb-3">
                       {formatToUSD(props.price)}
                     </p>
-                    <p className="text-small text-foreground/80 line-clamp-1 mb-3">
+                    <p className="text-small text-white/80 line-clamp-1 mb-3">
                       {props.desc}
                     </p>
                     <RatingRadioGroup

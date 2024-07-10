@@ -43,32 +43,32 @@ const TagGroupRadioItem = React.forwardRef<
       case "primary":
         return {
           bg: "border-primary",
-          fg: "text-primary-foreground",
+          fg: "text-primary-white",
         };
       case "secondary":
         return {
           bg: "border-secondary",
-          fg: "text-secondary-foreground",
+          fg: "text-secondary-white",
         };
       case "success":
         return {
           bg: "border-success",
-          fg: "text-success-foreground",
+          fg: "text-success-white",
         };
       case "warning":
         return {
           bg: "border-warning",
-          fg: "text-warning-foreground",
+          fg: "text-warning-white",
         };
       case "danger":
         return {
           bg: "border-danger",
-          fg: "text-danger-foreground",
+          fg: "text-danger-white",
         };
       default:
         return {
           bg: "border-primary",
-          fg: "text-primary-foreground",
+          fg: "text-primary-white",
         };
     }
   }, [color]);

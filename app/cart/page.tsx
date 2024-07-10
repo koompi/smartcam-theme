@@ -1,24 +1,31 @@
 "use client";
 
-import { products } from "@/data/products";
+import { useCart } from "@/context/useCart";
 // import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import CheckoutComponent from "./components/CheckoutComponent";
+import { useQuery } from "@apollo/client";
+import { ESTIMATION_PRICE } from "@/graphql/order";
+import { ProductType } from "@/types/product";
+import { PromotionType } from "@/types/promotion";
+import { GET_ALL_PRODUCTS } from "@/graphql/product";
 // import { GET_ALL_PRODUCTS } from "@/graphql/product";
 
-export default function CartPage() {
-  // const { data: products } = useQuery(GET_ALL_PRODUCTS, {
-  //   variables: {
-  //     filter: {
-  //       limit: 10,
-  //       skip: 0,
-  //       sort: -1,
-  //     },
-  //   },
-  // });
+interface OrderCart {
+  product: ProductType;
+  promotion: PromotionType;
+  qty: number;
+}
 
-  return (
-    <>
-      <CheckoutComponent products={products} />
-    </>
-  );
+export default function CartPage() {
+  const { data: products } = useQuery(GET_ALL_PRODUCTS, {
+    variables: {
+      filter: {
+        limit: 10,
+        skip: 0,
+        sort: -1,
+      },
+    },
+  });
+
+  return <CheckoutComponent />;
 }

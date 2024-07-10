@@ -9,11 +9,8 @@ import React, {
 } from "react";
 import { Toaster, toast } from "sonner";
 
-// import { useAuth } from "./useAuth";
-// import { useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
 import { GET_STORE_USER } from "@/graphql/store";
-// import { ItemProduct } from "@/types/product";
 import { CartContextType, CartItem } from "@/types/global";
 
 export const CartContext = createContext({});
@@ -131,7 +128,7 @@ export function CartProvider(props: { children: JSX.Element }) {
         logout: logout,
       }}
     >
-      <Toaster position="top-center" richColors />
+      <Toaster position="top-center" closeButton richColors />
       {props.children}
     </CartContext.Provider>
   );

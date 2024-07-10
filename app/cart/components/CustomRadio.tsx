@@ -37,7 +37,7 @@ const CustomRadio = React.forwardRef<HTMLInputElement, CustomRadioProps>(
         ...classNames,
         base: cn(
           "inline-flex m-0 px-3 py-4 max-w-[100%] items-center justify-between",
-          "flex-row-reverse w-full cursor-pointer rounded-lg 3 !border-medium border-default-100",
+          "flex-row-reverse w-full cursor-pointer rounded-lg 3 !border-medium border-gray-300",
           "data-[selected=true]:border-primary",
           classNames?.base,
           className

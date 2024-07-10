@@ -13,97 +13,117 @@ import {
   Link,
   Progress,
   RadioGroup,
-  Spinner,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { AnimatePresence, motion } from "framer-motion";
-import RecommendProducts from "./RecommendProducts";
 import { VisaIcon, MasterCardIcon, PayPalIcon } from "./Providers";
 
 import ShippingForm from "./ShippingForm";
 import OrderSummary from "./OrderSummary";
-// import PaymentForm from "./PaymentForm";
 import PaymentMethodRadio from "./PaymentMethodRadio";
-// import { useCart } from "@/context/useCart";
-// import { useAuth } from "@/context/useAuth";
-// import { ProductType } from "@/types/product";
-// import { formatToUSD } from "@/utils/usd";
-// import { CustomerAddressType } from "@/types/checkout";
-// import { useQuery } from "@apollo/client";
-// import { ESTIMATE_PRICE } from "@/graphql/delivery";
-// import { useMutation } from "@apollo/client";
-// import { CHECKOUT } from "@/graphql/mutation/checkout";
+import { useCart } from "@/context/useCart";
+import { useAuth } from "@/context/useAuth";
+import { useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
+import { CHECKOUT } from "@/graphql/mutation/checkout";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { formatToUSD } from "@/utils/formatUSD";
-import router from "next/router";
+import { PromotionType } from "@/types/promotion";
+import { ESTIMATION_PRICE } from "@/graphql/order";
+import { ProductType } from "@/types/product";
+import { GET_ALL_LOCATIONS } from "@/graphql/location";
+import { ESTIMATE_PRICE } from "@/graphql/delivery";
+import RecommendProducts from "./RecommendProducts";
+import { GET_ALL_PRODUCTS } from "@/graphql/product";
 
-// ProductType[]
-const CheckoutComponent = ({ products }: { products: any }) => {
-  // const { user } = useAuth();
-  // const router = useRouter();
+interface OrderCart {
+  product: ProductType;
+  promotion: PromotionType;
+  qty: number;
+}
 
-  // const { cartItems, cleanCartItems, loading } = useCart();
-  // const [price, setPrice] = useState(0);
-  const [ship, setShip] = useState<string>("");
-  // CustomerAddressType
-  const [toDelivery, setToDelivery] = useState<any | null>();
+const CheckoutComponent = () => {
+  const { user } = useAuth();
+  const router = useRouter();
 
-  // const [storeCreateCheckouts] = useMutation(CHECKOUT);
+  const { cartItems, cleanCartItems, membershipId } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [ship, setShip] = useState<number>(0.0);
+
+  const [delivery, setDelivery] = useState<"PERSONAL" | "L192" | "CP">(
+    "PERSONAL"
+  );
+  const [location, setLocation] = useState<string>("");
+  const [position, setPosition] = useState<{
+    lat: number;
+    lng: number;
+  }>();
+
+  const [storeCreateCheckouts] = useMutation(CHECKOUT);
 
   // estimate price
-  // const { data: es_price, refetch } = useQuery(ESTIMATE_PRICE, {
-  //   variables: {
-  //     adr: {
-  //       lat: toDelivery?.lat,
-  //       lng: toDelivery?.lng,
-  //     },
-  //   },
-  // });
+  const { data: es_delivery_price } = useQuery(ESTIMATE_PRICE, {
+    variables: {
+      items: cartItems,
+      lat: position?.lat,
+      lng: position?.lng,
+      deliveryType: delivery,
+      mainObjectId: "454",
+    },
+  });
 
-  //  function checkout
+  const { data: locations, loading: loadingAddress } =
+    useQuery(GET_ALL_LOCATIONS);
 
-  // const onSubmitCheckout = () => {
-  //   const totalPrice = (price + es_price?.estimatePrice?.data?.price).toFixed(
-  //     2
-  //   );
+  const { data: orders } = useQuery(ESTIMATION_PRICE, {
+    variables: {
+      input: [...cartItems],
+      membershipId: membershipId,
+    },
+  });
 
-  //   const newCart = cartItems?.map((item) => {
-  //     return {
-  //       productId: item?.product.productId,
-  //       qty: item?.quantity,
-  //       unitPrice: parseFloat(item?.product?.price.toString()),
-  //       variantId: item?.product?.variant?.id,
-  //     };
-  //   });
+  const { data: products } = useQuery(GET_ALL_PRODUCTS, {
+    variables: {
+      filter: {
+        limit: 10,
+        skip: 0,
+        sort: -1,
+      },
+    },
+  });
 
-  //   const variables = {
-  //     input: {
-  //       carts: newCart,
-  //       currency: "USD",
-  //       totalPrice: parseFloat(totalPrice.toString()),
-  //     },
-  //     deliveryId: ship == "PERSONAL" ? null : ship,
-  //     addressId: toDelivery?.id,
-  //     express: ship == "PERSONAL" ? "PERSONAL" : "L192",
-  //     payment: "CASH",
-  //   };
+  // checkout orders product
+  const onSubmitCheckout = () => {
+    const variables = {
+      body: {
+        carts: [...cartItems],
+        deliveryFee: ship,
+      },
+      membershipId: membershipId,
+      deliveryType: delivery,
+      locationId: location,
+      payment: "CASH",
+    };
 
-  //   storeCreateCheckouts({ variables: variables })
-  //     .then((_) => {
-  //       toast.success(
-  //         "Congratulation! you've been order the product(s) successfully!"
-  //       );
-  //       router.push("/orders");
-  //     })
-  //     .then(() => {
-  //       cleanCartItems();
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Your transaction order is failed!");
-  //       console.log(err);
-  //     });
-  // };
+    setLoading(true);
+    storeCreateCheckouts({ variables: variables })
+      .then((_) => {
+        toast.success(
+          "Congratulation! you've been order the product(s) successfully!"
+        );
+      })
+      .then(() => {
+        cleanCartItems();
+      })
+      .catch((err) => {
+        toast.error("Your transaction order is failed!");
+        console.log(err);
+      });
+    setTimeout(() => {
+      setLoading(false);
+      router.push("/orders");
+    }, 500);
+  };
 
   const [[page, direction], setPage] = React.useState([0, 0]);
 
@@ -124,16 +144,30 @@ const CheckoutComponent = ({ products }: { products: any }) => {
     }),
   };
 
-  // useEffect(() => {
-  //   const subtotal: number[] = [];
-  //   cartItems.map((product: any) =>
-  //     subtotal.push(product.quantity * product.product.price)
-  //   );
-  //   const Subtotal: any = subtotal.reduce((accumulator, value) => {
-  //     return accumulator + value;
-  //   }, 0);
-  //   setPrice(Subtotal);
-  // }, [cartItems]);
+  useEffect(() => {
+    if (!locations) {
+      return;
+    }
+    setDelivery("L192");
+    setLocation(locations?.storeLocations[0].id);
+    setPosition({
+      lat: locations?.storeLocations[0].lat,
+      lng: locations?.storeLocations[0].lng,
+    });
+  }, [locations]);
+
+  useEffect(() => {
+    if (!es_delivery_price) {
+      return;
+    }
+    setShip(es_delivery_price?.estimatePriceDelivery?.data.price);
+    console.log("lg", es_delivery_price);
+
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }, [es_delivery_price]);
 
   const paginate = (newDirection: number) => {
     if (page + newDirection < 0 || page + newDirection > 2) return;
@@ -141,28 +175,28 @@ const CheckoutComponent = ({ products }: { products: any }) => {
     setPage([page + newDirection, newDirection]);
   };
 
-  // const ctaLabel = React.useMemo(() => {
-  //   switch (page) {
-  //     case 0:
-  //       return `Delivery (${formatToUSD(
-  //         price +
-  //           (es_price?.estimatePrice?.data?.price
-  //             ? es_price?.estimatePrice?.data?.price
-  //             : 0)
-  //       )})`;
-  //     case 1:
-  //       return "Continue to payment";
-  //     case 2:
-  //       return "Place order";
-  //     default:
-  //       return `Delivery (${formatToUSD(
-  //         price +
-  //           (es_price?.estimatePrice?.data?.price
-  //             ? es_price?.estimatePrice?.data?.price
-  //             : 0)
-  //       )})`;
-  //   }
-  // }, [es_price?.estimatePrice?.data?.price, page, price]);
+  const ctaLabel = React.useMemo(() => {
+    switch (page) {
+      case 0:
+        return `Delivery ($${orders?.estimationOrders
+          ?.reduce((accumulator: number, currentObject: OrderCart) => {
+            return (
+              accumulator +
+              (currentObject?.promotion?.discount
+                ? currentObject?.promotion?.discount?.totalDiscount
+                : currentObject?.product.price) *
+                currentObject?.qty
+            );
+          }, 0)
+          .toFixed(2)})`;
+      case 1:
+        return "Continue to payment";
+      case 2:
+        return "Place order";
+      default:
+        return `Delivery ()`;
+    }
+  }, [page, orders]);
 
   const stepTitle = React.useMemo(() => {
     switch (page) {
@@ -179,24 +213,30 @@ const CheckoutComponent = ({ products }: { products: any }) => {
 
   const stepsContent = React.useMemo(() => {
     const paymentRadioClasses = {
-      wrapper: "group-data-[selected=true]:border-foreground",
-      base: "data-[selected=true]:border-foreground",
+      wrapper: "group-data-[selected=true]:border-primary",
+      base: "data-[selected=true]:border-primary",
       control: "bg-primary",
     };
 
     switch (page) {
       case 0:
-        return <OrderSummary hideTitle />;
+        return (
+          <OrderSummary
+            hideTitle
+            orders={orders?.estimationOrders && orders?.estimationOrders}
+          />
+        );
       case 1:
         return (
           <div className="mt-0 sm:mt-0 lg:mt-4 flex flex-col gap-6">
             <ShippingForm
               hideTitle
-              variant="bordered"
+              delivery={delivery}
+              setDelivery={setDelivery}
+              location={location}
+              setLocation={setLocation}
+              setPosition={setPosition}
               ship={ship}
-              setShip={setShip}
-              toDelivery={toDelivery as any}
-              setToDelivery={setToDelivery}
             />
           </div>
         );
@@ -209,8 +249,8 @@ const CheckoutComponent = ({ products }: { products: any }) => {
                 aria-label="Select or add payment method"
                 defaultExpandedKeys={["select_existing_payment"]}
                 itemClasses={{
-                  title: "text-medium text-foreground-500",
-                  indicator: "text-foreground",
+                  title: "text-medium text-white-500",
+                  indicator: "text-white",
                 }}
                 selectionMode="multiple"
                 showDivider={false}
@@ -291,9 +331,9 @@ const CheckoutComponent = ({ products }: { products: any }) => {
       default:
         return null;
     }
-  }, [page, ship, toDelivery]);
+  }, [page, orders, delivery, location]);
 
-  // if (loading) {
+  // if (order_loading) {
   //   return (
   //     <section className="grid min-h-dvh place-items-center px-6 py-24 sm:py-32 lg:px-8">
   //       <Spinner label="Loading..." color="primary" />
@@ -301,51 +341,51 @@ const CheckoutComponent = ({ products }: { products: any }) => {
   //   );
   // }
 
-  // if (cartItems.length <= 0) {
-  //   return (
-  //     <section className="grid min-h-dvh place-items-center px-6 py-24 sm:py-32 lg:px-8">
-  //       <div className="text-center">
-  //         <div className="flex justify-center items-center">
-  //           <Image
-  //             isBlurred
-  //             radius="none"
-  //             alt="Empty"
-  //             src="/images/empty-cart.svg"
-  //             className="h-32 sm:h-32 lg:h-60"
-  //           />
-  //         </div>
-  //         <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-  //           Whoops! Your cart is currently empty.
-  //         </h1>
-  //         <p className="mt-6 text-base leading-7 text-gray-600">
-  //           Browse our amazing selection of products and fill your cart with
-  //           goodies!
-  //         </p>
-  //         <div className="mt-10 flex items-center justify-center gap-x-6">
-  //           <Button
-  //             variant="shadow"
-  //             color="primary"
-  //             as={Link}
-  //             href="/"
-  //             className="text-background"
-  //           >
-  //             Go back home
-  //           </Button>
+  if (!orders) {
+    return (
+      <section className="grid min-h-dvh place-items-center px-6 py-24 sm:py-32 lg:px-8">
+        <div className="text-center">
+          <div className="flex justify-center items-center">
+            <Image
+              isBlurred
+              radius="none"
+              alt="Empty"
+              src="/images/empty-cart.svg"
+              className="h-32 sm:h-32 lg:h-60"
+            />
+          </div>
+          <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+            Whoops! Your cart is currently empty.
+          </h1>
+          <p className="mt-6 text-base leading-7 text-gray-600">
+            Browse our amazing selection of products and fill your cart with
+            goodies!
+          </p>
+          <div className="mt-10 flex items-center justify-center gap-x-6">
+            <Button
+              variant="shadow"
+              color="primary"
+              as={Link}
+              href="/"
+              className="text-background"
+            >
+              Go back home
+            </Button>
 
-  //           <Button
-  //             variant="light"
-  //             color="primary"
-  //             as={Link}
-  //             href="/products"
-  //             endContent={<span aria-hidden="true">&rarr;</span>}
-  //           >
-  //             Products
-  //           </Button>
-  //         </div>
-  //       </div>
-  //     </section>
-  //   );
-  // }
+            <Button
+              variant="light"
+              color="primary"
+              as={Link}
+              href="/products"
+              endContent={<span aria-hidden="true">&rarr;</span>}
+            >
+              Products
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="container mx-auto px-3 sm:px-3 lg:px-6 py-4 sm:py-4 lg:py-9 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-5 w-full gap-8">
@@ -355,17 +395,12 @@ const CheckoutComponent = ({ products }: { products: any }) => {
           <div>
             <Button
               className="text-default-700 flex"
-              // isDisabled={page === 0}
+              isDisabled={page === 0}
               radius="full"
               variant="flat"
-              // onPress={() => {
-              //   if (page <= 1) {
-              //     refetch();
-              //     setToDelivery(null);
-              //     setShip("");
-              //   }
-              //   paginate(-1);
-              // }}
+              onPress={() => {
+                paginate(-1);
+              }}
             >
               <Icon icon="solar:arrow-left-outline" width={20} />
               Go back
@@ -419,19 +454,22 @@ const CheckoutComponent = ({ products }: { products: any }) => {
             >
               <h1 className="text-2xl font-medium">{stepTitle}</h1>
               {stepsContent}
-              {/* {user ? (
+              {user ? (
                 <Button
                   fullWidth
                   color="primary"
                   className="mt-8 text-background"
                   size="lg"
+                  radius="full"
                   onPress={() => {
                     if (page === 2) {
                       onSubmitCheckout();
                     }
+                    router.push("?query=delivery");
                     paginate(1);
                   }}
-                  isDisabled={page === 1 && !(ship && toDelivery)}
+                  isDisabled={page === 1 && !(delivery && location)}
+                  isLoading={loading}
                 >
                   {ctaLabel}
                 </Button>
@@ -446,24 +484,69 @@ const CheckoutComponent = ({ products }: { products: any }) => {
                 >
                   Login
                 </Button>
-              )} */}
+              )}
             </motion.form>
           </AnimatePresence>
         </div>
       </div>
       <div className="col-span-2">
-        {page <= 0 ? null : ( // <RecommendProducts products={products} />
+        {page <= 0 ? (
+          // <RecommendProducts products={products.storeProducts} />
+          ""
+        ) : (
           <div className="sticky top-28 hidden sm:hidden lg:block">
             <Card shadow="sm" isBlurred>
-              <CardHeader>Sumary</CardHeader>
+              <CardHeader>Summary</CardHeader>
               <CardBody>
                 <dl className="flex flex-col gap-4 py-4">
                   <div className="flex justify-between">
                     <dt className="text-small text-default-500">Subtotal</dt>
                     <dd className="text-small font-semibold text-default-700">
-                      {formatToUSD(999)}
+                      $
+                      {orders?.estimationOrders
+                        ?.reduce(
+                          (accumulator: number, currentObject: OrderCart) => {
+                            return (
+                              accumulator +
+                              (currentObject?.promotion?.discount
+                                ? currentObject?.promotion?.discount
+                                    ?.originalPrice
+                                : currentObject?.product?.price) *
+                                currentObject?.qty
+                            );
+                          },
+                          0
+                        )
+                        .toFixed(2)}
                     </dd>
                   </div>
+                  <div className="flex justify-between">
+                    <dt className="text-small text-default-500">Discount</dt>
+                    <dd className="text-small font-semibold text-default-700">
+                      {/* ${(price - priceDiscount).toFixed(2)} */}$
+                      {orders?.estimationOrders
+                        ?.reduce(
+                          (accumulator: number, currentObject: OrderCart) => {
+                            return (
+                              accumulator +
+                              ((currentObject?.promotion?.discount
+                                ? currentObject?.promotion?.discount
+                                    ?.originalPrice
+                                : currentObject.product.price) *
+                                currentObject?.qty -
+                                (currentObject?.promotion?.discount
+                                  ? currentObject?.promotion?.discount
+                                      ?.totalDiscount
+                                  : currentObject.product.price) *
+                                  currentObject?.qty)
+                            );
+                          },
+                          0
+                        )
+                        .toFixed(2)}
+                    </dd>
+                  </div>
+
                   <div className="flex justify-between">
                     <dt className="text-small text-default-500 flex items-center gap-3">
                       Delivery
@@ -473,17 +556,15 @@ const CheckoutComponent = ({ products }: { products: any }) => {
                       />
                     </dt>
 
-                    {/* {ship === "PERSONAL" ? (
+                    {delivery === "PERSONAL" ? (
                       <dd className="text-small font-semibold text-default-700">
                         Free
                       </dd>
                     ) : (
                       <dd className="text-small font-semibold text-default-700">
-                        {es_price?.estimatePrice?.data?.price
-                          ? formatToUSD(es_price?.estimatePrice?.data?.price)
-                          : formatToUSD(0)}
+                        ${ship?.toFixed(2)}
                       </dd>
-                    )} */}
+                    )}
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-small text-default-500">Tax</dt>
@@ -505,20 +586,45 @@ const CheckoutComponent = ({ products }: { products: any }) => {
                             : 0)
                       )}
                     </dd> */}
-                    {/* {ship === "PERSONAL" ? (
+                    {delivery === "PERSONAL" ? (
                       <dd className="font-semibold text-primary text-xl">
-                        {formatToUSD(price)}
+                        $
+                        {orders?.estimationOrders
+                          ?.reduce(
+                            (accumulator: number, currentObject: OrderCart) => {
+                              return (
+                                accumulator +
+                                (currentObject?.promotion?.discount
+                                  ? currentObject?.promotion?.discount
+                                      ?.totalDiscount
+                                  : currentObject.product.price) *
+                                  currentObject?.qty
+                              );
+                            },
+                            0
+                          )
+                          .toFixed(2)}
                       </dd>
                     ) : (
                       <dd className="font-semibold text-primary text-xl">
-                        {formatToUSD(
-                          price +
-                            (es_price?.estimatePrice?.data?.price
-                              ? es_price?.estimatePrice?.data?.price
-                              : 0)
-                        )}
+                        $
+                        {(
+                          orders?.estimationOrders?.reduce(
+                            (accumulator: number, currentObject: OrderCart) => {
+                              return (
+                                accumulator +
+                                (currentObject?.promotion?.discount
+                                  ? currentObject?.promotion?.discount
+                                      ?.totalDiscount
+                                  : currentObject.product.price) *
+                                  currentObject?.qty
+                              );
+                            },
+                            0
+                          ) + ship
+                        ).toFixed(2)}
                       </dd>
-                    )} */}
+                    )}
                   </div>
                 </dl>
               </CardBody>

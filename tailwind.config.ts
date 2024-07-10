@@ -37,6 +37,8 @@ const config: Config = {
     },
   },
   darkMode: "class",
+  // plugins: [nextui()],
+
   plugins: [
     nextui({
       prefix: "nextui",
@@ -47,7 +49,8 @@ const config: Config = {
         light: {
           colors: {
             background: "#F8F8F8",
-            foreground: "#ffffff",
+            white: "#ffffff",
+            foreground: "#000000",
             ...theme.colors,
           },
           layout: {

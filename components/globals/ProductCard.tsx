@@ -1,5 +1,6 @@
 "use client";
 
+import { useCart } from "@/context/useCart";
 import { PromotionType } from "@/types/promotion";
 import { usd } from "@/utils/formatUSD";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -19,6 +20,7 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import React, { FC, ReactNode } from "react";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   id: string;
@@ -39,6 +41,8 @@ const ProductCard: FC<ProductCardProps> = ({
   price,
   promotion,
 }) => {
+  const { addToCart } = useCart();
+
   return (
     <Card
       shadow="sm"
@@ -178,10 +182,13 @@ const ProductCard: FC<ProductCardProps> = ({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            addToCart(id);
+            toast.success("The product is added into the cart!");
           }}
         >
           Add to Cart
         </Button>
+
         <Button
           isIconOnly
           variant="light"

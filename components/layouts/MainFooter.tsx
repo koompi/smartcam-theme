@@ -8,7 +8,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 const MainFooter = () => {
   return (
     <section className="relative overflow-hidden">
-      <footer className="py-10 bg-foreground sm:pt-16 lg:pt-24">
+      <footer className="py-10 bg-white sm:pt-16 lg:pt-24">
         <div className="absolute right-0">
           <Image
             alt="logo"
@@ -38,7 +38,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="#"
-                    className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-foreground"
+                    className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
                   >
                     <Icon icon="ic:baseline-facebook" fontSize={21} />
                   </Link>
@@ -47,7 +47,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="#"
-                    className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-foreground"
+                    className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
                   >
                     <Icon icon="mingcute:telegram-fill" fontSize={18} />
                   </Link>
@@ -56,7 +56,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="#"
-                    className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-foreground"
+                    className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
                   >
                     <Icon icon="hugeicons:instagram" fontSize={18} />
                   </Link>
@@ -65,7 +65,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="#"
-                    className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-foreground"
+                    className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
                   >
                     <Icon icon="ri:twitter-x-fill" />
                   </Link>

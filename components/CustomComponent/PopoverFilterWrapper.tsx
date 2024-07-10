@@ -28,7 +28,7 @@ const PopoverFilterWrapper = React.forwardRef<
     <Popover ref={ref} isOpen={isOpen} onOpenChange={onOpenChange} {...props}>
       <PopoverTrigger>
         <Button
-          className="border-gray-200 text-gray-foreground"
+          className="border-gray-200 text-gray-white"
           endContent={<Icon icon="solar:alt-arrow-down-linear" />}
           variant="bordered"
           radius="full"

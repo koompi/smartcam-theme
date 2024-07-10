@@ -15,7 +15,7 @@ const ProductPage = () => {
       <section className="flex gap-6 px-6 pb-12">
         <SidebarDrawer className="w-[27rem]">
           <FiltersWrapper
-            className="bg-foreground sticky top-20"
+            className="bg-white sticky top-20"
             items={ecommerceItems}
             scrollShadowClassName="pb-12"
             showActions={false}

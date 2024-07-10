@@ -33,7 +33,28 @@ export const CUSTOMER_ADDRESS = gql`
 `;
 
 export const ESTIMATE_PRICE = gql`
-  query ($adr: AdrInput!) {
-    estimatePrice(adr: $adr)
+  query (
+    $items: [Items!]!
+    $lat: Float!
+    $lng: Float!
+    $deliveryType: DeliveryType!
+    $membershipId: String
+    $mainObjectId: String
+  ) {
+    estimatePriceDelivery(
+      items: $items
+      lat: $lat
+      lng: $lng
+      deliveryType: $deliveryType
+      membershipId: $membershipId
+      mainObjectId: $mainObjectId
+    ) {
+      data {
+        currency
+        estimateTime
+        price
+        vehicleType
+      }
+    }
   }
 `;

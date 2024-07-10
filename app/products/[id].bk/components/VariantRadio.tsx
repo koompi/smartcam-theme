@@ -29,7 +29,7 @@ export const VariantRadio = (props: RadioProps) => {
       <div {...getLabelWrapperProps()}>
         {children && <span {...getLabelProps()}>{children}</span>}
         {description && (
-          <span className="text-small text-foreground opacity-70">
+          <span className="text-small text-white opacity-70">
             {description}
           </span>
         )}
