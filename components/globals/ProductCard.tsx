@@ -46,7 +46,7 @@ const ProductCard: FC<ProductCardProps> = ({
       isHoverable
       as={Link}
       href={`/products/${id}`}
-      className="col-span-1 h-full group"
+      className="flex flex-col flex-grow col-span-1 h-full group"
     >
       {promotion?.discount?.discountType && (
         <Chip
@@ -63,7 +63,7 @@ const ProductCard: FC<ProductCardProps> = ({
             promotion?.discount?.discountPercentage + "%"}
         </Chip>
       )}
-      <CardBody>
+      <CardBody className="flex flex-col flex-grow">
         <Dropdown
           showArrow
           classNames={{
@@ -113,15 +113,18 @@ const ProductCard: FC<ProductCardProps> = ({
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <Image
-          alt="products"
-          src={
-            !thumbnail
-              ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${thumbnail}`
-              : "/images/default-thumbnail.png"
-          }
-          isZoomed
-        />
+        <div className="aspect-video">
+          <Image
+            alt="products"
+            src={
+              !thumbnail
+                ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${thumbnail}`
+                : "/images/default-thumbnail.png"
+            }
+            isZoomed
+            className="w-full h-full object-cover object-center"
+          />
+        </div>
         <Spacer y={2} />
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }, (_, i) => {
@@ -140,27 +143,29 @@ const ProductCard: FC<ProductCardProps> = ({
           })}
         </div>
         <Spacer y={2} />
-        <h2 className="text-black font-medium text-sm sm:text-sm lg:text-lg line-clamp-2">
-          {title}
-        </h2>
-        <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-4 mt-2 sm:mt-2 lg:mt-3">
-          {desc}
-        </p>
-        <div className="flex items-center gap-3 mt-2 sm:mt-2 lg:mt-3">
-          {promotion?.discount?.discountType ? (
-            <>
-              <p className="text-black text-xs sm:text-xs lg:text-md line-through">
-                {usd(promotion?.discount?.originalPrice)}
-              </p>
+        <div className="flex flex-col flex-grow">
+          <h2 className="text-black font-medium text-sm sm:text-sm lg:text-lg line-clamp-2">
+            {title}
+          </h2>
+          <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-4 mt-2 sm:mt-2 lg:mt-3">
+            {desc}
+          </p>
+          <div className="flex items-center gap-3 mt-2 sm:mt-2 lg:mt-3">
+            {promotion?.discount?.discountType ? (
+              <>
+                <p className="text-black text-xs sm:text-xs lg:text-md line-through">
+                  {usd(promotion?.discount?.originalPrice)}
+                </p>
+                <p className="text-black  text-lg sm:text-lg lg:text-2xl font-bold">
+                  {usd(promotion?.discount?.totalDiscount)}
+                </p>
+              </>
+            ) : (
               <p className="text-black  text-lg sm:text-lg lg:text-2xl font-bold">
-                {usd(promotion?.discount?.totalDiscount)}
+                {usd(price)}
               </p>
-            </>
-          ) : (
-            <p className="text-black  text-lg sm:text-lg lg:text-2xl font-bold">
-              {usd(promotion?.discount?.originalPrice)}
-            </p>
-          )}
+            )}
+          </div>
         </div>
       </CardBody>
       <CardFooter className="items-center justify-between hidden sm:hidden lg:flex">

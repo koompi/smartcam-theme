@@ -18,6 +18,12 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  Avatar,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Skeleton,
 } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -25,9 +31,13 @@ import Header from "./Header";
 import { Menubar } from "./Menubar";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
+import { useAuth } from "@/context/useAuth";
+import { useCart } from "@/context/useCart";
 
 export const MainNavbar = () => {
   const pathname = usePathname();
+  const { user, loading } = useAuth();
+  const { cartItems, logout } = useCart();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -255,16 +265,94 @@ export const MainNavbar = () => {
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Button
-              as={Link}
-              color="primary"
-              href="#"
-              variant="flat"
-              radius="full"
-              className="px-10 font-semibold"
-            >
-              Login
-            </Button>
+            {user ? (
+              <Dropdown placement="bottom-end">
+                {loading ? (
+                  <Skeleton className="flex rounded-full w-12 h-12" />
+                ) : (
+                  <DropdownTrigger>
+                    <Avatar
+                      isBordered
+                      as="button"
+                      className="transition-transform"
+                      src={user?.avatar}
+                    />
+                  </DropdownTrigger>
+                )}
+                <DropdownMenu aria-label="User Actions" variant="flat">
+                  <DropdownItem key="profile" className="h-14 gap-2">
+                    <p className="font-bold">Signed in as</p>
+                    <p className="font-bold">{user?.email}</p>
+                  </DropdownItem>
+                  <DropdownItem
+                    as={Link}
+                    key="settings"
+                    href="/settings"
+                    startContent={
+                      <Icon icon="solar:settings-outline" fontSize={21} />
+                    }
+                  >
+                    Settings
+                  </DropdownItem>
+                  <DropdownItem
+                    as={Link}
+                    key="settings"
+                    href="/locations"
+                    startContent={
+                      <Icon
+                        icon="solar:streets-map-point-broken"
+                        fontSize={21}
+                      />
+                    }
+                  >
+                    My Locations
+                  </DropdownItem>
+                  <DropdownItem
+                    as={Link}
+                    key="orders"
+                    href="/orders"
+                    startContent={
+                      <Icon
+                        icon="solar:cart-large-minimalistic-linear"
+                        fontSize={21}
+                      />
+                    }
+                  >
+                    Orders
+                  </DropdownItem>
+                  {/* <DropdownItem
+                  key="wallet"
+                  startContent={
+                    <Icon icon="solar:wallet-linear" fontSize={21} />
+                  }
+                >
+                  Wallet
+                </DropdownItem> */}
+
+                  <DropdownItem
+                    key="logout"
+                    color="danger"
+                    onPress={() => logout()}
+                    startContent={
+                      <Icon icon="solar:logout-outline" fontSize={21} />
+                    }
+                  >
+                    Log Out
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            ) : (
+              <Button
+                as={Link}
+                color="primary"
+                href={`https://backend.riverbase.org/sso/store`}
+                variant="flat"
+                radius="full"
+                className="px-10 font-semibold"
+              >
+                Login
+              </Button>
+            )}
           </NavbarItem>
         </NavbarContent>
         <NavbarMenu className="pt-16">

@@ -6,8 +6,12 @@ import MainFooter from "@/components/layouts/MainFooter";
 import { BackToTop } from "@/components/globals/BackTop";
 import { ApolloWrapper } from "@/libs/apollo-wrapper";
 import MobileNavigator from "@/components/layouts/MobileNavigator";
+import { AppProvider } from "@/context/useAuth";
+import { CartProvider } from "@/context/useCart";
+import ThemeProvider from "@/context/useTheme";
 
 const inter = Inter({ subsets: ["latin"] });
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
@@ -62,11 +66,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.className} suppressHydrationWarning>
         <ApolloWrapper>
-          <MainNavbar />
-          {children}
-          <BackToTop />
-          <MainFooter />
-          <MobileNavigator />
+          <AppProvider>
+            <CartProvider>
+              <ThemeProvider>
+                <MainNavbar />
+                {children}
+                <BackToTop />
+                <MainFooter />
+                <MobileNavigator />
+              </ThemeProvider>
+            </CartProvider>
+          </AppProvider>
         </ApolloWrapper>
       </body>
     </html>

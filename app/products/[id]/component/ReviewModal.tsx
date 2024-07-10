@@ -35,8 +35,6 @@ const ModalReview = React.forwardRef<
             const formData = new FormData(e.currentTarget);
             const data = Object.fromEntries(formData.entries());
 
-            console.log(data);
-
             onClose?.();
           }}
         >

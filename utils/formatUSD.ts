@@ -1,5 +1,5 @@
 const formatToUSD = (number: number): string => {
-  return number.toLocaleString("en-US", {
+  return number?.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 2,
@@ -7,7 +7,7 @@ const formatToUSD = (number: number): string => {
 };
 
 const usd = (number: number): string => {
-  return number.toLocaleString("en-US", {
+  return number?.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
     minimumFractionDigits: 0,

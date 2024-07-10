@@ -12,7 +12,7 @@ import { Pagination, Navigation } from "swiper/modules";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-import { ProductType } from "@/types/product";
+import { MessageProduct, ProductType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 
 interface ProductProps {
@@ -23,12 +23,42 @@ interface ProductProps {
 interface Props {
   title: string;
   data: any;
+  type: string;
 }
 
-const SectionListProducts: FC<Props> = ({ title, data }) => {
+const SectionListProducts: FC<Props> = ({ title, data, type }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [_, setInit] = useState<boolean>();
+
+  console.log("data", data);
+
+  const mostPopularSort = (): MessageProduct[] => {
+    if (!data) {
+      return [];
+    }
+    return [...data?.products].sort((a: MessageProduct, b: MessageProduct) =>
+      a.product?.sell > b.product?.sell ? -1 : 1
+    );
+  };
+
+  const newestSort = (): MessageProduct[] => {
+    if (!data?.products) {
+      return [];
+    }
+    return [...data?.products].sort((a: MessageProduct, b: MessageProduct) =>
+      a.product?.createdAt > b.product?.createdAt ? -1 : 1
+    );
+  };
+
+  const topRated = (): MessageProduct[] => {
+    if (!data?.products) {
+      return [];
+    }
+    return [...data?.products].sort((a: MessageProduct, b: MessageProduct) =>
+      a.product?.rating > b.product?.rating ? -1 : 1
+    );
+  };
 
   return (
     <section className="px-3 sm:px-3 lg:px-6 py-6">
@@ -86,36 +116,43 @@ const SectionListProducts: FC<Props> = ({ title, data }) => {
           },
         }}
         modules={[Pagination, Navigation]}
-        // className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 place-items-stretch gap-3 bg-background"
+        className="card-display grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 place-items-stretch gap-3 bg-background"
       >
-        {Array.from(data, (res: ProductProps, idx) => {
-          const { thumbnail, title, desc, rating, price, currencyPrice, id } =
-            res?.product;
+        {Array.from(
+          type === "MOST POPULAR"
+            ? mostPopularSort()
+            : type === "NEW ARRIVAL"
+            ? newestSort()
+            : topRated(),
+          (res: ProductProps, idx) => {
+            const { thumbnail, title, desc, rating, price, currencyPrice, id } =
+              res?.product;
 
-          return (
-            <SwiperSlide key={idx} className="bg-background">
-              <ProductCard
-                id={id}
-                thumbnail={`/images/products/${thumbnail}`}
-                title={title}
-                desc={desc}
-                rating={rating ? rating : 4}
-                price={price}
-                promotion={{
-                  isMembership: res.promotion?.isMembership,
-                  discount: {
-                    discountPercentage:
-                      res.promotion?.discount?.discountPercentage,
-                    discountPrice: res.promotion?.discount?.discountPrice,
-                    discountType: res.promotion?.discount?.discountType,
-                    originalPrice: res.promotion?.discount?.originalPrice,
-                    totalDiscount: res.promotion?.discount?.totalDiscount,
-                  },
-                }}
-              />
-            </SwiperSlide>
-          );
-        })}
+            return (
+              <SwiperSlide key={idx} className="bg-background">
+                <ProductCard
+                  id={id}
+                  thumbnail={`/images/products/${thumbnail}`}
+                  title={title}
+                  desc={desc}
+                  rating={rating ? rating : 4}
+                  price={price}
+                  promotion={{
+                    isMembership: res.promotion?.isMembership,
+                    discount: {
+                      discountPercentage:
+                        res.promotion?.discount?.discountPercentage,
+                      discountPrice: res.promotion?.discount?.discountPrice,
+                      discountType: res.promotion?.discount?.discountType,
+                      originalPrice: res.promotion?.discount?.originalPrice,
+                      totalDiscount: res.promotion?.discount?.totalDiscount,
+                    },
+                  }}
+                />
+              </SwiperSlide>
+            );
+          }
+        )}
       </Swiper>
     </section>
   );

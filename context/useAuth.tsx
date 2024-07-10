@@ -56,6 +56,7 @@ export const AppProvider: FC<Props> = (props) => {
       if ((data as unknown as number) == 401) {
         return setLoading(true);
       }
+
       setUser(data);
       setTimeout(() => {
         setLoading(false);
