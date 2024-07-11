@@ -1,16 +1,23 @@
 "use client";
 
-import { Button, Card, CardBody, Chip, Divider, Image } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  Chip,
+  Divider,
+  Image,
+} from "@nextui-org/react";
 import React, { FC } from "react";
 import { Icon } from "@iconify/react";
 import Steps from "@uiw/react-steps";
 import { OrdersType } from "@/types/checkout";
 import dayjs from "dayjs";
-import { formatToUSD } from "@/utils/usd";
 import Link from "next/link";
 import { useMutation } from "@apollo/client";
 import { toast } from "sonner";
-import { CONFIRM_ORDER } from "@/graphql/mutation/order";
+import { CONFIRM_ORDER } from "@/graphql.bk/mutation/order";
+import VerticalSteps from "./VerticalSteps";
 
 const OrderCard: FC<OrdersType> = (props) => {
   const [storeConfirmOrder] = useMutation(CONFIRM_ORDER);
@@ -29,9 +36,6 @@ const OrderCard: FC<OrdersType> = (props) => {
         console.log(err);
       });
   };
-
-  console.log("order", props);
-  
 
   return (
     <Card
@@ -79,7 +83,10 @@ const OrderCard: FC<OrdersType> = (props) => {
             <div className="flex flex-wrap items-center gap-6">
               <Image
                 alt={props.carts[0]?.product?.title}
-                src={`${process.env.NEXT_PUBLIC_DRIVE ?? "https://drive.backend.riverbase.org"}/api/drive?hash=${props?.carts[0]?.product?.thumbnail}`}
+                src={`${
+                  process.env.NEXT_PUBLIC_DRIVE ??
+                  "https://drive.backend.riverbase.org"
+                }/api/drive?hash=${props?.carts[0]?.product?.thumbnail}`}
                 isBlurred
                 className="border-2 h-16 w-16 sm:h-16 sm:w-16 lg:h-36 lg:w-36 object-contain object-center"
               />
@@ -94,11 +101,6 @@ const OrderCard: FC<OrdersType> = (props) => {
                 <p className="text-sm font-light">
                   {props?.totalUnitPrice.usd.toFixed(2)}
                 </p>
-                <div>
-                  <Chip>
-                    {/* {props.} */}
-                  </Chip>
-                </div>
               </div>
             </div>
           ) : (
@@ -107,13 +109,34 @@ const OrderCard: FC<OrdersType> = (props) => {
                 <Image
                   key={idx}
                   alt={props.carts[0]?.product?.title}
-                  src={`${process.env.NEXT_PUBLIC_DRIVE ?? "https://drive.backend.riverbase.org"}/api/drive?hash=${res?.product?.thumbnail}`}
+                  src={`${
+                    process.env.NEXT_PUBLIC_DRIVE ??
+                    "https://drive.backend.riverbase.org"
+                  }/api/drive?hash=${res?.product?.thumbnail}`}
                   isBlurred
                   className="border-2 col-span-1 h-16 w-16 sm:h-16 sm:w-16 lg:h-24 lg:w-24 object-cover bg-white object-center"
                 />
               ))}
             </div>
           )}
+
+          {/* <VerticalSteps
+            steps={[
+              {
+                title: "Ordered",
+              },
+              {
+                title: "Confirmed",
+              },
+              {
+                title: "Out for delivery",
+              },
+              {
+                title: "Delivered",
+              },
+            ]}
+          /> */}
+
           {props?.status !== "CANCEL" ? (
             <div className="mt-3">
               <Steps
@@ -121,10 +144,10 @@ const OrderCard: FC<OrdersType> = (props) => {
                   props?.status === "START"
                     ? 0
                     : props?.status === "CONFIRM"
-                      ? 1
-                      : props?.status === "PROCESS"
-                        ? 2
-                        : 3
+                    ? 1
+                    : props?.status === "PROCESS"
+                    ? 2
+                    : 3
                 }
                 direction="vertical"
                 progressDot

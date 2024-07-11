@@ -7,13 +7,14 @@ import {
   AccordionItem,
   Button,
   Card,
+  Chip,
   Divider,
   Image,
   Link,
   RadioGroup,
 } from "@nextui-org/react";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_LOCATIONS } from "@/graphql/location";
+import { GET_ALL_LOCATIONS } from "@/graphql.bk/location";
 import { LocationType } from "@/types/location";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import CustomRadio from "./CustomRadio";
@@ -53,8 +54,6 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
     //   setAddress(true);
     // };
 
-    // console.log("myLocation", locations);
-
     return (
       <>
         <div>
@@ -73,16 +72,14 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                   </div>
                 )}
                 title={
-                  <div className="space-y-1 pb-4 leading-normal text-black">
-                    <div className="text-xl font-semibold text-black">
-                      {myLocation?.firstName} {myLocation?.lastName}
-                    </div>
-                    <div className="leading-snug text-black">
-                      <div>{myLocation?.email}</div>
-                      <div>{myLocation?.phoneNumber}</div>
-                    </div>
+                  <div className="flex items-center gap-3">
+                    <Chip size="sm" color="primary">
+                      {myLocation?.label}
+                    </Chip>
+                    <p>{myLocation?.address?.streetValue}</p>
                   </div>
                 }
+                // title="Delivery Option"
               >
                 <div className="my-4">
                   <RadioGroup
@@ -99,16 +96,24 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                           <CustomRadio
                             key={idx}
                             classNames={deliveryRadioClasses}
+                            icon={
+                              <Image
+                                alt="delivery logo"
+                                src={
+                                  !myLocation?.photos[0]
+                                    ? "/images/shop.png"
+                                    : myLocation?.photos[0]
+                                }
+                                radius="none"
+                                className="w-24"
+                              />
+                            }
+                            label={location?.address?.streetValue}
+                            chip={myLocation?.label}
                             description={
-                              <div className="space-y-0.5">
-                                <div className="font-semibold text-black text-lg">
-                                  {myLocation?.firstName} {myLocation?.lastName}
-                                </div>
-                                <div className="leading-snug">
-                                  <div>{myLocation?.email}</div>
-                                  <div>{myLocation?.phoneNumber}</div>
-                                </div>
-                                <div>{location?.address?.streetValue}</div>
+                              <div className="leading-snug flex items-center gap-2">
+                                <div>{myLocation?.email}</div>
+                                <div>{myLocation?.phoneNumber}</div>
                               </div>
                             }
                             value={myLocation.id}
@@ -133,7 +138,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
             </Link>
           )}
           <div className="mt-6 flex space-x-4 justify-between">
-            <Accordion>
+            <Accordion defaultExpandedKeys={["delivery"]}>
               <AccordionItem
                 key="delivery"
                 aria-label="Theme"
@@ -180,24 +185,21 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                   <RadioGroup
                     aria-label="Select existing payment method"
                     classNames={{ wrapper: "gap-3" }}
-                    defaultValue={location}
+                    defaultValue={delivery}
                     onValueChange={(value) => {
                       setDelivery(value);
                     }}
                   >
-                    {["CP", "L192"]?.map((delivery: string, idx: number) => {
+                    {["CP", "L192"]?.map((delivery: string) => {
                       return (
                         <CustomRadio
-                          key={idx}
+                          key={delivery}
                           classNames={deliveryRadioClasses}
                           description={
                             <div className="space-y-0.5">
                               <div className="font-semibold text-black text-lg">
                                 {delivery}
                               </div>
-                              {/* <div className="font-semibold text-black text-md">
-                                Fee: $1.5
-                              </div> */}
                               <div>(Delivery within 2-3 days)</div>
                             </div>
                           }

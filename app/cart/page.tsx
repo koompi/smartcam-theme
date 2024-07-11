@@ -4,10 +4,10 @@ import { useCart } from "@/context/useCart";
 // import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import CheckoutComponent from "./components/CheckoutComponent";
 import { useQuery } from "@apollo/client";
-import { ESTIMATION_PRICE } from "@/graphql/order";
+import { ESTIMATION_PRICE } from "@/graphql.bk/order";
 import { ProductType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
-import { GET_ALL_PRODUCTS } from "@/graphql/product";
+import { GET_ALL_PRODUCTS } from "@/graphql.bk/product";
 // import { GET_ALL_PRODUCTS } from "@/graphql/product";
 
 interface OrderCart {

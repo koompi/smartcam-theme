@@ -66,7 +66,11 @@ const CustomRadio = React.forwardRef<HTMLInputElement, CustomRadioProps>(
               </Chip>
             )}
             {chip && !isRecommended && (
-              <Chip className="h-6 p-0 text-tiny" color="danger" variant="flat">
+              <Chip
+                className="h-6 p-0 text-tiny"
+                color="primary"
+                variant="flat"
+              >
                 {chip}
               </Chip>
             )}

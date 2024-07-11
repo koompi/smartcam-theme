@@ -18,6 +18,8 @@
     "@types/leaflet": "^1.9.12",
     "@uiw/react-steps": "^4.22.3",
     "axios": "^1.7.2",
+    "baray-js": "github:baray-io/baray-js#dev",
+    "baray-js-react": "github:baray-io/baray-js-react",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.11",
     "framer-motion": "^11.2.11",

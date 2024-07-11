@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Accordion,
   AccordionItem,
@@ -25,16 +25,18 @@ import { useCart } from "@/context/useCart";
 import { useAuth } from "@/context/useAuth";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import { CHECKOUT } from "@/graphql/mutation/checkout";
+import { CHECKOUT } from "@/graphql.bk/mutation/checkout";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { PromotionType } from "@/types/promotion";
-import { ESTIMATION_PRICE } from "@/graphql/order";
+import { ESTIMATION_PRICE } from "@/graphql.bk/order";
 import { ProductType } from "@/types/product";
-import { GET_ALL_LOCATIONS } from "@/graphql/location";
-import { ESTIMATE_PRICE } from "@/graphql/delivery";
+import { GET_ALL_LOCATIONS } from "@/graphql.bk/location";
+import { ESTIMATE_PRICE } from "@/graphql.bk/delivery";
 import RecommendProducts from "./RecommendProducts";
-import { GET_ALL_PRODUCTS } from "@/graphql/product";
+import { GET_ALL_PRODUCTS } from "@/graphql.bk/product";
+import PaymentForm from "./PaymentForm";
+import { useBaray } from "@/hooks/baray";
 
 interface OrderCart {
   product: ProductType;
@@ -45,10 +47,12 @@ interface OrderCart {
 const CheckoutComponent = () => {
   const { user } = useAuth();
   const router = useRouter();
+  const baray = useBaray();
 
   const { cartItems, cleanCartItems, membershipId } = useCart();
   const [loading, setLoading] = useState(false);
   const [ship, setShip] = useState<number>(0.0);
+  const [paymentOption, setPaymentOption] = useState("online");
 
   const [delivery, setDelivery] = useState<"PERSONAL" | "L192" | "CP">(
     "PERSONAL"
@@ -93,36 +97,50 @@ const CheckoutComponent = () => {
   });
 
   // checkout orders product
-  const onSubmitCheckout = () => {
-    const variables = {
-      body: {
-        carts: [...cartItems],
-        deliveryFee: ship,
-      },
-      membershipId: membershipId,
-      deliveryType: delivery,
-      locationId: location,
-      payment: "CASH",
-    };
-
-    setLoading(true);
-    storeCreateCheckouts({ variables: variables })
-      .then((_) => {
-        toast.success(
-          "Congratulation! you've been order the product(s) successfully!"
-        );
-      })
-      .then(() => {
-        cleanCartItems();
-      })
-      .catch((err) => {
+  const onSubmitCheckout = async () => {
+    // with online payment (baray)
+    if (paymentOption === "online") {
+      try {
+        setLoading(true);
+        const intent = await createIntent();
+        baray!.confirmPayment(intent._id);
+        setLoading(false);
+      } catch (err) {
         toast.error("Your transaction order is failed!");
         console.log(err);
-      });
-    setTimeout(() => {
-      setLoading(false);
-      router.push("/orders");
-    }, 500);
+      }
+    } else {
+      // cash
+      const variables = {
+        body: {
+          carts: [...cartItems],
+          deliveryFee: ship,
+        },
+        membershipId: membershipId,
+        deliveryType: delivery,
+        locationId: location,
+        payment: "CASH",
+      };
+
+      setLoading(true);
+      storeCreateCheckouts({ variables: variables })
+        .then((_) => {
+          toast.success(
+            "Congratulation! you've been order the product(s) successfully!"
+          );
+        })
+        .then(() => {
+          cleanCartItems();
+        })
+        .catch((err) => {
+          toast.error("Your transaction order is failed!");
+          console.log(err);
+        });
+      setTimeout(() => {
+        setLoading(false);
+        router.push("/orders");
+      }, 500);
+    }
   };
 
   const [[page, direction], setPage] = React.useState([0, 0]);
@@ -161,7 +179,6 @@ const CheckoutComponent = () => {
       return;
     }
     setShip(es_delivery_price?.estimatePriceDelivery?.data.price);
-    console.log("lg", es_delivery_price);
 
     setLoading(true);
     setTimeout(() => {
@@ -262,23 +279,11 @@ const CheckoutComponent = () => {
                   <RadioGroup
                     aria-label="Select existing payment method"
                     classNames={{ wrapper: "gap-3" }}
-                    defaultValue="cash"
+                    defaultValue="online"
+                    onValueChange={setPaymentOption}
                   >
                     <PaymentMethodRadio
                       isRecommended
-                      classNames={paymentRadioClasses}
-                      description="Paid by cash"
-                      icon={
-                        <Icon
-                          icon="solar:wallet-money-bold"
-                          className="text-danger"
-                          fontSize={32}
-                        />
-                      }
-                      label="Cash"
-                      value="cash"
-                    />
-                    <PaymentMethodRadio
                       classNames={paymentRadioClasses}
                       description="coming soon"
                       icon={
@@ -288,42 +293,24 @@ const CheckoutComponent = () => {
                           fontSize={32}
                         />
                       }
-                      label="Baray"
-                      value="baray"
-                      isDisabled
+                      label="Online Payment"
+                      value="online"
                     />
                     <PaymentMethodRadio
                       classNames={paymentRadioClasses}
-                      description="coming soon"
-                      icon={<VisaIcon height={30} width={30} />}
-                      label="Visa"
-                      value="4229"
-                      isDisabled
-                    />
-                    <PaymentMethodRadio
-                      classNames={paymentRadioClasses}
-                      description="coming soon"
-                      icon={<MasterCardIcon height={30} width={30} />}
-                      label="MasterCard"
-                      value="8888"
-                      isDisabled
-                    />
-                    <PaymentMethodRadio
-                      classNames={paymentRadioClasses}
-                      description="coming soon"
-                      icon={<PayPalIcon height={30} width={30} />}
-                      label="PayPal"
-                      value="paypal"
-                      isDisabled
+                      description="Paid by cash"
+                      icon={
+                        <Icon
+                          icon="solar:wallet-money-bold"
+                          className="text-danger"
+                          fontSize={32}
+                        />
+                      }
+                      label="Cash on Delivery"
+                      value="cash"
                     />
                   </RadioGroup>
                 </AccordionItem>
-                {/* <AccordionItem
-                  key="add_new_payment"
-                  title="Add a new payment method"
-                >
-                  <PaymentForm variant="bordered" />
-                </AccordionItem> */}
               </Accordion>
             </div>
           </div>
@@ -341,7 +328,7 @@ const CheckoutComponent = () => {
   //   );
   // }
 
-  if (!orders) {
+  if (!orders || orders.estimationOrders.length <= 0) {
     return (
       <section className="grid min-h-dvh place-items-center px-6 py-24 sm:py-32 lg:px-8">
         <div className="text-center">
@@ -468,7 +455,10 @@ const CheckoutComponent = () => {
                     router.push("?query=delivery");
                     paginate(1);
                   }}
-                  isDisabled={page === 1 && !(delivery && location)}
+                  isDisabled={
+                    orders.estimationOrders.length <= 0 ||
+                    (page === 1 && !(delivery && location))
+                  }
                   isLoading={loading}
                 >
                   {ctaLabel}
@@ -481,6 +471,7 @@ const CheckoutComponent = () => {
                   color="primary"
                   className="mt-8 text-background"
                   size="lg"
+                  radius="full"
                 >
                   Login
                 </Button>
@@ -491,9 +482,9 @@ const CheckoutComponent = () => {
       </div>
       <div className="col-span-2">
         {page <= 0 ? (
-          // <RecommendProducts products={products.storeProducts} />
-          ""
+          <RecommendProducts products={products?.storeProducts?.products} />
         ) : (
+          // ""
           <div className="sticky top-28 hidden sm:hidden lg:block">
             <Card shadow="sm" isBlurred>
               <CardHeader>Summary</CardHeader>
@@ -637,3 +628,7 @@ const CheckoutComponent = () => {
 };
 
 export default CheckoutComponent;
+
+function createIntent() {
+  return { _id: "001" };
+}

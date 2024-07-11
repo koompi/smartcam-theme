@@ -1,7 +1,7 @@
 "use client";
 
 import ProductViewInfo from "./ProductViewItem";
-import { GET_PRODUCT } from "@/graphql/product";
+import { GET_PRODUCT } from "@/graphql.bk/product";
 import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 
 export default function ProductDetail(props: { slug: string }) {

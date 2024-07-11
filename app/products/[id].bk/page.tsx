@@ -1,4 +1,4 @@
-import { GET_PRODUCT } from "@/graphql/product";
+import { GET_PRODUCT } from "@/graphql.bk/product";
 import { Metadata, ResolvingMetadata } from "next";
 import { getClient } from "@/libs/client";
 

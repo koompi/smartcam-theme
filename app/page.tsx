@@ -8,7 +8,7 @@ import SectionListProducts from "./components/SectionListProducts";
 // import { products } from "@/data/products";
 import Banner from "./components/Banner";
 import Link from "next/link";
-import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
+import { GLOBAL_PRODUCT_FILTERING } from "@/graphql.bk/product";
 import { useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
 import { CardLoading } from "@/components/globals/Loading";

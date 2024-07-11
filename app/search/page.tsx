@@ -6,10 +6,10 @@ import { Category } from "@/types/category";
 // import ProductCard from "../components/ProductCard";
 import Link from "next/link";
 import { Search } from "./components/Search";
-import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
+import { GLOBAL_PRODUCT_FILTERING } from "@/graphql.bk/product";
 import { useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
-import { CATEGORIES } from "@/graphql/category";
+import { CATEGORIES } from "@/graphql.bk/category";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();

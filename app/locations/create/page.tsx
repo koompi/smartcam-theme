@@ -26,7 +26,7 @@ import { validateNumber } from "@/utils/phone";
 import axios, { AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { useMutation } from "@apollo/client";
-import { CREATE_CUSTOMER_LOCATION } from "@/graphql/mutation/location";
+import { CREATE_CUSTOMER_LOCATION } from "@/graphql.bk/mutation/location";
 import { useAuth } from "@/context/useAuth";
 import dynamic from "next/dynamic";
 import LocationLabel from "../components/LocationLabel";

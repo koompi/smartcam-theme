@@ -7,13 +7,13 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 const checkbox = tv({
   slots: {
     base: "border-default hover:bg-default-200",
-    content: "text-default-500",
+    content: "text-gray-500",
   },
   variants: {
     isSelected: {
       true: {
         base: "border-primary bg-primary hover:bg-primary-500 hover:border-primary-500",
-        content: "text-primary-white pl-1",
+        content: "text-white pl-1",
       },
     },
     isFocusVisible: {

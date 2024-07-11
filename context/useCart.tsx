@@ -10,7 +10,7 @@ import React, {
 import { Toaster, toast } from "sonner";
 
 import { useQuery } from "@apollo/client";
-import { GET_STORE_USER } from "@/graphql/store";
+import { GET_STORE_USER } from "@/graphql.bk/store";
 import { CartContextType, CartItem } from "@/types/global";
 
 export const CartContext = createContext({});

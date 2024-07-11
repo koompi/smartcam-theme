@@ -117,16 +117,17 @@ const ProductCard: FC<ProductCardProps> = ({
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <div className="aspect-video">
+        <div className="flex justify-center items-center overflow-hidden">
           <Image
             alt="products"
             src={
-              !thumbnail
+              thumbnail
                 ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${thumbnail}`
                 : "/images/default-thumbnail.png"
             }
             isZoomed
-            className="w-full h-full object-cover object-center"
+            isBlurred
+            className="w-96 h-36 sm:h-36 lg:h-60 object-cover object-center"
           />
         </div>
         <Spacer y={2} />

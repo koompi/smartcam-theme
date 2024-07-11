@@ -9,6 +9,7 @@ import MobileNavigator from "@/components/layouts/MobileNavigator";
 import { AppProvider } from "@/context/useAuth";
 import { CartProvider } from "@/context/useCart";
 import ThemeProvider from "@/context/useTheme";
+import { BarayProvider } from "@/context/baray";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -67,15 +68,19 @@ export default function RootLayout({
       <body className={poppins.className} suppressHydrationWarning>
         <ApolloWrapper>
           <AppProvider>
-            <CartProvider>
-              <ThemeProvider>
-                <MainNavbar />
-                {children}
-                <BackToTop />
-                <MainFooter />
-                <MobileNavigator />
-              </ThemeProvider>
-            </CartProvider>
+            <BarayProvider
+              apiKey={"pk_prod_b41705c5-ae81-4d1f-8c3e-7edb56589ab3"}
+            >
+              <CartProvider>
+                <ThemeProvider>
+                  <MainNavbar />
+                  {children}
+                  <BackToTop />
+                  <MainFooter />
+                  <MobileNavigator />
+                </ThemeProvider>
+              </CartProvider>
+            </BarayProvider>
           </AppProvider>
         </ApolloWrapper>
       </body>

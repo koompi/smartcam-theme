@@ -15,8 +15,6 @@ import React, { FC } from "react";
 import { LocationType } from "@/types/location";
 
 const MyLocation: FC<LocationType> = (props) => {
-  console.log("poro", props);
-
   return (
     <Card
       isBlurred

@@ -31,8 +31,6 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
   const nextRef = useRef(null);
   const [_, setInit] = useState<boolean>();
 
-  console.log("data", data);
-
   const mostPopularSort = (): MessageProduct[] => {
     if (!data) {
       return [];
@@ -132,7 +130,7 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
               <SwiperSlide key={idx} className="bg-background">
                 <ProductCard
                   id={id}
-                  thumbnail={`/images/products/${thumbnail}`}
+                  thumbnail={thumbnail}
                   title={title}
                   desc={desc}
                   rating={rating ? rating : 4}

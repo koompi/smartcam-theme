@@ -3,6 +3,7 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
+import { BarayProvider } from "@/context/baray";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const router = useRouter();

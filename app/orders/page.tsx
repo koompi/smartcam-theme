@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import OrderCard from "./components/OrderCard";
 import { useQuery } from "@apollo/client";
-import { GET_ORDERS } from "@/graphql/orders";
+import { GET_ORDERS } from "@/graphql.bk/orders";
 import { OrdersType } from "@/types/checkout";
 import { Skeleton } from "@nextui-org/react";
 import { useSearchParams } from "next/navigation";
@@ -55,6 +55,8 @@ const OrderPage = () => {
       </section>
     );
   }
+
+  console.log("data", data);
 
   return (
     <section className="bg-white">

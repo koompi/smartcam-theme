@@ -29,7 +29,7 @@ const ProductPage = () => {
                 <ProductCard
                   key={idx}
                   url={res.url}
-                  thumbnail={`/images/products/${res.thumbnail}`}
+                  thumbnail={res.thumbnail}
                   title={res.title}
                   desc={undefined}
                   rating={res.rating}

@@ -14,13 +14,9 @@ export const ORDER_BY_ID = gql`
       id
       status
       tax
-      totalDiscount
-      totalPrice
       carts {
-        discountPrice
         productId
         qty
-        unitPrice
         variantId
         product {
           brand
@@ -34,10 +30,6 @@ export const ORDER_BY_ID = gql`
           id
           previews
           price
-          productCodes {
-            code
-            id
-          }
           rating
           slug
           status
@@ -61,12 +53,32 @@ export const ORDER_BY_ID = gql`
             price
           }
         }
+        discountPrice {
+          khr
+          usd
+        }
+        unitPrice {
+          usd
+          khr
+        }
+      }
+      totalPrice {
+        khr
+        usd
+      }
+      discountUnitPrice {
+        khr
+        usd
+      }
+      totalUnitPrice {
+        khr
+        usd
       }
     }
   }
 `;
 
-export const ESTIMATION_PRICE_ORDER = gql`
+export const ESTIMATION_PRICE = gql`
   query ($input: [InputEstimationOrder!]!, $membershipId: String) {
     estimationOrders(input: $input, membershipId: $membershipId) {
       qty
@@ -84,6 +96,7 @@ export const ESTIMATION_PRICE_ORDER = gql`
         id
         title
         price
+        thumbnail
       }
     }
   }

@@ -41,6 +41,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
                 : "/images/default-thumbnail.png"
             }
             isZoomed
+            isBlurred
             className="h-full w-full"
           />
         </div>

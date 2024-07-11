@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Divider } from "@nextui-org/react";
+import { Button, Divider, Image } from "@nextui-org/react";
 import OrderSummaryItem from "./OrderSummaryItem";
 // import { useCart } from "@/context/useCart";
 import { Toaster } from "sonner";
@@ -37,8 +37,6 @@ const OrderSummary = React.forwardRef<HTMLDivElement, OrderSummaryProps>(
     //     membershipId: membershipId,
     //   },
     // });
-
-    // console.log("props", props.orders);
 
     return (
       <div ref={ref} {...props}>
