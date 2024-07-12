@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import { GET_PRODUCT } from "@/graphql/product";
 import { getClient } from "@/libs/client";
 import { ResolvingMetadata, Metadata } from "next";
-import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 const ProductDetail = dynamic(() => import("./component/ProductDetail"));
 
@@ -24,6 +23,8 @@ export async function generateMetadata(
     query: GET_PRODUCT,
     variables: { slug: id },
   });
+
+  console.log("produ", data);
 
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];

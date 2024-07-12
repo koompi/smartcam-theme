@@ -87,8 +87,6 @@ const ProductPage = () => {
     return <Loading />;
   }
 
-  console.log("prod", products.storeGlobalFilterProducts?.products);
-
   return (
     <main>
       <PromotionCard />
