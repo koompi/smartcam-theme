@@ -18,90 +18,116 @@ const ecommerceItems: Filter[] = [
     defaultOpen: true,
     options: [
       {
-        title: "Accer",
-        value: "acer",
+        title: "Addidas",
+        value: "Addidas",
       },
       {
-        title: "Adata",
-        value: "adata",
+        title: "Converse",
+        value: "Converse",
       },
       {
-        title: "Apc",
-        value: "apc",
+        title: "Puma",
+        value: "Puma",
       },
       {
-        title: "Apple",
-        value: "apple",
+        title: "Mizuno",
+        value: "Mizuno",
       },
       {
-        title: "Asus",
-        value: "asus",
+        title: "New Balance",
+        value: "New Balance",
       },
       {
-        title: "Canon",
-        value: "canon",
-      },
-      {
-        title: "Dahua",
-        value: "dahua",
-      },
-      {
-        title: "Dell",
-        value: "dell",
-      },
-      {
-        title: "Epson",
-        value: "epson",
-      },
-      {
-        title: "Hikvision",
-        value: "hikvision",
-      },
-      {
-        title: "Hp",
-        value: "hp",
-      },
-      {
-        title: "Ion",
-        value: "ion",
-      },
-      {
-        title: "Lelnovo",
-        value: "lenovo",
-      },
-      {
-        title: "Meki",
-        value: "meki",
-      },
-      {
-        title: "Microsoft",
-        value: "microsoft",
-      },
-      {
-        title: "Prolink",
-        value: "prolink",
+        title: "Nike",
+        value: "Nike",
       },
     ],
+    // options: [
+    //   {
+    //     title: "Accer",
+    //     value: "acer",
+    //   },
+    //   {
+    //     title: "Adata",
+    //     value: "adata",
+    //   },
+    //   {
+    //     title: "Apc",
+    //     value: "apc",
+    //   },
+    //   {
+    //     title: "Apple",
+    //     value: "apple",
+    //   },
+    //   {
+    //     title: "Asus",
+    //     value: "asus",
+    //   },
+    //   {
+    //     title: "Canon",
+    //     value: "canon",
+    //   },
+    //   {
+    //     title: "Dahua",
+    //     value: "dahua",
+    //   },
+    //   {
+    //     title: "Dell",
+    //     value: "dell",
+    //   },
+    //   {
+    //     title: "Epson",
+    //     value: "epson",
+    //   },
+    //   {
+    //     title: "Hikvision",
+    //     value: "hikvision",
+    //   },
+    //   {
+    //     title: "Hp",
+    //     value: "hp",
+    //   },
+    //   {
+    //     title: "Ion",
+    //     value: "ion",
+    //   },
+    //   {
+    //     title: "Lelnovo",
+    //     value: "lenovo",
+    //   },
+    //   {
+    //     title: "Meki",
+    //     value: "meki",
+    //   },
+    //   {
+    //     title: "Microsoft",
+    //     value: "microsoft",
+    //   },
+    //   {
+    //     title: "Prolink",
+    //     value: "prolink",
+    //   },
+    // ],
   },
   {
     type: FilterTypeEnum.CheckboxGroup,
     title: "Category",
     options: [
       {
-        title: "Computer",
-        value: "computer",
+        title: "Men",
+        value: "Men",
       },
       {
-        title: "Printers",
-        value: "Printers",
+        title: "Women",
+        value: "Women",
       },
       {
-        title: "Projector",
-        value: "projector",
+        title: "Kids",
+        value: "Kids",
       },
       {
-        title: "Accessories",
-        value: "accessories",
+        title: "Sport",
+        value: "Sport",
       },
     ],
   },

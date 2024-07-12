@@ -126,7 +126,7 @@ export const MainNavbar = () => {
         </NavbarContent>
 
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
-          <NavbarItem>
+          {/* <NavbarItem>
             <Popover placement="bottom" showArrow={true}>
               <PopoverTrigger>
                 <Button isIconOnly radius="full" color="primary" variant="flat">
@@ -143,7 +143,7 @@ export const MainNavbar = () => {
                 </ul>
               </PopoverContent>
             </Popover>
-          </NavbarItem>
+          </NavbarItem> */}
           <NavbarItem>
             <Input
               type="search"
@@ -440,7 +440,7 @@ export const MainNavbar = () => {
             )}
           </NavbarItem>
         </NavbarContent>
-        <NavbarMenu className="pt-16">
+        <NavbarMenu className="pt-12">
           {menuItems.map((item, index) => (
             <NavbarMenuItem
               key={`${item}-${index}`}
@@ -460,7 +460,7 @@ export const MainNavbar = () => {
             target="_blank"
             radius="full"
             color="primary"
-            className="absolute bottom-6 right-6"
+            className="absolute bottom-20 right-6"
           >
             <Icon icon="mingcute:telegram-fill" fontSize={27} />
           </Button>

@@ -8,13 +8,11 @@ import {
   Checkbox,
   CheckboxGroup,
   Divider,
-  RadioGroup,
   ScrollShadow,
   Switch,
   Tab,
   Tabs,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
 import PriceSlider from "./PriceSlider";
 
 // import ColorRadioItem from "./color-radio-item";

@@ -313,17 +313,17 @@ export const Menubar = () => {
           placeholder="Category"
           variant="bordered"
         >
-          <SelectItem key="computer" value="computer">
-            Computer
+          <SelectItem key="Men" value="Men">
+            Men
           </SelectItem>
-          <SelectItem key="printers" value="printers">
-            Printers
+          <SelectItem key="Women" value="Women">
+            Women
           </SelectItem>
-          <SelectItem key="accessories" value="accessories">
-            Accessories
+          <SelectItem key="Kids" value="Kids">
+            Kids
           </SelectItem>
-          <SelectItem key="projectors" value="projectors">
-            Projectors
+          <SelectItem key="Sport" value="Sport">
+            Sport
           </SelectItem>
         </Select>
         <Spacer x={1} />

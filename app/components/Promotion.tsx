@@ -5,6 +5,9 @@ import React from "react";
 import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import ProductCardImageOnly from "@/components/globals/ProductCardImageOnly";
+import { Loading } from "@/components/globals/Loading";
+import { PROMOTIONS } from "@/graphql/product";
+import { useQuery } from "@apollo/client";
 
 export const Promotion = () => {
   const promotion = [
@@ -33,6 +36,12 @@ export const Promotion = () => {
       url: "#",
     },
   ];
+
+  const { data, loading: promotionLoading } = useQuery(PROMOTIONS);
+
+  if (promotionLoading || !data) {
+    return <Loading />;
+  }
 
   return (
     <section className="hidden sm:hidden lg:block py-9 bg-white">
@@ -65,11 +74,15 @@ export const Promotion = () => {
                 <p className="text-gray-600">Your exclusive price</p>
                 <Link href="#">
                   <ProductCardImageOnly
-                    src="apple-m3-black.png"
-                    orginal_price={1890}
-                    promotion_price={1800}
+                    src={data.normalPromotions[0]?.product?.thumbnail}
+                    orginal_price={data.normalPromotions[0]?.originalPrice}
+                    promotion_price={data.normalPromotions[0]?.promotionPrice}
                     off={10}
                     isGroup={false}
+                    promotion_percentage={
+                      data.normalPromotions[0]?.promotionPercentage
+                    }
+                    discountType={data.normalPromotions[0]?.discountType}
                   />
                 </Link>
               </CardBody>
@@ -87,11 +100,15 @@ export const Promotion = () => {
               <div className="rounded-2xl bg-white p-3 h-full flex flex-col justify-center">
                 <Link href="#">
                   <ProductCardImageOnly
-                    src="imac.png"
-                    orginal_price={1890}
-                    promotion_price={1700}
-                    off={15}
+                    src={data.normalPromotions[3]?.product?.thumbnail}
+                    orginal_price={data.normalPromotions[3]?.originalPrice}
+                    promotion_price={data.normalPromotions[3]?.promotionPrice}
+                    off={10}
                     isGroup={false}
+                    promotion_percentage={
+                      data.normalPromotions[3]?.promotionPercentage
+                    }
+                    discountType={data.normalPromotions[3]?.discountType}
                   />
                 </Link>
               </div>
@@ -105,19 +122,31 @@ export const Promotion = () => {
                 </h1>
                 <p className="text-gray-600">Expired 30days</p>
                 <div className="grid grid-cols-3 items-stretch">
-                  {promotion.map((res, idx) => {
-                    return (
-                      <Link href={res.url} key={idx}>
-                        <ProductCardImageOnly
-                          src={res.src}
-                          orginal_price={res.original_price}
-                          promotion_price={res.promotion_price}
-                          off={res.off}
-                          isGroup={res.isGroup}
-                        />
-                      </Link>
-                    );
-                  })}
+                  {data.normalPromotions
+                    .slice(0, 3)
+                    .map((res: any, idx: number) => {
+                      const {
+                        originalPrice,
+                        promotionPrice,
+                        discountType,
+                        promotionPercentage,
+                        product,
+                      } = res && res;
+
+                      return (
+                        <Link href="#" key={idx}>
+                          <ProductCardImageOnly
+                            src={product.thumbnail}
+                            orginal_price={originalPrice}
+                            promotion_price={promotionPrice}
+                            promotion_percentage={promotionPercentage}
+                            isGroup={res.isGroup}
+                            discountType={discountType}
+                            off={0}
+                          />
+                        </Link>
+                      );
+                    })}
                 </div>
               </CardBody>
             </Card>
@@ -126,19 +155,31 @@ export const Promotion = () => {
                 <h1 className="text-2xl font-semibold text-black">New</h1>
                 <p className="text-gray-600">New promotion</p>
                 <div className="grid grid-cols-3 items-stretch">
-                  {promotion.map((res, idx) => {
-                    return (
-                      <Link href={res.url} key={idx}>
-                        <ProductCardImageOnly
-                          src={res.src}
-                          orginal_price={res.original_price}
-                          promotion_price={res.promotion_price}
-                          off={res.off}
-                          isGroup={res.isGroup}
-                        />
-                      </Link>
-                    );
-                  })}
+                  {data.normalPromotions
+                    .slice(1, 4)
+                    .map((res: any, idx: number) => {
+                      const {
+                        originalPrice,
+                        promotionPrice,
+                        discountType,
+                        promotionPercentage,
+                        product,
+                      } = res && res;
+
+                      return (
+                        <Link href="#" key={idx}>
+                          <ProductCardImageOnly
+                            src={product.thumbnail}
+                            orginal_price={originalPrice}
+                            promotion_price={promotionPrice}
+                            promotion_percentage={promotionPercentage}
+                            isGroup={res.isGroup}
+                            discountType={discountType}
+                            off={0}
+                          />
+                        </Link>
+                      );
+                    })}
                 </div>
               </CardBody>
             </Card>

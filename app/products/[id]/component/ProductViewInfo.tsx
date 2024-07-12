@@ -382,7 +382,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                   <Spacer y={6} />
                   <h2 className="text-4xl font-bold text-primary">
                     {props.promotion?.discount ? (
-                      <>
+                      <div className="flex items-center gap-3">
                         <div className="line-through text-xl">
                           {formatToUSD(
                             parseInt(
@@ -401,7 +401,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                                 variant.price) /
                                 100}
                         </label>
-                      </>
+                      </div>
                     ) : (
                       `${formatToUSD(parseInt(variant.price.toString()))}`
                     )}
@@ -753,7 +753,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
               <Spacer y={6} />
               <h2 className="text-4xl font-bold text-primary">
                 {props.promotion?.discount ? (
-                  <>
+                  <div className="flex items-center gap-3">
                     <div className="line-through text-xl">
                       {formatToUSD(
                         parseInt(
@@ -771,7 +771,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                             variant.price) /
                             100}
                     </label>
-                  </>
+                  </div>
                 ) : (
                   `${formatToUSD(parseInt(variant.price.toString()))}`
                 )}

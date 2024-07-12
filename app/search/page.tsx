@@ -10,6 +10,7 @@ import { GLOBAL_PRODUCT_FILTERING } from "@/graphql.bk/product";
 import { useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
 import { CATEGORIES } from "@/graphql.bk/category";
+import ProductCard from "@/components/globals/ProductCard";
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -80,6 +81,7 @@ export default function SearchPage() {
                     size="sm"
                     className="w-auto"
                     as={Link}
+                    radius="full"
                     href={`/products?search=&category=${cat.id}`}
                   >
                     {cat.title.en}
@@ -91,7 +93,7 @@ export default function SearchPage() {
         </div>
       )}
 
-      {/* {products?.storeGlobalFilterProducts?.products.length > 0 && (
+      {products?.storeGlobalFilterProducts?.products.length > 0 && (
         <div className="my-auto flex max-w-lg flex-col gap-2 pb-9">
           <h3 className="text-lg font-bold leading-8 mt-3">Trending Now</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 px-2">
@@ -100,16 +102,38 @@ export default function SearchPage() {
               ?.sort((a: ProductType, b: ProductType) =>
                 a?.sell > b?.sell ? -1 : 1
               )
-              ?.map((res: ProductType, idx: number) => {
+              ?.map((res: any, idx: number) => {
+                const { thumbnail, title, desc, rating, price, id, slug } =
+                  res?.product;
+
                 return (
                   <div key={idx}>
-                    <ProductCard product={res} loading={false} />
+                    <ProductCard
+                      id={id}
+                      thumbnail={thumbnail}
+                      title={title}
+                      desc={desc}
+                      rating={rating ? rating : 4}
+                      price={price}
+                      promotion={{
+                        isMembership: res.promotion?.isMembership,
+                        discount: {
+                          discountPercentage:
+                            res.promotion?.discount?.discountPercentage,
+                          discountPrice: res.promotion?.discount?.discountPrice,
+                          discountType: res.promotion?.discount?.discountType,
+                          originalPrice: res.promotion?.discount?.originalPrice,
+                          totalDiscount: res.promotion?.discount?.totalDiscount,
+                        },
+                      }}
+                      slug={slug}
+                    />
                   </div>
                 );
               })}
           </div>
         </div>
-      )} */}
+      )}
     </section>
   );
 }

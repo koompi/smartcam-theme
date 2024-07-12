@@ -244,3 +244,81 @@ export const GLOBAL_PRODUCT_FILTERING = gql`
     }
   }
 `;
+
+export const PROMOTIONS = gql`
+  query GetPromotion {
+    normalPromotions {
+      product {
+        id
+        ownerId
+        title
+        thumbnail
+        brand
+        desc
+        price
+        slug
+        rating
+        previews
+        status
+        detail
+        currency
+        stocks {
+          amount
+          status
+        }
+        category {
+          id
+          title {
+            en
+          }
+          children {
+            id
+            title {
+              en
+            }
+          }
+        }
+        subcategories {
+          id
+          title {
+            en
+          }
+        }
+        variants {
+          id
+          default
+          attributes {
+            type
+            option
+          }
+          label
+          previews
+          price
+        }
+        createdAt
+        updatedAt
+        currencyPrice {
+          khr
+          usd
+        }
+        store {
+          name
+        }
+      }
+      discountType
+      originalPrice
+      promotionPercentage
+      promotionPrice
+      promotionStatus
+      promotionType
+      availability
+      createdAt
+      description
+      endPromotion
+      id
+      membershipId
+      startPromotion
+      updatedAt
+    }
+  }
+`;

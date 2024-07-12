@@ -5,7 +5,6 @@ import React from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
-import { products } from "@/data/products";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -60,35 +59,35 @@ const PromotionCard = () => {
                 <Image
                   alt="banner"
                   radius="none"
-                  src="/images/banner/banner.png"
+                  src="/images/banner/banner.jpg"
                 />
               </SwiperSlide>
               <SwiperSlide>
                 <Image
                   alt="banner"
                   radius="none"
-                  src="/images/banner/banner.png"
+                  src="/images/banner/banner2.jpg"
                 />
               </SwiperSlide>
               <SwiperSlide>
                 <Image
                   alt="banner"
                   radius="none"
-                  src="/images/banner/banner.png"
+                  src="/images/banner/banner3.jpg"
                 />
               </SwiperSlide>
               <SwiperSlide>
                 <Image
                   alt="banner"
                   radius="none"
-                  src="/images/banner/banner.png"
+                  src="/images/banner/banner4.jpg"
                 />
               </SwiperSlide>
               <SwiperSlide>
                 <Image
                   alt="banner"
                   radius="none"
-                  src="/images/banner/banner.png"
+                  src="/images/banner/banner5.jpg"
                 />
               </SwiperSlide>
             </Swiper>
