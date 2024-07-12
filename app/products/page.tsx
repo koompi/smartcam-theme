@@ -7,13 +7,13 @@ import ecommerceItems from "@/components/CustomComponent/EcommerceItems";
 import FiltersWrapper from "@/components/CustomComponent/FilterWrapper";
 import SidebarDrawer from "@/components/CustomComponent/SidebarDrawer";
 import PromotionCard from "../components/PromotionCard";
-import { CATEGORIES } from "@/graphql/category";
 import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
 import { useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
 import { Loading } from "@/components/globals/Loading";
 import { ProductType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
+import Empty from "@/components/globals/Empty";
 
 interface ProductProps {
   product: ProductType;
@@ -90,7 +90,7 @@ const ProductPage = () => {
   return (
     <main>
       <PromotionCard />
-      <section className="flex gap-6 px-6 pb-12">
+      <section className="flex gap-6 px-3 sm:px-3 lg:px-6 py-6 sm:py-6 lg:py-6">
         <SidebarDrawer className="w-[27rem]">
           <FiltersWrapper
             className="bg-white sticky top-20"
@@ -101,7 +101,10 @@ const ProductPage = () => {
           />
         </SidebarDrawer>
         <section className="w-full">
-          <div className="grid grid-cols-4 place-items-stretch gap-3">
+          {products?.storeGlobalFilterProducts?.products.length <= 0 && (
+            <Empty />
+          )}
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 place-items-stretch gap-3">
             {Array.from(
               products?.storeGlobalFilterProducts?.products,
               (res: ProductProps, idx) => {

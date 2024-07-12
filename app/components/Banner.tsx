@@ -27,34 +27,34 @@ const Banner = () => {
           modules={[Autoplay, Pagination]}
         >
           <SwiperSlide>
-            <Image alt="banner" radius="none" src="/images/banner/banner.png" />
+            <Image alt="banner" radius="none" src="/images/banner/banner.jpg" />
           </SwiperSlide>
           <SwiperSlide>
             <Image
               alt="banner"
               radius="none"
-              src="/images/banner/banner2.png"
+              src="/images/banner/banner2.jpg"
             />
           </SwiperSlide>
           <SwiperSlide>
             <Image
               alt="banner"
               radius="none"
-              src="/images/banner/banner3.png"
+              src="/images/banner/banner3.jpg"
             />
           </SwiperSlide>
           <SwiperSlide>
             <Image
               alt="banner"
               radius="none"
-              src="/images/banner/banner4.png"
+              src="/images/banner/banner4.jpg"
             />
           </SwiperSlide>
           <SwiperSlide>
             <Image
               alt="banner"
               radius="none"
-              src="/images/banner/banner5.png"
+              src="/images/banner/banner5.jpg"
             />
           </SwiperSlide>
         </Swiper>

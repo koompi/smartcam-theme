@@ -24,8 +24,6 @@ export async function generateMetadata(
     variables: { slug: id },
   });
 
-  console.log("produ", data);
-
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
 

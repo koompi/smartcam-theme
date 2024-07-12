@@ -135,14 +135,14 @@ const ProductCard: FC<ProductCardProps> = ({
         <Spacer y={2} />
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }, (_, i) => {
-            const isSelected = i + 1 <= rating;
+            const isSelected = i + 1 <= 4;
 
             return (
               <Icon
                 key={i}
                 className={cn(
                   "text-sm sm:text-sm lg:text-lg",
-                  isSelected ? "text-danger" : "text-gray-300"
+                  isSelected ? "text-primary" : "text-gray-300"
                 )}
                 icon="solar:star-bold"
               />

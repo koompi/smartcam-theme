@@ -12,7 +12,7 @@ const MainFooter = () => {
         <div className="absolute right-0">
           <Image
             alt="logo"
-            src="/images/logo-only-grayscale.png"
+            src="/images/mizuno-grayscale.png"
             className="h-[45rem]"
             radius="none"
           />
@@ -23,14 +23,14 @@ const MainFooter = () => {
             <div className="col-span-2 md:col-span-3 lg:col-span-3 lg:pr-8">
               <Image
                 alt="logo"
-                src="/images/smartcam-logo.png"
+                src="/images/mizuno.png"
                 className="h-24"
                 radius="none"
               />
 
               <p className="text-base leading-relaxed text-gray-600 mt-7 max-w-xl">
-                SMARTCAM is the leading company focus on electronics ( computer
-                , Printer ( EPSON, HP, CANON) and parts). we will our best to
+                Mizuno is the leading company focus on electronics ( computer ,
+                Printer ( EPSON, HP, CANON) and parts). we will our best to
                 offer best services and products.
               </p>
 

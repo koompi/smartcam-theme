@@ -12,6 +12,8 @@ import { GLOBAL_PRODUCT_FILTERING } from "@/graphql.bk/product";
 import { useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
 import { CardLoading } from "@/components/globals/Loading";
+import { BRANDS } from "@/graphql/brands";
+import { BrandsType } from "@/types/product";
 
 export default function Home() {
   const searchParams = useSearchParams();
@@ -108,86 +110,96 @@ export default function Home() {
 }
 
 export const BrandsScrolling = () => {
-  const logo = [
-    {
-      title: "Accer",
-      src: "acer.png",
-    },
-    {
-      title: "Adata",
-      src: "adata.png",
-    },
-    {
-      title: "Apc",
-      src: "apc.png",
-    },
-    {
-      title: "Apple",
-      src: "apple.png",
-    },
-    {
-      title: "Asus",
-      src: "asus.png",
-    },
-    {
-      title: "Canon",
-      src: "canon.png",
-    },
-    {
-      title: "Dahua",
-      src: "dahua.png",
-    },
-    {
-      title: "Dell",
-      src: "dell.png",
-    },
-    {
-      title: "Epson",
-      src: "epson.png",
-    },
-    {
-      title: "Hikvision",
-      src: "hikvision.png",
-    },
-    {
-      title: "Hp",
-      src: "hp.png",
-    },
-    {
-      title: "Ion",
-      src: "ion.png",
-    },
-    {
-      title: "Lelnovo",
-      src: "lenovo.png",
-    },
-    {
-      title: "Meki",
-      src: "meki.png",
-    },
-    {
-      title: "Microsoft",
-      src: "microsoft.png",
-    },
-    {
-      title: "Prolink",
-      src: "prolink.png",
-    },
-  ];
+  const { data, loading } = useQuery(BRANDS);
+
+  if (loading || !data) {
+    return;
+  }
+
+  // const logo = [
+  //   {
+  //     title: "Accer",
+  //     src: "acer.png",
+  //   },
+  //   {
+  //     title: "Adata",
+  //     src: "adata.png",
+  //   },
+  //   {
+  //     title: "Apc",
+  //     src: "apc.png",
+  //   },
+  //   {
+  //     title: "Apple",
+  //     src: "apple.png",
+  //   },
+  //   {
+  //     title: "Asus",
+  //     src: "asus.png",
+  //   },
+  //   {
+  //     title: "Canon",
+  //     src: "canon.png",
+  //   },
+  //   {
+  //     title: "Dahua",
+  //     src: "dahua.png",
+  //   },
+  //   {
+  //     title: "Dell",
+  //     src: "dell.png",
+  //   },
+  //   {
+  //     title: "Epson",
+  //     src: "epson.png",
+  //   },
+  //   {
+  //     title: "Hikvision",
+  //     src: "hikvision.png",
+  //   },
+  //   {
+  //     title: "Hp",
+  //     src: "hp.png",
+  //   },
+  //   {
+  //     title: "Ion",
+  //     src: "ion.png",
+  //   },
+  //   {
+  //     title: "Lelnovo",
+  //     src: "lenovo.png",
+  //   },
+  //   {
+  //     title: "Meki",
+  //     src: "meki.png",
+  //   },
+  //   {
+  //     title: "Microsoft",
+  //     src: "microsoft.png",
+  //   },
+  //   {
+  //     title: "Prolink",
+  //     src: "prolink.png",
+  //   },
+  // ];
 
   return (
     <section className="mx-auto w-full bg-white h-20 sm:h-20 lg:h-36 flex items-center justify-start">
       <ScrollingBanner shouldPauseOnHover gap="40px">
-        {logo.map((b, idx) => (
+        {data.storeOwnerBrands.map((b: BrandsType, idx: number) => (
           <Link
             href="/products"
             key={idx}
             className="flex items-center justify-center text-white w-12 sm:w-12 lg:w-20"
           >
             <Image
-              alt={b.title}
+              alt={b.title?.en}
               radius="none"
-              src={`/images/brands/${b.src}`}
+              src={
+                b.logo
+                  ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${b.logo}`
+                  : "/images/default-thumbnail.png"
+              }
               className="w-full h-full object-cover"
             />
           </Link>

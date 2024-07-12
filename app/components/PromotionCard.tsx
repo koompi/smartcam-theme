@@ -13,7 +13,7 @@ import "swiper/css/navigation";
 
 const PromotionCard = () => {
   return (
-    <section className="p-6">
+    <section className="p-6 hidden sm:hidden lg:block">
       <Card
         shadow="none"
         className="rounded-3xl text-black bg-primary/5 grid grid-cols-12 place-items-center p-6 gap-3"

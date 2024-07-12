@@ -19,9 +19,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Smartcam Group",
+  title: "Mizuno",
   description:
-    "SMARTCAM  is the leading company focus on electronics ( computer , Printer ( EPSON, HP, CANON) and parts). we will our best to offer best services and products.",
+    "Mizuno  is the leading company focus on electronics ( computer , Printer ( EPSON, HP, CANON) and parts). we will our best to offer best services and products.",
 
   metadataBase: new URL("https://riverbase.org"),
   alternates: {
@@ -33,21 +33,21 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: {
-      default: "Smartcam Group",
-      template: `%s - Smartcam Group`,
+      default: "Mizuno",
+      template: `%s - Mizuno`,
     },
     description:
-      "SMARTCAM  is the leading company focus on electronics ( computer , Printer ( EPSON, HP, CANON) and parts). we will our best to offer best services and products.",
+      "Mizuno  is the leading company focus on electronics ( computer , Printer ( EPSON, HP, CANON) and parts). we will our best to offer best services and products.",
     url: "https://riverbase.org",
     siteName: "Riverbase",
     images: [
       {
-        url: "http://localhost:3000/images/seo-thumbnail.png",
+        url: "http://localhost:3000/images/mizuno.png",
         width: 800,
         height: 600,
       },
       {
-        url: "http://localhost:3000/images/seo-thumbnail.png",
+        url: "http://localhost:3000/images/mizuno.png",
         width: 1800,
         height: 1600,
         alt: "My custom alt",

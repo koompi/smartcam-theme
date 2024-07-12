@@ -15,7 +15,7 @@ export const news = [
       "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     isLoading: false,
     isBanner: false,
-    author: "Smartcam",
+    author: "Mizuno",
     createdAt: "09/09/2024",
   },
   {
@@ -26,7 +26,7 @@ export const news = [
       "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     isLoading: false,
     isBanner: false,
-    author: "Smartcam",
+    author: "Mizuno",
     createdAt: "09/09/2024",
   },
   {
@@ -37,7 +37,7 @@ export const news = [
       "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?q=80&w=3774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     isLoading: false,
     isBanner: false,
-    author: "Smartcam",
+    author: "Mizuno",
     createdAt: "09/09/2024",
   },
   {
@@ -48,7 +48,7 @@ export const news = [
       "https://images.unsplash.com/photo-1610500795224-fb86b02926d7?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     isLoading: false,
     isBanner: false,
-    author: "Smartcam",
+    author: "Mizuno",
     createdAt: "09/09/2024",
   },
   {
@@ -59,7 +59,7 @@ export const news = [
       "https://images.unsplash.com/photo-1693031630369-bd429a57f115?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     isLoading: false,
     isBanner: false,
-    author: "Smartcam",
+    author: "Mizuno",
     createdAt: "09/09/2024",
   },
   {
@@ -70,7 +70,7 @@ export const news = [
       "https://images.unsplash.com/photo-1693031630146-568e2f72db0e?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     isLoading: false,
     isBanner: false,
-    author: "Smartcam",
+    author: "Mizuno",
     createdAt: "09/09/2024",
   },
   {
@@ -81,7 +81,7 @@ export const news = [
       "https://images.unsplash.com/photo-1510125964506-dc5a14f3ef4e?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     isLoading: false,
     isBanner: false,
-    author: "Smartcam",
+    author: "Mizuno",
     createdAt: "09/09/2024",
   },
   {
@@ -92,7 +92,7 @@ export const news = [
       "https://images.unsplash.com/photo-1650094980833-7373de26feb6?q=80&w=3774&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     isLoading: false,
     isBanner: false,
-    author: "Smartcam",
+    author: "Mizuno",
     createdAt: "09/09/2024",
   },
 ];

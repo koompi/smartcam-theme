@@ -25,14 +25,13 @@ import {
   DropdownTrigger,
   Skeleton,
 } from "@nextui-org/react";
-import Link from "next/link";
 import React, { useState } from "react";
 import Header from "./Header";
 import { Menubar } from "./Menubar";
 import { usePathname } from "next/navigation";
-import { cn } from "@/utils/cn";
 import { useAuth } from "@/context/useAuth";
 import { useCart } from "@/context/useCart";
+import Link from "next/link";
 
 export const MainNavbar = () => {
   const pathname = usePathname();
@@ -99,25 +98,30 @@ export const MainNavbar = () => {
           <NavbarMenuToggle
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           />
-          <Image
-            alt="logo"
-            src="/images/smartcam.png"
-            className="h-8 sm:h-12"
-          />
+          <Link href="/">
+            <Image
+              alt="logo"
+              src="/images/mizuno.png"
+              className="h-8 sm:h-12"
+              radius="none"
+            />
+          </Link>
         </NavbarContent>
         <NavbarContent className="hidden sm:flex" justify="start">
           <NavbarBrand as={Link} href="/">
             <Image
               alt="logo"
-              src="/images/smartcam-logo.png"
+              src="/images/mizuno.png"
               className="h-11 sm:h-12"
+              radius="none"
             />
             <Spacer x={3} />
-            <Image
+            {/* <Image
               alt="logo"
               src="/images/smartcam-solutions.png"
               className="hidden sm:flex h-16"
-            />
+              radius="none"
+            /> */}
           </NavbarBrand>
         </NavbarContent>
 
@@ -157,13 +161,13 @@ export const MainNavbar = () => {
           justify="end"
           className="flex sm:hidden items-center gap-6"
         >
-          <NavbarItem
+          {/* <NavbarItem
             className="mt-2"
             as={Link}
             href="/wishlist"
             isActive={pathname === "/wishlist"}
           >
-            <Badge color="danger" content={50} size="sm" shape="circle">
+            <Badge color="danger" content={9} size="sm" shape="circle">
               <Button
                 color="primary"
                 variant="light"
@@ -182,26 +186,102 @@ export const MainNavbar = () => {
                 />
               </Button>
             </Badge>
-          </NavbarItem>
-          <NavbarItem>
-            <Button
-              as={Link}
-              color="primary"
-              href="#"
-              variant="flat"
-              radius="full"
-              size="md"
-              isIconOnly
-            >
-              <Icon icon="solar:user-rounded-bold" fontSize={24} />
-            </Button>
-          </NavbarItem>
+          </NavbarItem> */}
+
+          {user ? (
+            <Dropdown placement="bottom-end">
+              {loading ? (
+                <Skeleton className="flex rounded-full w-12 h-12" />
+              ) : (
+                <DropdownTrigger>
+                  <Avatar
+                    isBordered
+                    as="button"
+                    className="transition-transform"
+                    src={user?.avatar}
+                  />
+                </DropdownTrigger>
+              )}
+              <DropdownMenu aria-label="User Actions" variant="flat">
+                <DropdownItem key="profile" className="h-14 gap-2">
+                  <p className="font-bold">Signed in as</p>
+                  <p className="font-bold">{user?.email}</p>
+                </DropdownItem>
+                <DropdownItem
+                  as={Link}
+                  key="settings"
+                  href="/settings"
+                  startContent={
+                    <Icon icon="solar:settings-outline" fontSize={21} />
+                  }
+                >
+                  Settings
+                </DropdownItem>
+                <DropdownItem
+                  as={Link}
+                  key="settings"
+                  href="/locations"
+                  startContent={
+                    <Icon icon="solar:streets-map-point-broken" fontSize={21} />
+                  }
+                >
+                  My Locations
+                </DropdownItem>
+                <DropdownItem
+                  as={Link}
+                  key="orders"
+                  href="/orders"
+                  startContent={
+                    <Icon
+                      icon="solar:cart-large-minimalistic-linear"
+                      fontSize={21}
+                    />
+                  }
+                >
+                  Orders
+                </DropdownItem>
+                {/* <DropdownItem
+                  key="wallet"
+                  startContent={
+                    <Icon icon="solar:wallet-linear" fontSize={21} />
+                  }
+                >
+                  Wallet
+                </DropdownItem> */}
+
+                <DropdownItem
+                  key="logout"
+                  color="danger"
+                  onPress={() => logout()}
+                  startContent={
+                    <Icon icon="solar:logout-outline" fontSize={21} />
+                  }
+                >
+                  Log Out
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          ) : (
+            <NavbarItem>
+              <Button
+                as={Link}
+                color="primary"
+                href={`https://backend.riverbase.org/sso/store`}
+                variant="flat"
+                radius="full"
+                size="md"
+                isIconOnly
+              >
+                <Icon icon="solar:user-rounded-bold" fontSize={24} />
+              </Button>
+            </NavbarItem>
+          )}
         </NavbarContent>
         <NavbarContent
           justify="end"
           className="hidden sm:flex items-center gap-6"
         >
-          <NavbarItem isActive={pathname === "/compare"}>
+          {/* <NavbarItem isActive={pathname === "/compare"}>
             <Link href="/compare">
               <Badge color="danger" content={3} shape="circle">
                 <Button
@@ -219,8 +299,8 @@ export const MainNavbar = () => {
                 </Button>
               </Badge>
             </Link>
-          </NavbarItem>
-          <NavbarItem>
+          </NavbarItem> */}
+          {/* <NavbarItem>
             <Link href="/wishlist">
               <Badge color="danger" content={9} shape="circle">
                 <Button
@@ -241,7 +321,7 @@ export const MainNavbar = () => {
                 </Button>
               </Badge>
             </Link>
-          </NavbarItem>
+          </NavbarItem> */}
           <NavbarItem className="mr-12">
             <Link href="/cart">
               <Badge

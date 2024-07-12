@@ -11,11 +11,11 @@ const AboutPage = () => {
       <TextParallaxContent
         imgUrl="https://images.unsplash.com/photo-1531973576160-7125cd663d86?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         subheading="Behind"
-        heading="Smartcam Electronics"
+        heading="Mizuno"
       >
-        <TextSupportContent title="We are Smartcam Electronics">
+        <TextSupportContent title="We are Mizuno">
           <p className="mb-8 text-xl text-neutral-600 md:text-2xl">
-            SMARTCAM is the leading company focus on electronics ( computer ,
+            Mizuno is the leading company focus on electronics ( computer ,
             Printer ( EPSON, HP, CANON) and parts). we will our best to offer
             best services and products.
           </p>

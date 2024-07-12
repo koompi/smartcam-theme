@@ -32,9 +32,6 @@ export default RecommendProducts;
 const RecommendCard: FC<{ props: Props }> = ({ props }) => {
   // const { addToCart } = useCart();
   // const router = useRouter();
-
-  console.log("props", props);
-
   return (
     <>
       {/* <Link href={`/products/${props.slug}`}> */}

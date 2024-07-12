@@ -21,6 +21,9 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/utils/cn";
+import { BRANDS } from "@/graphql/brands";
+import { useQuery } from "@apollo/client";
+import { BrandsType } from "@/types/product";
 
 interface SubMenuType {
   url: string;
@@ -102,74 +105,11 @@ export const Menubar = () => {
     },
   ];
 
-  const logo = [
-    {
-      title: "Accer",
-      src: "acer.png",
-    },
-    {
-      title: "Adata",
-      src: "adata.png",
-    },
-    {
-      title: "Apc",
-      src: "apc.png",
-    },
-    {
-      title: "Apple",
-      src: "apple.png",
-    },
-    {
-      title: "Asus",
-      src: "asus.png",
-    },
-    {
-      title: "Canon",
-      src: "canon.png",
-    },
-    {
-      title: "Dahua",
-      src: "dahua.png",
-    },
-    {
-      title: "Dell",
-      src: "dell.png",
-    },
-    {
-      title: "Epson",
-      src: "epson.png",
-    },
-    {
-      title: "Hikvision",
-      src: "hikvision.png",
-    },
-    {
-      title: "Hp",
-      src: "hp.png",
-    },
-    {
-      title: "Ion",
-      src: "ion.png",
-    },
-    {
-      title: "Lelnovo",
-      src: "lenovo.png",
-    },
-    {
-      title: "Meki",
-      src: "meki.png",
-    },
-    {
-      title: "Microsoft",
-      src: "microsoft.png",
-    },
-    {
-      title: "Prolink",
-      src: "prolink.png",
-    },
-  ];
+  const { data, loading } = useQuery(BRANDS);
 
-  // console.log("path", pathname);
+  if (loading || !data) {
+    return;
+  }
 
   return (
     <Navbar maxWidth="full" className="bg-white h-12">
@@ -284,7 +224,7 @@ export const Menubar = () => {
                   <h1 className="text-xl font-semibold">About US</h1>
                   <Spacer y={2} />
                   <p className="font-light text-xs text-gray-600">
-                    SMARTCAM is the leading company focus on electronics (
+                    Mizuno is the leading company focus on electronics (
                     computer , Printer ( EPSON, HP, CANON) and parts). we will
                     our best to offer best services and products.
                   </p>
@@ -336,21 +276,25 @@ export const Menubar = () => {
           placeholder="Brands"
           variant="bordered"
         >
-          {logo.map((res, idx) => {
+          {data.storeOwnerBrands.map((res: BrandsType, idx: number) => {
             return (
               <SelectItem
                 key={idx}
-                value={res.title}
+                value={res.title.en}
                 startContent={
                   <Image
-                    alt={res.title}
-                    src={`/images/brands/${res.src}`}
+                    alt={res.title.en}
+                    src={
+                      res.logo
+                        ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${res.logo}`
+                        : "/images/default-thumbnail.png"
+                    }
                     className="h-9 w-9 object-contain bg-background rounded-full p-1"
                     radius="none"
                   />
                 }
               >
-                {res.title}
+                {res.title.en}
               </SelectItem>
             );
           })}

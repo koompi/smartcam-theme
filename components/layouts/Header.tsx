@@ -21,7 +21,7 @@ export default function Header() {
           orientation="vertical"
           className="h-6 bg-white hidden sm:hidden lg:flex"
         />
-        <p>info@smartcam-group.com</p>
+        <p>info@mizuno-group.com</p>
       </div>
       <div className="flex items-center gap-3">
         <p className="hidden sm:hidden lg:flex">Social Media</p>
