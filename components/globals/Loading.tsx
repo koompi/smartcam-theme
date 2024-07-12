@@ -32,9 +32,9 @@ const LoadingNoFrame = () => {
 const CardLoading = () => {
   return (
     <div className="px-3 sm:px-3 lg:px-6 w-full grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-      {[1, 2, 3, 4, 5].map((_) => {
+      {[1, 2, 3, 4, 5].map((_, idx: number) => {
         return (
-          <Card className="w-full space-y-5 p-4" radius="lg">
+          <Card key={idx} className="w-full space-y-5 p-4" radius="lg">
             <Skeleton className="rounded-lg">
               <div className="h-60 rounded-lg bg-default-300"></div>
             </Skeleton>

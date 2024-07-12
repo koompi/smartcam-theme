@@ -28,6 +28,7 @@ import { useMutation } from "@apollo/client";
 import { CHECKOUT } from "@/graphql.bk/mutation/checkout";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+
 import { PromotionType } from "@/types/promotion";
 import { ESTIMATION_PRICE } from "@/graphql.bk/order";
 import { ProductType } from "@/types/product";
@@ -115,7 +116,9 @@ const CheckoutComponent = () => {
 
     if (paymentOption === "ONLINE") {
       const intentId = res.data.storeCreateCheckout["intentId"];
-      baray!.confirmPayment(intentId);
+      baray!.confirmPayment(intentId, () => {
+        cleanCartItems();
+      });
       setLoading(false);
     } else {
       toast.success(
@@ -304,6 +307,7 @@ const CheckoutComponent = () => {
       default:
         return null;
     }
+    //@ts-ignore
   }, [page, orders, delivery, location]);
 
   // if (order_loading) {

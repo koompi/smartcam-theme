@@ -93,22 +93,20 @@ const ratings = [
   },
 ];
 
+//@ts-ignore
 const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
-  (
-    {
-      title,
-      previews,
-      price,
-      desc,
-      rating,
-      variants,
-      detail,
-      stocks,
-      className,
-      ...props
-    },
-    ref
-  ) => {
+  ({
+    title,
+    previews,
+    price,
+    desc,
+    rating,
+    variants,
+    detail,
+    stocks,
+    className,
+    ...props
+  }) => {
     const searchParams = useSearchParams();
     const search = searchParams.get("search") || null;
     const sortParam = searchParams.get("sort") || null;
