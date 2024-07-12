@@ -68,9 +68,7 @@ export default function RootLayout({
       <body className={poppins.className} suppressHydrationWarning>
         <ApolloWrapper>
           <AppProvider>
-            <BarayProvider
-              apiKey={"pk_prod_b41705c5-ae81-4d1f-8c3e-7edb56589ab3"}
-            >
+            <BarayProvider apiKey={process.env.NEXT_PUBLIC_BARAY_KEY!}>
               <CartProvider>
                 <ThemeProvider>
                   <MainNavbar />

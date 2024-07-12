@@ -1,8 +1,8 @@
 "use client";
 
-import ProductViewInfo from "./ProductViewItem";
-import { GET_PRODUCT } from "@/graphql.bk/product";
-import { useQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import ProductViewInfo from "./ProductViewInfo";
+import { GET_PRODUCT } from "@/graphql/product";
+import { useQuery } from "@apollo/client";
 
 export default function ProductDetail(props: { slug: string }) {
   const { data, loading, error } = useQuery(GET_PRODUCT, {
@@ -18,7 +18,10 @@ export default function ProductDetail(props: { slug: string }) {
       {loading ? (
         <div>loading...</div>
       ) : (
-        <ProductViewInfo {...data?.storeProduct} />
+        <ProductViewInfo
+          {...data?.storeProduct?.product}
+          promotion={data?.storeProduct?.promotion}
+        />
       )}
     </>
   );

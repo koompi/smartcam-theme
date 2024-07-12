@@ -30,6 +30,7 @@ interface ProductCardProps {
   rating: number;
   price: number;
   promotion: PromotionType;
+  slug: string;
 }
 
 const ProductCard: FC<ProductCardProps> = ({
@@ -40,6 +41,7 @@ const ProductCard: FC<ProductCardProps> = ({
   rating,
   price,
   promotion,
+  slug,
 }) => {
   const { addToCart } = useCart();
 
@@ -49,7 +51,7 @@ const ProductCard: FC<ProductCardProps> = ({
       isPressable
       isHoverable
       as={Link}
-      href={`/products/${id}`}
+      href={`/products/${slug}`}
       className="flex flex-col flex-grow col-span-1 h-full group"
     >
       {promotion?.discount?.discountType && (

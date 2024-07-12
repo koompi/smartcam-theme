@@ -52,7 +52,7 @@ const CheckoutComponent = () => {
   const { cartItems, cleanCartItems, membershipId } = useCart();
   const [loading, setLoading] = useState(false);
   const [ship, setShip] = useState<number>(0.0);
-  const [paymentOption, setPaymentOption] = useState("online");
+  const [paymentOption, setPaymentOption] = useState("ONLINE");
 
   const [delivery, setDelivery] = useState<"PERSONAL" | "L192" | "CP">(
     "PERSONAL"
@@ -98,44 +98,30 @@ const CheckoutComponent = () => {
 
   // checkout orders product
   const onSubmitCheckout = async () => {
-    // with online payment (baray)
-    if (paymentOption === "online") {
-      try {
-        setLoading(true);
-        const intent = await createIntent();
-        baray!.confirmPayment(intent._id);
-        setLoading(false);
-      } catch (err) {
-        toast.error("Your transaction order is failed!");
-        console.log(err);
-      }
-    } else {
-      // cash
-      const variables = {
-        body: {
-          carts: [...cartItems],
-          deliveryFee: ship,
-        },
-        membershipId: membershipId,
-        deliveryType: delivery,
-        locationId: location,
-        payment: "CASH",
-      };
+    const variables = {
+      body: {
+        carts: [...cartItems],
+        deliveryFee: ship,
+      },
+      membershipId: membershipId,
+      deliveryType: delivery,
+      locationId: location,
+      payment: paymentOption,
+    };
 
-      setLoading(true);
-      storeCreateCheckouts({ variables: variables })
-        .then((_) => {
-          toast.success(
-            "Congratulation! you've been order the product(s) successfully!"
-          );
-        })
-        .then(() => {
-          cleanCartItems();
-        })
-        .catch((err) => {
-          toast.error("Your transaction order is failed!");
-          console.log(err);
-        });
+    setLoading(true);
+
+    const res = await storeCreateCheckouts({ variables: variables });
+
+    if (paymentOption === "ONLINE") {
+      const intentId = res.data.storeCreateCheckout["intentId"];
+      baray!.confirmPayment(intentId);
+      setLoading(false);
+    } else {
+      toast.success(
+        "Congratulation! you've been order the product(s) successfully!"
+      );
+      cleanCartItems();
       setTimeout(() => {
         setLoading(false);
         router.push("/orders");
@@ -279,7 +265,7 @@ const CheckoutComponent = () => {
                   <RadioGroup
                     aria-label="Select existing payment method"
                     classNames={{ wrapper: "gap-3" }}
-                    defaultValue="online"
+                    defaultValue="ONLINE"
                     onValueChange={setPaymentOption}
                   >
                     <PaymentMethodRadio
@@ -294,7 +280,7 @@ const CheckoutComponent = () => {
                         />
                       }
                       label="Online Payment"
-                      value="online"
+                      value="ONLINE"
                     />
                     <PaymentMethodRadio
                       classNames={paymentRadioClasses}
@@ -307,7 +293,7 @@ const CheckoutComponent = () => {
                         />
                       }
                       label="Cash on Delivery"
-                      value="cash"
+                      value="CASH"
                     />
                   </RadioGroup>
                 </AccordionItem>

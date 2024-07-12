@@ -1,4 +1,4 @@
-"use server";
+"react-server";
 
 const ENDPOINT =
   process.env.NEXT_PUBLIC_BACKEND ?? "https://backend.riverbase.org";
@@ -24,13 +24,13 @@ export const { getClient } = registerApolloClient(() => {
     }),
   });
 });
+import { SSRMultipartLink } from "@apollo/experimental-nextjs-app-support";
+
+import { ApolloLink, HttpLink, concat } from "@apollo/client";
 import {
   NextSSRApolloClient,
   NextSSRInMemoryCache,
-  SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
-
-import { ApolloLink, HttpLink, concat } from "@apollo/client";
 
 const token =
   typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
