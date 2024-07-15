@@ -10,7 +10,7 @@ import React, {
 import { Toaster, toast } from "sonner";
 
 import { useQuery } from "@apollo/client";
-import { GET_STORE_USER } from "@/graphql.bk/store";
+import { GET_CUSTOMER } from "@/graphql/store";
 import { CartContextType, CartItem } from "@/types/global";
 
 export const CartContext = createContext({});
@@ -18,7 +18,7 @@ export const CartContext = createContext({});
 export function CartProvider(props: { children: JSX.Element }) {
   const [cartItems, setCartItems] = useState<CartItem[] | []>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const { data: userStore, loading: loading_store } = useQuery(GET_STORE_USER);
+  const { data: userStore, loading: loading_store } = useQuery(GET_CUSTOMER);
 
   useEffect(() => {
     const carts = localStorage.getItem("cartItems");

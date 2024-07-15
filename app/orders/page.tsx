@@ -56,8 +56,6 @@ const OrderPage = () => {
     );
   }
 
-  console.log("data", data);
-
   return (
     <section className="bg-white">
       <div className="container max-w-full sm:max-w-full lg:max-w-5xl py-9 px-3 sm:px-3 lg:px-6 mx-auto">
@@ -68,21 +66,12 @@ const OrderPage = () => {
           </p>
         </div>
         <div className="flex flex-col gap-6 items-center">
-          {data?.storeOrders?.orders.length <= 0 && <div>No Orders</div>}
-          {data?.storeOrders?.orders.map((order: OrdersType, idx: number) => {
+          {data?.customerOrders?.orders.length <= 0 && <div>No Orders</div>}
+          {data?.customerOrders?.orders.map((order: OrdersType, idx: number) => {
             return (
               <OrderCard
                 key={idx}
                 {...order}
-                // carts={order?.carts}
-                // code={order?.code}
-                // createdAt={order?.createdAt}
-                // id={order?.id}
-                // ownerId={order?.ownerId}
-                // status={order?.status}
-                // tax={order?.tax}
-                // totalDiscount={order?.totalDiscount}
-                // totalPrice={order?.totalPrice}
                 refetch={refetch}
               />
             );

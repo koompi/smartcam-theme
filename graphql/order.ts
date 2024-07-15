@@ -1,13 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const ORDER_PRODUCT = gql`
-  mutation ($input: InputOrder!) {
-    storeCreateOrder(input: $input)
-  }
-`;
-
 export const ORDER_BY_ID = gql`
-  query ExampleQuery($storeOrderId: String!) {
+  query($storeOrderId: String!) {
     storeOrder(id: $storeOrderId) {
       code
       createdAt
