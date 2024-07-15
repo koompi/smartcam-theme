@@ -14,7 +14,7 @@ const NewsBanner = () => {
         imageSrc="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=3732&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         isLoading={false}
         isBanner={true}
-        author="Mizuno"
+        author="Smartcam"
         createdAt="09/09/2024"
       />
       <div className="col-span-3">
@@ -24,7 +24,7 @@ const NewsBanner = () => {
           imageSrc="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           isLoading={false}
           isBanner={false}
-          author="Mizuno"
+          author="Smartcam"
           createdAt="09/09/2024"
         />
         <Spacer y={6} />
@@ -34,7 +34,7 @@ const NewsBanner = () => {
           imageSrc="https://images.unsplash.com/photo-1560523160-754a9e25c68f?q=80&w=3836&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           isLoading={false}
           isBanner={false}
-          author="Mizuno"
+          author="Smartcam"
           createdAt="09/09/2024"
         />
       </div>

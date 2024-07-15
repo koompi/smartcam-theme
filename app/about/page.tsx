@@ -11,11 +11,11 @@ const AboutPage = () => {
       <TextParallaxContent
         imgUrl="https://images.unsplash.com/photo-1531973576160-7125cd663d86?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         subheading="Behind"
-        heading="Mizuno"
+        heading="Smartcam"
       >
-        <TextSupportContent title="We are Mizuno">
+        <TextSupportContent title="We are Smartcam">
           <p className="mb-8 text-xl text-neutral-600 md:text-2xl">
-            Mizuno is the leading company focus on electronics ( computer ,
+            Smartcam is the leading company focus on electronics ( computer ,
             Printer ( EPSON, HP, CANON) and parts). we will our best to offer
             best services and products.
           </p>
@@ -40,7 +40,7 @@ const AboutPage = () => {
         heading="Top hardware, best value"
       >
         <TextSupportContent title="Mission">
-          <ul className="list-disc mb-8 text-xl text-neutral-600 md:text-2xl">
+          <ul className="list-disc mb-8 text-xl text-neutral-600 md:text-2xl pl-6 sm:pl-6 lg:pl-0">
             <li>
               Offer high quality products - competitive price and delivering
               excellence customer services.

@@ -9,6 +9,7 @@ import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import Link from "next/link";
 
 const PromotionCard = () => {
   return (
@@ -31,6 +32,8 @@ const PromotionCard = () => {
           <Button
             size="lg"
             variant="shadow"
+            as={Link}
+            href="/promotions"
             color="primary"
             radius="full"
             className="px-12"

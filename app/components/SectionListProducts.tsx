@@ -123,8 +123,10 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
             ? newestSort()
             : topRated(),
           (res: ProductProps, idx) => {
-            const { thumbnail, title, desc, rating, price, id, slug } =
+            const { thumbnail, title, desc, rating, price, id, slug, stocks } =
               res?.product;
+
+            console.log("data", res);
 
             return (
               <SwiperSlide key={idx} className="bg-background">
@@ -147,6 +149,7 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
                     },
                   }}
                   slug={slug}
+                  stocks={stocks}
                 />
               </SwiperSlide>
             );

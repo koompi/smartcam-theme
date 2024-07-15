@@ -32,6 +32,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/useAuth";
 import { useCart } from "@/context/useCart";
 import Link from "next/link";
+import { cn } from "@/utils/cn";
 
 export const MainNavbar = () => {
   const pathname = usePathname();
@@ -101,7 +102,7 @@ export const MainNavbar = () => {
           <Link href="/">
             <Image
               alt="logo"
-              src="/images/mizuno.png"
+              src="/images/smartcam-logo.png"
               className="h-8 sm:h-12"
               radius="none"
             />
@@ -111,22 +112,22 @@ export const MainNavbar = () => {
           <NavbarBrand as={Link} href="/">
             <Image
               alt="logo"
-              src="/images/mizuno.png"
+              src="/images/smartcam-logo.png"
               className="h-11 sm:h-12"
               radius="none"
             />
             <Spacer x={3} />
-            {/* <Image
+            <Image
               alt="logo"
               src="/images/smartcam-solutions.png"
               className="hidden sm:flex h-16"
               radius="none"
-            /> */}
+            />
           </NavbarBrand>
         </NavbarContent>
 
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
-          {/* <NavbarItem>
+          <NavbarItem>
             <Popover placement="bottom" showArrow={true}>
               <PopoverTrigger>
                 <Button isIconOnly radius="full" color="primary" variant="flat">
@@ -143,7 +144,7 @@ export const MainNavbar = () => {
                 </ul>
               </PopoverContent>
             </Popover>
-          </NavbarItem> */}
+          </NavbarItem>
           <NavbarItem>
             <Input
               type="search"
@@ -161,7 +162,7 @@ export const MainNavbar = () => {
           justify="end"
           className="flex sm:hidden items-center gap-6"
         >
-          {/* <NavbarItem
+          <NavbarItem
             className="mt-2"
             as={Link}
             href="/wishlist"
@@ -186,7 +187,7 @@ export const MainNavbar = () => {
                 />
               </Button>
             </Badge>
-          </NavbarItem> */}
+          </NavbarItem>
 
           {user ? (
             <Dropdown placement="bottom-end">
@@ -281,7 +282,7 @@ export const MainNavbar = () => {
           justify="end"
           className="hidden sm:flex items-center gap-6"
         >
-          {/* <NavbarItem isActive={pathname === "/compare"}>
+          <NavbarItem isActive={pathname === "/compare"}>
             <Link href="/compare">
               <Badge color="danger" content={3} shape="circle">
                 <Button
@@ -299,8 +300,8 @@ export const MainNavbar = () => {
                 </Button>
               </Badge>
             </Link>
-          </NavbarItem> */}
-          {/* <NavbarItem>
+          </NavbarItem>
+          <NavbarItem>
             <Link href="/wishlist">
               <Badge color="danger" content={9} shape="circle">
                 <Button
@@ -321,7 +322,7 @@ export const MainNavbar = () => {
                 </Button>
               </Badge>
             </Link>
-          </NavbarItem> */}
+          </NavbarItem>
           <NavbarItem className="mr-12">
             <Link href="/cart">
               <Badge

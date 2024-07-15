@@ -34,7 +34,7 @@ const SummaryRatingCard = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex flex-col gap-2 rounded-xl p-6 shadow-none sm:shadow-none lg:shadow-small",
+        "flex flex-col gap-2 rounded-xl p-1 sm:p-1 lg:p-6 shadow-none sm:shadow-none lg:shadow-small",
         className
       )}
       {...props}

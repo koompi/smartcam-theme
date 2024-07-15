@@ -307,8 +307,7 @@ const CheckoutComponent = () => {
       default:
         return null;
     }
-    //@ts-ignore
-  }, [page, orders, delivery, location]);
+  }, [page, orders, delivery, location, ship]);
 
   // if (order_loading) {
   //   return (

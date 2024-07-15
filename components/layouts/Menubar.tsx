@@ -224,7 +224,7 @@ export const Menubar = () => {
                   <h1 className="text-xl font-semibold">About US</h1>
                   <Spacer y={2} />
                   <p className="font-light text-xs text-gray-600">
-                    Mizuno is the leading company focus on electronics (
+                    Smartcam is the leading company focus on electronics (
                     computer , Printer ( EPSON, HP, CANON) and parts). we will
                     our best to offer best services and products.
                   </p>

@@ -7,8 +7,6 @@ import {
   Image,
   Button,
   RadioGroup,
-  Input,
-  Divider,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -17,9 +15,8 @@ import {
   CardBody,
   Tab,
   Tabs,
-  Select,
-  SelectItem,
   useDisclosure,
+  Input,
 } from "@nextui-org/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -41,7 +38,7 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { VariantRadio } from "./VariantRadio";
-import { formatToUSD, usd } from "@/utils/formatUSD";
+import { formatToUSD } from "@/utils/formatUSD";
 import productReviews from "@/data/productReviews";
 import {
   TwitterShareButton,
@@ -56,7 +53,7 @@ import Review from "./Reviews";
 import SummaryRatingCard from "./SummaryRatingCard";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "@/context/useCart";
-import { Attribute, ProductType, Variants } from "@/types/product";
+import { ProductType, Variants } from "@/types/product";
 import { toast } from "sonner";
 import { LexicalReader } from "@/app/editor/LexicalReader";
 
@@ -164,6 +161,8 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
       price: price,
       attributes: [],
     });
+
+    console.log("stokc", stocks);
 
     return (
       <main>
@@ -422,7 +421,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                     (Rerviews)
                   </div>
                   <Spacer y={6} />
-                  <div className="flex items-center gap-2 text-default-700">
+                  {/* <div className="flex items-center gap-2 text-default-700">
                     <Icon icon="solar:box-line-duotone" fontSize={24} />
                     {stocks?.status === "IN-STOCK" && (
                       <p className="text-small font-semibold text-primary">
@@ -439,7 +438,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                         OUT-OF-STOCK
                       </p>
                     )}
-                  </div>
+                  </div> */}
                   <div className="mt-4">
                     <p className="sr-only">Product desc</p>
                     <p className="line-clamp-3 text-medium text-gray-500">
@@ -500,62 +499,66 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                     )}
                   </div>
 
-                  <Spacer y={6} />
-                  {/* <p className="mt-3 font-medium">Quantity</p>
-              <div className="flex items-center justify-between mt-3">
-                <div className="max-w-48 flex items-center gap-3">
-                  <Button
-                    color="default"
-                    size="sm"
-                    isIconOnly
-                    variant="flat"
-                    radius="full"
-                  >
-                    <Icon icon="ic:baseline-minus" fontSize={24} />
-                  </Button>
-                  <Input
-                    type="number"
-                    min={1}
-                    defaultValue="1"
-                    variant="flat"
-                    radius="full"
-                    className="bg-white"
-                  ></Input>
-                  <Button
-                    isIconOnly
-                    variant="flat"
-                    radius="full"
-                    color="default"
-                    size="sm"
-                  >
-                    <Icon icon="material-symbols:add" fontSize={24} />
-                  </Button>
-                </div>
-                <Button
-                  variant="bordered"
-                  radius="full"
-                  color="primary"
-                  isIconOnly
-                >
-                  <Icon icon="solar:heart-bold" fontSize={24} />
-                </Button>
-              </div>
-              <p className="text-sm text-gray-600 mt-3">48 available</p> */}
+                  {/* <Spacer y={6} /> */}
+                  <p className="mt-3 font-medium">Quantity</p>
+                  <div className="flex items-center justify-between mt-3">
+                    <div className="max-w-48 flex items-center gap-3">
+                      <Button
+                        color="default"
+                        size="sm"
+                        isIconOnly
+                        variant="flat"
+                        radius="full"
+                      >
+                        <Icon icon="ic:baseline-minus" fontSize={24} />
+                      </Button>
+                      <Input
+                        type="number"
+                        min={1}
+                        defaultValue="1"
+                        variant="flat"
+                        radius="full"
+                        className="bg-white"
+                      ></Input>
+                      <Button
+                        isIconOnly
+                        variant="flat"
+                        radius="full"
+                        color="default"
+                        size="sm"
+                      >
+                        <Icon icon="material-symbols:add" fontSize={24} />
+                      </Button>
+                    </div>
+                    <Button
+                      variant="bordered"
+                      radius="full"
+                      color="primary"
+                      isIconOnly
+                    >
+                      <Icon icon="solar:heart-bold" fontSize={24} />
+                    </Button>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-3">
+                    {stocks?.amount} available
+                  </p>
 
                   <div className="grid grid-cols-12 place-items-center gap-3 mt-6">
-                    {/* <Button
-                  className="col-span-6"
-                  variant="shadow"
-                  size="lg"
-                  radius="full"
-                  color="primary"
-                  fullWidth
-                  startContent={<Icon icon="solar:bag-3-bold" fontSize={24} />}
-                >
-                  Buy Now
-                </Button> */}
                     <Button
-                      className="col-span-12"
+                      className="col-span-6"
+                      variant="shadow"
+                      size="lg"
+                      radius="full"
+                      color="primary"
+                      fullWidth
+                      startContent={
+                        <Icon icon="solar:bag-3-bold" fontSize={24} />
+                      }
+                    >
+                      Buy Now
+                    </Button>
+                    <Button
+                      className="col-span-6"
                       variant="flat"
                       size="lg"
                       radius="full"
@@ -695,7 +698,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                     <Tab key="rerviews" title="Reviews">
                       <Card className="rounded-3xl" shadow="none">
                         <CardBody className="p-3 sm:p-3 lg:p-12">
-                          <section className="mx-auto w-full max-w-6xl lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-12 ">
+                          <section className="mx-auto w-full max-w-6xl lg:grid lg:max-w-7xl lg:grid-cols-12 lg:gap-x-12">
                             <div className="lg:col-span-4">
                               <SummaryRatingCard
                                 averageRating={4.4}
@@ -792,7 +795,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                 (Rerviews)
               </div>
               <Spacer y={6} />
-              <div className="flex items-center gap-2 text-default-700">
+              {/* <div className="flex items-center gap-2 text-default-700">
                 <Icon icon="solar:box-line-duotone" fontSize={24} />
                 {stocks?.status === "IN-STOCK" && (
                   <p className="text-small font-semibold text-primary">
@@ -809,7 +812,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                     OUT-OF-STOCK
                   </p>
                 )}
-              </div>
+              </div> */}
               <div className="mt-4">
                 <p className="sr-only">Product desc</p>
                 <p className="line-clamp-3 text-medium text-gray-500">{desc}</p>
@@ -868,8 +871,8 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                 )}
               </div>
 
-              <Spacer y={6} />
-              {/* <p className="mt-3 font-medium">Quantity</p>
+              {/* <Spacer y={6} /> */}
+              <p className="mt-3 font-medium">Quantity</p>
               <div className="flex items-center justify-between mt-3">
                 <div className="max-w-48 flex items-center gap-3">
                   <Button
@@ -908,10 +911,13 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                   <Icon icon="solar:heart-bold" fontSize={24} />
                 </Button>
               </div>
-              <p className="text-sm text-gray-600 mt-3">48 available</p> */}
+
+              <p className="text-sm text-gray-600 mt-3">
+                {stocks?.amount} available
+              </p>
 
               <div className="grid grid-cols-12 place-items-center gap-3 mt-6">
-                {/* <Button
+                <Button
                   className="col-span-6"
                   variant="shadow"
                   size="lg"
@@ -921,9 +927,9 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                   startContent={<Icon icon="solar:bag-3-bold" fontSize={24} />}
                 >
                   Buy Now
-                </Button> */}
+                </Button>
                 <Button
-                  className="col-span-12"
+                  className="col-span-6"
                   variant="flat"
                   size="lg"
                   radius="full"

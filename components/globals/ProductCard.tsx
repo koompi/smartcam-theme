@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/context/useCart";
+import { StockType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { usd } from "@/utils/formatUSD";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -31,6 +32,7 @@ interface ProductCardProps {
   price: number;
   promotion: PromotionType;
   slug: string;
+  stocks: StockType;
 }
 
 const ProductCard: FC<ProductCardProps> = ({
@@ -42,6 +44,7 @@ const ProductCard: FC<ProductCardProps> = ({
   price,
   promotion,
   slug,
+  stocks,
 }) => {
   const { addToCart } = useCart();
 
@@ -188,6 +191,7 @@ const ProductCard: FC<ProductCardProps> = ({
             addToCart(id);
             toast.success("The product is added into the cart!");
           }}
+          isDisabled={stocks?.status === "OUT-STOCK"}
         >
           Add to Cart
         </Button>

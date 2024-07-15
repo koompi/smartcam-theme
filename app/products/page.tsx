@@ -108,8 +108,16 @@ const ProductPage = () => {
             {Array.from(
               products?.storeGlobalFilterProducts?.products,
               (res: ProductProps, idx) => {
-                const { thumbnail, title, desc, rating, price, id, slug } =
-                  res?.product;
+                const {
+                  thumbnail,
+                  title,
+                  desc,
+                  rating,
+                  price,
+                  id,
+                  slug,
+                  stocks,
+                } = res?.product;
 
                 return (
                   <ProductCard
@@ -132,6 +140,7 @@ const ProductPage = () => {
                         totalDiscount: res.promotion?.discount?.totalDiscount,
                       },
                     }}
+                    stocks={stocks}
                   />
                 );
               }

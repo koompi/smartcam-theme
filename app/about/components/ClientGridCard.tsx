@@ -6,9 +6,11 @@ import { Image, Spacer } from "@nextui-org/react";
 
 export const ClientGridCard = () => {
   return (
-    <div className="bg-neutral-50 px-4 py-12" id="customers">
+    <div className="bg-neutral-50 px-4 py-0 sm:py-0 lg:py-12" id="customers">
       <div className="mx-auto container">
-        <h1 className="text-5xl font-bold text-center">Authorized Reseller</h1>
+        <h1 className="text-2xl sm:text-2xl lg:text-5xl font-bold text-center">
+          Authorized Reseller
+        </h1>
         <Spacer y={9} />
         <ClipPathLinks />
       </div>
@@ -122,7 +124,12 @@ const LinkBox = ({ Logo }: { Logo: string }) => {
       }}
       className="relative grid h-20 w-full place-content-center sm:h-28 md:h-36"
     >
-      <Image alt="logo" radius="none" src={Logo} className="w-32" />
+      <Image
+        alt="logo"
+        radius="none"
+        src={Logo}
+        className="w-12 sm:w-12 lg:w-32"
+      />
       <div
         ref={scope}
         style={{
@@ -130,7 +137,12 @@ const LinkBox = ({ Logo }: { Logo: string }) => {
         }}
         className="absolute inset-0 grid place-content-center bg-gray-200 text-white"
       >
-        <Image alt="logo" radius="none" src={Logo} className="w-32" />
+        <Image
+          alt="logo"
+          radius="none"
+          src={Logo}
+          className="w-12 sm:w-12 lg:w-32"
+        />
       </div>
     </div>
   );
