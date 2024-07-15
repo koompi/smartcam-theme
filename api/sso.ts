@@ -9,13 +9,11 @@ export const sso_api = (code: string, state: string) => {
   return axios.request(config);
 };
 
-export const user_store_login = (token: String) => {
-  return axios.post(
-    `${process.env.NEXT_PUBLIC_BACKEND}/api/store/login`,
-    { store_id: process.env.NEXT_PUBLIC_ID_STORE },
+export const customer_login = (token: String) => {
+  return axios.get(
+    `${process.env.NEXT_PUBLIC_BACKEND}/api/customer/${process.env.NEXT_PUBLIC_ID_STORE}`,
     {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     }

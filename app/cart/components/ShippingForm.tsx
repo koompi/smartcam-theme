@@ -50,20 +50,16 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
       (l: LocationType) => l.id == location
     );
 
-    // const changeLocation = () => {
-    //   setAddress(true);
-    // };
-
     return (
       <>
         <div>
           <h1 className="font-semibold text-xl pb-4">Delivery address</h1>
-          {myLocation ? (
+          {locations?.storeLocations?.length > 0 ? (
             <Accordion>
               <AccordionItem
                 key="delivery"
                 aria-label="Theme"
-                indicator={(_) => (
+                indicator={(_: any) => (
                   <div className="flex items-center font-semibold cursor-pointer">
                     <Icon
                       icon="solar:alt-arrow-right-line-duotone"
@@ -86,8 +82,8 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                     aria-label="Select existing payment method"
                     classNames={{ wrapper: "gap-3" }}
                     defaultValue={location}
-                    onValueChange={(value) => {
-                      setDelivery(value);
+                    onValueChange={(value: string) => {
+                      setLocation(value);
                     }}
                   >
                     {locations?.storeLocations?.map(
@@ -116,7 +112,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                                 <div>{myLocation?.phoneNumber}</div>
                               </div>
                             }
-                            value={myLocation.id}
+                            value={location.id}
                           />
                         );
                       }
@@ -137,12 +133,13 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
               </div>
             </Link>
           )}
+          <Divider className="mt-4"/>
           <div className="mt-6 flex space-x-4 justify-between">
             <Accordion defaultExpandedKeys={["delivery"]}>
               <AccordionItem
                 key="delivery"
                 aria-label="Theme"
-                indicator={(_) => (
+                indicator={(_: any) => (
                   <div className="flex items-center font-semibold cursor-pointer">
                     <Icon
                       icon="solar:alt-arrow-right-line-duotone"
@@ -186,7 +183,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                     aria-label="Select existing payment method"
                     classNames={{ wrapper: "gap-3" }}
                     defaultValue={delivery}
-                    onValueChange={(value) => {
+                    onValueChange={(value: string) => {
                       setDelivery(value);
                     }}
                   >

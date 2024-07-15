@@ -25,7 +25,7 @@ import { useCart } from "@/context/useCart";
 import { useAuth } from "@/context/useAuth";
 import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
-import { CHECKOUT } from "@/graphql.bk/mutation/checkout";
+import { CHECKOUT } from "@/graphql/mutation/checkout";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -64,7 +64,7 @@ const CheckoutComponent = () => {
     lng: number;
   }>();
 
-  const [storeCreateCheckouts] = useMutation(CHECKOUT);
+  const [customerCheckout] = useMutation(CHECKOUT);
 
   // estimate price
   const { data: es_delivery_price } = useQuery(ESTIMATE_PRICE, {
@@ -77,10 +77,7 @@ const CheckoutComponent = () => {
     },
   });
 
-  const { data: locations, loading: loadingAddress } =
-    useQuery(GET_ALL_LOCATIONS);
-
-  const { data: orders } = useQuery(ESTIMATION_PRICE, {
+  const { data: orders, loading: loadingOrder } = useQuery(ESTIMATION_PRICE, {
     variables: {
       input: [...cartItems],
       membershipId: membershipId,
@@ -112,7 +109,7 @@ const CheckoutComponent = () => {
 
     setLoading(true);
 
-    const res = await storeCreateCheckouts({ variables: variables });
+    const res = await customerCheckout({ variables: variables });
 
     if (paymentOption === "ONLINE") {
       const intentId = res.data.storeCreateCheckout["intentId"];
@@ -152,24 +149,11 @@ const CheckoutComponent = () => {
   };
 
   useEffect(() => {
-    if (!locations) {
-      return;
-    }
-    setDelivery("L192");
-    setLocation(locations?.storeLocations[0].id);
-    setPosition({
-      lat: locations?.storeLocations[0].lat,
-      lng: locations?.storeLocations[0].lng,
-    });
-  }, [locations]);
-
-  useEffect(() => {
     if (!es_delivery_price) {
       return;
     }
-    setShip(es_delivery_price?.estimatePriceDelivery?.data.price);
-
     setLoading(true);
+    setShip(es_delivery_price?.estimatePriceDelivery?.data.price);
     setTimeout(() => {
       setLoading(false);
     }, 500);
@@ -229,7 +213,8 @@ const CheckoutComponent = () => {
         return (
           <OrderSummary
             hideTitle
-            orders={orders?.estimationOrders && orders?.estimationOrders}
+            loading={loadingOrder}
+            orders={orders?.estimationOrders}
           />
         );
       case 1:
@@ -308,61 +293,53 @@ const CheckoutComponent = () => {
         return null;
     }
     //@ts-ignore
-  }, [page, orders, delivery, location]);
+  }, [page, orders, delivery, location, ship, loadingOrder]); 
 
-  // if (order_loading) {
+  // if (!orders || orders.estimationOrders.length <= 0) {
   //   return (
-  //     <section className="grid min-h-dvh place-items-center px-6 py-24 sm:py-32 lg:px-8">
-  //       <Spinner label="Loading..." color="primary" />
-  //     </section>
+      // <section className="grid min-h-dvh place-items-center px-6 py-24 sm:py-32 lg:px-8">
+      //   <div className="text-center">
+      //     <div className="flex justify-center items-center">
+      //       <Image
+      //         isBlurred
+      //         radius="none"
+      //         alt="Empty"
+      //         src="/images/empty-cart.svg"
+      //         className="h-32 sm:h-32 lg:h-60"
+      //       />
+      //     </div>
+      //     <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+      //       Whoops! Your cart is currently empty.
+      //     </h1>
+      //     <p className="mt-6 text-base leading-7 text-gray-600">
+      //       Browse our amazing selection of products and fill your cart with
+      //       goodies!
+      //     </p>
+      //     <div className="mt-10 flex items-center justify-center gap-x-6">
+      //       <Button
+      //         variant="shadow"
+      //         color="primary"
+      //         as={Link}
+      //         href="/"
+      //         className="text-background"
+      //       >
+      //         Go back home
+      //       </Button>
+
+      //       <Button
+      //         variant="light"
+      //         color="primary"
+      //         as={Link}
+      //         href="/products"
+      //         endContent={<span aria-hidden="true">&rarr;</span>}
+      //       >
+      //         Products
+      //       </Button>
+      //     </div>
+      //   </div>
+      // </section>
   //   );
   // }
-
-  if (!orders || orders.estimationOrders.length <= 0) {
-    return (
-      <section className="grid min-h-dvh place-items-center px-6 py-24 sm:py-32 lg:px-8">
-        <div className="text-center">
-          <div className="flex justify-center items-center">
-            <Image
-              isBlurred
-              radius="none"
-              alt="Empty"
-              src="/images/empty-cart.svg"
-              className="h-32 sm:h-32 lg:h-60"
-            />
-          </div>
-          <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-            Whoops! Your cart is currently empty.
-          </h1>
-          <p className="mt-6 text-base leading-7 text-gray-600">
-            Browse our amazing selection of products and fill your cart with
-            goodies!
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Button
-              variant="shadow"
-              color="primary"
-              as={Link}
-              href="/"
-              className="text-background"
-            >
-              Go back home
-            </Button>
-
-            <Button
-              variant="light"
-              color="primary"
-              as={Link}
-              href="/products"
-              endContent={<span aria-hidden="true">&rarr;</span>}
-            >
-              Products
-            </Button>
-          </div>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className="container mx-auto px-3 sm:px-3 lg:px-6 py-4 sm:py-4 lg:py-9 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-5 w-full gap-8">
@@ -446,7 +423,7 @@ const CheckoutComponent = () => {
                     paginate(1);
                   }}
                   isDisabled={
-                    orders.estimationOrders.length <= 0 ||
+                    orders?.estimationOrders?.length <= 0 ||
                     (page === 1 && !(delivery && location))
                   }
                   isLoading={loading}
@@ -474,7 +451,6 @@ const CheckoutComponent = () => {
         {page <= 0 ? (
           <RecommendProducts products={products?.storeProducts?.products} />
         ) : (
-          // ""
           <div className="sticky top-28 hidden sm:hidden lg:block">
             <Card shadow="sm" isBlurred>
               <CardHeader>Summary</CardHeader>
@@ -543,7 +519,7 @@ const CheckoutComponent = () => {
                       </dd>
                     ) : (
                       <dd className="text-small font-semibold text-default-700">
-                        ${ship?.toFixed(2)}
+                        {loading ? "...." : ship?.toFixed(2)}
                       </dd>
                     )}
                   </div>
@@ -559,14 +535,6 @@ const CheckoutComponent = () => {
                     <dt className="text-small font-semibold text-default-500">
                       Total
                     </dt>
-                    {/* <dd className="font-semibold text-primary text-xl">
-                      {formatToUSD(
-                        price +
-                          (es_price?.estimatePrice?.data?.price
-                            ? es_price?.estimatePrice?.data?.price
-                            : 0)
-                      )}
-                    </dd> */}
                     {delivery === "PERSONAL" ? (
                       <dd className="font-semibold text-primary text-xl">
                         $

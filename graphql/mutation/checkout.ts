@@ -8,7 +8,7 @@ export const CHECKOUT = gql`
     $body: BodyOrder!
     $membershipId: String
   ) {
-    storeCreateCheckout(
+    customerCheckout(
       locationId: $locationId
       deliveryType: $deliveryType
       payment: $payment
