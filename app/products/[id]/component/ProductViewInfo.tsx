@@ -441,7 +441,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                   </div> */}
                   <div className="mt-4">
                     <p className="sr-only">Product desc</p>
-                    <p className="line-clamp-3 text-medium text-gray-500">
+                    <p className="line-clamp-9 text-medium text-gray-500">
                       {desc}
                     </p>
                   </div>
@@ -815,7 +815,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
               </div> */}
               <div className="mt-4">
                 <p className="sr-only">Product desc</p>
-                <p className="line-clamp-3 text-medium text-gray-500">{desc}</p>
+                <p className="line-clamp-9 text-medium text-gray-500">{desc}</p>
               </div>
               {/*  ---variants----- */}
               <div className="mt-6 flex flex-col gap-1">

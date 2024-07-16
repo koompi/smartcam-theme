@@ -1,7 +1,7 @@
 "use client";
 
 import type { InputProps } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionItem,
@@ -38,9 +38,18 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
       base: "data-[selected=true]:border-primary",
       control: "bg-primary",
     };
-    const [address, setAddress] = useState(false);
+    const [active, setActive] = useState<string | null>(null);
     const { data: locations, loading: loadingAddress } =
       useQuery(GET_ALL_LOCATIONS);
+
+    useEffect(() => {
+      if (!locations) {
+        return;
+      }
+      if (locations?.storeLocations.length > 0) {
+        setLocation(locations?.storeLocations[0].id);
+      }
+    }, [locations]);
 
     if (loadingAddress) {
       return "Loading...";
@@ -68,11 +77,13 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                   </div>
                 )}
                 title={
-                  <div className="flex items-center gap-3">
-                    <Chip size="sm" color="primary">
-                      {myLocation?.label}
-                    </Chip>
-                    <p>{myLocation?.address?.streetValue}</p>
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <Chip size="sm" color="primary">
+                        {myLocation?.label}
+                      </Chip>
+                      <p>{myLocation?.address?.streetValue}</p>
+                    </div>
                   </div>
                 }
                 // title="Delivery Option"
@@ -133,7 +144,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
               </div>
             </Link>
           )}
-          <Divider className="mt-4"/>
+          <Divider className="mt-4" />
           <div className="mt-6 flex space-x-4 justify-between">
             <Accordion defaultExpandedKeys={["delivery"]}>
               <AccordionItem
