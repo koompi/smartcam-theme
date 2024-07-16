@@ -27,20 +27,27 @@ const Banner = () => {
           modules={[Autoplay, Pagination]}
         >
           <SwiperSlide>
-            <Image alt="banner" radius="none" src="/images/banner/banner.jpg" />
-          </SwiperSlide>
-          <SwiperSlide>
             <Image
               alt="banner"
               radius="none"
-              src="/images/banner/banner2.jpg"
+              src="/images/banner/banner.jpg"
+              className="h-[100dvh] object-cover object-center w-screen"
             />
           </SwiperSlide>
           <SwiperSlide>
             <Image
               alt="banner"
               radius="none"
-              src="/images/banner/banner3.jpg"
+              src="/images/banner/banner2.png"
+              className="h-[100dvh] object-cover object-center w-screen"
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <Image
+              alt="banner"
+              radius="none"
+              src="/images/banner/banner3.png"
+              className="h-[100dvh] object-cover object-center w-screen"
             />
           </SwiperSlide>
           <SwiperSlide>
@@ -48,6 +55,7 @@ const Banner = () => {
               alt="banner"
               radius="none"
               src="/images/banner/banner4.jpg"
+              className="h-[100dvh] object-cover object-center w-screen"
             />
           </SwiperSlide>
           <SwiperSlide>
@@ -55,6 +63,7 @@ const Banner = () => {
               alt="banner"
               radius="none"
               src="/images/banner/banner5.jpg"
+              className="h-[100dvh] object-cover object-center w-screen"
             />
           </SwiperSlide>
         </Swiper>

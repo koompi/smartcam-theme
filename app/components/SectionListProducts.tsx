@@ -126,8 +126,6 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
             const { thumbnail, title, desc, rating, price, id, slug, stocks } =
               res?.product;
 
-            console.log("data", res);
-
             return (
               <SwiperSlide key={idx} className="bg-background">
                 <ProductCard

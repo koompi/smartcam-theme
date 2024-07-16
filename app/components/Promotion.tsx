@@ -10,37 +10,12 @@ import { PROMOTIONS } from "@/graphql/product";
 import { useQuery } from "@apollo/client";
 
 export const Promotion = () => {
-  const promotion = [
-    {
-      src: "apple-m3-black.png",
-      original_price: 1850,
-      promotion_price: 1800,
-      off: 10,
-      isGroup: true,
-      url: "#",
-    },
-    {
-      src: "apple-m3-gray.png",
-      original_price: 1850,
-      promotion_price: 1800,
-      off: 10,
-      isGroup: true,
-      url: "#",
-    },
-    {
-      src: "apple-m3-black2.png",
-      original_price: 1850,
-      promotion_price: 1800,
-      off: 10,
-      isGroup: true,
-      url: "#",
-    },
-  ];
-
   const { data, loading: promotionLoading } = useQuery(PROMOTIONS);
 
-  if (promotionLoading || !data) {
+  if (promotionLoading) {
     return <Loading />;
+  } else if (data.normalPromotions.length <= 0) {
+    return null;
   }
 
   return (

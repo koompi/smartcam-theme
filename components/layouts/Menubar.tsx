@@ -24,6 +24,8 @@ import { cn } from "@/utils/cn";
 import { BRANDS } from "@/graphql/brands";
 import { useQuery } from "@apollo/client";
 import { BrandsType } from "@/types/product";
+import { CATEGORIES } from "@/graphql/category";
+import { Category } from "@/types/category";
 
 interface SubMenuType {
   url: string;
@@ -105,9 +107,21 @@ export const Menubar = () => {
     },
   ];
 
+  // query brands
   const { data, loading } = useQuery(BRANDS);
 
-  if (loading || !data) {
+  // query categories
+  const { data: categories, loading: loadingCategory } = useQuery(CATEGORIES, {
+    variables: {
+      filter: {
+        limit: 8,
+        skip: 0,
+        sort: -1,
+      },
+    },
+  });
+
+  if (loading || !data || loadingCategory || !categories) {
     return;
   }
 
@@ -313,18 +327,13 @@ export const Menubar = () => {
           placeholder="Category"
           variant="bordered"
         >
-          <SelectItem key="Men" value="Men">
-            Men
-          </SelectItem>
-          <SelectItem key="Women" value="Women">
-            Women
-          </SelectItem>
-          <SelectItem key="Kids" value="Kids">
-            Kids
-          </SelectItem>
-          <SelectItem key="Sport" value="Sport">
-            Sport
-          </SelectItem>
+          {categories?.storeOwnerCategories.map((res: Category) => {
+            return (
+              <SelectItem key={res.id} value={res.id}>
+                {res.title?.en}
+              </SelectItem>
+            );
+          })}
         </Select>
         <Spacer x={1} />
         {/* ======= short ======= */}

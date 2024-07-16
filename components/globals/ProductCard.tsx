@@ -40,7 +40,6 @@ const ProductCard: FC<ProductCardProps> = ({
   thumbnail,
   title,
   desc,
-  rating,
   price,
   promotion,
   slug,
@@ -157,7 +156,7 @@ const ProductCard: FC<ProductCardProps> = ({
           <h2 className="text-black font-medium text-sm sm:text-sm lg:text-lg line-clamp-2">
             {title}
           </h2>
-          <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-4 mt-2 sm:mt-2 lg:mt-3">
+          <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-9 whitespace-pre-line mt-2 sm:mt-2 lg:mt-3">
             {desc}
           </p>
           <div className="flex items-center gap-3 mt-2 sm:mt-2 lg:mt-3">
