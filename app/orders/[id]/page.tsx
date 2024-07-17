@@ -84,8 +84,6 @@ const OrderSinglePage = () => {
   //     </section>
   //   );
 
-  console.log("data", data);
-
   return (
     <section className="bg-white">
       <div className="container max-w-full sm:max-w-full lg:max-w-5xl py-9 px-3 sm:px-3 lg:px-6 mx-auto">

@@ -33,6 +33,10 @@ interface ProductCardProps {
   promotion: PromotionType;
   slug: string;
   stocks: StockType;
+  currencyPrice: {
+    khr: number;
+    usd: number;
+  };
 }
 
 const ProductCard: FC<ProductCardProps> = ({
@@ -44,6 +48,7 @@ const ProductCard: FC<ProductCardProps> = ({
   promotion,
   slug,
   stocks,
+  currencyPrice,
 }) => {
   const { addToCart } = useCart();
 
@@ -54,7 +59,7 @@ const ProductCard: FC<ProductCardProps> = ({
       isHoverable
       as={Link}
       href={`/products/${slug}`}
-      className="flex flex-col flex-grow col-span-1 h-full group"
+      className=" flex flex-col flex-grow col-span-1 h-full group items-stretch"
     >
       {promotion?.discount?.discountType && (
         <Chip
@@ -171,7 +176,7 @@ const ProductCard: FC<ProductCardProps> = ({
               </>
             ) : (
               <p className="text-black  text-lg sm:text-lg lg:text-2xl font-bold">
-                {usd(price)}
+                {usd(currencyPrice?.usd)}
               </p>
             )}
           </div>

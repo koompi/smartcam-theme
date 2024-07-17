@@ -117,6 +117,7 @@ const ProductPage = () => {
                   id,
                   slug,
                   stocks,
+                  currencyPrice,
                 } = res?.product;
 
                 return (
@@ -141,6 +142,7 @@ const ProductPage = () => {
                       },
                     }}
                     stocks={stocks}
+                    currencyPrice={currencyPrice}
                   />
                 );
               }

@@ -69,14 +69,14 @@ const PromotionCard = () => {
                 <Image
                   alt="banner"
                   radius="none"
-                  src="/images/banner/banner2.jpg"
+                  src="/images/banner/banner2.png"
                 />
               </SwiperSlide>
               <SwiperSlide>
                 <Image
                   alt="banner"
                   radius="none"
-                  src="/images/banner/banner3.jpg"
+                  src="/images/banner/banner3.png"
                 />
               </SwiperSlide>
               <SwiperSlide>

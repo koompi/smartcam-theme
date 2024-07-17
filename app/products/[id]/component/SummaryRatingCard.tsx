@@ -59,7 +59,7 @@ const SummaryRatingCard = React.forwardRef<
                 aria-label={`${rating} stars`}
                 color="danger"
                 label={
-                  <span className="text-small text-default-500">{`${rating} ${
+                  <span className="text-small text-gray-500">{`${rating} ${
                     rating > 1 ? "stars" : "star"
                   }`}</span>
                 }

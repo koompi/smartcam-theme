@@ -41,7 +41,7 @@ const ModalReview = React.forwardRef<
           <RatingRadioGroup
             hideStarsText
             className="flex-col-reverse items-start"
-            color="warning"
+            color="primary"
             label={<span className="text-small">Rating</span>}
           />
           <Input

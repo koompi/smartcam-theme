@@ -94,17 +94,26 @@ export default function SearchPage() {
       )}
 
       {products?.storeGlobalFilterProducts?.products.length > 0 && (
-        <div className="my-auto flex max-w-lg flex-col gap-2 pb-9">
+        <div className="my-auto flex flex-col gap-2 pb-9">
           <h3 className="text-lg font-bold leading-8 mt-3">Trending Now</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 px-2">
+          <div className="w-full grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3 px-2">
             {products?.storeGlobalFilterProducts?.products
               ?.slice(0, 10)
               ?.sort((a: ProductType, b: ProductType) =>
                 a?.sell > b?.sell ? -1 : 1
               )
               ?.map((res: any, idx: number) => {
-                const { thumbnail, title, desc, rating, price, id, slug } =
-                  res?.product;
+                const {
+                  thumbnail,
+                  title,
+                  desc,
+                  rating,
+                  price,
+                  id,
+                  slug,
+                  currencyPrice,
+                  stocks,
+                } = res?.product;
 
                 return (
                   <div key={idx}>
@@ -127,6 +136,8 @@ export default function SearchPage() {
                         },
                       }}
                       slug={slug}
+                      stocks={stocks}
+                      currencyPrice={currencyPrice}
                     />
                   </div>
                 );

@@ -33,10 +33,7 @@ import {
 import { Swiper as SwiperType } from "swiper/types"; // Import Swiper type
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/navigation";
-import "swiper/css/thumbs";
+
 import { VariantRadio } from "./VariantRadio";
 import { formatToUSD } from "@/utils/formatUSD";
 import productReviews from "@/data/productReviews";
@@ -56,6 +53,12 @@ import { useCart } from "@/context/useCart";
 import { ProductType, Variants } from "@/types/product";
 import { toast } from "sonner";
 import { LexicalReader } from "@/app/editor/LexicalReader";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
 
 export type ProductViewInfoProps = Omit<
   React.HTMLAttributes<HTMLDivElement>,
@@ -113,6 +116,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
     const swiperRef = useRef<SwiperType | null>(null);
     const fullHost = window.location.href;
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
+    const [isCopied, setIsCopied] = useState(false);
 
     const { addToCart } = useCart();
 
@@ -162,7 +166,23 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
       attributes: [],
     });
 
-    console.log("stokc", stocks);
+    const handleCopy = async () => {
+      try {
+        // await navigator.clipboard.writeText("hello");
+        await navigator.clipboard
+          .writeText(fullHost)
+          .then(() => {
+            toast.success("Copied!");
+          })
+          .catch(() => {
+            toast.error("something went wrong!");
+          });
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2000); // Reset the copied state after 2 seconds
+      } catch (err) {
+        console.error("Failed to copy: ", err);
+      }
+    };
 
     return (
       <main>
@@ -311,7 +331,6 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                   radius="full"
                   isIconOnly
                   id="zoom-button"
-                  // size="lg"
                   variant="flat"
                   color="primary"
                   className="absolute z-50 bottom-3 right-3"
@@ -421,7 +440,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                     (Rerviews)
                   </div>
                   <Spacer y={6} />
-                  {/* <div className="flex items-center gap-2 text-default-700">
+                  <div className="flex items-center gap-2 text-default-700">
                     <Icon icon="solar:box-line-duotone" fontSize={24} />
                     {stocks?.status === "IN-STOCK" && (
                       <p className="text-small font-semibold text-primary">
@@ -438,10 +457,10 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                         OUT-OF-STOCK
                       </p>
                     )}
-                  </div> */}
+                  </div>
                   <div className="mt-4">
                     <p className="sr-only">Product desc</p>
-                    <p className="line-clamp-9 text-medium text-gray-500">
+                    <p className="line-clamp-9 text-medium text-gray-500 whitespace-pre-line">
                       {desc}
                     </p>
                   </div>
@@ -539,9 +558,9 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                       <Icon icon="solar:heart-bold" fontSize={24} />
                     </Button>
                   </div>
-                  <p className="text-sm text-gray-600 mt-3">
+                  {/* <p className="text-sm text-gray-600 mt-3">
                     {stocks?.amount} available
-                  </p>
+                  </p> */}
 
                   <div className="grid grid-cols-12 place-items-center gap-3 mt-6">
                     <Button
@@ -603,6 +622,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                           startContent={
                             <Icon icon="solar:link-bold" fontSize={21} />
                           }
+                          onPress={() => handleCopy()}
                         >
                           Copy Link
                         </DropdownItem>
@@ -795,7 +815,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                 (Rerviews)
               </div>
               <Spacer y={6} />
-              {/* <div className="flex items-center gap-2 text-default-700">
+              <div className="flex items-center gap-2 text-default-700">
                 <Icon icon="solar:box-line-duotone" fontSize={24} />
                 {stocks?.status === "IN-STOCK" && (
                   <p className="text-small font-semibold text-primary">
@@ -812,10 +832,12 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                     OUT-OF-STOCK
                   </p>
                 )}
-              </div> */}
+              </div>
               <div className="mt-4">
                 <p className="sr-only">Product desc</p>
-                <p className="line-clamp-9 text-medium text-gray-500">{desc}</p>
+                <p className="line-clamp-9 text-medium text-gray-500 whitespace-pre-line">
+                  {desc}
+                </p>
               </div>
               {/*  ---variants----- */}
               <div className="mt-6 flex flex-col gap-1">
@@ -912,9 +934,9 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                 </Button>
               </div>
 
-              <p className="text-sm text-gray-600 mt-3">
+              {/* <p className="text-sm text-gray-600 mt-3">
                 {stocks?.amount} available
-              </p>
+              </p> */}
 
               <div className="grid grid-cols-12 place-items-center gap-3 mt-6">
                 <Button
@@ -974,6 +996,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                       startContent={
                         <Icon icon="solar:link-bold" fontSize={21} />
                       }
+                      onPress={() => handleCopy()}
                     >
                       Copy Link
                     </DropdownItem>

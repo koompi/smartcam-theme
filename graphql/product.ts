@@ -208,6 +208,7 @@ export const GLOBAL_PRODUCT_FILTERING = gql`
           sell
           rating
           status
+          desc
           stocks {
             amount
             status
