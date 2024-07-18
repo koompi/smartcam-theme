@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
-import "./globals.css";
+import "@/styles/editor.css";
+import "@/styles/globals.css";
 import { MainNavbar } from "@/components/layouts/Main-Navbar";
 import MainFooter from "@/components/layouts/MainFooter";
 import { BackToTop } from "@/components/globals/BackTop";

@@ -59,6 +59,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
+import "@/styles/editor.css";
 
 export type ProductViewInfoProps = Omit<
   React.HTMLAttributes<HTMLDivElement>,
@@ -193,7 +194,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
           color="primary"
           radius="lg"
         >
-          <BreadcrumbItem href="/products">Products</BreadcrumbItem>
+          s<BreadcrumbItem href="/products">Products</BreadcrumbItem>
           {props?.category && (
             <BreadcrumbItem
               href={`/products/?search=${search ? search : ""}&brands=${

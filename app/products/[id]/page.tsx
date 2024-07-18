@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { GET_PRODUCT } from "@/graphql/product";
 import { getClient } from "@/libs/client";
 import { ResolvingMetadata, Metadata } from "next";
+import "@/styles/editor.css";
 
 const ProductDetail = dynamic(() => import("./component/ProductDetail"));
 
