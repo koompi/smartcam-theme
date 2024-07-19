@@ -59,7 +59,6 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import "@/styles/editor.css";
 
 export type ProductViewInfoProps = Omit<
   React.HTMLAttributes<HTMLDivElement>,
@@ -711,7 +710,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
                   >
                     <Tab key="description" title="Decription">
                       <Card className="rounded-3xl" shadow="none">
-                        <CardBody className="p-3 sm:p-3 lg:p-12">
+                        <CardBody className="px-7 sm:px-7 lg:px-12 lg:py-9">
                           <LexicalReader data={detail} />
                         </CardBody>
                       </Card>

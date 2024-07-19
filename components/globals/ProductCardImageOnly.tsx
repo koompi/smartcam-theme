@@ -4,25 +4,23 @@ import { formatToUSD } from "@/utils/formatUSD";
 import { Image } from "@nextui-org/react";
 import React, { FC } from "react";
 import { cn } from "@/utils/cn";
+import { ProductType } from "@/types/product";
+import { PromotionType } from "@/types/promotion";
 
 interface ProductCardImageOnlyType {
-  src: string;
-  orginal_price: number;
-  promotion_price: number;
-  promotion_percentage: number;
-  off: number;
+  product: ProductType;
+  promotion: PromotionType;
   isGroup: boolean;
-  discountType: string;
 }
 
 const ProductCardImageOnly: FC<ProductCardImageOnlyType> = (props) => {
   return (
     <>
       <Image
-        alt={props.src}
+        alt={props.product?.title}
         src={
-          props.src
-            ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${props.src}`
+          props.product
+            ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${props.product?.thumbnail}`
             : "/images/default-thumbnail.png"
         }
         radius="none"
@@ -34,14 +32,14 @@ const ProductCardImageOnly: FC<ProductCardImageOnlyType> = (props) => {
             "text-sm": props.isGroup,
           })}
         >
-          {formatToUSD(props.orginal_price)}
+          {formatToUSD(props.promotion?.discount?.originalPrice)}
         </p>
         <p
           className={cn("font-semibold text-black", "text-xl", {
             "text-lg": props.isGroup,
           })}
         >
-          {formatToUSD(props.promotion_price)}
+          {formatToUSD(props.promotion?.discount?.totalDiscount)}
         </p>
       </div>
     </>

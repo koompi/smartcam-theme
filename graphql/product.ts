@@ -246,80 +246,164 @@ export const GLOBAL_PRODUCT_FILTERING = gql`
   }
 `;
 
-export const PROMOTIONS = gql`
-  query GetPromotion {
-    normalPromotions {
-      product {
-        id
-        ownerId
-        title
-        thumbnail
-        brand
-        desc
-        price
-        slug
-        rating
-        previews
-        status
-        detail
-        currency
-        stocks {
-          amount
-          status
-        }
-        category {
-          id
-          title {
-            en
+export const PROMOTIONS_BY_TYPE = gql`
+  query PromotionSpecialOffer($type: PromotionStatus!) {
+    promotionSpecialOffer(type: $type) {
+      products {
+        promotion {
+          isMembership
+          discount {
+            discountPercentage
+            discountPrice
+            discountType
+            originalPrice
+            promotionStatus
+            totalDiscount
           }
-          children {
+        }
+        product {
+          id
+          ownerId
+          title
+          thumbnail
+          brand
+          desc
+          price
+          slug
+          rating
+          previews
+          status
+          detail
+          currencyPrice {
+            khr
+            usd
+          }
+          currency
+          stocks {
+            amount
+            status
+          }
+          category {
+            id
+            title {
+              en
+            }
+            children {
+              id
+              title {
+                en
+              }
+            }
+          }
+          subcategories {
             id
             title {
               en
             }
           }
-        }
-        subcategories {
-          id
-          title {
-            en
+          variants {
+            id
+            default
+            attributes {
+              type
+              option
+            }
+            label
+            previews
+            price
           }
-        }
-        variants {
-          id
-          default
-          attributes {
-            type
-            option
+          createdAt
+          updatedAt
+          currencyPrice {
+            khr
+            usd
           }
-          label
-          previews
-          price
-        }
-        createdAt
-        updatedAt
-        currencyPrice {
-          khr
-          usd
-        }
-        store {
-          name
+          store {
+            name
+          }
         }
       }
-      discountType
-      originalPrice
-      promotionPercentage
-      promotionPrice
-      promotionStatus
-      promotionType
-      availability
-      createdAt
-      description
-      endPromotion
-      id
-      membershipId
-      startPromotion
-      updatedAt
+    }
+  }
+`;
+
+export const PROMOTIONS_BY_SPECIAL_SAVING = gql`
+  query SpecialSaving {
+    specialSaving {
+      products {
+        promotion {
+          isMembership
+          discount {
+            discountPercentage
+            discountPrice
+            discountType
+            originalPrice
+            promotionStatus
+            totalDiscount
+          }
+        }
+        product {
+          id
+          ownerId
+          title
+          thumbnail
+          brand
+          desc
+          price
+          slug
+          rating
+          previews
+          status
+          detail
+          currencyPrice {
+            khr
+            usd
+          }
+          currency
+          stocks {
+            amount
+            status
+          }
+          category {
+            id
+            title {
+              en
+            }
+            children {
+              id
+              title {
+                en
+              }
+            }
+          }
+          subcategories {
+            id
+            title {
+              en
+            }
+          }
+          variants {
+            id
+            default
+            attributes {
+              type
+              option
+            }
+            label
+            previews
+            price
+          }
+          createdAt
+          updatedAt
+          currencyPrice {
+            khr
+            usd
+          }
+          store {
+            name
+          }
+        }
+      }
     }
   }
 `;

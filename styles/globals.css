@@ -63,6 +63,10 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+.cube-swiper .swiper-slide {
+  width: 30px !important;
+  height: 30px !important;
+}
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) {
   .swiper-slide {

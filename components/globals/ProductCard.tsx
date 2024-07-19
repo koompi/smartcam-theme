@@ -44,7 +44,6 @@ const ProductCard: FC<ProductCardProps> = ({
   thumbnail,
   title,
   desc,
-  price,
   promotion,
   slug,
   stocks,

@@ -1,5 +1,5 @@
 export type PromotionType = {
-  isMembership: boolean;
+  isMembership?: boolean;
   discount: {
     discountPercentage?: number;
     discountPrice: number;
