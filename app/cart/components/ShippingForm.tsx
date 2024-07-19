@@ -49,7 +49,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
       if (locations?.storeLocations.length > 0) {
         setLocation(locations?.storeLocations[0].id);
       }
-    }, [locations]);
+    }, [locations, setLocation]);
 
     if (loadingAddress) {
       return "Loading...";

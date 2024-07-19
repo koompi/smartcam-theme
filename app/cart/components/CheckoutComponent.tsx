@@ -288,7 +288,7 @@ const CheckoutComponent = () => {
       default:
         return null;
     }
-  }, [page, orders, delivery, location, ship]);
+  }, [page, orders, delivery, location, ship, loadingOrder]);
 
   // if (!orders || orders.estimationOrders.length <= 0) {
   //   return (

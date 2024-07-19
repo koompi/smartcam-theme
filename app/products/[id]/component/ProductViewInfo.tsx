@@ -93,7 +93,7 @@ const ratings = [
   },
 ];
 
-//@ts-ignore
+// eslint-disable-next-line react/display-name
 const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
   ({
     title,
@@ -104,7 +104,6 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
     variants,
     detail,
     stocks,
-    className,
     ...props
   }) => {
     const searchParams = useSearchParams();
@@ -168,7 +167,6 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
 
     const handleCopy = async () => {
       try {
-        // await navigator.clipboard.writeText("hello");
         await navigator.clipboard
           .writeText(fullHost)
           .then(() => {
@@ -193,7 +191,7 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
           color="primary"
           radius="lg"
         >
-          s<BreadcrumbItem href="/products">Products</BreadcrumbItem>
+          <BreadcrumbItem href="/products">Products</BreadcrumbItem>
           {props?.category && (
             <BreadcrumbItem
               href={`/products/?search=${search ? search : ""}&brands=${

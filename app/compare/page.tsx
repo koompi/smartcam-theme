@@ -11,7 +11,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, FC } from "react";
 
 interface Topic {
   title: string;
@@ -36,7 +36,8 @@ interface Product {
 
 interface ProductsComparisonTableProps {
   products: Product[];
-  topics: Topic[];
+  setGroupSelected: (value: string[]) => void;
+  groupSelected: string[];
 }
 
 export const productsComparison: Product[] = [
@@ -127,97 +128,6 @@ const ComparisonPage = () => {
     "description",
   ]);
 
-  const ProductsComparisonTable: React.FC<ProductsComparisonTableProps> = ({
-    products,
-    topics,
-  }) => {
-    const renderTopicData = (
-      product: Product,
-      topicValue: string
-    ): string | JSX.Element => {
-      switch (topicValue) {
-        case "information":
-          return groupSelected.includes("information") ? product.title : ""; // Assuming 'desc' contains detailed information
-        case "price":
-          return `$${product.totalPrice}`;
-        case "brand":
-          return product.brand;
-        case "category":
-          return product.category;
-        case "description":
-          return product.description; // Same as 'information' for this example
-        case "details":
-          return "Details not specified"; // Handle if details are not present
-        default:
-          return ""; // Default case
-      }
-    };
-
-    return (
-      <div className="overflow-x-auto">
-        <table className="min-w-full">
-          <thead>
-            <tr className="bg-white">
-              <th className="py-2 text-left">
-                <div className="w-full flex flex-col items-center justify-center">
-                  <Button
-                    size="lg"
-                    variant="solid"
-                    color="primary"
-                    radius="full"
-                    isIconOnly
-                    className="h-20 w-20"
-                    as={Link}
-                    href="/products"
-                  >
-                    <Icon icon="solar:add-circle-bold" fontSize={80} />
-                  </Button>
-                </div>
-              </th>
-              {products.map((product) => (
-                <th key={product.id} className="py-2 px-4 ">
-                  <div className="w-full col-span-1 flex flex-col items-center justify-center p-3">
-                    <Image
-                      radius="lg"
-                      alt={product.title}
-                      src={`/images/products/${product.thumbnail}`}
-                      className="h-60 mx-auto"
-                      isZoomed
-                    />
-                    <Button
-                      variant="light"
-                      color="primary"
-                      className="font-semibold"
-                    >
-                      Add to Cart
-                    </Button>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {groupSelected.map((topic, idx) => (
-              <tr
-                key={topic}
-                className={cn("px-4", {
-                  "bg-white": idx % 2,
-                })}
-              >
-                <td className="py-6 px-4 font-bold">{topic}</td>
-                {products.map((product) => (
-                  <td key={`${product.id}-${topic}`} className="py-2 px-4">
-                    {renderTopicData(product, topic)}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
   return (
     <section className="container py-6">
       <h1 className="text-2xl font-bold">Comparison</h1>
@@ -229,7 +139,7 @@ const ComparisonPage = () => {
           value={groupSelected}
           onChange={setGroupSelected}
         >
-          {Array.from(topics, (t, idx) => {
+          {Array.from(topics, (t: Topic, idx) => {
             return (
               <CustomCheckbox key={idx} value={t.value}>
                 {t.title}
@@ -244,9 +154,105 @@ const ComparisonPage = () => {
       <Divider className="my-3" />
       <Spacer y={6} />
 
-      <ProductsComparisonTable products={productsComparison} topics={topics} />
+      <ProductsComparisonTable
+        products={productsComparison}
+        groupSelected={groupSelected}
+        setGroupSelected={setGroupSelected}
+      />
     </section>
   );
 };
 
 export default ComparisonPage;
+
+export const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (
+  props
+) => {
+  const renderTopicData = (
+    product: Product,
+    topicValue: string
+  ): string | JSX.Element => {
+    switch (topicValue) {
+      case "information":
+        return props?.groupSelected.includes("information")
+          ? product.title
+          : ""; // Assuming 'desc' contains detailed information
+      case "price":
+        return `$${product.totalPrice}`;
+      case "brand":
+        return product.brand;
+      case "category":
+        return product.category;
+      case "description":
+        return product.description; // Same as 'information' for this example
+      case "details":
+        return "Details not specified"; // Handle if details are not present
+      default:
+        return ""; // Default case
+    }
+  };
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full">
+        <thead>
+          <tr className="bg-white">
+            <th className="py-2 text-left">
+              <div className="w-full flex flex-col items-center justify-center">
+                <Button
+                  size="lg"
+                  variant="solid"
+                  color="primary"
+                  radius="full"
+                  isIconOnly
+                  className="h-20 w-20"
+                  as={Link}
+                  href="/products"
+                >
+                  <Icon icon="solar:add-circle-bold" fontSize={80} />
+                </Button>
+              </div>
+            </th>
+            {props.products?.map((product: any) => (
+              <th key={product.id} className="py-2 px-4 ">
+                <div className="w-full col-span-1 flex flex-col items-center justify-center p-3">
+                  <Image
+                    radius="lg"
+                    alt={product.title}
+                    src={`/images/products/${product.thumbnail}`}
+                    className="h-60 mx-auto"
+                    isZoomed
+                  />
+                  <Button
+                    variant="light"
+                    color="primary"
+                    className="font-semibold"
+                  >
+                    Add to Cart
+                  </Button>
+                </div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {props.groupSelected.map((topic, idx) => (
+            <tr
+              key={topic}
+              className={cn("px-4", {
+                "bg-white": idx % 2,
+              })}
+            >
+              <td className="py-6 px-4 font-bold">{topic}</td>
+              {props.products.map((product: Product) => (
+                <td key={`${product.id}-${topic}`} className="py-2 px-4">
+                  {renderTopicData(product, topic)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
