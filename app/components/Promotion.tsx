@@ -31,7 +31,7 @@ interface ProductProps {
 
 export const Promotion = () => {
   const { data, loading: promotionLoading } = useQuery(PROMOTIONS_BY_TYPE, {
-    variables: { type: "NORMAL" },
+    variables: { promotionStatus: "NORMAL" },
   });
 
   const { data: saving, loading: loadingSaving } = useQuery(
