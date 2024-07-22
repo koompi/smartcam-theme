@@ -2,7 +2,7 @@
 
 import type { SliderProps } from "@nextui-org/react";
 
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Divider, Input, Slider } from "@nextui-org/react";
 
 import { cn } from "@/utils/cn";
@@ -13,6 +13,7 @@ export type PriceSliderAnimation = "opacity" | "height";
 export type PriceSliderProps = Omit<SliderProps, "ref"> & {
   range?: RangeFilter;
   animation?: PriceSliderAnimation;
+  setPriceRange: Dispatch<SetStateAction<[number, number]>>;
 };
 
 export type RangeValue = [number, number];
@@ -86,7 +87,7 @@ const PriceSliderPip: React.FC<PriceSliderPipProps> = ({
 };
 
 const PriceSlider = React.forwardRef<HTMLDivElement, PriceSliderProps>(
-  ({ range, animation, className, ...props }, ref) => {
+  ({ range, animation, setPriceRange, className, ...props }, ref) => {
     const defaultValue = React.useMemo<RangeValue>(
       () => range?.defaultValue || [0, 1000],
       [range?.defaultValue]
@@ -167,6 +168,7 @@ const PriceSlider = React.forwardRef<HTMLDivElement, PriceSliderProps>(
             value={value}
             onChange={(value) => {
               setValue(value as RangeValue);
+              setPriceRange(value as RangeValue);
             }}
           />
         </div>

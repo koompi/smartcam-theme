@@ -3,9 +3,8 @@ import { Button, Navbar } from "@nextui-org/react";
 
 import { ProductType } from "@/types/product";
 import { Category } from "@/types/category";
-// import ProductCard from "../components/ProductCard";
 import Link from "next/link";
-import { Search } from "./components/Search";
+import { Search } from "@/components/layouts/Search";
 import { GLOBAL_PRODUCT_FILTERING } from "@/graphql.bk/product";
 import { useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";

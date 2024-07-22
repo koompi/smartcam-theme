@@ -16,7 +16,7 @@ export const Search = () => {
   const [value, setValue] = useState("");
 
   const onSubmit: SubmitHandler<FormSearch> = () => {
-    router.push(`/products?search=${value ? value : ""}&category=`);
+    router.push(`/products?search=${value ? value : ""}`);
   };
   return (
     <form
@@ -25,16 +25,14 @@ export const Search = () => {
     >
       <Input
         color="primary"
-        {...(register("search"), { required: true })}
-        radius="lg"
         size="lg"
         type="search"
+        {...(register("search"), { required: true })}
         variant="bordered"
         placeholder="Find your product here ..."
-        className="max-w-xl w-full"
-        startContent={<Icon icon="fe:search" fontSize={21} />}
+        startContent={<Icon icon="mingcute:search-line" fontSize={24} />}
         onClear={() => {
-          setValue(""), router.push(`?search=&category=`);
+          setValue(""), router.push(`?search=`);
         }}
         isClearable
         isRequired
@@ -42,16 +40,18 @@ export const Search = () => {
         onValueChange={(value) => {
           setValue(value);
         }}
+        className="w-[33rem]"
+        radius="full"
       />
       <Button
         variant="shadow"
         type="submit"
-        size="lg"
+        radius="full"
         color="primary"
         className="text-background"
         isIconOnly
       >
-        <Icon icon="lucide:search" />
+        <Icon icon="lucide:search" fontSize={21} />
       </Button>
     </form>
   );

@@ -10,11 +10,6 @@ import {
   Image,
   Spacer,
   Badge,
-  Input,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Tooltip,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
@@ -33,12 +28,12 @@ import { useAuth } from "@/context/useAuth";
 import { useCart } from "@/context/useCart";
 import Link from "next/link";
 import { cn } from "@/utils/cn";
+import { Search } from "./Search";
 
 export const MainNavbar = () => {
   const pathname = usePathname();
   const { user, loading } = useAuth();
   const { cartItems, logout } = useCart();
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuItems = [
@@ -127,7 +122,7 @@ export const MainNavbar = () => {
         </NavbarContent>
 
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
-          <NavbarItem>
+          {/* <NavbarItem>
             <Popover placement="bottom" showArrow={true}>
               <PopoverTrigger>
                 <Button isIconOnly radius="full" color="primary" variant="flat">
@@ -144,18 +139,9 @@ export const MainNavbar = () => {
                 </ul>
               </PopoverContent>
             </Popover>
-          </NavbarItem>
+          </NavbarItem> */}
           <NavbarItem>
-            <Input
-              type="search"
-              placeholder="Find products ..."
-              variant="flat"
-              className="w-[33rem]"
-              radius="full"
-              endContent={<Icon icon="mingcute:search-line" fontSize={24} />}
-              isClearable
-              color="primary"
-            />
+            <Search />
           </NavbarItem>
         </NavbarContent>
         <NavbarContent

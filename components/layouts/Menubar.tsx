@@ -14,11 +14,11 @@ import {
   PopoverTrigger,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import PopoverFilterWrapper from "../CustomComponent/PopoverFilterWrapper";
 import PriceSlider from "../CustomComponent/PriceSlider";
 import { Icon } from "@iconify/react/dist/iconify.js";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { cn } from "@/utils/cn";
 import { BRANDS } from "@/graphql/brands";
@@ -51,6 +51,19 @@ export const SubMenu: FC<SubMenuType> = (props) => {
 
 export const Menubar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const search = useSearchParams();
+  const brands = searchParams.get("brands") || null;
+  const cat = searchParams.get("category") || null;
+  const sub = searchParams.get("sub_category") || null;
+  const sortParam = searchParams.get("sort") || null;
+  const min = searchParams.get("min_price") || null;
+  const max = searchParams.get("max_price") || null;
+
+  const sort = search.get("sort") as string;
+  const selected = sort?.length > 0 ? sort : "all";
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 2500]);
 
   const aboutus_menu = [
     {
@@ -111,15 +124,7 @@ export const Menubar = () => {
   const { data, loading } = useQuery(BRANDS);
 
   // query categories
-  const { data: categories, loading: loadingCategory } = useQuery(CATEGORIES, {
-    variables: {
-      filter: {
-        limit: 8,
-        skip: 0,
-        sort: -1,
-      },
-    },
-  });
+  const { data: categories, loading: loadingCategory } = useQuery(CATEGORIES);
 
   if (loading || !data || loadingCategory || !categories) {
     return;
@@ -266,15 +271,19 @@ export const Menubar = () => {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end" className="flex items-center gap-0">
-        <PopoverFilterWrapper title="Pricing Range">
+        <PopoverFilterWrapper title="Pricing Range" priceRange={priceRange}>
           <PriceSlider
             aria-label="Pricing Filter"
             range={{
               min: 0,
-              defaultValue: [100, 500],
-              max: 2000,
+              defaultValue: [
+                min ? parseInt(min as string) : 0,
+                max ? parseInt(max as string) : 2500,
+              ],
+              max: 5000,
               step: 1,
             }}
+            setPriceRange={setPriceRange}
           />
         </PopoverFilterWrapper>
         <Spacer x={1} />
@@ -296,6 +305,8 @@ export const Menubar = () => {
               <SelectItem
                 key={idx}
                 value={res.title.en}
+                as={Link}
+                href={`/products?search=&brands=${res.title ? res.title?.en : ""}&category=${cat ? cat : ""}&sub_category${sub ? sub : ""}&sort=${sortParam ? sortParam : ""}`}
                 startContent={
                   <Image
                     alt={res.title.en}
@@ -323,14 +334,18 @@ export const Menubar = () => {
             value: "w-[9rem]",
           }}
           radius="full"
-          // defaultSelectedKeys={["most_popular"]}
           labelPlacement="outside-left"
           placeholder="Category"
           variant="bordered"
         >
           {categories?.storeOwnerCategories.map((res: Category) => {
             return (
-              <SelectItem key={res.id} value={res.id}>
+              <SelectItem
+                key={res.id}
+                value={res.id}
+                as={Link}
+                href={`/products?search=&category=${res.id}`}
+              >
                 {res.title?.en}
               </SelectItem>
             );
@@ -350,7 +365,26 @@ export const Menubar = () => {
           placeholder="Select an option"
           variant="bordered"
           disallowEmptySelection
+          selectedKeys={[selected]}
+          onChange={(e) => {
+            if (e.target.value == "all") {
+              return router.push("/products");
+            }
+            router.push(
+              `/products?search=${
+                search.get("search") ? search.get("search") : ""
+              }&brands=${brands ? brands : ""}&category=${
+                search.get("category") ? search.get("category") : ""
+              }&sub_category=${
+                search.get("sub_category") ? search.get("sub_category") : ""
+              }&sort=${e.target.value ? e.target.value : ""}`
+            );
+          }}
         >
+          <SelectItem key="all">All Product</SelectItem>
+          <SelectItem key="brand" value="brand">
+            Brand
+          </SelectItem>
           <SelectItem key="newest" value="newest">
             Newest
           </SelectItem>
