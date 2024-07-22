@@ -52,7 +52,7 @@ import { useSearchParams } from "next/navigation";
 import { useCart } from "@/context/useCart";
 import { ProductType, Variants } from "@/types/product";
 import { toast } from "sonner";
-import { LexicalReader } from "@/app/editor/LexicalReader";
+import { LexicalReader } from "@/editor/LexicalReader";
 
 // Import Swiper styles
 import "swiper/css";
@@ -60,10 +60,7 @@ import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 
-export type ProductViewInfoProps = Omit<
-  React.HTMLAttributes<HTMLDivElement>,
-  "id"
-> & {
+type ProductViewInfoProps = Omit<React.HTMLAttributes<HTMLDivElement>, "id"> & {
   isPopular?: boolean;
   isLoading?: boolean;
   removeWrapper?: boolean;
@@ -93,8 +90,10 @@ const ratings = [
   },
 ];
 
-// eslint-disable-next-line react/display-name
-const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
+export const ProductViewItem = React.forwardRef<
+  HTMLDivElement,
+  ProductViewInfoProps
+>(
   ({
     title,
     previews,
@@ -1076,5 +1075,3 @@ const ProductViewInfo = React.forwardRef<HTMLDivElement, ProductViewInfoProps>(
     );
   }
 );
-
-export default ProductViewInfo;

@@ -40,7 +40,7 @@ interface ProductsComparisonTableProps {
   groupSelected: string[];
 }
 
-export const productsComparison: Product[] = [
+const productsComparison: Product[] = [
   {
     id: "1",
     url: "#",
@@ -94,7 +94,7 @@ export const productsComparison: Product[] = [
   },
 ];
 
-export const topics: Topic[] = [
+const topics: Topic[] = [
   {
     title: "Information",
     value: "information",
@@ -165,9 +165,7 @@ const ComparisonPage = () => {
 
 export default ComparisonPage;
 
-export const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (
-  props
-) => {
+const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (props) => {
   const renderTopicData = (
     product: Product,
     topicValue: string

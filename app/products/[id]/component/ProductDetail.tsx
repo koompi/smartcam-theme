@@ -1,7 +1,7 @@
 "use client";
 
 import { CardLoading } from "@/components/globals/Loading";
-import ProductViewInfo from "./ProductViewInfo";
+import { ProductViewItem } from "./ProductViewItem";
 import { GET_PRODUCT } from "@/graphql/product";
 import { useQuery } from "@apollo/client";
 
@@ -20,7 +20,7 @@ export default function ProductDetail(props: { slug: string }) {
       {loading ? (
         <CardLoading />
       ) : (
-        <ProductViewInfo
+        <ProductViewItem
           {...data?.storeProduct?.product}
           promotion={data?.storeProduct?.promotion}
         />

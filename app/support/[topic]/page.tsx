@@ -84,7 +84,7 @@ const SupprtPage = () => {
 
 export default SupprtPage;
 
-export const faqs = [
+const faqs = [
   {
     title: "How to taking care of Macbook Pro M3?",
     content: "https://www.youtube.com/embed/0pg_Y41waaE?si=wvrKW7aLhTPkfLe2",

@@ -109,7 +109,7 @@ export default function Home() {
   );
 }
 
-export const BrandsScrolling = () => {
+const BrandsScrolling = () => {
   const { data, loading } = useQuery(BRANDS);
 
   if (loading || !data) {

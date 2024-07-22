@@ -13,6 +13,7 @@
     "@apollo/experimental-nextjs-app-support": "^0.11.2",
     "@excalidraw/excalidraw": "^0.17.6",
     "@iconify/react": "^5.0.1",
+    "@lexical/file": "^0.16.1",
     "@lexical/headless": "^0.16.1",
     "@lexical/react": "^0.16.1",
     "@lexical/rich-text": "^0.16.1",
@@ -30,6 +31,7 @@
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "leaflet-geosearch": "^4.0.0",
     "lexical": "^0.16.1",
+    "lodash-es": "^4.17.21",
     "next": "14.2.4",
     "next-nprogress-bar": "^2.3.12",
     "next-share": "^0.27.0",
@@ -41,6 +43,8 @@
     "swiper": "^11.1.4"
   },
   "devDependencies": {
+    "@types/katex": "^0.16.7",
+    "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18",
@@ -48,6 +52,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "postcss": "^8",
+    "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

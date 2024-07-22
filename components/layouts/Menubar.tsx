@@ -289,6 +289,7 @@ export const Menubar = () => {
           labelPlacement="outside-left"
           placeholder="Brands"
           variant="bordered"
+          disallowEmptySelection
         >
           {data.storeOwnerBrands.map((res: BrandsType, idx: number) => {
             return (

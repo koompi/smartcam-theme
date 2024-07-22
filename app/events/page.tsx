@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import NewsCard from "./component/NewsCard";
 import NewsBanner from "./component/NewsBanner";
 
-export const news = [
+const news = [
   {
     title:
       "Lorem ipsum dolor sit amet consectetur. Massa consequat risus eu lobortis turpis arcu elementum. Imperdiet eget purus convallis curabitur aliquam vitae etiam lorem. Id id vehicula",
