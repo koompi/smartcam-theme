@@ -40,7 +40,7 @@ export const Promotion = () => {
 
   if (promotionLoading || loadingSaving) {
     return <Loading />;
-  } else if (data.promotionSpecialOffer.products.length <= 0) {
+  } else if (data?.promotionSpecialOffer?.products.length <= 0) {
     return null;
   }
 
@@ -64,7 +64,7 @@ export const Promotion = () => {
                 </Link>
               </CardBody>
             </Card>
-            {data.promotionSpecialOffer.products.length > 0 && (
+            {data?.promotionSpecialOffer?.products?.length > 0 && (
               <Card
                 shadow="none"
                 className="rounded-3xl p-6 bg-background h-full"
