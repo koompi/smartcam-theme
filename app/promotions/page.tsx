@@ -24,12 +24,14 @@ interface ProductProps {
 
 const PromotionPage = () => {
   const { data, loading: promotionLoading } = useQuery(PROMOTIONS_BY_TYPE, {
-    variables: { type: "NORMAL" },
+    variables: { promotionStatus: "NORMAL" },
   });
 
   if (promotionLoading || !data) {
     return <Loading />;
   }
+
+  console.log("data", data);
 
   return (
     <main>
@@ -39,10 +41,10 @@ const PromotionPage = () => {
           All Promotions
         </h1>
         <Spacer y={6} />
-        {data.promotionSpecialOffer.products.length <= 0 && <Empty />}
+        {data?.promotionSpecialOffer.products.length <= 0 && <Empty />}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {Array.from(
-            data.promotionSpecialOffer.products,
+            data?.promotionSpecialOffer.products,
             (res: ProductProps, idx) => {
               const {
                 thumbnail,

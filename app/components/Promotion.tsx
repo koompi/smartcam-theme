@@ -22,7 +22,7 @@ import "swiper/css/effect-cube";
 import "swiper/css/pagination";
 
 // import required modules
-import { Autoplay, EffectCube, Pagination } from "swiper/modules";
+import { Autoplay, EffectCube } from "swiper/modules";
 
 interface ProductProps {
   product: ProductType;

@@ -1,20 +1,12 @@
 "use client";
 
-import React from "react";
-import ProductCard from "@/components/globals/ProductCard";
-import ecommerceItems from "@/components/CustomComponent/EcommerceItems";
-import FiltersWrapper from "@/components/CustomComponent/FilterWrapper";
-import SidebarDrawer from "@/components/CustomComponent/SidebarDrawer";
-import PromotionCard from "../components/PromotionCard";
+import ComponentProducts from "@/components/CustomComponent/ComponentProducts";
 import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
 import { useQuery } from "@apollo/client";
+import { CATEGORIES } from "@/graphql/category";
 import { useSearchParams } from "next/navigation";
-import { Loading } from "@/components/globals/Loading";
-import { MessageProduct, ProductType } from "@/types/product";
-import { PromotionType } from "@/types/promotion";
-import Empty from "@/components/globals/Empty";
 
-const ProductPage = () => {
+export default function ProductsPage() {
   const searchParams = useSearchParams();
   const search = searchParams.get("search") || null;
   const cat = searchParams.get("category") || null;
@@ -27,7 +19,6 @@ const ProductPage = () => {
   const price =
     ["price_low_to_high", "price_high_to_low"].includes(sortParam as string) ||
     null;
-  const sort = searchParams.get("sort") ?? null;
 
   const brands = searchParams.get("brands") || null;
 
@@ -72,342 +63,22 @@ const ProductPage = () => {
     }
   );
 
-  const mostPopularSort = (): MessageProduct[] => {
-    if (!products) {
-      return [];
-    }
-
-    return [...products?.storeGlobalFilterProducts?.products].sort(
-      (a: MessageProduct, b: MessageProduct) =>
-        a.product.sell > b.product.sell ? -1 : 1
-    );
-  };
-
-  const brandSort = (): MessageProduct[] => {
-    if (!products) {
-      return [];
-    }
-    return [...products?.storeGlobalFilterProducts?.products].sort(
-      (a: MessageProduct, b: MessageProduct) =>
-        a.product.brand > b.product.brand ? -1 : 1
-    );
-  };
-
-  const topRated = (): MessageProduct[] => {
-    if (!products) {
-      return [];
-    }
-    return [...products?.storeGlobalFilterProducts?.products].sort(
-      (a: MessageProduct, b: MessageProduct) =>
-        a.product.rating > b.product.rating ? -1 : 1
-    );
-  };
-
-  const newestSort = (): MessageProduct[] => {
-    if (!products) {
-      return [];
-    }
-    return [...products?.storeGlobalFilterProducts?.products].sort(
-      (a: MessageProduct, b: MessageProduct) =>
-        a.product.createdAt > b.product.createdAt ? -1 : 1
-    );
-  };
-
-  const ProductSortComponent = () => {
-    if (sort === "most_popular") {
-      return (
-        <>
-          {mostPopularSort().map((res: MessageProduct, idx: number) => {
-            const {
-              thumbnail,
-              title,
-              desc,
-              rating,
-              price,
-              id,
-              slug,
-              stocks,
-              currencyPrice,
-            } = res?.product;
-            return (
-              <ProductCard
-                key={idx}
-                id={id}
-                thumbnail={thumbnail}
-                title={title}
-                desc={desc}
-                rating={rating}
-                price={price}
-                slug={slug}
-                promotion={{
-                  isMembership: res.promotion?.isMembership,
-                  discount: {
-                    discountPercentage:
-                      res.promotion?.discount?.discountPercentage,
-                    discountPrice: res.promotion?.discount?.discountPrice,
-                    discountType: res.promotion?.discount?.discountType,
-                    originalPrice: res.promotion?.discount?.originalPrice,
-                    totalDiscount: res.promotion?.discount?.totalDiscount,
-                  },
-                }}
-                stocks={stocks}
-                currencyPrice={currencyPrice}
-              />
-            );
-          })}
-        </>
-      );
-    }
-    if (sort === "newest") {
-      return (
-        <>
-          {newestSort().map((res: MessageProduct, idx: number) => {
-            const {
-              thumbnail,
-              title,
-              desc,
-              rating,
-              price,
-              id,
-              slug,
-              stocks,
-              currencyPrice,
-            } = res?.product;
-            return (
-              <ProductCard
-                key={idx}
-                id={id}
-                thumbnail={thumbnail}
-                title={title}
-                desc={desc}
-                rating={rating}
-                price={price}
-                slug={slug}
-                promotion={{
-                  isMembership: res.promotion?.isMembership,
-                  discount: {
-                    discountPercentage:
-                      res.promotion?.discount?.discountPercentage,
-                    discountPrice: res.promotion?.discount?.discountPrice,
-                    discountType: res.promotion?.discount?.discountType,
-                    originalPrice: res.promotion?.discount?.originalPrice,
-                    totalDiscount: res.promotion?.discount?.totalDiscount,
-                  },
-                }}
-                stocks={stocks}
-                currencyPrice={currencyPrice}
-              />
-            );
-          })}
-        </>
-      );
-    }
-    if (sort === "top_rated") {
-      return (
-        <>
-          {topRated().map((res: MessageProduct, idx: number) => {
-            const {
-              thumbnail,
-              title,
-              desc,
-              rating,
-              price,
-              id,
-              slug,
-              stocks,
-              currencyPrice,
-            } = res?.product;
-            return (
-              <ProductCard
-                key={idx}
-                id={id}
-                thumbnail={thumbnail}
-                title={title}
-                desc={desc}
-                rating={rating}
-                price={price}
-                slug={slug}
-                promotion={{
-                  isMembership: res.promotion?.isMembership,
-                  discount: {
-                    discountPercentage:
-                      res.promotion?.discount?.discountPercentage,
-                    discountPrice: res.promotion?.discount?.discountPrice,
-                    discountType: res.promotion?.discount?.discountType,
-                    originalPrice: res.promotion?.discount?.originalPrice,
-                    totalDiscount: res.promotion?.discount?.totalDiscount,
-                  },
-                }}
-                stocks={stocks}
-                currencyPrice={currencyPrice}
-              />
-            );
-          })}
-        </>
-      );
-    }
-    if (sort === "price_low_to_high" || sort === "price_high_to_low") {
-      return (
-        <>
-          {products?.storeGlobalFilterProducts?.products.map(
-            (res: MessageProduct, idx: number) => {
-              const {
-                thumbnail,
-                title,
-                desc,
-                rating,
-                price,
-                id,
-                slug,
-                stocks,
-                currencyPrice,
-              } = res?.product;
-              return (
-                <ProductCard
-                  key={idx}
-                  id={id}
-                  thumbnail={thumbnail}
-                  title={title}
-                  desc={desc}
-                  rating={rating}
-                  price={price}
-                  slug={slug}
-                  promotion={{
-                    isMembership: res.promotion?.isMembership,
-                    discount: {
-                      discountPercentage:
-                        res.promotion?.discount?.discountPercentage,
-                      discountPrice: res.promotion?.discount?.discountPrice,
-                      discountType: res.promotion?.discount?.discountType,
-                      originalPrice: res.promotion?.discount?.originalPrice,
-                      totalDiscount: res.promotion?.discount?.totalDiscount,
-                    },
-                  }}
-                  stocks={stocks}
-                  currencyPrice={currencyPrice}
-                />
-              );
-            }
-          )}
-        </>
-      );
-    } else {
-      return (
-        <>
-          {brandSort().map((res: MessageProduct, idx: number) => {
-            const {
-              thumbnail,
-              title,
-              desc,
-              rating,
-              price,
-              id,
-              slug,
-              stocks,
-              currencyPrice,
-            } = res?.product;
-            return (
-              <ProductCard
-                key={idx}
-                id={id}
-                thumbnail={thumbnail}
-                title={title}
-                desc={desc}
-                rating={rating}
-                price={price}
-                slug={slug}
-                promotion={{
-                  isMembership: res.promotion?.isMembership,
-                  discount: {
-                    discountPercentage:
-                      res.promotion?.discount?.discountPercentage,
-                    discountPrice: res.promotion?.discount?.discountPrice,
-                    discountType: res.promotion?.discount?.discountType,
-                    originalPrice: res.promotion?.discount?.originalPrice,
-                    totalDiscount: res.promotion?.discount?.totalDiscount,
-                  },
-                }}
-                stocks={stocks}
-                currencyPrice={currencyPrice}
-              />
-            );
-          })}
-        </>
-      );
-    }
-  };
-
-  if (loadingProduct || !products) {
-    return <Loading />;
-  }
+  const { data: categories } = useQuery(CATEGORIES, {
+    variables: {
+      filter: null,
+    },
+  });
 
   return (
-    <main>
-      <PromotionCard />
-      <section className="flex gap-6 px-3 sm:px-3 lg:px-6 py-6 sm:py-6 lg:py-6">
-        <SidebarDrawer className="w-[27rem]">
-          <FiltersWrapper
-            className="bg-white sticky top-20"
-            items={ecommerceItems}
-            scrollShadowClassName="pb-12"
-            showActions={false}
-            title="Filter by"
-          />
-        </SidebarDrawer>
-        <section className="w-full">
-          {products?.storeGlobalFilterProducts?.products.length <= 0 && (
-            <Empty />
-          )}
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 place-items-stretch gap-3">
-            {/* {Array.from(
-              products?.storeGlobalFilterProducts?.products,
-              (res: ProductProps, idx) => {
-                const {
-                  thumbnail,
-                  title,
-                  desc,
-                  rating,
-                  price,
-                  id,
-                  slug,
-                  stocks,
-                  currencyPrice,
-                } = res?.product;
-
-                return (
-                  <ProductCard
-                    key={idx}
-                    id={id}
-                    thumbnail={thumbnail}
-                    title={title}
-                    desc={desc}
-                    rating={rating}
-                    price={price}
-                    slug={slug}
-                    promotion={{
-                      isMembership: res.promotion?.isMembership,
-                      discount: {
-                        discountPercentage:
-                          res.promotion?.discount?.discountPercentage,
-                        discountPrice: res.promotion?.discount?.discountPrice,
-                        discountType: res.promotion?.discount?.discountType,
-                        originalPrice: res.promotion?.discount?.originalPrice,
-                        totalDiscount: res.promotion?.discount?.totalDiscount,
-                      },
-                    }}
-                    stocks={stocks}
-                    currencyPrice={currencyPrice}
-                  />
-                );
-              }
-            )} */}
-
-            <ProductSortComponent />
-          </div>
-        </section>
-      </section>
-    </main>
+    <section className="px-3 sm:px-3 lg:px-6 py-3 sm:py-3 lg:py-9">
+      <div className="flex gap-x-6">
+        <ComponentProducts
+          categories={categories?.storeOwnerCategories}
+          {...products?.storeGlobalFilterProducts}
+          searchParams={searchParams}
+          loading={loadingProduct}
+        />
+      </div>
+    </section>
   );
-};
-
-export default ProductPage;
+}

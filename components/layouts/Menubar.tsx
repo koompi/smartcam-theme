@@ -63,7 +63,7 @@ export const Menubar = () => {
 
   const sort = search.get("sort") as string;
   const selected = sort?.length > 0 ? sort : "all";
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 2500]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1500]);
 
   const aboutus_menu = [
     {
@@ -81,17 +81,17 @@ export const Menubar = () => {
       title: "Contact US",
       desc: "Considering a new IT purchase? Our sales team is ready to discuss your needs and recommend the perfect solutions.",
     },
-    {
-      url: "/events",
-      title: "Events",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, quam?",
-    },
+    // {
+    //   url: "/events",
+    //   title: "Events",
+    //   desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, quam?",
+    // },
 
-    {
-      url: "/careers",
-      title: "Careers",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, quam?",
-    },
+    // {
+    //   url: "/careers",
+    //   title: "Careers",
+    //   desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, quam?",
+    // },
   ];
   const support_menu = [
     {
@@ -278,9 +278,9 @@ export const Menubar = () => {
               min: 0,
               defaultValue: [
                 min ? parseInt(min as string) : 0,
-                max ? parseInt(max as string) : 2500,
+                max ? parseInt(max as string) : 1500,
               ],
-              max: 5000,
+              max: 3000,
               step: 1,
             }}
             setPriceRange={setPriceRange}
@@ -299,14 +299,18 @@ export const Menubar = () => {
           placeholder="Brands"
           variant="bordered"
           disallowEmptySelection
+          selectedKeys={[brands ? brands : ""]}
         >
-          {data.storeOwnerBrands.map((res: BrandsType, idx: number) => {
+          {data.storeOwnerBrands.map((res: BrandsType) => {
             return (
               <SelectItem
-                key={idx}
+                key={res.title.en}
                 value={res.title.en}
-                as={Link}
-                href={`/products?search=&brands=${res.title ? res.title?.en : ""}&category=${cat ? cat : ""}&sub_category${sub ? sub : ""}&sort=${sortParam ? sortParam : ""}`}
+                onPress={() => {
+                  router.push(
+                    `/products?search=&brands=${res.title ? res.title?.en : ""}&category=${cat ? cat : ""}&sub_category${sub ? sub : ""}&sort=${sortParam ? sortParam : ""}`
+                  );
+                }}
                 startContent={
                   <Image
                     alt={res.title.en}
@@ -337,14 +341,17 @@ export const Menubar = () => {
           labelPlacement="outside-left"
           placeholder="Category"
           variant="bordered"
+          disallowEmptySelection
+          selectedKeys={[cat ? cat : ""]}
         >
           {categories?.storeOwnerCategories.map((res: Category) => {
             return (
               <SelectItem
                 key={res.id}
                 value={res.id}
-                as={Link}
-                href={`/products?search=&category=${res.id}`}
+                onPress={() => {
+                  router.push(`/products?search=&category=${res.id}`);
+                }}
               >
                 {res.title?.en}
               </SelectItem>

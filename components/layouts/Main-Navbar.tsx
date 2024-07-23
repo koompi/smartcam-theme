@@ -148,7 +148,7 @@ export const MainNavbar = () => {
           justify="end"
           className="flex sm:hidden items-center gap-6"
         >
-          <NavbarItem
+          {/* <NavbarItem
             className="mt-2"
             as={Link}
             href="/wishlist"
@@ -173,7 +173,7 @@ export const MainNavbar = () => {
                 />
               </Button>
             </Badge>
-          </NavbarItem>
+          </NavbarItem> */}
 
           {user ? (
             <Dropdown placement="bottom-end">
@@ -206,7 +206,7 @@ export const MainNavbar = () => {
                 </DropdownItem>
                 <DropdownItem
                   as={Link}
-                  key="settings"
+                  key="locations"
                   href="/locations"
                   startContent={
                     <Icon icon="solar:streets-map-point-broken" fontSize={21} />
@@ -268,7 +268,7 @@ export const MainNavbar = () => {
           justify="end"
           className="hidden sm:flex items-center gap-6"
         >
-          <NavbarItem isActive={pathname === "/compare"}>
+          {/* <NavbarItem isActive={pathname === "/compare"}>
             <Link href="/compare">
               <Badge color="danger" content={3} shape="circle">
                 <Button
@@ -286,8 +286,8 @@ export const MainNavbar = () => {
                 </Button>
               </Badge>
             </Link>
-          </NavbarItem>
-          <NavbarItem>
+          </NavbarItem> */}
+          {/* <NavbarItem>
             <Link href="/wishlist">
               <Badge color="danger" content={9} shape="circle">
                 <Button
@@ -308,7 +308,7 @@ export const MainNavbar = () => {
                 </Button>
               </Badge>
             </Link>
-          </NavbarItem>
+          </NavbarItem> */}
           <NavbarItem className="mr-12">
             <Link href="/cart">
               <Badge
@@ -368,7 +368,7 @@ export const MainNavbar = () => {
                   </DropdownItem>
                   <DropdownItem
                     as={Link}
-                    key="settings"
+                    key="locations"
                     href="/locations"
                     startContent={
                       <Icon

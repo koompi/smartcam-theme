@@ -76,7 +76,7 @@ const ProductCard: FC<ProductCardProps> = ({
         </Chip>
       )}
       <CardBody className="flex flex-col flex-grow">
-        <Dropdown
+        {/* <Dropdown
           showArrow
           classNames={{
             base: "before:bg-default-200", // change arrow background
@@ -124,7 +124,7 @@ const ProductCard: FC<ProductCardProps> = ({
               Buy Now
             </DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
         <div className="flex justify-center items-center overflow-hidden">
           <Image
             alt="products"

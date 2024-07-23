@@ -550,7 +550,7 @@ export const ProductViewItem = React.forwardRef<
                       variant="bordered"
                       radius="full"
                       color="primary"
-                      isIconOnly
+                      isDisabled
                     >
                       <Icon icon="solar:heart-bold" fontSize={24} />
                     </Button>
@@ -570,6 +570,7 @@ export const ProductViewItem = React.forwardRef<
                       startContent={
                         <Icon icon="solar:bag-3-bold" fontSize={24} />
                       }
+                      isDisabled
                     >
                       Buy Now
                     </Button>
@@ -925,7 +926,7 @@ export const ProductViewItem = React.forwardRef<
                   variant="bordered"
                   radius="full"
                   color="primary"
-                  isIconOnly
+                  isDisabled
                 >
                   <Icon icon="solar:heart-bold" fontSize={24} />
                 </Button>
@@ -944,6 +945,7 @@ export const ProductViewItem = React.forwardRef<
                   color="primary"
                   fullWidth
                   startContent={<Icon icon="solar:bag-3-bold" fontSize={24} />}
+                  isDisabled
                 >
                   Buy Now
                 </Button>

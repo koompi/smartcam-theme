@@ -247,7 +247,7 @@ export const GLOBAL_PRODUCT_FILTERING = gql`
 `;
 
 export const PROMOTIONS_BY_TYPE = gql`
-  query($promotionStatus: PromotionStatus!) {
+  query ($promotionStatus: PromotionStatus!) {
     promotionSpecialOffer(promotionStatus: $promotionStatus) {
       products {
         promotion {
