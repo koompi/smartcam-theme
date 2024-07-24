@@ -31,8 +31,6 @@ export const GET_ORDERS = gql`
         code
         createdAt
         id
-        status
-        tax
         discountUnitPrice {
           khr
           usd

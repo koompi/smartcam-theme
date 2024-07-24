@@ -3,14 +3,16 @@ import { gql } from "@apollo/client";
 export const CHECKOUT = gql`
   mutation (
     $locationId: String!
-    $deliveryType: DeliveryType!
+    $shippingType: DeliveryType!
+    $shippingFee: Float
     $payment: PaymentType!
     $body: BodyOrder!
     $membershipId: String
   ) {
     customerCheckout(
       locationId: $locationId
-      deliveryType: $deliveryType
+      shippingType: $shippingType
+      shippingFee: $shippingFee
       payment: $payment
       body: $body
       membershipId: $membershipId

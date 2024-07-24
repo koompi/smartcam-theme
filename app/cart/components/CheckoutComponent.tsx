@@ -95,34 +95,39 @@ const CheckoutComponent = () => {
     const variables = {
       body: {
         carts: [...cartItems],
-        deliveryFee: ship,
       },
       membershipId: membershipId,
-      deliveryType: delivery,
+      shippingFee: ship,
+      shippingType: delivery,
       locationId: location,
       payment: paymentOption,
     };
 
     setLoading(true);
 
-    const res = await customerCheckout({ variables: variables });
-
-    if (paymentOption === "ONLINE") {
-      const intentId = res.data.storeCreateCheckout["intentId"];
-      baray!.confirmPayment(intentId, () => {
-        cleanCartItems();
-      });
-      setLoading(false);
-    } else {
-      toast.success(
-        "Congratulation! you've been order the product(s) successfully!"
-      );
-      cleanCartItems();
-      setTimeout(() => {
+    customerCheckout({ variables: variables })
+      .then((res) => {
+        if (paymentOption === "ONLINE") {
+          const intentId = res.data.customerCheckout["intentId"];
+          baray!.confirmPayment(intentId, () => {
+            cleanCartItems();
+          });
+          setLoading(false);
+        } else {
+          toast.success(
+            "Congratulation! you've been order the product(s) successfully!"
+          );
+          cleanCartItems();
+          setTimeout(() => {
+            setLoading(false);
+            router.push("/orders");
+          }, 500);
+        }
+      })
+      .catch((e) => {
+        toast.error(e.message);
         setLoading(false);
-        router.push("/orders");
-      }, 500);
-    }
+      });
   };
 
   const [[page, direction], setPage] = React.useState([0, 0]);

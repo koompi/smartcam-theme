@@ -6,8 +6,6 @@ export const ORDER_BY_ID = gql`
       code
       createdAt
       id
-      status
-      tax
       totalDiscount
       totalPrice
       carts {
