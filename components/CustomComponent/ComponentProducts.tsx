@@ -331,7 +331,7 @@ export default function ComponentProducts({
         <div className="block sm:block lg:hidden w-full">
           <MenuBar onOpen={onOpen} />
         </div>
-        <main className="mt-4 h-full w-full overflow-visible px-1">
+        <main className="h-full w-full overflow-visible px-1">
           {loading ? (
             <CardLoading />
           ) : products?.length <= 0 || !products ? (

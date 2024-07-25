@@ -134,6 +134,7 @@ const PriceSlider = React.forwardRef<HTMLDivElement, PriceSliderProps>(
           const clampedValue = clampValue(newValue, minValue, value[1]);
 
           setValue([clampedValue, value[1]]);
+          setPriceRange([clampedValue, value[1]]);
         }
       },
       [value, range?.min, defaultValue]
@@ -146,6 +147,7 @@ const PriceSlider = React.forwardRef<HTMLDivElement, PriceSliderProps>(
 
         if (!isNaN(newValue) && newValue <= maxValue) {
           setValue([value[0], newValue]);
+          setPriceRange([value[0], newValue]);
         }
       },
       [value, range?.max, defaultValue]
@@ -178,8 +180,12 @@ const PriceSlider = React.forwardRef<HTMLDivElement, PriceSliderProps>(
             labelPlacement="outside"
             startContent={<p className="text-gray-400">$</p>}
             type="number"
+            defaultValue={`${value[0]}`}
             value={`${value[0]}`}
             onValueChange={onMinInputValueChange}
+            min={0}
+            max={3000}
+            radius="lg"
           />
           <Divider className="mx-2 w-2" />
           <Input
@@ -188,7 +194,11 @@ const PriceSlider = React.forwardRef<HTMLDivElement, PriceSliderProps>(
             startContent={<p className="text-gray-400">$</p>}
             type="number"
             value={`${value[1]}`}
+            defaultValue={`${value[1]}`}
             onValueChange={onMaxInputValueChange}
+            min={0}
+            max={3000}
+            radius="lg"
           />
         </div>
       </div>

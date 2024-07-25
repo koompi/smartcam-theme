@@ -64,12 +64,7 @@ const PopoverFilterWrapper = React.forwardRef<
         <span className="mb-2 text-medium font-medium text-gray-600">
           {title}
         </span>
-        {/* <div className="w-full px-2">
-          {React.cloneElement(children as React.ReactElement, {
-            onChange: handlePriceChange,
-            value: priceRange,
-          })}
-        </div> */}
+
         <div className="w-full px-2">{children}</div>
         <Divider className="mt-3 bg-gray-100" />
         <div className="flex w-full justify-end gap-2 py-2">
