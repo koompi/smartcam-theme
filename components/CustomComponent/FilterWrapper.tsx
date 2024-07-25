@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Accordion,
   AccordionItem,
@@ -103,6 +103,41 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
 
     const { data, loading } = useQuery(BRANDS);
 
+    const handleApply = useCallback(() => {
+      router.push(
+        `/products?search=${
+          search ? search : ""
+        }&brands=${brands ? brands : ""}&category=${
+          cat ? cat : ""
+        }&sub_category=${
+          sub ? sub : ""
+        }&sort=${sortParam ? sortParam : ""}&min_price=${priceRange[0]}&max_price=${priceRange[1]}`
+      );
+      onClose();
+      setPriceRange([0, 1500]);
+    }, [priceRange, router, onClose]);
+
+    // const price_slider = React.useMemo(() => {
+    //   console.log("price", min, max);
+    //   return (
+    //     <PriceSlider
+    //       aria-label="Pricing Filter"
+    //       range={{
+    //         min: 0,
+    //         defaultValue: [
+    //           min ? parseInt(min as string) : 0,
+    //           max ? parseInt(max as string) : 1500,
+    //         ],
+    //         max: 3000,
+    //         step: 1,
+    //       }}
+    //       setPriceRange={setPriceRange}
+    //     />
+    //   );
+    // }, [min, max]);
+
+    // console.log("price", min, max);
+
     return (
       <>
         <div className="block sm:block lg:hidden">
@@ -161,6 +196,10 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
           )}
 
           {/* Price range */}
+          <h3 className="text-lg font-semibold leading-8 text-default-600">
+            Price Range
+          </h3>
+          {/* {price_slider} */}
           <PriceSlider
             aria-label="Pricing Filter"
             range={{
@@ -174,6 +213,21 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
             }}
             setPriceRange={setPriceRange}
           />
+
+          {(priceRange[0] !== 0 || priceRange[1] !== 1500) && (
+            <>
+              <Divider className="mt-3 bg-gray-100" />
+              <Button
+                color="primary"
+                radius="lg"
+                variant="flat"
+                fullWidth
+                onPress={handleApply}
+              >
+                Apply
+              </Button>
+            </>
+          )}
 
           {/* Brands */}
 

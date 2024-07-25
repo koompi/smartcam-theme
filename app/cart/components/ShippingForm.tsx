@@ -160,7 +160,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                 )}
                 title={
                   <div className="flex space-x-4 text-black">
-                    {delivery === "CP" && (
+                    {delivery === "CP" ? (
                       <>
                         <Image
                           src="/images/logo_v1.png"
@@ -174,8 +174,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                           <div>Cambodia POS</div>
                         </div>
                       </>
-                    )}
-                    {delivery === "L192" && (
+                    ) : delivery === "L192" ? (
                       <>
                         <Image src="/images/l192.png" className="h-12" alt="" />
                         <div>
@@ -185,6 +184,8 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                           <div>L912 Delivery</div>
                         </div>
                       </>
+                    ) : (
+                      "Delivery Options"
                     )}
                   </div>
                 }
