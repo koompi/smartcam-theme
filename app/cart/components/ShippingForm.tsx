@@ -107,9 +107,9 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                               <Image
                                 alt="delivery logo"
                                 src={
-                                  !myLocation?.photos[0]
+                                  !location?.photos
                                     ? "/images/shop.png"
-                                    : myLocation?.photos[0]
+                                    : location?.photos[0]
                                 }
                                 radius="none"
                                 className="w-24"

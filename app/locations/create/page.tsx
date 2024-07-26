@@ -128,7 +128,7 @@ export default function PageLocation() {
     let bodyLocation = {
       ...values,
       ...position,
-      photos: photo ? [photo] : null,
+      photos: photo.length > 0 ? [photo] : null,
       map: address,
     };
 
@@ -149,6 +149,7 @@ export default function PageLocation() {
         router.push(`/cart?steps=shipping`);
       })
       .catch((err) => {
+        toast.error(err.message);
         console.log(err);
       });
   };

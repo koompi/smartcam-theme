@@ -31,11 +31,12 @@ export const LocationForm: FC<{
   register: any;
   photo: string;
   setPhoto: Function;
-}> = ({ register, photo, setPhoto }) => {
+  addressLabel: string;
+  setAddressLabel: Function;
+}> = ({ register, photo, setPhoto, addressLabel, setAddressLabel }) => {
   const { user } = useAuth();
   async function handleChange(e: any) {
     e.preventDefault();
-
     const body = {
       upload: e.target?.files[0],
     };
@@ -56,6 +57,7 @@ export const LocationForm: FC<{
       })
       .catch(function (error) {
         console.log(error);
+        toast.error(error.message);
       });
   }
   return (
@@ -308,6 +310,8 @@ export const LocationForm: FC<{
             }}
             orientation="horizontal"
             {...register("label")}
+            value={addressLabel}
+            onValueChange={setAddressLabel}
           >
             <LocationLabel value="Home" />
             <LocationLabel value="School" />
@@ -370,7 +374,7 @@ export const LocationForm: FC<{
             placeholder="Salutation"
             labelPlacement="outside"
             size="lg"
-            // defaultSelectedKeys={[store?.location?.salutation]}
+          // defaultSelectedKeys={[store?.location?.salutation]}
           >
             <SelectItem key="MR">MR</SelectItem>
             <SelectItem key="MS">MS</SelectItem>
@@ -444,7 +448,7 @@ export const LocationForm: FC<{
             labelPlacement="outside"
             size="lg"
             placeholder="Country"
-            // defaultSelectedKeys={[parseInt(store?.location?.countryId)]}
+          // defaultSelectedKeys={[parseInt(store?.location?.countryId)]}
           >
             <SelectItem key="1">Cambodia</SelectItem>
           </Select>
@@ -459,7 +463,7 @@ export const LocationForm: FC<{
             label="Province"
             labelPlacement="outside"
             size="lg"
-            // defaultSelectedKeys={[parseInt(store?.location?.provinceId)]}
+          // defaultSelectedKeys={[parseInt(store?.location?.provinceId)]}
           >
             {[
               {
@@ -495,7 +499,7 @@ export const LocationForm: FC<{
             label="District"
             labelPlacement="outside"
             size="lg"
-            // defaultSelectedKeys={[parseInt(store?.location?.districtId)]}
+          // defaultSelectedKeys={[parseInt(store?.location?.districtId)]}
           >
             {[
               {
@@ -534,7 +538,7 @@ export const LocationForm: FC<{
             label="Commune"
             labelPlacement="outside"
             size="lg"
-            // defaultSelectedKeys={[store?.location?.communeId]}
+          // defaultSelectedKeys={[store?.location?.communeId]}
           >
             {[
               {
