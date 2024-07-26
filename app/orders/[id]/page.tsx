@@ -138,7 +138,7 @@ const OrderSinglePage = () => {
               View your order history and check the delivery status for items.
             </p>
           </div>
-          {data?.storeOrder?.status === "START" && (
+          {data?.storeOrder?.checkout?.order_status === "PENDING" && (
             <Button
               size="lg"
               variant="flat"
@@ -154,16 +154,16 @@ const OrderSinglePage = () => {
           )}
         </div>
         {/*  -------- steps ---------- */}
-        {data?.storeOrder?.status !== "CANCEL" ? (
+        {data?.storeOrder?.checkout?.order_status !== "CANCEL" ? (
           <>
             <div className="hidden sm:hidden lg:inline ">
               <Steps
                 current={
-                  data?.storeOrder?.status === "START"
+                  data?.storeOrder?.checkout?.order_status === "PENDING"
                     ? 0
-                    : data?.storeOrder?.status === "CONFIRM"
+                    : data?.storeOrder?.checkout?.order_status === "CONFIRMED"
                     ? 1
-                    : data?.storeOrder?.status === "PROCESS"
+                    : data?.storeOrder?.checkout?.order_status === "SHIPPED"
                     ? 2
                     : 3
                 }
@@ -203,11 +203,11 @@ const OrderSinglePage = () => {
             <div className="inline sm:inline lg:hidden">
               <Steps
                 current={
-                  data?.storeOrder?.status === "START"
+                  data?.storeOrder?.checkout?.order_status === "PENDING"
                     ? 0
-                    : data?.storeOrder?.status === "CONFIRM"
+                    : data?.storeOrder?.checkout?.order_status === "CONFIRMED"
                     ? 1
-                    : data?.storeOrder?.status === "PROCESS"
+                    : data?.storeOrder?.checkout?.order_status === "SHIPPED"
                     ? 2
                     : 3
                 }
@@ -338,7 +338,7 @@ const OrderSinglePage = () => {
             </div>
           </div>
         </div>
-        {data?.storeOrder?.status === "START" && (
+        {data?.storeOrder?.checkout?.order_status === "START" && (
           <Button
             size="lg"
             variant="flat"
@@ -352,7 +352,7 @@ const OrderSinglePage = () => {
             Cancel Order
           </Button>
         )}
-        {data?.storeOrder?.status === "DELIVERY" && (
+        {data?.storeOrder?.checkout?.order_status === "DELIVERY" && (
           <Button
             size="lg"
             variant="flat"

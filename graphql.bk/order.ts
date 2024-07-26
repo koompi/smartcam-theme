@@ -7,13 +7,11 @@ export const ORDER_PRODUCT = gql`
 `;
 
 export const ORDER_BY_ID = gql`
-  query ExampleQuery($storeOrderId: String!) {
+  query ($storeOrderId: String!) {
     storeOrder(id: $storeOrderId) {
       code
       createdAt
       id
-      status
-      tax
       carts {
         productId
         qty
@@ -74,6 +72,7 @@ export const ORDER_BY_ID = gql`
         khr
         usd
       }
+      checkout
     }
   }
 `;
