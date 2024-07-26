@@ -233,6 +233,8 @@ export default function PageLocation() {
                 register={register}
                 photo={photo}
                 setPhoto={setPhoto}
+                addressLabel={addressLabel}
+                setAddressLabel={setAddressLabel}
               />
             </CardBody>
             <CardHeader>
