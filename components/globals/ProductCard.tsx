@@ -14,10 +14,6 @@ import {
   Button,
   Image,
   Chip,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
 } from "@nextui-org/react";
 import Link from "next/link";
 import React, { FC, ReactNode } from "react";
