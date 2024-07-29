@@ -19,7 +19,7 @@ export async function generateMetadata(
   const id = params.id;
 
   console.log("id", id);
-  
+
   const client = getClient();
 
   const { data } = await client.query({

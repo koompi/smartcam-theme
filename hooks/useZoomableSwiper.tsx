@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, MutableRefObject } from "react";
 import SwiperCore from "swiper";
 import { Zoom } from "swiper/modules";
 

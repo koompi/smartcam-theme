@@ -12,17 +12,18 @@ import { createHeadlessEditor } from "@lexical/headless";
 import { $generateHtmlFromNodes } from "@lexical/html";
 import "@/styles/globals.css";
 
-
 /* Lexical Design System */
 import PlaygroundNodes from "./nodes/PlaygroundNodes";
 
-import theme from '@/editor/themes/PlaygroundEditorTheme'
+import theme from "@/editor/themes/PlaygroundEditorTheme";
 
 interface Props {
   data: string;
 }
 
 async function run(value: string, callback: Dispatch<SetStateAction<string>>) {
+  console.log("value", value);
+
   return new Promise((resolve) => {
     const editor = createHeadlessEditor({
       namespace: "Editor",
@@ -30,8 +31,12 @@ async function run(value: string, callback: Dispatch<SetStateAction<string>>) {
       nodes: [...PlaygroundNodes],
       onError: () => {},
     });
-
-    editor.setEditorState(editor.parseEditorState(value));
+    try {
+      const parsedEditorState = editor.parseEditorState(value);
+      editor.setEditorState(parsedEditorState);
+    } catch (e) {
+      console.error("Failed to parse editor state:", e);
+    }
 
     editor.update(() => {
       let html = $generateHtmlFromNodes(editor, null);
