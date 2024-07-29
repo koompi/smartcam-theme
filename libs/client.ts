@@ -1,10 +1,10 @@
 "react-server";
 
 const ENDPOINT =
-  process.env.NEXT_PUBLIC_BACKEND ?? "https://backend.riverbase.org";
+  process.env.NEXT_PUBLIC_BACKEND ?? "";
 
 const GRAPHQL_ENDPOINT = `${ENDPOINT}/graphql/store?store_id=${
-  process.env.NEXT_PUBLIC_ID_STORE ?? "65a4a66033b9eda51233220c"
+  process.env.NEXT_PUBLIC_ID_STORE ?? ""
 }`;
 
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";

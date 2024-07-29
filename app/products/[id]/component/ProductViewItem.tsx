@@ -431,7 +431,7 @@ export const ProductViewItem = React.forwardRef<
                         />
                       );
                     })}{" "}
-                    (Rerviews)
+                    (Reviews)
                   </div>
                   <Spacer y={6} />
                   <div className="flex items-center gap-2 text-default-700">
@@ -831,7 +831,7 @@ export const ProductViewItem = React.forwardRef<
               <div className="mt-4">
                 <p className="sr-only">Product desc</p>
                 <p className="line-clamp-9 text-medium text-gray-500 whitespace-pre-line">
-                  {desc}
+                  {<LexicalReader data={desc} />}
                 </p>
               </div>
               {/*  ---variants----- */}
