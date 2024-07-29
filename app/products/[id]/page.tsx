@@ -18,6 +18,8 @@ export async function generateMetadata(
   // read route params
   const id = params.id;
 
+  console.log("id", id);
+  
   const client = getClient();
 
   const { data } = await client.query({

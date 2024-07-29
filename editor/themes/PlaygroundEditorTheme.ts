@@ -9,6 +9,7 @@
 import type {EditorThemeClasses} from 'lexical';
 
 import './PlaygroundEditorTheme.css';
+import './CommentEditorTheme.css';
 
 const theme: EditorThemeClasses = {
   blockCursor: 'PlaygroundEditorTheme__blockCursor',
