@@ -58,13 +58,14 @@ const Banner = () => {
           loop={true}
           pagination={{
             clickable: true,
+            dynamicBullets: true,
           }}
           modules={[Autoplay, Pagination]}
         >
           {data?.bannerSpacialOffer.map((res: any, idx: number) => (
             <SwiperSlide key={idx}>
               {res.products.length > 0 && (
-                <div className="flex items-center justify-center">
+                <div className="hidden sm:hidden lg:flex items-center justify-center">
                   <Button
                     as={Link}
                     href={`/products/${res?.products[0]?.product?.slug}`}

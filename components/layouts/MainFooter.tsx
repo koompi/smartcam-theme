@@ -4,12 +4,15 @@ import React from "react";
 import Link from "next/link";
 import { Image } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { useAuth } from "@/context/useAuth";
 
 const MainFooter = () => {
+  const { user } = useAuth();
+
   return (
     <section className="relative overflow-hidden">
       <footer className="py-10 bg-white sm:pt-16 lg:pt-24">
-        <div className="absolute right-0">
+        <div className="absolute right-0 z-0">
           <Image
             alt="logo"
             src="/images/logo-only-grayscale.png"
@@ -107,7 +110,7 @@ const MainFooter = () => {
               <ul className="mt-6 space-y-4">
                 <li>
                   <Link
-                    href="#"
+                    href="/about"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                   >
                     About US
@@ -116,39 +119,39 @@ const MainFooter = () => {
 
                 <li>
                   <Link
-                    href="#"
+                    href="/contact"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                   >
                     Contact US
                   </Link>
                 </li>
 
-                <li>
+                {/* <li>
                   <Link
                     href="#"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                   >
                     Events
                   </Link>
-                </li>
+                </li> */}
 
                 <li>
                   <Link
-                    href="#"
+                    href="/about#customers"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                   >
                     Our Customers
                   </Link>
                 </li>
 
-                <li>
+                {/* <li>
                   <Link
                     href="#"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                   >
                     Careers
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
             {/* Account */}
@@ -159,17 +162,19 @@ const MainFooter = () => {
 
               <ul className="mt-6 space-y-4">
                 <li>
-                  <Link
-                    href="#"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
-                  >
-                    Login
-                  </Link>
+                  {!user && (
+                    <Link
+                      href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
+                      className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    >
+                      Login
+                    </Link>
+                  )}
                 </li>
 
                 <li>
                   <Link
-                    href="#"
+                    href="/locations"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                   >
                     My Locations
@@ -178,10 +183,18 @@ const MainFooter = () => {
 
                 <li>
                   <Link
-                    href="#"
+                    href="/cart"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                   >
                     Cart
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/orders"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                  >
+                    Order
                   </Link>
                 </li>
 

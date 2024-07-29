@@ -31,8 +31,6 @@ const PromotionPage = () => {
     return <Loading />;
   }
 
-  console.log("data", data);
-
   return (
     <main>
       <Banner />

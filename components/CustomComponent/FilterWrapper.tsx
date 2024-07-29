@@ -381,6 +381,7 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
                 variant="flat"
                 fullWidth
                 radius="lg"
+                className="mb-9"
               >
                 Clear all filters
               </Button>

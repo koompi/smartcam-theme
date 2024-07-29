@@ -114,7 +114,6 @@ export const ProductViewItem = React.forwardRef<
     const swiperRef = useRef<SwiperType | null>(null);
     const fullHost = window.location.href;
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
-    const [isCopied, setIsCopied] = useState(false);
 
     const { addToCart } = useCart();
 
@@ -123,10 +122,10 @@ export const ProductViewItem = React.forwardRef<
       const handleZoom = () => {
         if (swiperRef.current) {
           const swiper = swiperRef.current;
-          if (swiper.zoom.scale === 1) {
-            swiper.zoom.in();
+          if (swiper?.zoom.scale === 1) {
+            swiper?.zoom.in();
           } else {
-            swiper.zoom.out();
+            swiper?.zoom.out();
           }
         }
       };
@@ -174,8 +173,6 @@ export const ProductViewItem = React.forwardRef<
           .catch(() => {
             toast.error("something went wrong!");
           });
-        setIsCopied(true);
-        setTimeout(() => setIsCopied(false), 2000); // Reset the copied state after 2 seconds
       } catch (err) {
         console.error("Failed to copy: ", err);
       }
@@ -297,7 +294,7 @@ export const ProductViewItem = React.forwardRef<
                   <SwiperSlide key={index}>
                     {video_files?.includes(preview?.split(".")[1]) ? (
                       <video
-                        className="h-[30dvh] sm:h-[30dvh] lg:h-[60dvh] w-full grid place-items-center mx-auto"
+                        className="h-[45dvh] sm:h-[45dvh] lg:h-[60dvh] w-full grid place-items-center mx-auto"
                         autoPlay
                         loop
                         muted
@@ -318,7 +315,7 @@ export const ProductViewItem = React.forwardRef<
                             process.env.NEXT_PUBLIC_DRIVE ??
                             "https://drive.backend.riverbase.org"
                           }/api/drive?hash=${preview}`}
-                          className="h-[30dvh] sm:h-[30dvh] lg:h-[60dvh]"
+                          className="h-[45dvh] sm:h-[45dvh] lg:h-[60dvh]"
                         />
                       </div>
                     )}
@@ -338,7 +335,7 @@ export const ProductViewItem = React.forwardRef<
 
               {/* Swap thumbnail for smaller devices */}
 
-              <div className="col-span-12 flex sm:flex lg:hidden">
+              {/* <div className="col-span-12 flex sm:flex lg:hidden">
                 <Swiper
                   onSwiper={setThumbsSwiper as any}
                   loop={true}
@@ -356,7 +353,7 @@ export const ProductViewItem = React.forwardRef<
                   {previews.map((preview, index) => (
                     <SwiperSlide
                       key={index}
-                      className="swiperSlider border border-primary rounded-2xl"
+                      className="swiperSlider border border-primary rounded-2xl p-1"
                     >
                       {video_files.includes(preview.split(".")[1]) ? (
                         <Icon
@@ -377,7 +374,7 @@ export const ProductViewItem = React.forwardRef<
                     </SwiperSlide>
                   ))}
                 </Swiper>
-              </div>
+              </div> */}
 
               {/* desc info for small devices */}
 

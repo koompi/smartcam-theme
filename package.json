@@ -40,7 +40,8 @@
     "react-hook-form": "^7.52.1",
     "react-leaflet": "^4.2.1",
     "sonner": "^1.5.0",
-    "swiper": "^11.1.4"
+    "swiper": "^11.1.4",
+    "vaul": "^0.9.1"
   },
   "devDependencies": {
     "@types/katex": "^0.16.7",

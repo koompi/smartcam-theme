@@ -19,22 +19,28 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Skeleton,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
 } from "@nextui-org/react";
 import React, { useState } from "react";
 import Header from "./Header";
 import { Menubar } from "./Menubar";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/useAuth";
 import { useCart } from "@/context/useCart";
 import Link from "next/link";
-import { cn } from "@/utils/cn";
 import { Search } from "./Search";
+import { Drawer } from "vaul";
 
 export const MainNavbar = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const { user, loading } = useAuth();
   const { cartItems, logout } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [popOpen, setPopOpen] = useState(true);
 
   const menuItems = [
     {
@@ -57,15 +63,15 @@ export const MainNavbar = () => {
       url: "/contact",
       title: "Contact US",
     },
-    {
-      url: "/events",
-      title: "Events",
-    },
+    // {
+    //   url: "/events",
+    //   title: "Events",
+    // },
 
-    {
-      url: "/careers",
-      title: "Careers",
-    },
+    // {
+    //   url: "/careers",
+    //   title: "Careers",
+    // },
 
     {
       url: "/support/video-support",
@@ -91,9 +97,65 @@ export const MainNavbar = () => {
         className="bg-background flex flex-col h-14 sm:h-auto"
       >
         <NavbarContent className="sm:hidden" justify="start">
-          <NavbarMenuToggle
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          />
+          <Drawer.Root
+            dismissible={true}
+            shouldScaleBackground
+            open={open}
+            onOpenChange={setOpen}
+          >
+            <Drawer.Trigger asChild onClick={() => setOpen(!open)}>
+              <Button isIconOnly variant="light" color="primary">
+                <Icon icon="heroicons-outline:menu-alt-2" fontSize={24} />
+              </Button>
+            </Drawer.Trigger>
+            <Drawer.Portal>
+              <Drawer.Overlay className="fixed inset-0" />
+              <Drawer.Content className="bg-white/60 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-60 flex flex-col rounded-t-3xl h-[60dvh] mt-24 fixed z-40 bottom-0 left-0 right-0">
+                <div className="p-4 bg-white/30 rounded-t-3xl flex-1">
+                  <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-500 mb-8" />
+                  <div className="max-w-md mx-auto px-3">
+                    {menuItems.map((item, index) => (
+                      <div
+                        key={`${item}-${index}`}
+                        className="my-3 text-xl font-semibold"
+                        onClick={() => {
+                          router.push(item.url);
+                          setOpen(!open);
+                        }}
+                      >
+                        <p>{item.title}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <Popover
+                  isOpen={popOpen}
+                  onOpenChange={(popOpen) => setPopOpen(!popOpen)}
+                  showArrow
+                  placement="left"
+                >
+                  <PopoverTrigger>
+                    <Button
+                      variant="shadow"
+                      size="lg"
+                      isIconOnly
+                      as={Link}
+                      href="https://t.me/T_thith"
+                      target="_blank"
+                      radius="full"
+                      color="primary"
+                      className="absolute bottom-12 right-9"
+                    >
+                      <Icon icon="mingcute:telegram-fill" fontSize={27} />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <div className="px-1 py-2">Chat to Customer Service</div>
+                  </PopoverContent>
+                </Popover>
+              </Drawer.Content>
+            </Drawer.Portal>
+          </Drawer.Root>
           <Link href="/">
             <Image
               alt="logo"
@@ -427,7 +489,7 @@ export const MainNavbar = () => {
             )}
           </NavbarItem>
         </NavbarContent>
-        <NavbarMenu className="pt-12">
+        {/* <NavbarMenu className="pt-12">
           {menuItems.map((item, index) => (
             <NavbarMenuItem
               key={`${item}-${index}`}
@@ -451,7 +513,7 @@ export const MainNavbar = () => {
           >
             <Icon icon="mingcute:telegram-fill" fontSize={27} />
           </Button>
-        </NavbarMenu>
+        </NavbarMenu> */}
       </Navbar>
       <div className="hidden sm:inline">
         <Menubar />
