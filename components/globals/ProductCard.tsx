@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/context/useCart";
+import { LexicalReader } from "@/editor/LexicalReader";
 import { StockType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { usd } from "@/utils/formatUSD";
@@ -157,7 +158,7 @@ const ProductCard: FC<ProductCardProps> = ({
             {title}
           </h2>
           <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-9 whitespace-pre-line mt-2 sm:mt-2 lg:mt-3">
-            {desc}
+            {desc ? <LexicalReader data={desc.toString()} /> : null}
           </p>
           <div className="flex items-center gap-3 mt-2 sm:mt-2 lg:mt-3">
             {promotion?.discount?.discountType ? (

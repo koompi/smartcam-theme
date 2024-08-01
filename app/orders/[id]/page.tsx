@@ -23,7 +23,7 @@ import Steps from "@uiw/react-steps";
 import dayjs from "dayjs";
 import { formatToUSD } from "@/utils/formatUSD";
 import { CheckoutCartType } from "@/types/checkout";
-import { CONFIRM_ORDER, CANCEL_ORDER } from "@/graphql.bk/mutation/order";
+import { CONFIRM_ORDER, CANCEL_ORDER } from "@/graphql/mutation/order";
 import { toast } from "sonner";
 import { useMutation } from "@apollo/client";
 
