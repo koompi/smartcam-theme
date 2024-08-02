@@ -28,11 +28,11 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import { PromotionType } from "@/types/promotion";
-import { ESTIMATION_PRICE } from "@/graphql.bk/order";
+import { ESTIMATION_PRICE } from "@/graphql/order";
 import { ProductType } from "@/types/product";
-import { ESTIMATE_PRICE } from "@/graphql.bk/delivery";
+import { ESTIMATE_PRICE } from "@/graphql/delivery";
 import RecommendProducts from "./RecommendProducts";
-import { GET_ALL_PRODUCTS } from "@/graphql.bk/product";
+import { GET_ALL_PRODUCTS } from "@/graphql/product";
 import { useBaray } from "@/hooks/baray";
 
 interface OrderCart {
