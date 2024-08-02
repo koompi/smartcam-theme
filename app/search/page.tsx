@@ -5,10 +5,10 @@ import { ProductType } from "@/types/product";
 import { Category } from "@/types/category";
 import Link from "next/link";
 import { Search } from "@/components/layouts/Search";
-import { GLOBAL_PRODUCT_FILTERING } from "@/graphql.bk/product";
+import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
 import { useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
-import { CATEGORIES } from "@/graphql.bk/category";
+import { CATEGORIES } from "@/graphql/category";
 import ProductCard from "@/components/globals/ProductCard";
 
 export default function SearchPage() {

@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import { useMutation } from "@apollo/client";
 import { toast } from "sonner";
-import { CONFIRM_ORDER } from "@/graphql.bk/mutation/order";
+import { CONFIRM_ORDER } from "@/graphql/mutation/order";
 import VerticalSteps from "./VerticalSteps";
 
 const OrderCard: FC<OrdersType> = (props) => {

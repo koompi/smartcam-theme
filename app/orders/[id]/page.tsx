@@ -17,7 +17,7 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
-import { ORDER_BY_ID } from "@/graphql.bk/order";
+import { ORDER_BY_ID } from "@/graphql/order";
 import { useParams } from "next/navigation";
 import Steps from "@uiw/react-steps";
 import dayjs from "dayjs";

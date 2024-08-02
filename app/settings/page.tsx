@@ -16,7 +16,7 @@ import {
 import { Icon } from "@iconify/react";
 import { useAuth } from "@/context/useAuth";
 import { useMutation } from "@apollo/client";
-import { UPDATE_USER } from "@/graphql.bk/mutation/user";
+import { UPDATE_USER } from "@/graphql/mutation/user";
 import { Toaster, toast } from "sonner";
 import { useForm } from "react-hook-form";
 import axios, { AxiosResponse } from "axios";

@@ -6,7 +6,7 @@ import { Icon } from "@iconify/react";
 import MyLocation from "./components/MyLocation";
 import { useQuery } from "@apollo/client";
 import { LocationType } from "@/types/location";
-import { GET_ALL_LOCATIONS } from "@/graphql.bk/location";
+import { GET_ALL_LOCATIONS } from "@/graphql/location";
 import Link from "next/link";
 
 export default function Page() {
