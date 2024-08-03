@@ -1,5 +1,6 @@
 "use client";
 
+import { LexicalReader } from "@/editor/LexicalReader";
 import { formatToUSD } from "@/utils/formatUSD";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import {
@@ -49,8 +50,6 @@ const WishingListCard: FC<WishListProps> = ({
       shadow="sm"
       isPressable
       isHoverable
-      as={Link}
-      href={url}
       className="col-span-1 h-full group"
     >
       {discountType && (
@@ -117,7 +116,9 @@ const WishingListCard: FC<WishListProps> = ({
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <Image alt="products" src={thumbnail} isZoomed />
+        <Image alt="products" src={thumbnail
+          ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${thumbnail}`
+          : "/images/default-thumbnail.png"} isZoomed />
         <Spacer y={2} />
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }, (_, i) => {
@@ -138,17 +139,18 @@ const WishingListCard: FC<WishListProps> = ({
         <Spacer y={2} />
         <h2 className="text-black font-medium text-lg line-clamp-2">{title}</h2>
         <Spacer y={3} />
-        <ul className="list-disc text-gray-500 text-sm pl-6">
-          <li>CPU: Apple M3 Pro chip 12-core</li>
-          <li>OS: macOS</li>
-          <li>RAM: 36GB unified memory</li>
-          <li>Storage: 512GB SSD</li>
-          <li>Graphic: Integrated 18-core</li>
-          <li>GPU -Display: 16.2-inch (3456-by-2234)</li>
-          <li>Battery: Up to 15hours</li>
-          <li>Weight: 2.14kg</li>
-          <li>Warranty: 1 year</li>
-        </ul>
+        {/* <ul className="list-disc text-gray-500 text-sm pl-6">
+            <li>CPU: Apple M3 Pro chip 12-core</li>
+            <li>OS: macOS</li>
+            <li>RAM: 36GB unified memory</li>
+            <li>Storage: 512GB SSD</li>
+            <li>Graphic: Integrated 18-core</li>
+            <li>GPU -Display: 16.2-inch (3456-by-2234)</li>
+            <li>Battery: Up to 15hours</li>
+            <li>Weight: 2.14kg</li>
+            <li>Warranty: 1 year</li>
+          </ul> */}
+        {description ? <LexicalReader data={description.toString()} /> : null}
         <Spacer y={3} />
         <div className="flex items-center gap-3">
           {discountType ? (

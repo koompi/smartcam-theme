@@ -2,9 +2,11 @@
 
 import { useCart } from "@/context/useCart";
 import { LexicalReader } from "@/editor/LexicalReader";
+import { ADD_WISHLIST } from "@/graphql/mutation/wishlist";
 import { StockType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { usd } from "@/utils/formatUSD";
+import { useMutation } from "@apollo/client";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import {
   Card,
@@ -46,7 +48,8 @@ const ProductCard: FC<ProductCardProps> = ({
   stocks,
   currencyPrice,
 }) => {
-  const { addToCart } = useCart();
+  const { addToCart } = useCart()
+  const [addFavorite] = useMutation(ADD_WISHLIST);
 
   return (
     <Card
@@ -203,6 +206,23 @@ const ProductCard: FC<ProductCardProps> = ({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            addFavorite({
+              variables: {
+                wishlistType: "FAVORITE",
+                products: [
+                  {
+                    productId: id,
+                    qty: 1,
+                  },
+                ],
+              },
+            })
+              .then((e) => {
+                toast.success("Items has been to add wishlist");
+              })
+              .catch((e) => {
+                toast.error(e.message.error);
+              });
           }}
         >
           <Icon

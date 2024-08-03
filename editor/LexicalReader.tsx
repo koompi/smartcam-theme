@@ -22,7 +22,6 @@ interface Props {
 }
 
 async function run(value: string, callback: Dispatch<SetStateAction<string>>) {
-  console.log("value", value);
 
   return new Promise((resolve) => {
     const editor = createHeadlessEditor({

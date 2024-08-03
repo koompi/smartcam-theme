@@ -10,9 +10,6 @@ import {
   Image,
   Spacer,
   Badge,
-  NavbarMenu,
-  NavbarMenuItem,
-  NavbarMenuToggle,
   Avatar,
   Dropdown,
   DropdownItem,
@@ -22,6 +19,8 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
+  Link as MyLink,
+  cn,
 } from "@nextui-org/react";
 import React, { useState } from "react";
 import Header from "./Header";
@@ -210,7 +209,7 @@ export const MainNavbar = () => {
           justify="end"
           className="flex sm:hidden items-center gap-6"
         >
-          {/* <NavbarItem
+          <NavbarItem
             className="mt-2"
             as={Link}
             href="/wishlist"
@@ -235,7 +234,7 @@ export const MainNavbar = () => {
                 />
               </Button>
             </Badge>
-          </NavbarItem> */}
+          </NavbarItem>
 
           {user ? (
             <Dropdown placement="bottom-end">
@@ -330,73 +329,72 @@ export const MainNavbar = () => {
           justify="end"
           className="hidden sm:flex items-center gap-6"
         >
-          {/* <NavbarItem isActive={pathname === "/compare"}>
-            <Link href="/compare">
-              <Badge color="danger" content={3} shape="circle">
-                <Button
-                  color={pathname === "/compare" ? "primary" : "default"}
-                  variant={pathname === "/compare" ? "flat" : "light"}
-                  radius="full"
-                  className={cn(
-                    "text-black hover:underline hover:text-primary",
-                    {
-                      "text-primary": pathname === "/compare",
-                    }
-                  )}
-                >
-                  Compare
-                </Button>
-              </Badge>
-            </Link>
-          </NavbarItem> */}
-          {/* <NavbarItem>
-            <Link href="/wishlist">
-              <Badge color="danger" content={9} shape="circle">
-                <Button
-                  isIconOnly
-                  radius="full"
-                  color={pathname === "/wishlist" ? "primary" : "default"}
-                  variant={pathname === "/wishlist" ? "flat" : "light"}
-                >
-                  <Icon
-                    icon={
-                      pathname === "/wishlist"
-                        ? "solar:heart-bold"
-                        : "solar:heart-linear"
-                    }
-                    className="text-primary"
-                    fontSize={27}
-                  />
-                </Button>
-              </Badge>
-            </Link>
-          </NavbarItem> */}
-          <NavbarItem className="mr-12">
-            <Link href="/cart">
-              <Badge
-                color="danger"
-                content={cartItems?.length}
-                isInvisible={cartItems?.length <= 0}
-                shape="circle"
+          <NavbarItem isActive={pathname === "/compare"}>
+            {/* <Link href="/compare"> */}
+            <Badge color="danger" content={3} shape="circle">
+              <Button
+                as={MyLink}
+                color={pathname === "/compare" ? "primary" : "default"}
+                variant={pathname === "/compare" ? "flat" : "light"}
+                radius="full"
+                className={cn("text-black hover:underline hover:text-primary", {
+                  "text-primary": pathname === "/compare",
+                })}
+                onClick={() => router.push("/compare")}
               >
-                <Button
-                  isIconOnly
-                  radius="full"
-                  color={pathname === "/cart" ? "primary" : "default"}
-                  variant={pathname === "/cart" ? "flat" : "light"}
-                >
-                  <Icon
-                    icon={
-                      pathname === "/cart"
-                        ? "solar:bag-3-bold"
-                        : "solar:bag-3-linear"
-                    }
-                    fontSize={27}
-                    className="text-primary"
-                  />
-                </Button>
-              </Badge>
-            </Link>
+                Compare
+              </Button>
+            </Badge>
+            {/* </Link> */}
+          </NavbarItem>
+          <NavbarItem>
+            <Badge color="danger" content={9} shape="circle">
+              <Button
+                isIconOnly
+                radius="full"
+                color={pathname === "/wishlist" ? "primary" : "default"}
+                variant={pathname === "/wishlist" ? "flat" : "light"}
+                onClick={() => router.push("/wishlist")}
+              >
+                <Icon
+                  icon={
+                    pathname === "/wishlist"
+                      ? "solar:heart-bold"
+                      : "solar:heart-linear"
+                  }
+                  className="text-primary"
+                  fontSize={27}
+                />
+              </Button>
+            </Badge>
+          </NavbarItem>
+          <NavbarItem className="mr-12">
+            {/* <Link href="/cart"> */}
+            <Badge
+              color="danger"
+              content={cartItems?.length}
+              isInvisible={cartItems?.length <= 0}
+              shape="circle"
+            >
+              <Button
+                isIconOnly
+                radius="full"
+                color={pathname === "/cart" ? "primary" : "default"}
+                variant={pathname === "/cart" ? "flat" : "light"}
+                onClick={() => router.push("/cart")}
+              >
+                <Icon
+                  icon={
+                    pathname === "/cart"
+                      ? "solar:bag-3-bold"
+                      : "solar:bag-3-linear"
+                  }
+                  fontSize={27}
+                  className="text-primary"
+                />
+              </Button>
+            </Badge>
+            {/* </Link> */}
           </NavbarItem>
           <NavbarItem>
             {user ? (

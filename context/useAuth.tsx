@@ -61,10 +61,8 @@ export const AppProvider: FC<Props> = (props) => {
       setTimeout(() => {
         setLoading(false);
       }, 500);
-      return;
     };
     user();
-    return;
   }, []);
 
   return (
