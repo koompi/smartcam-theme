@@ -175,7 +175,7 @@ const CheckoutComponent = () => {
               accumulator +
               (currentObject?.promotion?.discount
                 ? currentObject?.promotion?.discount?.totalDiscount
-                : currentObject?.product.price) *
+                : currentObject?.product?.price) *
                 currentObject?.qty
             );
           }, 0)

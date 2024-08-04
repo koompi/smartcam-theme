@@ -18,9 +18,13 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React, { FC, ReactNode } from "react";
+import React, { FC, ReactNode, useEffect } from "react";
+import { useMutation } from "@apollo/client";
+import { REMOVE_PRODUCT_FROM_WISHLIST } from "@/graphql/mutation/wishlist";
+import { toast } from "sonner";
 
 interface WishListProps {
+  id: string,
   url: string;
   thumbnail: string;
   title: string;
@@ -31,9 +35,11 @@ interface WishListProps {
   promotionPercentage: number;
   promotionPrice: number;
   totalPrice: number;
+  refetch: Function
 }
 
 const WishingListCard: FC<WishListProps> = ({
+  id,
   url,
   thumbnail,
   title,
@@ -44,7 +50,10 @@ const WishingListCard: FC<WishListProps> = ({
   promotionPercentage,
   promotionPrice,
   totalPrice,
+  refetch
 }) => {
+  const [removeProductFromEWishlist] = useMutation(REMOVE_PRODUCT_FROM_WISHLIST); 
+
   return (
     <Card
       shadow="sm"
@@ -111,6 +120,20 @@ const WishingListCard: FC<WishListProps> = ({
               startContent={
                 <Icon icon="solar:trash-bin-2-bold" fontSize={21} />
               }
+              onPress={() => {
+                removeProductFromEWishlist({
+                  variables: {
+                    productId: id
+                  },
+                })
+                  .then((e) => {
+                    toast.success("Items has been to remove from wishlist");
+                    refetch();
+                  })
+                  .catch((e) => { 
+                    toast.error(e.message);
+                  });
+              }}
             >
               Remove
             </DropdownItem>

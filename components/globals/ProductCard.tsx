@@ -2,7 +2,7 @@
 
 import { useCart } from "@/context/useCart";
 import { LexicalReader } from "@/editor/LexicalReader";
-import { ADD_WISHLIST } from "@/graphql/mutation/wishlist";
+import { ADD_COMPARE_WISHLIST, ADD_WISHLIST } from "@/graphql/mutation/wishlist";
 import { StockType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { usd } from "@/utils/formatUSD";
@@ -32,6 +32,7 @@ interface ProductCardProps {
   promotion: PromotionType;
   slug: string;
   stocks: StockType;
+  categoryId: string;
   currencyPrice: {
     khr: number;
     usd: number;
@@ -47,9 +48,11 @@ const ProductCard: FC<ProductCardProps> = ({
   slug,
   stocks,
   currencyPrice,
+  categoryId
 }) => {
   const { addToCart } = useCart()
-  const [addFavorite] = useMutation(ADD_WISHLIST);
+  const [addWishlist] = useMutation(ADD_WISHLIST);
+  const [addWishlistCompare] = useMutation(ADD_COMPARE_WISHLIST);
 
   return (
     <Card
@@ -199,38 +202,61 @@ const ProductCard: FC<ProductCardProps> = ({
           Add to Cart
         </Button>
 
-        <Button
-          isIconOnly
-          variant="light"
-          radius="full"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            addFavorite({
-              variables: {
-                wishlistType: "FAVORITE",
-                products: [
-                  {
-                    productId: id,
-                    qty: 1,
-                  },
-                ],
-              },
-            })
-              .then((e) => {
-                toast.success("Items has been to add wishlist");
+        <div>
+          <Button
+            isIconOnly
+            variant="light"
+            radius="full"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // add product to wishlist
+              addWishlist({
+                variables: {
+                  wishlistType: "FAVORITE",
+                  productId: id,
+                },
               })
-              .catch((e) => {
-                toast.error(e.message.error);
-              });
-          }}
-        >
-          <Icon
-            icon="solar:heart-outline"
-            fontSize={30}
-            className="text-gray-500"
-          />
-        </Button>
+                .then((res) => {
+                  toast.success(res.data.storeAddWishlist.message);
+                })
+                .catch((e) => {
+                  toast.error(e.message);
+                });
+            }}
+          >
+            <Icon
+              icon="solar:heart-outline"
+              fontSize={30}
+              className="text-gray-500"
+            />
+          </Button>
+          <Button
+            isIconOnly
+            variant="light"
+            radius="full"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // add product to wishlist
+              addWishlistCompare({
+                variables: {
+                  wishlistType: "COMPARE",
+                  productId: id,
+                  categoryId: categoryId
+                },
+              })
+                .then((res) => {
+                  toast.success(res.data.storeAddCompare.message);
+                })
+                .catch((e) => {
+                  toast.error(e.message);
+                });
+            }}
+          >
+            Compare
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

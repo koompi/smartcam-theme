@@ -93,6 +93,7 @@ export default function ComponentProducts({
               slug,
               stocks,
               currencyPrice,
+              category
             } = res?.product;
             return (
               <ProductCard
@@ -104,6 +105,7 @@ export default function ComponentProducts({
                 rating={rating}
                 price={price}
                 slug={slug}
+                categoryId={category.id}
                 promotion={{
                   isMembership: res.promotion?.isMembership,
                   discount: {
@@ -137,11 +139,13 @@ export default function ComponentProducts({
               slug,
               stocks,
               currencyPrice,
+              category
             } = res?.product;
             return (
               <ProductCard
                 key={idx}
                 id={id}
+                categoryId={category.id}
                 thumbnail={thumbnail}
                 title={title}
                 desc={desc}
@@ -181,11 +185,13 @@ export default function ComponentProducts({
               slug,
               stocks,
               currencyPrice,
+              category
             } = res?.product;
             return (
               <ProductCard
                 key={idx}
                 id={id}
+                categoryId={category.id}
                 thumbnail={thumbnail}
                 title={title}
                 desc={desc}
@@ -225,11 +231,13 @@ export default function ComponentProducts({
               slug,
               stocks,
               currencyPrice,
+              category
             } = res?.product;
             return (
               <ProductCard
                 key={idx}
                 id={id}
+                categoryId={category.id}
                 thumbnail={thumbnail}
                 title={title}
                 desc={desc}
@@ -268,11 +276,13 @@ export default function ComponentProducts({
               slug,
               stocks,
               currencyPrice,
+              category
             } = res?.product;
             return (
               <ProductCard
                 key={idx}
                 id={id}
+                categoryId={category.id}
                 thumbnail={thumbnail}
                 title={title}
                 desc={desc}

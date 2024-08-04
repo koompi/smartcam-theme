@@ -213,6 +213,24 @@ export const GLOBAL_PRODUCT_FILTERING = gql`
             amount
             status
           }
+          category {
+            id
+            title {
+              en
+            }
+            children {
+              id
+              title {
+                en
+              }
+            }
+          }
+          subcategories {
+            id
+            title {
+              en
+            }
+          }
           variants {
             default
             id

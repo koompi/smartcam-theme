@@ -1,21 +1,17 @@
 "use client";
 
 import WishingListCard from "@/components/globals/WishingListCard";
-import { products } from "@/data/products";
 import { WISHLISTS } from "@/graphql/wishlist";
-import { ProductType } from "@/types/product";
 import { useQuery } from "@apollo/client";
 import { Spacer, Spinner } from "@nextui-org/react";
 import React from "react";
 
 const WishListPage = () => {
-  const { data, loading } = useQuery(WISHLISTS, {
+  const { data, loading, refetch } = useQuery(WISHLISTS, {
     variables: {
-      wishlistType: "COMPARE",
+      wishlistType: "FAVORITE",
     },
   });
-
-  console.log("data", data);
   
   return loading ? (
     <Spinner />
@@ -28,6 +24,7 @@ const WishListPage = () => {
           return (
             <WishingListCard
               key={idx}
+              id={res.product.id}
               url={res.url}
               thumbnail={res.product.thumbnail}
               title={res.product.title}
@@ -38,6 +35,7 @@ const WishListPage = () => {
               promotionPercentage={res?.promotion?.promotionPercentage}
               promotionPrice={res?.promotionPrice}
               totalPrice={res?.promotion?.totalPrice}
+              refetch={refetch}
             />
           );
         })}

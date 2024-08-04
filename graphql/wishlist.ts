@@ -30,6 +30,7 @@ export const WISHLISTS = gql`
           }
         }
         product {
+          id
           title
           thumbnail
           weight
@@ -37,8 +38,20 @@ export const WISHLISTS = gql`
           price
           desc
           detail
+          brand
+          category {
+            id
+            title {
+              en
+            }
+            children {
+              id
+              title {
+                en
+              }
+            }
+          }
         }
-        qty
       }
       createdAt
       updatedAt
