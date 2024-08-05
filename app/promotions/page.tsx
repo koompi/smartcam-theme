@@ -19,6 +19,8 @@ interface ProductProps {
   promotionPrice: number;
   promotionPercentage: number | undefined;
   product: ProductType;
+  favorite: boolean;
+  compare: boolean;
   promotion: PromotionType;
 }
 
@@ -54,12 +56,16 @@ const PromotionPage = () => {
                 slug,
                 stocks,
                 currencyPrice,
+                category
               } = res?.product;
 
               return (
                 <ProductCard
                   key={idx}
                   id={id}
+                  favorite={res?.favorite}
+                  compare={res?.compare}
+                  categoryId={category.id}
                   thumbnail={thumbnail}
                   title={title}
                   desc={desc}

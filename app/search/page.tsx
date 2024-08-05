@@ -112,6 +112,7 @@ export default function SearchPage() {
                   slug,
                   currencyPrice,
                   stocks,
+                  category
                 } = res?.product;
 
                 return (
@@ -121,6 +122,9 @@ export default function SearchPage() {
                       thumbnail={thumbnail}
                       title={title}
                       desc={desc}
+                      favorite={res?.favorite}
+                      compare={res?.compare}
+                      categoryId={category.id}
                       rating={rating ? rating : 4}
                       price={price}
                       promotion={{

@@ -281,6 +281,8 @@ export const PROMOTIONS_BY_TYPE = gql`
             totalDiscount
           }
         }
+        favorite
+        compare
         product {
           id
           ownerId
