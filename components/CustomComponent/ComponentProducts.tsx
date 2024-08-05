@@ -12,6 +12,7 @@ import { PaginationProduct } from "./PaginationProduct";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { CardLoading } from "../globals/Loading";
+import { useCart } from "@/context/useCart";
 
 export default function ComponentProducts({
   categories,
@@ -36,6 +37,7 @@ export default function ComponentProducts({
   const minPrice = (searchParams.get("min_price") as string) || null;
   const maxPrice = (searchParams.get("max_price") as string) || null;
   const sort = searchParams.get("sort") ?? null;
+
 
   const [page, setPage] = useState(parseInt(offset));
 
@@ -99,6 +101,8 @@ export default function ComponentProducts({
               <ProductCard
                 key={idx}
                 id={id}
+                favorite={res?.favorite}
+                compare={res?.compare}
                 thumbnail={thumbnail}
                 title={title}
                 desc={desc}
@@ -145,6 +149,8 @@ export default function ComponentProducts({
               <ProductCard
                 key={idx}
                 id={id}
+                favorite={res?.favorite}
+                compare={res?.compare}
                 categoryId={category.id}
                 thumbnail={thumbnail}
                 title={title}
@@ -191,6 +197,8 @@ export default function ComponentProducts({
               <ProductCard
                 key={idx}
                 id={id}
+                favorite={res?.favorite}
+                compare={res?.compare}
                 categoryId={category.id}
                 thumbnail={thumbnail}
                 title={title}
@@ -237,6 +245,8 @@ export default function ComponentProducts({
               <ProductCard
                 key={idx}
                 id={id}
+                favorite={res?.favorite}
+                compare={res?.compare}
                 categoryId={category.id}
                 thumbnail={thumbnail}
                 title={title}
@@ -282,6 +292,8 @@ export default function ComponentProducts({
               <ProductCard
                 key={idx}
                 id={id}
+                favorite={res?.favorite}
+                compare={res?.compare}
                 categoryId={category.id}
                 thumbnail={thumbnail}
                 title={title}
@@ -318,6 +330,7 @@ export default function ComponentProducts({
         ? totalPages
         : pages
       : totalPages;
+  
 
   return (
     <>

@@ -31,15 +31,19 @@ import { useCart } from "@/context/useCart";
 import Link from "next/link";
 import { Search } from "./Search";
 import { Drawer } from "vaul";
+import { useQuery } from "@apollo/client";
+import { WISHLIST_NOTIFICATION } from "@/graphql/wishlist";
 
 export const MainNavbar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, loading } = useAuth();
+  const { user, loading, notifications } = useAuth();
   const { cartItems, logout } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [popOpen, setPopOpen] = useState(true);
+
+  // const {data, refetch} = useQuery(WISHLIST_NOTIFICATION)
 
   const menuItems = [
     {
@@ -331,7 +335,7 @@ export const MainNavbar = () => {
         >
           <NavbarItem isActive={pathname === "/compare"}>
             {/* <Link href="/compare"> */}
-            <Badge color="danger" content={3} shape="circle">
+            <Badge color="danger" content={notifications ? notifications.count_compare : 0} shape="circle">
               <Button
                 as={MyLink}
                 color={pathname === "/compare" ? "primary" : "default"}
@@ -340,7 +344,7 @@ export const MainNavbar = () => {
                 className={cn("text-black hover:underline hover:text-primary", {
                   "text-primary": pathname === "/compare",
                 })}
-                onClick={() => router.push("/compare")}
+                href="/compare"
               >
                 Compare
               </Button>
@@ -348,13 +352,14 @@ export const MainNavbar = () => {
             {/* </Link> */}
           </NavbarItem>
           <NavbarItem>
-            <Badge color="danger" content={9} shape="circle">
+            <Badge color="danger" content={notifications ? notifications?.count_favorite : 0} shape="circle">
               <Button
+                as={MyLink}
                 isIconOnly
                 radius="full"
                 color={pathname === "/wishlist" ? "primary" : "default"}
                 variant={pathname === "/wishlist" ? "flat" : "light"}
-                onClick={() => router.push("/wishlist")}
+                href="/wishlist"
               >
                 <Icon
                   icon={

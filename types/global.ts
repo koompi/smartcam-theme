@@ -1,4 +1,3 @@
-import { ItemProduct } from "./product";
 import { UserType } from "./user";
 
 export type ContextAuth = {
@@ -6,6 +5,8 @@ export type ContextAuth = {
   getUser: () => void;
   loading: boolean;
   login: (model: string | null) => void;
+  notifications: any;
+  refetch: Function,
 };
 
 export type CartItem = {
@@ -16,6 +17,9 @@ export type CartItem = {
 export type CartContextType = {
   cartItems: CartItem[];
   membershipId: string;
+  wishlistFav: any,
+  wishlistCompare: any,
+  refetchFav: Function,
   addToCart: (product_id: string) => void;
   minusCart: (product_id: string) => void;
   removeFromCart: (id: String) => void;

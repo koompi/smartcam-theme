@@ -12,6 +12,8 @@ import { PromotionType } from "@/types/promotion";
 interface ProductProps {
   product: ProductType;
   promotion: PromotionType;
+  favorite: boolean;
+  compare: boolean;
 }
 
 interface Props {
@@ -114,8 +116,8 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
               type === "MOST POPULAR"
                 ? mostPopularSort()
                 : type === "NEW ARRIVAL"
-                ? newestSort()
-                : topRated(),
+                  ? newestSort()
+                  : topRated(),
               (res: ProductProps, idx) => {
                 const {
                   thumbnail,
@@ -127,6 +129,7 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
                   slug,
                   stocks,
                   currencyPrice,
+                  category
                 } = res?.product;
 
                 return (
@@ -136,6 +139,9 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
                   >
                     <ProductCard
                       id={id}
+                      favorite={res?.favorite}
+                      compare={res?.compare}
+                      categoryId={category.id}
                       thumbnail={thumbnail}
                       title={title}
                       desc={desc}

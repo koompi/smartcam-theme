@@ -58,3 +58,9 @@ export const WISHLISTS = gql`
     }
   }
 `;
+
+export const WISHLIST_NOTIFICATION = gql`
+  query {
+    storeNotifications
+  }
+`;

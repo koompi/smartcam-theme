@@ -1,8 +1,12 @@
 "use client";
 
+import { useAuth } from "@/context/useAuth";
 import { useCart } from "@/context/useCart";
 import { LexicalReader } from "@/editor/LexicalReader";
-import { ADD_COMPARE_WISHLIST, ADD_WISHLIST } from "@/graphql/mutation/wishlist";
+import {
+  ADD_COMPARE_WISHLIST,
+  ADD_WISHLIST,
+} from "@/graphql/mutation/wishlist";
 import { StockType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { usd } from "@/utils/formatUSD";
@@ -19,7 +23,7 @@ import {
   Chip,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React, { FC, ReactNode } from "react";
+import React, { FC, ReactNode, useState } from "react";
 import { toast } from "sonner";
 
 interface ProductCardProps {
@@ -33,6 +37,8 @@ interface ProductCardProps {
   slug: string;
   stocks: StockType;
   categoryId: string;
+  favorite: boolean;
+  compare: boolean;
   currencyPrice: {
     khr: number;
     usd: number;
@@ -48,11 +54,16 @@ const ProductCard: FC<ProductCardProps> = ({
   slug,
   stocks,
   currencyPrice,
-  categoryId
+  categoryId,
+  favorite,
+  compare,
 }) => {
-  const { addToCart } = useCart()
+  const { addToCart } = useCart();
+  const { refetch } = useAuth();
   const [addWishlist] = useMutation(ADD_WISHLIST);
   const [addWishlistCompare] = useMutation(ADD_COMPARE_WISHLIST);
+  const [isFavorite, setIsFavorite] = useState(favorite);
+  const [isCompare, setIsCompare] = useState(compare);
 
   return (
     <Card
@@ -219,22 +230,34 @@ const ProductCard: FC<ProductCardProps> = ({
               })
                 .then((res) => {
                   toast.success(res.data.storeAddWishlist.message);
+                  refetch();
+                  setIsFavorite(!isFavorite);
                 })
                 .catch((e) => {
                   toast.error(e.message);
                 });
             }}
           >
-            <Icon
-              icon="solar:heart-outline"
-              fontSize={30}
-              className="text-gray-500"
-            />
+            {isFavorite ? (
+              <Icon
+                icon="solar:heart-bold"
+                fontSize={30}
+                className="text-gray-500"
+              />
+            ) : (
+              <Icon
+                icon="solar:heart-outline"
+                fontSize={30}
+                className="text-gray-500"
+              />
+            )}
           </Button>
           <Button
             isIconOnly
             variant="light"
             radius="full"
+            // color="primary"
+            className={`${isCompare && `bg-gray-200`}`}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -243,18 +266,24 @@ const ProductCard: FC<ProductCardProps> = ({
                 variables: {
                   wishlistType: "COMPARE",
                   productId: id,
-                  categoryId: categoryId
+                  categoryId: categoryId,
                 },
               })
                 .then((res) => {
                   toast.success(res.data.storeAddCompare.message);
+                  refetch();
+                  setIsCompare(!isCompare);
                 })
                 .catch((e) => {
                   toast.error(e.message);
                 });
             }}
           >
-            Compare
+            <Icon
+              icon="mdi:compare-horizontal"
+              fontSize={30}
+              className="text-gray-500"
+            />
           </Button>
         </div>
       </CardFooter>

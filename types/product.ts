@@ -43,6 +43,8 @@ export type StockType = {
 export type MessageProduct = {
   product: ProductType;
   promotion: PromotionType;
+  favorite: boolean;
+  compare: boolean;
 };
 
 export type ProductType = {

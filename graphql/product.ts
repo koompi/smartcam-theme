@@ -196,6 +196,8 @@ export const GLOBAL_PRODUCT_FILTERING = gql`
       filter: $filter
     ) {
       products {
+        compare
+        favorite
         product {
           id
           createdAt

@@ -4,6 +4,8 @@ import { createContext, useContext, JSX, FC, useState, useEffect } from "react";
 import axios from "axios";
 import { UserType } from "@/types/user";
 import { ContextAuth } from "@/types/global";
+import { useQuery } from "@apollo/client";
+import { WISHLIST_NOTIFICATION } from "@/graphql/wishlist";
 
 export const AuthContext = createContext({});
 
@@ -48,6 +50,8 @@ const getUser = async () => {
 export const AppProvider: FC<Props> = (props) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
+  const {data, refetch} = useQuery(WISHLIST_NOTIFICATION);
+
 
   useEffect(() => {
     setLoading(true);
@@ -66,7 +70,7 @@ export const AppProvider: FC<Props> = (props) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user: user, loading: loading }}>
+    <AuthContext.Provider value={{ user: user, loading: loading, notifications: data?.storeNotifications, refetch: refetch  }}>
       {props.children}
     </AuthContext.Provider>
   );
