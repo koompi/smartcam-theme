@@ -13,7 +13,7 @@ export const ADD_COMPARE_WISHLIST = gql`
 `;
 
 export const REMOVE_PRODUCT_FROM_WISHLIST = gql`
-  mutation ($productId: String!) {
-    removeProductFromWishlist(productId: $productId)
+  mutation ($productId: String! $wishlistType: WishlistType!) {
+    removeProductFromWishlist(productId: $productId wishlistType: $wishlistType)
   }
 `;

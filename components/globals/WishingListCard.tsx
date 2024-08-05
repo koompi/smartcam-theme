@@ -123,10 +123,11 @@ const WishingListCard: FC<WishListProps> = ({
               onPress={() => {
                 removeProductFromEWishlist({
                   variables: {
-                    productId: id
+                    productId: id,
+                    wishlistType: "FAVORITE"
                   },
                 })
-                  .then((e) => {
+                  .then((_) => {
                     toast.success("Items has been to remove from wishlist");
                     refetch();
                   })
