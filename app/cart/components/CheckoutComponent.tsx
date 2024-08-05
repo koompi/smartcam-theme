@@ -32,7 +32,7 @@ import { ESTIMATION_PRICE } from "@/graphql/order";
 import { ProductType } from "@/types/product";
 import { ESTIMATE_PRICE } from "@/graphql/delivery";
 import RecommendProducts from "./RecommendProducts";
-import { GET_ALL_PRODUCTS } from "@/graphql/product";
+import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
 import { useBaray } from "@/hooks/baray";
 
 interface OrderCart {
@@ -80,7 +80,7 @@ const CheckoutComponent = () => {
     },
   });
 
-  const { data: products } = useQuery(GET_ALL_PRODUCTS, {
+  const { data: products } = useQuery(GLOBAL_PRODUCT_FILTERING, {
     variables: {
       filter: {
         limit: 10,
@@ -449,7 +449,7 @@ const CheckoutComponent = () => {
       </div>
       <div className="col-span-2">
         {page <= 0 ? (
-          <RecommendProducts products={products?.storeProducts?.products} />
+          <RecommendProducts products={products?.storeGlobalFilterProducts?.products} />
         ) : (
           <div className="sticky top-28 hidden sm:hidden lg:block">
             <Card shadow="sm" isBlurred>
