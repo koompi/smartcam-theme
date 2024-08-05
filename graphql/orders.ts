@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const GET_ORDERS = gql`
   query ($filter: OrderBy) {
-    storeOrders(filter: $filter) {
+    customerOrders(filter: $filter) {
       total
       pages
       orders {
@@ -31,9 +31,6 @@ export const GET_ORDERS = gql`
         code
         createdAt
         id
-        ownerId
-        status
-        tax
         discountUnitPrice {
           khr
           usd

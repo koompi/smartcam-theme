@@ -5,8 +5,8 @@ import { WISHLISTS } from "@/graphql/wishlist";
 import { ProductType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { cn } from "@/utils/cn";
-import { useQuery } from "@apollo/client";
-import { Icon } from "@iconify/react/dist/iconify.js"
+import { useMutation, useQuery } from "@apollo/client";
+import { Icon } from "@iconify/react/dist/iconify.js";
 import { LexicalReader } from "@/editor/LexicalReader";
 
 import {
@@ -19,6 +19,9 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import React, { useState, FC } from "react";
+import { RESET_ITEM_COMPARE_LIST } from "@/graphql/mutation/wishlist";
+import { toast } from "sonner";
+import Empty from "@/components/globals/Empty";
 
 interface Topic {
   title: string;
@@ -135,17 +138,47 @@ const ComparisonPage = () => {
     "description",
   ]);
 
-  const { data, loading } = useQuery(WISHLISTS, {
+  const { data, loading, refetch, error } = useQuery(WISHLISTS, {
     variables: {
       wishlistType: "COMPARE",
     },
   });
 
+  const [resetItemCompare] = useMutation(RESET_ITEM_COMPARE_LIST);
+
   return loading ? (
     <Spinner />
+  ) : error ? (
+    <Empty />
   ) : (
     <section className="container py-6">
-      <h1 className="text-2xl font-bold">Comparison</h1>
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-bold">Comparison</h1>
+        <div>
+          <Button 
+            color="primary"
+            variant="solid"
+            radius="full"
+            onPress={() => {
+              resetItemCompare({
+                variables: {
+                  compareId: data?.customerWishlists?.id,
+                },
+              })
+                .then((res) => {
+                  toast.success(res.data.resetCompareList.message);
+                  refetch();
+                })
+                .catch((e) => {
+                  toast.error(e.message);
+                });
+            }}
+            endContent={<Icon icon="solar:refresh-square-bold" fontSize={24} />}
+          >
+            Reset
+          </Button>
+        </div>
+      </div>
       <Spacer y={3} />
       <div className="flex flex-col gap-1 w-full">
         <CheckboxGroup
@@ -163,8 +196,8 @@ const ComparisonPage = () => {
           })}
         </CheckboxGroup>
         {/* <p className="mt-4 ml-1 text-default-500">
-          Selected: {groupSelected.join(", ")}
-        </p> */}
+        Selected: {groupSelected.join(", ")}
+      </p> */}
       </div>
       <Divider className="my-3" />
       <Spacer y={6} />
@@ -198,9 +231,17 @@ const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (props) => {
       case "category":
         return product.category.title.en;
       case "description":
-        return product.desc ? <LexicalReader data={product.desc}/> : "Desc not specified"; // Same as 'information' for this example
+        return product.desc ? (
+          <LexicalReader data={product.desc} />
+        ) : (
+          "Desc not specified"
+        ); // Same as 'information' for this example
       case "details":
-        return product.detail ? <LexicalReader data={product.detail}/> : "Details not specified"; // Handle if details are not present
+        return product.detail ? (
+          <LexicalReader data={product.detail} />
+        ) : (
+          "Details not specified"
+        ); // Handle if details are not present
       default:
         return ""; // Default case
     }
@@ -227,30 +268,38 @@ const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (props) => {
                 </Button>
               </div>
             </th>
-            {props.products?.map(({product, promotion }: {product: ProductType, promotion: PromotionType }) => (
-              <th key={product.id} className="py-2 px-4 ">
-                <div className="w-full col-span-1 flex flex-col items-center justify-center p-3">
-                  <Image
-                    radius="lg"
-                    alt={product.title}
-                    src={
-                      product?.thumbnail
-                        ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${product?.thumbnail}`
-                        : "/images/default-thumbnail.png"
-                    }
-                    className="h-60 mx-auto"
-                    isZoomed
-                  />
-                  <Button
-                    variant="light"
-                    color="primary"
-                    className="font-semibold"
-                  >
-                    Add to Cart
-                  </Button>
-                </div>
-              </th>
-            ))}
+            {props.products?.map(
+              ({
+                product,
+                promotion,
+              }: {
+                product: ProductType;
+                promotion: PromotionType;
+              }) => (
+                <th key={product.id} className="py-2 px-4 ">
+                  <div className="w-full col-span-1 flex flex-col items-center justify-center p-3">
+                    <Image
+                      radius="lg"
+                      alt={product.title}
+                      src={
+                        product?.thumbnail
+                          ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${product?.thumbnail}`
+                          : "/images/default-thumbnail.png"
+                      }
+                      className="h-60 mx-auto"
+                      isZoomed
+                    />
+                    <Button
+                      variant="light"
+                      color="primary"
+                      className="font-semibold"
+                    >
+                      Add to Cart
+                    </Button>
+                  </div>
+                </th>
+              )
+            )}
           </tr>
         </thead>
         <tbody>
@@ -262,11 +311,19 @@ const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (props) => {
               })}
             >
               <td className="py-6 px-4 font-bold capitalize">{topic}</td>
-              {props.products.map(({product, promotion }: {product: ProductType, promotion: PromotionType }) => (
-                <td key={`${product.id}-${topic}`} className="py-2 px-4">
-                  {renderTopicData(product, promotion, topic)}
-                </td>
-              ))}
+              {props.products.map(
+                ({
+                  product,
+                  promotion,
+                }: {
+                  product: ProductType;
+                  promotion: PromotionType;
+                }) => (
+                  <td key={`${product.id}-${topic}`} className="py-2 px-4">
+                    {renderTopicData(product, promotion, topic)}
+                  </td>
+                )
+              )}
             </tr>
           ))}
         </tbody>
