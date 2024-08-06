@@ -33,6 +33,8 @@ const PromotionPage = () => {
     return <Loading />;
   }
 
+  console.log("promotion", data?.promotionSpecialOffer.products);
+  
   return (
     <main>
       <Banner />
@@ -44,7 +46,7 @@ const PromotionPage = () => {
         {data?.promotionSpecialOffer.products.length <= 0 && <Empty />}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {Array.from(
-            data?.promotionSpecialOffer.products,
+            data?.promotionSpecialOffer.products.filter((item: any) => item.product),
             (res: ProductProps, idx) => {
               const {
                 thumbnail,
