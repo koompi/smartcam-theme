@@ -22,7 +22,7 @@ import {
   Link as MyLink,
   cn,
 } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { Menubar } from "./Menubar";
 import { usePathname, useRouter } from "next/navigation";
@@ -40,6 +40,7 @@ export const MainNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [popOpen, setPopOpen] = useState(true);
+  const cartIconRef = useRef<HTMLDivElement>(null);
 
   // const {data, refetch} = useQuery(WISHLIST_NOTIFICATION)
 
@@ -382,6 +383,7 @@ export const MainNavbar = () => {
           <NavbarItem className="mr-12">
             {/* <Link href="/cart"> */}
             <Badge
+              ref={cartIconRef}
               color="danger"
               content={cartItems?.length}
               isInvisible={cartItems?.length <= 0}
@@ -397,10 +399,10 @@ export const MainNavbar = () => {
                 <Icon
                   icon={
                     pathname === "/cart"
-                      ? "solar:bag-3-bold"
-                      : "solar:bag-3-linear"
+                      ? "solar:cart-large-minimalistic-bold"
+                      : "solar:cart-large-minimalistic-bold-duotone"
                   }
-                  fontSize={27}
+                  fontSize={30}
                   className="text-primary"
                 />
               </Button>

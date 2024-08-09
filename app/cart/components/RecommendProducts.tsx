@@ -32,10 +32,10 @@ export default RecommendProducts;
 const RecommendCard: FC<{ props: Props }> = ({ props }) => {
   // const { addToCart } = useCart();
   // const router = useRouter();
+
   return (
     <>
-      {/* <Link href={`/products/${props.slug}`}> */}
-      <Link href={`#`}>
+      <Link href={`/products/${props.product?.slug}`}>
         <Card isBlurred shadow="sm" className="group">
           <CardBody>
             <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 items-center justify-center">
@@ -62,9 +62,6 @@ const RecommendCard: FC<{ props: Props }> = ({ props }) => {
                     </h3>
                     <p className="text-small line-clamp-1 mb-3">
                       {formatToUSD(props.product.price)}
-                    </p>
-                    <p className="text-small line-clamp-1 mb-3">
-                      {props.product.desc}
                     </p>
                     <RatingRadioGroup
                       hideStarsText

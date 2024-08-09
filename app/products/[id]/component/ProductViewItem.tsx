@@ -190,19 +190,24 @@ export const ProductViewItem = React.forwardRef<
           <BreadcrumbItem href="/products">Products</BreadcrumbItem>
           {props?.category && (
             <BreadcrumbItem
-              href={`/products/?search=${search ? search : ""}&brands=${brands ? brands : ""
-                }&category=${props?.category?.id ? props?.category?.id : ""
-                }&sort=${sortParam ? sortParam : ""}`}
+              href={`/products/?search=${search ? search : ""}&brands=${
+                brands ? brands : ""
+              }&category=${
+                props?.category?.id ? props?.category?.id : ""
+              }&sort=${sortParam ? sortParam : ""}`}
             >
               {props?.category?.title?.en}
             </BreadcrumbItem>
           )}
           {props?.subcategories.length > 0 && (
             <BreadcrumbItem
-              href={`/products/?search=${search ? search : ""}&brands=${brands ? brands : ""
-                }&category=${props?.category?.id ? props?.category?.id : ""
-                }&sub_category=${props?.subcategories[0]?.id ? props?.subcategories[0]?.id : ""
-                }&sort=${sortParam ? sortParam : ""}`}
+              href={`/products/?search=${search ? search : ""}&brands=${
+                brands ? brands : ""
+              }&category=${
+                props?.category?.id ? props?.category?.id : ""
+              }&sub_category=${
+                props?.subcategories[0]?.id ? props?.subcategories[0]?.id : ""
+              }&sort=${sortParam ? sortParam : ""}`}
             >
               {props?.subcategories[0]?.title?.en}
             </BreadcrumbItem>
@@ -221,7 +226,7 @@ export const ProductViewItem = React.forwardRef<
                   onSwiper={setThumbsSwiper as any}
                   loop={true}
                   autoplay={{
-                    delay: 9000,
+                    delay: 5000,
                     disableOnInteraction: false,
                   }}
                   spaceBetween={10}
@@ -247,9 +252,10 @@ export const ProductViewItem = React.forwardRef<
                           <Image
                             alt="image"
                             radius="lg"
-                            src={`${process.env.NEXT_PUBLIC_DRIVE ??
+                            src={`${
+                              process.env.NEXT_PUBLIC_DRIVE ??
                               "https://drive.backend.riverbase.org"
-                              }/api/drive?hash=${preview}`}
+                            }/api/drive?hash=${preview}`}
                             className="h-full max-h-[11.5rem] relative w-[30rem] cursor-pointer object-cover object-center"
                           />
                         </div>
@@ -272,7 +278,7 @@ export const ProductViewItem = React.forwardRef<
                   Pagination,
                 ]}
                 autoplay={{
-                  delay: 9000,
+                  delay: 5000,
                   disableOnInteraction: false,
                 }}
                 zoom={true}
@@ -294,9 +300,10 @@ export const ProductViewItem = React.forwardRef<
                         muted
                       >
                         <source
-                          src={`${process.env.NEXT_PUBLIC_DRIVE ??
+                          src={`${
+                            process.env.NEXT_PUBLIC_DRIVE ??
                             "https://drive.backend.riverbase.org"
-                            }/api/drive?hash=${preview}`}
+                          }/api/drive?hash=${preview}`}
                           type="video/mp4"
                         />
                       </video>
@@ -304,9 +311,10 @@ export const ProductViewItem = React.forwardRef<
                       <div className="swiper-zoom-container grid place-items-center place-content-center h-full object-contain object-center">
                         <Image
                           alt="Product thumbnail"
-                          src={`${process.env.NEXT_PUBLIC_DRIVE ??
+                          src={`${
+                            process.env.NEXT_PUBLIC_DRIVE ??
                             "https://drive.backend.riverbase.org"
-                            }/api/drive?hash=${preview}`}
+                          }/api/drive?hash=${preview}`}
                           className="h-[45dvh] sm:h-[45dvh] lg:h-[60dvh]"
                         />
                       </div>
@@ -375,9 +383,10 @@ export const ProductViewItem = React.forwardRef<
                   <h1 className="text-xl font-bold tracking-tight">
                     {title}
                     {props.promotion.discount &&
-                      ` - (${props.promotion?.discount.discountType == "PRICE"
-                        ? `$${props.promotion?.discount.discountPrice}`
-                        : `${props.promotion?.discount.discountPercentage}%`
+                      ` - (${
+                        props.promotion?.discount.discountType == "PRICE"
+                          ? `$${props.promotion?.discount.discountPrice}`
+                          : `${props.promotion?.discount.discountPercentage}%`
                       })`}
                   </h1>
                   <Spacer y={6} />
@@ -395,12 +404,12 @@ export const ProductViewItem = React.forwardRef<
                           $
                           {props?.promotion?.discount.discountType === "PRICE"
                             ? variant.price -
-                            (props.promotion.discount.discountPrice ?? 0)
+                              (props.promotion.discount.discountPrice ?? 0)
                             : variant.price -
-                            ((props.promotion?.discount.discountPercentage ??
-                              0) *
-                              variant.price) /
-                            100}
+                              ((props.promotion?.discount.discountPercentage ??
+                                0) *
+                                variant.price) /
+                                100}
                         </label>
                       </div>
                     ) : (
@@ -470,9 +479,10 @@ export const ProductViewItem = React.forwardRef<
                                   <div className="grid items-center grid-cols-5 justify-between">
                                     <Image
                                       alt="variants"
-                                      src={`${process.env.NEXT_PUBLIC_DRIVE ??
+                                      src={`${
+                                        process.env.NEXT_PUBLIC_DRIVE ??
                                         "https://drive.backend.riverbase.org"
-                                        }/api/drive?hash=${item?.previews}`}
+                                      }/api/drive?hash=${item?.previews}`}
                                       className="h-12 col-span-1"
                                       radius="md"
                                     />
@@ -750,9 +760,10 @@ export const ProductViewItem = React.forwardRef<
               <h1 className="text-2xl font-bold tracking-tight">
                 {title}
                 {props.promotion.discount &&
-                  ` - (${props.promotion?.discount.discountType == "PRICE"
-                    ? `$${props.promotion?.discount.discountPrice}`
-                    : `${props.promotion?.discount.discountPercentage}%`
+                  ` - (${
+                    props.promotion?.discount.discountType == "PRICE"
+                      ? `$${props.promotion?.discount.discountPrice}`
+                      : `${props.promotion?.discount.discountPercentage}%`
                   })`}
               </h1>
               <Spacer y={6} />
@@ -770,11 +781,11 @@ export const ProductViewItem = React.forwardRef<
                       $
                       {props?.promotion?.discount.discountType === "PRICE"
                         ? variant.price -
-                        (props.promotion.discount.discountPrice ?? 0)
+                          (props.promotion.discount.discountPrice ?? 0)
                         : variant.price -
-                        ((props.promotion?.discount.discountPercentage ?? 0) *
-                          variant.price) /
-                        100}
+                          ((props.promotion?.discount.discountPercentage ?? 0) *
+                            variant.price) /
+                            100}
                     </label>
                   </div>
                 ) : (
@@ -844,9 +855,10 @@ export const ProductViewItem = React.forwardRef<
                               <div className="grid items-center grid-cols-5 justify-between">
                                 <Image
                                   alt="variants"
-                                  src={`${process.env.NEXT_PUBLIC_DRIVE ??
+                                  src={`${
+                                    process.env.NEXT_PUBLIC_DRIVE ??
                                     "https://drive.backend.riverbase.org"
-                                    }/api/drive?hash=${item?.previews}`}
+                                  }/api/drive?hash=${item?.previews}`}
                                   className="h-12 col-span-1"
                                   radius="md"
                                 />

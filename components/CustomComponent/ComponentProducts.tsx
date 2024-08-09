@@ -38,7 +38,6 @@ export default function ComponentProducts({
   const maxPrice = (searchParams.get("max_price") as string) || null;
   const sort = searchParams.get("sort") ?? null;
 
-
   const [page, setPage] = useState(parseInt(offset));
 
   const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
@@ -95,7 +94,7 @@ export default function ComponentProducts({
               slug,
               stocks,
               currencyPrice,
-              category
+              category,
             } = res?.product;
             return (
               <ProductCard
@@ -143,7 +142,7 @@ export default function ComponentProducts({
               slug,
               stocks,
               currencyPrice,
-              category
+              category,
             } = res?.product;
             return (
               <ProductCard
@@ -191,7 +190,7 @@ export default function ComponentProducts({
               slug,
               stocks,
               currencyPrice,
-              category
+              category,
             } = res?.product;
             return (
               <ProductCard
@@ -239,7 +238,7 @@ export default function ComponentProducts({
               slug,
               stocks,
               currencyPrice,
-              category
+              category,
             } = res?.product;
             return (
               <ProductCard
@@ -286,7 +285,7 @@ export default function ComponentProducts({
               slug,
               stocks,
               currencyPrice,
-              category
+              category,
             } = res?.product;
             return (
               <ProductCard
@@ -330,7 +329,6 @@ export default function ComponentProducts({
         ? totalPages
         : pages
       : totalPages;
-  
 
   return (
     <>

@@ -27,8 +27,9 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React, { FC, ReactNode, useState } from "react";
+import React, { FC, ReactNode, useRef, useState } from "react";
 import { toast } from "sonner";
+import { gsap } from "gsap";
 
 interface ProductCardProps {
   id: string;
@@ -76,7 +77,7 @@ const ProductCard: FC<ProductCardProps> = ({
       isHoverable
       as={Link}
       href={`/products/${slug}`}
-      className=" flex flex-col flex-grow col-span-1 h-full group items-stretch"
+      className="flex flex-col flex-grow col-span-1 h-full group items-stretch"
     >
       {promotion?.discount?.discountType && (
         <Chip
@@ -162,7 +163,7 @@ const ProductCard: FC<ProductCardProps> = ({
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <div className="flex justify-center items-center overflow-hidden">
+        <div className="flex justify-center items-center overflow-hidden ">
           <Image
             alt="products"
             src={
@@ -219,22 +220,24 @@ const ProductCard: FC<ProductCardProps> = ({
         </div>
       </CardBody>
       <CardFooter className="items-center justify-between hidden sm:hidden lg:flex">
-        <Button
-          radius="full"
-          color="primary"
-          startContent={
-            <Icon icon="solar:cart-large-minimalistic-bold" fontSize={21} />
-          }
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            addToCart(id);
-            toast.success("The product is added into the cart!");
-          }}
-          isDisabled={stocks?.status === "OUT-STOCK"}
-        >
-          Add to Cart
-        </Button>
+        <div className="relative">
+          <Button
+            radius="full"
+            color="primary"
+            startContent={
+              <Icon icon="solar:cart-large-minimalistic-bold" fontSize={21} />
+            }
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              addToCart(id);
+              toast.success("The product is added into the cart!");
+            }}
+            isDisabled={stocks?.status === "OUT-STOCK"}
+          >
+            Add to Cart
+          </Button>
+        </div>
 
         <div>
           <Button
