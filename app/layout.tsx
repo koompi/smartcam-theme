@@ -10,6 +10,7 @@ import { AppProvider } from "@/context/useAuth";
 import { CartProvider } from "@/context/useCart";
 import ThemeProvider from "@/context/useTheme";
 import { BarayProvider } from "@/context/baray";
+import ChatToCustomer from "@/components/globals/ChatToCustomer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -73,6 +74,7 @@ export default function RootLayout({
                 <ThemeProvider>
                   <MainNavbar />
                   {children}
+                  <ChatToCustomer />
                   <BackToTop />
                   <MainFooter />
                   <MobileNavigator />

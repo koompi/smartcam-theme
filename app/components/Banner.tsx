@@ -65,7 +65,7 @@ const Banner = () => {
           {data?.bannerSpacialOffer.map((res: any, idx: number) => (
             <SwiperSlide key={idx}>
               {res.products.length > 0 && (
-                <div className="hidden sm:hidden lg:flex items-center justify-center">
+                <div className="hidden sm:hidden lg:flex items-center justify-center absolute z-30 bottom-12">
                   <Button
                     as={Link}
                     href={`/products/${res?.products[0]?.product?.slug}`}
@@ -73,7 +73,7 @@ const Banner = () => {
                     variant="shadow"
                     color="primary"
                     radius="full"
-                    className="absolute z-30 bottom-12 px-12"
+                    className=" px-12"
                     endContent={<Icon icon="solar:arrow-right-bold" />}
                   >
                     See More

@@ -147,6 +147,21 @@ export const Menubar = () => {
         <NavbarItem>
           <Link
             href="/promotions"
+            className="relative py-2 group btn-effect-2 rounded-xl"
+          >
+            <Button
+              radius="lg"
+              variant="flat"
+              color="primary"
+              className="px-5 py-2 text-md font-medium"
+            >
+              Special Offer
+            </Button>
+          </Link>
+        </NavbarItem>
+        {/* <NavbarItem>
+          <Link
+            href="/promotions"
             className="relative px-5 py-2 font-medium text-white group"
           >
             <span
@@ -171,7 +186,7 @@ export const Menubar = () => {
             <span className="absolute bottom-0 right-0 hidden w-10 h-20 transition-all duration-100 ease-out transform translate-x-10 translate-y-8 bg-primary/60 -rotate-12"></span>
             <span className="relative"> Special Offer</span>
           </Link>
-        </NavbarItem>
+        </NavbarItem> */}
         <NavbarItem>
           <Popover placement="bottom" showArrow offset={12}>
             <PopoverTrigger>

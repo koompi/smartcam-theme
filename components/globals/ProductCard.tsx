@@ -21,6 +21,10 @@ import {
   Button,
   Image,
   Chip,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
 } from "@nextui-org/react";
 import Link from "next/link";
 import React, { FC, ReactNode, useState } from "react";
@@ -90,7 +94,7 @@ const ProductCard: FC<ProductCardProps> = ({
         </Chip>
       )}
       <CardBody className="flex flex-col flex-grow">
-        {/* <Dropdown
+        <Dropdown
           showArrow
           classNames={{
             base: "before:bg-default-200", // change arrow background
@@ -125,6 +129,25 @@ const ProductCard: FC<ProductCardProps> = ({
               startContent={
                 <Icon icon="material-symbols:compare" fontSize={21} />
               }
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                addWishlistCompare({
+                  variables: {
+                    wishlistType: "COMPARE",
+                    productId: id,
+                    categoryId: categoryId,
+                  },
+                })
+                  .then((res) => {
+                    toast.success(res.data.storeAddCompare.message);
+                    refetch();
+                    setIsCompare(!isCompare);
+                  })
+                  .catch((e) => {
+                    toast.error(e.message);
+                  });
+              }}
             >
               Add to Compare
             </DropdownItem>
@@ -138,7 +161,7 @@ const ProductCard: FC<ProductCardProps> = ({
               Buy Now
             </DropdownItem>
           </DropdownMenu>
-        </Dropdown> */}
+        </Dropdown>
         <div className="flex justify-center items-center overflow-hidden">
           <Image
             alt="products"
@@ -242,7 +265,7 @@ const ProductCard: FC<ProductCardProps> = ({
               <Icon
                 icon="solar:heart-bold"
                 fontSize={30}
-                className="text-gray-500"
+                className="text-danger"
               />
             ) : (
               <Icon
@@ -252,7 +275,7 @@ const ProductCard: FC<ProductCardProps> = ({
               />
             )}
           </Button>
-          <Button
+          {/* <Button
             isIconOnly
             variant="light"
             radius="full"
@@ -284,7 +307,7 @@ const ProductCard: FC<ProductCardProps> = ({
               fontSize={30}
               className="text-gray-500"
             />
-          </Button>
+          </Button> */}
         </div>
       </CardFooter>
     </Card>

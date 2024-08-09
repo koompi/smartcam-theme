@@ -210,12 +210,14 @@ const MainFooter = () => {
             </div>
           </div>
 
-          <hr className="mt-16 mb-10 border-gray-200" />
-          <p className="text-sm text-center text-gray-600">
-            © Copyright 2024, All Rights Reserved by Smartcam Eletronics
-          </p>
+          {/* <hr className="mt-16 mb-10 border-gray-200" /> */}
         </div>
       </footer>
+      <div className="bg-gradient-to-r from-primary to-primary-800 py-3">
+        <p className="text-sm text-center text-white">
+          © Copyright 2024, All Rights Reserved by Smartcam Eletronics
+        </p>
+      </div>
     </section>
   );
 };

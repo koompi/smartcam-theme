@@ -50,12 +50,12 @@ export default function Home() {
             : [...brands?.split(","), cat]
           : [...brands?.split(",")]
         : cat
-        ? sub
-          ? [sub]
-          : [cat]
-        : search
-        ? []
-        : null,
+          ? sub
+            ? [sub]
+            : [cat]
+          : search
+            ? []
+            : null,
       keyword: search ? search : search,
       status: price ? "price" : null,
       range: rangePrice,

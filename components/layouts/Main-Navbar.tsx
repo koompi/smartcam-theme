@@ -31,8 +31,6 @@ import { useCart } from "@/context/useCart";
 import Link from "next/link";
 import { Search } from "./Search";
 import { Drawer } from "vaul";
-import { useQuery } from "@apollo/client";
-import { WISHLIST_NOTIFICATION } from "@/graphql/wishlist";
 
 export const MainNavbar = () => {
   const router = useRouter();
@@ -335,7 +333,11 @@ export const MainNavbar = () => {
         >
           <NavbarItem isActive={pathname === "/compare"}>
             {/* <Link href="/compare"> */}
-            <Badge color="danger" content={notifications ? notifications.count_compare : 0} shape="circle">
+            <Badge
+              color="danger"
+              content={notifications ? notifications.count_compare : 0}
+              shape="circle"
+            >
               <Button
                 as={MyLink}
                 color={pathname === "/compare" ? "primary" : "default"}
@@ -352,7 +354,11 @@ export const MainNavbar = () => {
             {/* </Link> */}
           </NavbarItem>
           <NavbarItem>
-            <Badge color="danger" content={notifications ? notifications?.count_favorite : 0} shape="circle">
+            <Badge
+              color="danger"
+              content={notifications ? notifications?.count_favorite : 0}
+              shape="circle"
+            >
               <Button
                 as={MyLink}
                 isIconOnly

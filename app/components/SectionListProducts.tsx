@@ -129,13 +129,13 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
                   slug,
                   stocks,
                   currencyPrice,
-                  category
+                  category,
                 } = res?.product;
 
                 return (
                   <div
                     key={idx}
-                    className="flex-shrink-0 w-1/5 h-full snap-center"
+                    className="flex-shrink-0 w-1/6 h-full snap-center"
                   >
                     <ProductCard
                       id={id}
