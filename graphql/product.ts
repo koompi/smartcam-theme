@@ -3,6 +3,8 @@ import { gql } from "@apollo/client";
 export const GET_PRODUCT = gql`
   query ($slug: String!) {
     storeProduct(slug: $slug) {
+      compare
+      favorite
       product {
         id
         ownerId

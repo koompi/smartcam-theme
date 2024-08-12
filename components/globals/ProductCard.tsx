@@ -27,9 +27,8 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React, { FC, ReactNode, useRef, useState } from "react";
+import React, { FC, ReactNode, useState } from "react";
 import { toast } from "sonner";
-import { gsap } from "gsap";
 
 interface ProductCardProps {
   id: string;
@@ -247,7 +246,6 @@ const ProductCard: FC<ProductCardProps> = ({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              // add product to wishlist
               addWishlist({
                 variables: {
                   wishlistType: "FAVORITE",

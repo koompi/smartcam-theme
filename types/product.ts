@@ -73,6 +73,8 @@ export type ProductType = {
   category: Category;
   stocks: StockType;
   subcategories: SubCategory[];
+  favorite: boolean;
+  compare: boolean;
 };
 
 // dynamic types

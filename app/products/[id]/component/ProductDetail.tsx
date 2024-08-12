@@ -22,6 +22,8 @@ export default function ProductDetail(props: { slug: string }) {
       ) : (
         <ProductViewItem
           {...data?.storeProduct?.product}
+          favorite={data?.storeProduct?.favorite}
+          compare={data?.storeProduct?.compare}
           promotion={data?.storeProduct?.promotion}
         />
       )}

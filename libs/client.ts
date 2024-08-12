@@ -1,7 +1,6 @@
 "react-server";
 
-const ENDPOINT =
-  process.env.NEXT_PUBLIC_BACKEND ?? "";
+const ENDPOINT = process.env.NEXT_PUBLIC_BACKEND ?? "";
 
 const GRAPHQL_ENDPOINT = `${ENDPOINT}/graphql/store?store_id=${
   process.env.NEXT_PUBLIC_ID_STORE ?? ""
