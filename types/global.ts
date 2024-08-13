@@ -6,7 +6,7 @@ export type ContextAuth = {
   loading: boolean;
   login: (model: string | null) => void;
   notifications: any;
-  refetch: Function,
+  refetch: Function;
 };
 
 export type CartItem = {
@@ -17,10 +17,10 @@ export type CartItem = {
 export type CartContextType = {
   cartItems: CartItem[];
   membershipId: string;
-  wishlistFav: any,
-  wishlistCompare: any,
-  refetchFav: Function,
-  addToCart: (product_id: string) => void;
+  wishlistFav: any;
+  wishlistCompare: any;
+  refetchFav: Function;
+  addToCart: (product_id: string, qty?: number) => void;
   minusCart: (product_id: string) => void;
   removeFromCart: (id: String) => void;
   addCarts: (cartItems: CartItem[]) => void;

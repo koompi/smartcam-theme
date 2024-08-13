@@ -109,6 +109,7 @@ export const ProductViewItem = React.forwardRef<
     stocks,
     favorite,
     compare,
+    offer,
     ...props
   }) => {
     const searchParams = useSearchParams();
@@ -123,6 +124,7 @@ export const ProductViewItem = React.forwardRef<
     const [isFavorite, setIsFavorite] = useState(favorite);
     const { refetch } = useAuth();
     const [isCompare, setIsCompare] = useState(compare);
+    const [qty, setQty] = useState<number>(1);
 
     const [addWishlistCompare] = useMutation(ADD_COMPARE_WISHLIST);
     const [addWishlist] = useMutation(ADD_WISHLIST);
@@ -446,10 +448,24 @@ export const ProductViewItem = React.forwardRef<
                     (Reviews)
                   </div>
                   <Spacer y={6} />
+                  {offer?.promotionStatus === "UP COMING" && (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <Icon icon="hugeicons:discount" fontSize={24} />
+                        <p>
+                          Big Offer at{" "}
+                          <span className="font-semibold text-lg">
+                            {offer?.startPromotion}
+                          </span>
+                        </p>
+                      </div>
+                      <Spacer y={1} />
+                    </>
+                  )}
                   <div className="flex items-center gap-2 text-default-700">
                     <Icon icon="solar:box-line-duotone" fontSize={24} />
                     {stocks?.status === "IN-STOCK" && (
-                      <p className="text-small font-semibold text-primary">
+                      <p className="text-small font-semibold">
                         {stocks?.status}
                       </p>
                     )}
@@ -534,41 +550,153 @@ export const ProductViewItem = React.forwardRef<
                         isIconOnly
                         variant="flat"
                         radius="full"
+                        isDisabled={qty <= 1}
+                        onPress={() => setQty(qty - 1)}
                       >
                         <Icon icon="ic:baseline-minus" fontSize={24} />
                       </Button>
                       <Input
                         type="number"
                         min={1}
-                        defaultValue="1"
+                        defaultValue={qty.toString()}
+                        value={qty.toString()}
                         variant="flat"
                         radius="full"
                         className="bg-white"
-                      ></Input>
+                        onValueChange={(value) => {
+                          setQty(parseInt(value.toString()));
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "." || e.key === ",") {
+                            e.preventDefault();
+                          }
+                        }}
+                        onPaste={(e) => {
+                          let pasteData = e.clipboardData.getData("text");
+
+                          if (pasteData) {
+                            e.preventDefault();
+                            pasteData.replace(/[^0-9]*/g, "");
+                          }
+                        }}
+                        pattern="[0-9]"
+                      />
                       <Button
                         isIconOnly
                         variant="flat"
                         radius="full"
                         color="default"
                         size="sm"
+                        onPress={() => setQty(qty + 1)}
                       >
                         <Icon icon="material-symbols:add" fontSize={24} />
                       </Button>
                     </div>
                     <Button
-                      variant="bordered"
-                      radius="full"
+                      isIconOnly
+                      variant="flat"
                       color="primary"
-                      isDisabled
+                      radius="full"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        addWishlist({
+                          variables: {
+                            wishlistType: "FAVORITE",
+                            productId: props.id,
+                          },
+                        })
+                          .then((res) => {
+                            toast.success(res.data.storeAddWishlist.message);
+                            refetch();
+                            setIsFavorite(!isFavorite);
+                          })
+                          .catch((e) => {
+                            toast.error(e.message);
+                          });
+                      }}
                     >
-                      <Icon icon="solar:heart-bold" fontSize={24} />
+                      {isFavorite ? (
+                        <Icon icon="solar:heart-bold" fontSize={24} />
+                      ) : (
+                        <Icon icon="solar:heart-outline" fontSize={24} />
+                      )}
                     </Button>
                   </div>
-                  {/* <p className="text-sm text-gray-600 mt-3">
-                    {stocks?.amount} available
-                  </p> */}
-
-                  <div className="grid grid-cols-12 place-items-center gap-3 mt-6">
+                  <div className="mt-6">
+                    <Button
+                      className="col-span-6"
+                      variant="shadow"
+                      size="lg"
+                      radius="full"
+                      color="primary"
+                      fullWidth
+                      startContent={
+                        <Icon icon="solar:bag-3-bold" fontSize={24} />
+                      }
+                    >
+                      Buy Now
+                    </Button>
+                    <div className="grid grid-cols-12 place-items-center gap-3 mt-3">
+                      <Button
+                        className="col-span-6"
+                        variant="flat"
+                        size="lg"
+                        radius="full"
+                        color="primary"
+                        fullWidth
+                        startContent={
+                          <Icon icon="solar:cart-large-2-bold" fontSize={24} />
+                        }
+                        isDisabled={stocks?.status === "OUT-STOCK"}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          addToCart(variant.id ? variant.id : props.id, qty);
+                          toast.success("The product is added into the cart!");
+                        }}
+                      >
+                        Add to Cart
+                      </Button>
+                      <Button
+                        className="col-span-6"
+                        variant={isCompare ? "flat" : "bordered"}
+                        size="lg"
+                        radius="full"
+                        color={isCompare ? "danger" : "primary"}
+                        fullWidth
+                        startContent={
+                          isCompare ? (
+                            <Icon icon="icon-park-twotone:back" fontSize={20} />
+                          ) : (
+                            <Icon icon="fluent-mdl2:compare" fontSize={20} />
+                          )
+                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          addWishlistCompare({
+                            variables: {
+                              wishlistType: "COMPARE",
+                              productId: props.id,
+                              categoryId: props.category.id,
+                            },
+                          })
+                            .then((res) => {
+                              toast.success(res.data.storeAddCompare.message);
+                              refetch();
+                              setIsCompare(!isCompare);
+                            })
+                            .catch((e) => {
+                              toast.error(e.message);
+                            });
+                        }}
+                      >
+                        {isCompare ? "Undo" : "Compare"}
+                      </Button>
+                    </div>
+                  </div>
+                  {/* <div className="grid grid-cols-12 place-items-center gap-3 mt-6">
                     <Button
                       className="col-span-6"
                       variant="shadow"
@@ -603,7 +731,7 @@ export const ProductViewItem = React.forwardRef<
                     >
                       Add to Cart
                     </Button>
-                  </div>
+                  </div> */}
                   <div className="flex items-center justify-end mt-6">
                     <Dropdown placement="top" size="lg" type="listbox">
                       <DropdownTrigger>
@@ -720,7 +848,7 @@ export const ProductViewItem = React.forwardRef<
                         className="rounded-xl sm:rounded-xl lg:rounded-3xl"
                         shadow="none"
                       >
-                        <CardBody className="px-0 sm:px-0 lg:px-3 lg:py-6">
+                        <CardBody className="px-3 sm:px-3 lg:px-6 lg:py-6">
                           <LexicalReader data={detail} />
                         </CardBody>
                       </Card>
@@ -828,6 +956,20 @@ export const ProductViewItem = React.forwardRef<
                 (Rerviews)
               </div>
               <Spacer y={6} />
+              {offer?.promotionStatus === "UP COMING" && (
+                <>
+                  <div className="flex items-center gap-2">
+                    <Icon icon="hugeicons:discount" fontSize={24} />
+                    <p>
+                      Big Offer at{" "}
+                      <span className="font-semibold text-lg">
+                        {offer?.startPromotion}
+                      </span>
+                    </p>
+                  </div>
+                  <Spacer y={1} />
+                </>
+              )}
               <div className="flex items-center gap-2 text-default-700">
                 <Icon icon="solar:box-line-duotone" fontSize={24} />
                 {stocks?.status === "IN-STOCK" && (
@@ -916,30 +1058,49 @@ export const ProductViewItem = React.forwardRef<
                     isIconOnly
                     variant="flat"
                     radius="full"
+                    isDisabled={qty <= 1}
+                    onPress={() => setQty(qty - 1)}
                   >
                     <Icon icon="ic:baseline-minus" fontSize={24} />
                   </Button>
                   <Input
                     type="number"
                     min={1}
-                    defaultValue="1"
+                    defaultValue={qty.toString()}
+                    value={qty.toString()}
                     variant="flat"
                     radius="full"
                     className="bg-white"
-                  ></Input>
+                    onValueChange={(value) => {
+                      setQty(parseInt(value.toString()));
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "." || e.key === ",") {
+                        e.preventDefault();
+                      }
+                    }}
+                    onPaste={(e) => {
+                      let pasteData = e.clipboardData.getData("text");
+                      if (pasteData) {
+                        e.preventDefault();
+                        pasteData.replace(/[^0-9]*/g, "");
+                      }
+                    }}
+                  />
                   <Button
                     isIconOnly
                     variant="flat"
                     radius="full"
                     color="default"
                     size="sm"
+                    onPress={() => setQty(qty + 1)}
                   >
                     <Icon icon="material-symbols:add" fontSize={24} />
                   </Button>
                 </div>
                 <Button
                   isIconOnly
-                  variant="bordered"
+                  variant="flat"
                   color="primary"
                   radius="full"
                   onClick={(e) => {
@@ -967,14 +1128,6 @@ export const ProductViewItem = React.forwardRef<
                     <Icon icon="solar:heart-outline" fontSize={24} />
                   )}
                 </Button>
-                {/* <Button
-                  variant="bordered"
-                  radius="full"
-                  isIconOnly
-                  color="primary"
-                >
-                  <Icon icon="solar:heart-linear" fontSize={24} />
-                </Button> */}
               </div>
 
               {/* <p className="text-sm text-gray-600 mt-3">
@@ -1008,7 +1161,7 @@ export const ProductViewItem = React.forwardRef<
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      addToCart(variant.id ? variant.id : props.id);
+                      addToCart(variant.id ? variant.id : props.id, qty);
                       toast.success("The product is added into the cart!");
                     }}
                   >

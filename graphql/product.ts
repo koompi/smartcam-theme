@@ -23,6 +23,13 @@ export const GET_PRODUCT = gql`
           amount
           status
         }
+        promotion {
+          startPromotion
+          promotionType
+          promotionStatus
+          endPromotion
+          availability
+        }
         category {
           id
           title {
@@ -298,6 +305,11 @@ export const PROMOTIONS_BY_TYPE = gql`
           previews
           status
           detail
+          promotion {
+            discountType
+            startPromotion
+            endPromotion
+          }
           currencyPrice {
             khr
             usd

@@ -49,7 +49,7 @@ export function CartProvider(props: { children: JSX.Element }) {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
 
-  const addToCart = (product_id: string) => {
+  const addToCart = (product_id: string, qty?: number) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
         (item) => item.productId === product_id
@@ -59,7 +59,7 @@ export function CartProvider(props: { children: JSX.Element }) {
           res.productId === product_id ? { ...res, qty: res.qty + 1 } : res
         );
       }
-      const newItem: CartItem = { productId: product_id, qty: 1 };
+      const newItem: CartItem = { productId: product_id, qty: qty ? qty : 1 };
       const updatedItems = [...prevItems, newItem];
       localStorage.setItem("cartItems", JSON.stringify(updatedItems));
       return updatedItems;
@@ -112,7 +112,7 @@ export function CartProvider(props: { children: JSX.Element }) {
 
   if (loading || loading_store) {
     return null;
-  }  
+  }
 
   return (
     <CartContext.Provider

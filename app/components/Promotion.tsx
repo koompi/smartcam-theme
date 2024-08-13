@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardBody, Image, Spacer } from "@nextui-org/react";
+import { Card, CardBody, Spacer } from "@nextui-org/react";
 import React from "react";
 import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -43,6 +43,8 @@ export const Promotion = () => {
   } else if (data?.promotionSpecialOffer?.products.length <= 0) {
     return null;
   }
+
+  // console.log("data", data);
 
   return (
     <section className="hidden sm:hidden lg:block py-9 bg-white">
@@ -208,6 +210,8 @@ export const Promotion = () => {
                       )
                       .slice(0, 3)
                       .map((res: ProductProps, idx: number) => {
+                        // console.log("res", res);
+
                         return (
                           <Link
                             href={`/products/${res.product?.slug}`}

@@ -25,6 +25,7 @@ export default function ProductDetail(props: { slug: string }) {
           favorite={data?.storeProduct?.favorite}
           compare={data?.storeProduct?.compare}
           promotion={data?.storeProduct?.promotion}
+          offer={data?.storeProduct?.product?.promotion}
         />
       )}
     </>

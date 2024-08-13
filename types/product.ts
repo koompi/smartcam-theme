@@ -75,6 +75,7 @@ export type ProductType = {
   subcategories: SubCategory[];
   favorite: boolean;
   compare: boolean;
+  offer: any;
 };
 
 // dynamic types

@@ -223,9 +223,7 @@ const ProductCard: FC<ProductCardProps> = ({
           <Button
             radius="full"
             color="primary"
-            startContent={
-              <Icon icon="solar:cart-large-minimalistic-bold" fontSize={21} />
-            }
+            startContent={<Icon icon="solar:cart-plus-bold" fontSize={21} />}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
