@@ -126,10 +126,10 @@ const Banner = () => {
               size="lg"
               className="w-28 bg-inherit"
             >
-              <Icon icon="ph:circle-thin" className="text-6xl text-white" />
+              <Icon icon="ph:circle-thin" className="text-6xl text-white/60" />
               <Icon
                 icon="teenyicons:arrow-solid"
-                className="text-4xl text-white -rotate-45 relative -left-7"
+                className="text-4xl text-white/60 -rotate-45 relative -left-7"
               />
             </Button>
           </div>
@@ -145,9 +145,9 @@ const Banner = () => {
             >
               <Icon
                 icon="teenyicons:arrow-solid"
-                className="text-4xl text-white rotate-[135deg] relative left-7"
+                className="text-4xl text-white/60 rotate-[135deg] relative left-7"
               />
-              <Icon icon="ph:circle-thin" className="text-6xl text-white" />
+              <Icon icon="ph:circle-thin" className="text-6xl text-white/60" />
             </Button>
           </div>
         </div>
