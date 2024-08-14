@@ -50,14 +50,15 @@ const CheckoutComponent = () => {
   const [loading, setLoading] = useState(false);
   const [ship, setShip] = useState<number>(0.0);
   const [paymentOption, setPaymentOption] = useState("ONLINE");
+  const [mailShippingId, setMailShippingId] = useState<string | null>("445");
 
   const [delivery, setDelivery] = useState<"PERSONAL" | "L192" | "CP">(
     "PERSONAL"
   );
   const [location, setLocation] = useState<string>("");
   const [position, setPosition] = useState<{
-    lat: number;
-    lng: number;
+    lat: number | null;
+    lng: number | null;
   }>();
 
   const [customerCheckout] = useMutation(CHECKOUT);
@@ -69,7 +70,7 @@ const CheckoutComponent = () => {
       lat: position?.lat,
       lng: position?.lng,
       deliveryType: delivery,
-      mainObjectId: "454",
+      mailShippingId: mailShippingId,
     },
   });
 
@@ -229,6 +230,7 @@ const CheckoutComponent = () => {
               setLocation={setLocation}
               setPosition={setPosition}
               ship={ship}
+              setMailShippingId={setMailShippingId}
             />
           </div>
         );
@@ -341,6 +343,9 @@ const CheckoutComponent = () => {
   //   );
   // }
 
+  console.log("orders", orders);
+  
+    
   return (
     <section className="container mx-auto px-3 sm:px-3 lg:px-6 py-4 sm:py-4 lg:py-9 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-5 w-full gap-8">
       {/* Left */}

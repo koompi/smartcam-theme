@@ -113,7 +113,7 @@ export function CartProvider(props: { children: JSX.Element }) {
   if (loading || loading_store) {
     return null;
   }  
-
+  
   return (
     <CartContext.Provider
       value={{

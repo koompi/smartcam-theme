@@ -296,7 +296,7 @@ export const ProductViewItem = React.forwardRef<
                         <source
                           src={`${process.env.NEXT_PUBLIC_DRIVE ??
                             "https://drive.backend.riverbase.org"
-                            }/api/drive?hash=${preview}`}
+                            }/api/drive?hash=${preview}&max=true`}
                           type="video/mp4"
                         />
                       </video>
@@ -306,7 +306,7 @@ export const ProductViewItem = React.forwardRef<
                           alt="Product thumbnail"
                           src={`${process.env.NEXT_PUBLIC_DRIVE ??
                             "https://drive.backend.riverbase.org"
-                            }/api/drive?hash=${preview}`}
+                            }/api/drive?hash=${preview}&max=true`}
                           className="h-[45dvh] sm:h-[45dvh] lg:h-[60dvh]"
                         />
                       </div>

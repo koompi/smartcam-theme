@@ -18,7 +18,8 @@ import { GET_ALL_LOCATIONS } from "@/graphql/location";
 import { LocationType } from "@/types/location";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import CustomRadio from "./CustomRadio";
-import { CustomerAddressType } from "@/types/checkout";
+import axios from "axios";
+import { headers } from "next/headers";
 
 export type ShippingFormProps = React.HTMLAttributes<HTMLDivElement> & {
   variant?: InputProps["variant"];
@@ -28,17 +29,29 @@ export type ShippingFormProps = React.HTMLAttributes<HTMLDivElement> & {
   location: string;
   setLocation: Function;
   setPosition: Function;
+  setMailShippingId: Function;
   ship: number;
 };
 
 const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
-  ({ delivery, setDelivery, location, setLocation, ship, className }, ref) => {
+  (
+    {
+      delivery,
+      setDelivery,
+      location,
+      setLocation,
+      ship,
+      setPosition,
+      className,
+    },
+    ref
+  ) => {
     const deliveryRadioClasses = {
       wrapper: "group-data-[selected=true]:border-primary",
       base: "data-[selected=true]:border-primary",
       control: "bg-primary",
     };
-    const [active, setActive] = useState<string | null>(null);
+    const [shipping, setShipping] = useState([]);
     const { data: locations, loading: loadingAddress } =
       useQuery(GET_ALL_LOCATIONS);
 
@@ -50,6 +63,24 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
         setLocation(locations?.storeLocations[0].id);
       }
     }, [locations, setLocation]);
+
+    useEffect(() => {
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: `${process.env.NEXT_PUBLIC_BACKEND}/api/domestic/mail_object`,
+        headers: {},
+      };
+
+      axios
+        .request(config)
+        .then((response) => {
+          setShipping(response.data.result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, []);
 
     if (loadingAddress) {
       return "Loading...";
@@ -86,7 +117,6 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                     </div>
                   </div>
                 }
-                // title="Delivery Option"
               >
                 <div className="my-4">
                   <RadioGroup
@@ -196,6 +226,10 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                     classNames={{ wrapper: "gap-3" }}
                     defaultValue={delivery}
                     onValueChange={(value: string) => {
+                      setPosition({
+                        lat: myLocation.lat,
+                        lng: myLocation.lng,
+                      });
                       setDelivery(value);
                     }}
                   >
@@ -224,11 +258,40 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                               className="w-20"
                             />
                           }
-                          // label={delivery}
                           value={delivery}
                         />
                       );
                     })}
+
+                    {/* {shipping.map((ship: any, idx) => {
+                      return (
+                        <CustomRadio
+                          key={idx}
+                          classNames={deliveryRadioClasses}
+                          description={
+                            <div className="space-y-0.5">
+                              <div className="font-semibold text-black text-lg">
+                                {ship.english}
+                              </div>
+                              <div>Weight: ({ship.min_weight} - {ship.max_weight}) Kg</div>
+                            </div>
+                          }
+                          icon={
+                            <Image
+                              alt="delivery"
+                              src={
+                                delivery === "CP"
+                                  ? "/images/logo_v1.png"
+                                  : "/images/l192.png"
+                              }
+                              radius="none"
+                              className="w-20"
+                            />
+                          }
+                          value={delivery}
+                        />
+                      );
+                    })} */}
                   </RadioGroup>
                 </div>
               </AccordionItem>

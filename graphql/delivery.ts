@@ -35,11 +35,11 @@ export const CUSTOMER_ADDRESS = gql`
 export const ESTIMATE_PRICE = gql`
   query (
     $items: [Items!]!
-    $lat: Float!
-    $lng: Float!
+    $lat: Float
+    $lng: Float
     $deliveryType: DeliveryType!
     $membershipId: String
-    $mainObjectId: String
+    $mailShippingId: String
   ) {
     estimatePriceDelivery(
       items: $items
@@ -47,7 +47,7 @@ export const ESTIMATE_PRICE = gql`
       lng: $lng
       deliveryType: $deliveryType
       membershipId: $membershipId
-      mainObjectId: $mainObjectId
+      mailShippingId: $mailShippingId
     ) {
       data {
         currency
