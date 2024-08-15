@@ -55,6 +55,6 @@ export default function Telegram() {
 
   return<>
   
-  {JSON.stringify(localStorage.getItem("access_token"), null, 4)}
+  <p>Token: {JSON.stringify(localStorage.getItem("access_token"), null, 4)}</p>
   </>;
 }
