@@ -23,7 +23,8 @@ export const TelegramProvider = ({
 
   useEffect(() => {
     const app = (window as any).Telegram?.WebApp;
-
+    console.log("app", app);
+    
     if (app) {
       app.ready();
       app.expand();
