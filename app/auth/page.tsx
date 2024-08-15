@@ -19,7 +19,7 @@ export default function Telegram() {
       try {
         await axios
           .post(
-            `${process.env.NEXT_PUBLIC_BACKEND}/v1/telegram/app?client_id=2141a78e3d57c22151da6d179fafc8a1.selendra.org&scope=default&response_type=code&state=koompi&redirect_uri=${window.location.origin}`,
+            `https://oauth.selendra.org/v1/telegram/app?client_id=2141a78e3d57c22151da6d179fafc8a1.selendra.org&scope=default&response_type=code&state=koompi&redirect_uri=${window.location.origin}`,
             {
               data: {
                 ...user,
