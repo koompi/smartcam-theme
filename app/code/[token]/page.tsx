@@ -15,7 +15,7 @@ export default function Token() {
         localStorage.setItem("access_token", param.token);
 
         if (typeof window !== "undefined") {
-          // global && window.location.replace("/");
+          global && window.location.replace("/");
         }
       });
     }
@@ -25,7 +25,6 @@ export default function Token() {
   return (
     <div className="h-screen flex justify-center items-center">
       <Spinner />
-      {param.token}
     </div>
   );
 }

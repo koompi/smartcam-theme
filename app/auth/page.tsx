@@ -5,7 +5,6 @@ import { useTelegram } from "@/context/telegramProvider";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { json } from "stream/consumers";
 
 export default function Telegram() {
   const router = useRouter();
@@ -34,7 +33,7 @@ export default function Telegram() {
           )
           .then(async ({ data }) => {
           // window.location.href =`${window.location.origin}?code=${data.token}&state=koompi`;
-          router.replace(`${window.location.origin}?code=${data.token}&state=koompi`)          })
+          router.replace(`${window.location.origin}/code=${data.token}&state=koompi`)          })
           .catch((err: any) => {
             console.log("err", err);
           })
