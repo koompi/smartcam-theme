@@ -5,6 +5,7 @@ import { useTelegram } from "@/context/telegramProvider";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { json } from "stream/consumers";
 
 export default function Telegram() {
   const router = useRouter();
@@ -51,5 +52,8 @@ export default function Telegram() {
     return <Loading />;
   }
 
-  return;
+  return<>
+  
+  {JSON.stringify(user, null, 4)}
+  </>;
 }
