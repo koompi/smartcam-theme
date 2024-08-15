@@ -11,6 +11,7 @@ import { CartProvider } from "@/context/useCart";
 import ThemeProvider from "@/context/useTheme";
 import { BarayProvider } from "@/context/baray";
 import ChatToCustomer from "@/components/globals/ChatToCustomer";
+import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -69,18 +70,20 @@ export default function RootLayout({
       <body className={poppins.className} suppressHydrationWarning>
         <ApolloWrapper>
           <AppProvider>
-            <BarayProvider apiKey={process.env.NEXT_PUBLIC_BARAY_KEY!}>
-              <CartProvider>
-                <ThemeProvider>
-                  <MainNavbar />
-                  {children}
-                  <ChatToCustomer />
-                  <BackToTop />
-                  <MainFooter />
-                  <MobileNavigator />
-                </ThemeProvider>
-              </CartProvider>
-            </BarayProvider>
+            <Providers>
+              <BarayProvider apiKey={process.env.NEXT_PUBLIC_BARAY_KEY!}>
+                <CartProvider>
+                  <ThemeProvider>
+                    <MainNavbar />
+                    {children}
+                    <ChatToCustomer />
+                    <BackToTop />
+                    <MainFooter />
+                    <MobileNavigator />
+                  </ThemeProvider>
+                </CartProvider>
+              </BarayProvider>
+            </Providers>
           </AppProvider>
         </ApolloWrapper>
       </body>
