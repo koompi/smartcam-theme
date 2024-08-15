@@ -18,13 +18,16 @@ export default function Telegram() {
     const fetchUserAuth = async () => {
       try {
         await axios
-          .post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`, {
-            data: {
-              ...user,
-              auth_date: webApp?.initDataUnsafe.auth_date,
-              hash: webApp?.initDataUnsafe.hash,
-            },
-          })
+          .post(
+            `${process.env.NEXT_PUBLIC_BACKEND}/v1/telegram/app?client_id=2141a78e3d57c22151da6d179fafc8a1.selendra.org&scope=default&response_type=code&state=koompi&redirect_uri=${window.location.origin}`,
+            {
+              data: {
+                ...user,
+                auth_date: webApp?.initDataUnsafe.auth_date,
+                hash: webApp?.initDataUnsafe.hash,
+              },
+            }
+          )
           .then(async ({ data }) => {
             router.push(
               `${window.location.origin}?code=${data.token}&state=koompi`
