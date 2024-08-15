@@ -18,13 +18,10 @@ export const TelegramProvider = ({
   const router = useRouter();
   const [webApp, setWebApp] = useState<IWebApp | null>(null);
   const { user } = useAuth();
-  console.log("user", user);
   
 
   useEffect(() => {
     const app = (window as any).Telegram?.WebApp;
-    console.log("app", app);
-    
     if (app) {
       app.ready();
       app.expand();
@@ -32,11 +29,9 @@ export const TelegramProvider = ({
     }
   }, []);
 
-  useEffect(() => {
-    console.log("webapp", webApp);
-    
+  useEffect(() => {    
     if (webApp && webApp.initDataUnsafe.user && !user) {
-      router.push("/");
+      router.push("/auth");
     }
   }, [webApp, user, router]);
 
