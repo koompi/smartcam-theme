@@ -11,6 +11,7 @@ export default function Telegram() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [test, setTest] = useState("");
 
   const { user, webApp } = useTelegram();
 
@@ -30,9 +31,8 @@ export default function Telegram() {
             }
           )
           .then(async ({ data }) => {
-            router.push(
-              `${window.location.origin}?code=${data.token}&state=koompi`
-            );
+            setTest(data);
+          window.location.href =  `${window.location.origin}?code=${data.token}&state=koompi`;
           })
           .catch((err: any) => {
             console.log("err", err);
@@ -54,6 +54,6 @@ export default function Telegram() {
 
   return<>
   
-  {JSON.stringify(user, null, 4)}
+  {JSON.stringify(test, null, 4)}
   </>;
 }
