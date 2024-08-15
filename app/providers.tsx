@@ -8,7 +8,6 @@ import Script from "next/script";
 import { useEffect } from "react";
 import axios from "axios";
 
-// axios.defaults.headers.common["Authorization"] = getCookie("token");
 axios.defaults.withCredentials = true;
 
 export function Providers({ children }: { children: React.ReactNode }) {
