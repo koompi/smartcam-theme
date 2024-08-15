@@ -3,7 +3,7 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
-import { BarayProvider } from "@/context/baray";
+import { TelegramProvider } from "@/context/telegramProvider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -16,7 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         options={{ showSpinner: false }}
         shallowRouting
       />
-      {children}
+      <TelegramProvider>{children}</TelegramProvider>
     </NextUIProvider>
   );
 }

@@ -60,7 +60,7 @@ export const Search = () => {
         <Icon icon="mingcute:menu-fill" fontSize={26} />
       </Button>
       <Modal
-        size="4xl"
+        size="3xl"
         isOpen={isOpen}
         onClose={onClose}
         radius="lg"

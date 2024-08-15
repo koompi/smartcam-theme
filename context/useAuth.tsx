@@ -50,8 +50,7 @@ const getUser = async () => {
 export const AppProvider: FC<Props> = (props) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
-  const {data, refetch} = useQuery(WISHLIST_NOTIFICATION);
-
+  const { data, refetch } = useQuery(WISHLIST_NOTIFICATION);
 
   useEffect(() => {
     setLoading(true);
@@ -70,7 +69,14 @@ export const AppProvider: FC<Props> = (props) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user: user, loading: loading, notifications: data?.storeNotifications, refetch: refetch  }}>
+    <AuthContext.Provider
+      value={{
+        user: user,
+        loading: loading,
+        notifications: data?.storeNotifications,
+        refetch: refetch,
+      }}
+    >
       {props.children}
     </AuthContext.Provider>
   );

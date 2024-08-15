@@ -512,7 +512,7 @@ export const ProductViewItem = React.forwardRef<
                                         "https://drive.backend.riverbase.org"
                                       }/api/drive?hash=${item?.previews}`}
                                       className="h-12 col-span-1"
-                                      radius="md"
+                                      radius="md" 
                                     />
                                     <div className="col-span-4">
                                       <span className="text-md font-semibold line-clamp-1">
