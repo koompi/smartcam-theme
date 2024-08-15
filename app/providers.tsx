@@ -5,9 +5,21 @@ import { useRouter } from "next/navigation";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 import { TelegramProvider } from "@/context/telegramProvider";
 import Script from "next/script";
+import { useEffect } from "react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+
+  useEffect(() => {
+    if (window) {
+      const app = (window as any)?.Telegram?.WebApp;
+      // Call as soon as your page is ready for the user to see
+      app?.ready();
+
+      // Expand your web app to full screen
+      app?.expand();
+    }
+  }, []);
 
   return (
     <>
