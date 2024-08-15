@@ -31,7 +31,7 @@ export const TelegramProvider = ({
 
   useEffect(() => {
     if (webApp && webApp.initDataUnsafe.user && !user) {
-      router.push("/");
+      router.push("/auth");
     }
   }, [webApp, user, router]);
 
