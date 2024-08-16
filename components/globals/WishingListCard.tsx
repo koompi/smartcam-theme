@@ -1,7 +1,7 @@
 "use client";
 
 import { LexicalReader } from "@/editor/LexicalReader";
-import { formatToUSD } from "@/utils/formatUSD";
+import { usd } from "@/utils/formatUSD";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import {
   Card,
@@ -18,50 +18,69 @@ import {
   DropdownTrigger,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React, { FC, ReactNode, useEffect } from "react";
+import React, { FC, ReactNode, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { REMOVE_PRODUCT_FROM_WISHLIST } from "@/graphql/mutation/wishlist";
+import {
+  ADD_COMPARE_WISHLIST,
+  REMOVE_PRODUCT_FROM_WISHLIST,
+} from "@/graphql/mutation/wishlist";
 import { toast } from "sonner";
+import { StockType } from "@/types/product";
+import { PromotionType } from "@/types/promotion";
+import { useCart } from "@/context/useCart";
 
 interface WishListProps {
-  id: string,
-  url: string;
+  id: string;
   thumbnail: string;
   title: string;
-  description: ReactNode;
+  desc: ReactNode;
   rating: number;
   price: number;
-  discountType: string | null;
-  promotionPercentage: number;
-  promotionPrice: number;
-  totalPrice: number;
-  refetch: Function
+  promotion: PromotionType;
+  slug: string;
+  stocks: StockType;
+  categoryId: string;
+  favorite: boolean;
+  compare: boolean;
+  currencyPrice: {
+    khr: number;
+    usd: number;
+  };
+  refetch: Function;
 }
 
 const WishingListCard: FC<WishListProps> = ({
   id,
-  url,
   thumbnail,
   title,
-  description,
-  rating,
-  price,
-  discountType,
-  promotionPercentage,
-  promotionPrice,
-  totalPrice,
-  refetch
+  desc,
+  promotion,
+  slug,
+  stocks,
+  currencyPrice,
+  categoryId,
+  compare,
+  refetch,
 }) => {
-  const [removeProductFromEWishlist] = useMutation(REMOVE_PRODUCT_FROM_WISHLIST); 
+  const [isCompare, setIsCompare] = useState(compare);
+
+  const [removeProductFromEWishlist] = useMutation(
+    REMOVE_PRODUCT_FROM_WISHLIST
+  );
+  const [addWishlistCompare] = useMutation(ADD_COMPARE_WISHLIST);
+
+  const { addToCart } = useCart();
 
   return (
     <Card
       shadow="sm"
       isPressable
       isHoverable
+      as={Link}
+      href={`/products/${slug}`}
       className="col-span-1 h-full group"
     >
-      {discountType && (
+      {promotion?.discount?.discountType && (
         <Chip
           size="sm"
           color="danger"
@@ -69,8 +88,11 @@ const WishingListCard: FC<WishListProps> = ({
           radius="none"
           variant="shadow"
         >
-          OFF {discountType === "PRICE" && formatToUSD(promotionPrice)}
-          {discountType === "PERCENTAGE" && promotionPercentage + "%"}
+          OFF{" "}
+          {promotion?.discount?.discountType === "PRICE" &&
+            usd(promotion?.discount?.discountPrice)}
+          {promotion?.discount?.discountType === "PERCENTAGE" &&
+            promotion?.discount?.discountPercentage + "%"}
         </Chip>
       )}
       <CardBody>
@@ -107,10 +129,33 @@ const WishingListCard: FC<WishListProps> = ({
               color="primary"
               description="Compare your products"
               startContent={
-                <Icon icon="material-symbols:compare" fontSize={21} />
+                isCompare ? (
+                  <Icon icon="icon-park-twotone:back" fontSize={21} />
+                ) : (
+                  <Icon icon="fluent-mdl2:compare" fontSize={21} />
+                )
               }
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                addWishlistCompare({
+                  variables: {
+                    wishlistType: "COMPARE",
+                    productId: id,
+                    categoryId: categoryId,
+                  },
+                })
+                  .then((res) => {
+                    toast.success(res.data.storeAddCompare.message);
+                    refetch();
+                    setIsCompare(!isCompare);
+                  })
+                  .catch((e) => {
+                    toast.error(e.message);
+                  });
+              }}
             >
-              Add to Compare
+              {isCompare ? "Undo" : "Add to Compare"}
             </DropdownItem>
             <DropdownItem
               key="remove"
@@ -124,14 +169,14 @@ const WishingListCard: FC<WishListProps> = ({
                 removeProductFromEWishlist({
                   variables: {
                     productId: id,
-                    wishlistType: "FAVORITE"
+                    wishlistType: "FAVORITE",
                   },
                 })
                   .then((_) => {
                     toast.success("Items has been to remove from wishlist");
                     refetch();
                   })
-                  .catch((e) => { 
+                  .catch((e) => {
                     toast.error(e.message);
                   });
               }}
@@ -140,20 +185,26 @@ const WishingListCard: FC<WishListProps> = ({
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <Image alt="products" src={thumbnail
-          ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${thumbnail}`
-          : "/images/default-thumbnail.png"} isZoomed />
+        <Image
+          alt="products"
+          src={
+            thumbnail
+              ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${thumbnail}`
+              : "/images/default-thumbnail.png"
+          }
+          isZoomed
+        />
         <Spacer y={2} />
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }, (_, i) => {
-            const isSelected = i + 1 <= rating;
+            const isSelected = i + 1 <= 4;
 
             return (
               <Icon
                 key={i}
                 className={cn(
                   "text-lg sm:text-xl",
-                  isSelected ? "text-danger" : "text-gray-300"
+                  isSelected ? "text-primary" : "text-gray-300"
                 )}
                 icon="solar:star-bold"
               />
@@ -161,34 +212,27 @@ const WishingListCard: FC<WishListProps> = ({
           })}
         </div>
         <Spacer y={2} />
-        <h2 className="text-black font-medium text-lg line-clamp-2">{title}</h2>
+        <h2 className="text-black font-medium text-sm sm:text-sm lg:text-lg line-clamp-2">
+          {title}
+        </h2>
         <Spacer y={3} />
-        {/* <ul className="list-disc text-gray-500 text-sm pl-6">
-            <li>CPU: Apple M3 Pro chip 12-core</li>
-            <li>OS: macOS</li>
-            <li>RAM: 36GB unified memory</li>
-            <li>Storage: 512GB SSD</li>
-            <li>Graphic: Integrated 18-core</li>
-            <li>GPU -Display: 16.2-inch (3456-by-2234)</li>
-            <li>Battery: Up to 15hours</li>
-            <li>Weight: 2.14kg</li>
-            <li>Warranty: 1 year</li>
-          </ul> */}
-        {description ? <LexicalReader data={description.toString()} /> : null}
+        <div className="fontSizeTextEditor">
+          {desc ? <LexicalReader data={desc.toString()} /> : null}
+        </div>
         <Spacer y={3} />
-        <div className="flex items-center gap-3">
-          {discountType ? (
+        <div className="flex items-center gap-3 mt-2 sm:mt-2 lg:mt-3">
+          {promotion?.discount?.discountType ? (
             <>
-              <p className="text-black text-md line-through">
-                {formatToUSD(price)}
+              <p className="text-black text-xs sm:text-xs lg:text-md line-through">
+                {usd(promotion?.discount?.originalPrice)}
               </p>
-              <p className="text-black text-2xl font-bold">
-                {formatToUSD(totalPrice)}
+              <p className="text-black  text-lg sm:text-lg lg:text-2xl font-bold">
+                {usd(promotion?.discount?.totalDiscount)}
               </p>
             </>
           ) : (
-            <p className="text-black text-2xl font-bold">
-              {formatToUSD(price)}
+            <p className="text-black  text-lg sm:text-lg lg:text-2xl font-bold">
+              {usd(currencyPrice?.usd)}
             </p>
           )}
         </div>
@@ -209,16 +253,16 @@ const WishingListCard: FC<WishListProps> = ({
           isIconOnly
           variant="flat"
           radius="full"
+          color="primary"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            addToCart(id);
+            toast.success("The product is added into the cart!");
           }}
+          isDisabled={stocks?.status === "OUT-STOCK"}
         >
-          <Icon
-            icon="solar:cart-large-minimalistic-bold"
-            fontSize={24}
-            className="text-gray-500"
-          />
+          <Icon icon="solar:cart-large-minimalistic-bold" fontSize={24} />
         </Button>
       </CardFooter>
     </Card>

@@ -343,9 +343,6 @@ const CheckoutComponent = () => {
   //   );
   // }
 
-  console.log("orders", orders);
-  
-    
   return (
     <section className="container mx-auto px-3 sm:px-3 lg:px-6 py-4 sm:py-4 lg:py-9 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-5 w-full gap-8">
       {/* Left */}
@@ -454,7 +451,9 @@ const CheckoutComponent = () => {
       </div>
       <div className="col-span-2">
         {page <= 0 ? (
-          <RecommendProducts products={products?.storeGlobalFilterProducts?.products} />
+          <RecommendProducts
+            products={products?.storeGlobalFilterProducts?.products}
+          />
         ) : (
           <div className="sticky top-28 hidden sm:hidden lg:block">
             <Card shadow="sm" isBlurred>

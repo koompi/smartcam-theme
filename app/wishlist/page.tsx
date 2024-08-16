@@ -19,27 +19,51 @@ const WishListPage = () => {
   ) : error ? (
     <Empty />
   ) : (
-    <div className="p-6">
+    <div className="p-3 sm:p-3 lg:p-6">
       <h1 className="text-2xl font-bold">
         Wish List ({data?.customerWishlists?.products?.length})
       </h1>
       <Spacer y={6} />
-      <div className="grid grid-cols-5 place-items-stretch gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 place-items-stretch gap-3">
         {data?.customerWishlists?.products?.map((res: any, idx: number) => {
+          const {
+            thumbnail,
+            title,
+            desc,
+            rating,
+            price,
+            slug,
+            stocks,
+            currencyPrice,
+            category,
+          } = res?.product;
+
           return (
             <WishingListCard
               key={idx}
               id={res.product.id}
-              url={res.url}
-              thumbnail={res.product.thumbnail}
-              title={res.product.title}
-              description={res.product.desc}
-              rating={res.rating}
-              price={res.product.price}
-              discountType={res?.promotion?.discountType}
-              promotionPercentage={res?.promotion?.promotionPercentage}
-              promotionPrice={res?.promotionPrice}
-              totalPrice={res?.promotion?.totalPrice}
+              favorite={res?.favorite}
+              compare={res?.compare}
+              categoryId={category.id}
+              thumbnail={thumbnail}
+              title={title}
+              desc={desc}
+              rating={rating ? rating : 4}
+              price={price}
+              promotion={{
+                isMembership: res.promotion?.isMembership,
+                discount: {
+                  discountPercentage:
+                    res.promotion?.discount?.discountPercentage,
+                  discountPrice: res.promotion?.discount?.discountPrice,
+                  discountType: res.promotion?.discount?.discountType,
+                  originalPrice: res.promotion?.discount?.originalPrice,
+                  totalDiscount: res.promotion?.discount?.totalDiscount,
+                },
+              }}
+              slug={slug}
+              stocks={stocks}
+              currencyPrice={currencyPrice}
               refetch={refetch}
             />
           );

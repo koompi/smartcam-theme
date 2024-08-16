@@ -22,87 +22,18 @@ import React, { useState, FC } from "react";
 import { RESET_ITEM_COMPARE_LIST } from "@/graphql/mutation/wishlist";
 import { toast } from "sonner";
 import Empty from "@/components/globals/Empty";
+import { useCart } from "@/context/useCart";
 
 interface Topic {
   title: string;
   value: string; // Use a string for topic values
 }
 
-// interface Product {
-//   id: string;
-//   url: string;
-//   thumbnail: string;
-//   title: string;
-//   description: string;
-//   rating: number;
-//   price: number;
-//   discountType: string;
-//   promotionPercentage: number;
-//   promotionPrice: number;
-//   totalPrice: number;
-//   brand: string;
-//   category: string;
-// }
-
 interface ProductsComparisonTableProps {
   products: any;
   setGroupSelected: (value: string[]) => void;
   groupSelected: string[];
 }
-
-// const productsComparison: Product[] = [
-//   {
-//     id: "1",
-//     url: "#",
-//     thumbnail: "apple-m3-black.png",
-//     title:
-//       " Apple Macbook Pro 16.2' M3 Pro chip CPU 12-core and 18-core GPU-36GB-512GB-Space Black (MRW23ZP/A)1Y",
-//     description:
-//       "-CPU / Processor: Apple M3 Pro chip 12-core CPU with 6 performance cores and 6 efficiency cores 18-core GPU Hardware-accelerated ray tracing 16-core Neural Engine 150GB/s memory bandwidth-Operating System : macOS-RAM / Memory: 36GB unified memory-Storage: 512GB SSD-Graphic: Apple Integrated 18-core GPU-Display: 16.2-inch (diagonal) Liquid Retina XDR display 3456-by-2234 native resolution at 254 pixels per inch-Optical Drive: None-Wireless: Wi-Fi 6E (802.11ax) + Bluetooth 5.3-Audio: High-fidelity six-speaker sound system with force-cancelling woofers Wide stereo sound-Webcame: 1080p FaceTime HD camera Advanced image signal processor with computational video-Ports :-SDXC card slot , HDMI port, 3.5 mm headphone jack, MagSafe 3 port.           Three Thunderbolt 4 (USB-C) ports with support for: *Charging, DisplayPort, Thunderbolt 4 (up to 40Gb/s), USB 4 (up to 40Gb/s).-Battery: M3 Pro Chip Up to 22 hours Apple TV app movie playback Up to 15 hours wireless web-Keyboard: Backlit Magic Keyboard Touch ID-Weight: 4.7 pounds (2.14 kg)-Warranty: 1year warranty",
-//     rating: 4,
-//     price: 1850,
-//     discountType: "PERCENTAGE",
-//     promotionPercentage: 5,
-//     promotionPrice: 0,
-//     totalPrice: 1800,
-//     brand: "Apple",
-//     category: "Computer",
-//   },
-//   {
-//     id: "2",
-//     url: "#",
-//     thumbnail: "apple-m3-black2.png",
-//     title:
-//       "Apple Macbook Pro 16.2' M3 Pro chip CPU 12-core and 18-core GPU-36GB-512GB-Space Black (MRW23ZP/A)1Y",
-//     description:
-//       "-CPU / Processor: Apple M3 Pro chip 12-core CPU with 6 performance cores and 6 efficiency cores 18-core GPU Hardware-accelerated ray tracing 16-core Neural Engine 150GB/s memory bandwidth-Operating System : macOS-RAM / Memory: 36GB unified memory-Storage: 512GB SSD-Graphic: Apple Integrated 18-core GPU-Display: 16.2-inch (diagonal) Liquid Retina XDR display 3456-by-2234 native resolution at 254 pixels per inch-Optical Drive: None-Wireless: Wi-Fi 6E (802.11ax) + Bluetooth 5.3-Audio: High-fidelity six-speaker sound system with force-cancelling woofers Wide stereo sound-Webcame: 1080p FaceTime HD camera Advanced image signal processor with computational video-Ports :-SDXC card slot , HDMI port, 3.5 mm headphone jack, MagSafe 3 port.           Three Thunderbolt 4 (USB-C) ports with support for: *Charging, DisplayPort, Thunderbolt 4 (up to 40Gb/s), USB 4 (up to 40Gb/s).-Battery: M3 Pro Chip Up to 22 hours Apple TV app movie playback Up to 15 hours wireless web-Keyboard: Backlit Magic Keyboard Touch ID-Weight: 4.7 pounds (2.14 kg)-Warranty: 1year warranty",
-//     rating: 4,
-//     price: 1850,
-//     discountType: "PERCENTAGE",
-//     promotionPercentage: 5,
-//     promotionPrice: 0,
-//     totalPrice: 1800,
-//     brand: "Apple",
-//     category: "Computer",
-//   },
-//   {
-//     id: "3",
-//     url: "#",
-//     thumbnail: "apple-m3-gray.png",
-//     title:
-//       "Apple Macbook Pro 16.2' M3 Pro chip CPU 12-core and 18-core GPU-36GB-512GB-Space Black (MRW23ZP/A)1Y",
-//     description:
-//       "-CPU / Processor: Apple M3 Pro chip 12-core CPU with 6 performance cores and 6 efficiency cores 18-core GPU Hardware-accelerated ray tracing 16-core Neural Engine 150GB/s memory bandwidth-Operating System : macOS-RAM / Memory: 36GB unified memory-Storage: 512GB SSD-Graphic: Apple Integrated 18-core GPU-Display: 16.2-inch (diagonal) Liquid Retina XDR display 3456-by-2234 native resolution at 254 pixels per inch-Optical Drive: None-Wireless: Wi-Fi 6E (802.11ax) + Bluetooth 5.3-Audio: High-fidelity six-speaker sound system with force-cancelling woofers Wide stereo sound-Webcame: 1080p FaceTime HD camera Advanced image signal processor with computational video-Ports :-SDXC card slot , HDMI port, 3.5 mm headphone jack, MagSafe 3 port.           Three Thunderbolt 4 (USB-C) ports with support for: *Charging, DisplayPort, Thunderbolt 4 (up to 40Gb/s), USB 4 (up to 40Gb/s).-Battery: M3 Pro Chip Up to 22 hours Apple TV app movie playback Up to 15 hours wireless web-Keyboard: Backlit Magic Keyboard Touch ID-Weight: 4.7 pounds (2.14 kg)-Warranty: 1year warranty",
-//     rating: 4,
-//     price: 1850,
-//     discountType: "PERCENTAGE",
-//     promotionPercentage: 5,
-//     promotionPrice: 0,
-//     totalPrice: 1800,
-//     brand: "Apple",
-//     category: "Computer",
-//   },
-// ];
 
 const topics: Topic[] = [
   {
@@ -151,13 +82,13 @@ const ComparisonPage = () => {
   ) : error ? (
     <Empty />
   ) : (
-    <section className="container py-6">
+    <section className="container py-6 px-3 sm:px-3 lg:px-0">
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold">Comparison</h1>
         <div>
-          <Button 
-            color="primary"
-            variant="solid"
+          <Button
+            color="danger"
+            variant="flat"
             radius="full"
             onPress={() => {
               resetItemCompare({
@@ -247,6 +178,8 @@ const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (props) => {
     }
   };
 
+  const { addToCart } = useCart();
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full">
@@ -260,11 +193,11 @@ const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (props) => {
                   color="primary"
                   radius="full"
                   isIconOnly
-                  className="h-20 w-20"
+                  className="w-auto h-auto"
                   as={Link}
                   href="/products"
                 >
-                  <Icon icon="solar:add-circle-bold" fontSize={80} />
+                  <Icon icon="solar:add-circle-bold" className="text-[3rem]" />
                 </Button>
               </div>
             </th>
@@ -275,30 +208,42 @@ const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (props) => {
               }: {
                 product: ProductType;
                 promotion: PromotionType;
-              }) => (
-                <th key={product.id} className="py-2 px-4 ">
-                  <div className="w-full col-span-1 flex flex-col items-center justify-center p-3">
-                    <Image
-                      radius="lg"
-                      alt={product.title}
-                      src={
-                        product?.thumbnail
-                          ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${product?.thumbnail}`
-                          : "/images/default-thumbnail.png"
-                      }
-                      className="h-60 mx-auto"
-                      isZoomed
-                    />
-                    <Button
-                      variant="light"
-                      color="primary"
-                      className="font-semibold"
-                    >
-                      Add to Cart
-                    </Button>
-                  </div>
-                </th>
-              )
+              }) => {
+                return (
+                  <th key={product.id} className="py-2 px-4 ">
+                    <div className="w-full col-span-1 flex flex-col items-center justify-center p-3">
+                      <Image
+                        radius="lg"
+                        alt={product.title}
+                        src={
+                          product?.thumbnail
+                            ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${product?.thumbnail}`
+                            : "/images/default-thumbnail.png"
+                        }
+                        className="h-30 sm:h-30 lg:h-60 mx-auto"
+                        isZoomed
+                      />
+                      {product?.stocks?.amount > 0 && (
+                        <Button
+                          variant="light"
+                          color="primary"
+                          className="font-semibold"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            addToCart(product.id);
+                            toast.success(
+                              "The product is added into the cart!"
+                            );
+                          }}
+                        >
+                          Add to Cart
+                        </Button>
+                      )}
+                    </div>
+                  </th>
+                );
+              }
             )}
           </tr>
         </thead>
