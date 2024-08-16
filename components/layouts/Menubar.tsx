@@ -64,6 +64,13 @@ export const Menubar = () => {
   const sort = search.get("sort") as string;
   const selected = sort?.length > 0 ? sort : "all";
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1500]);
+  const [isOpen, setIsOpen] = useState({
+    price: false,
+    brands: false,
+    categories: false,
+    sort: false,
+  });
+  // const [openType, setOpenType] = useState("");
 
   const aboutus_menu = [
     {
@@ -129,6 +136,42 @@ export const Menubar = () => {
   if (loading || !data || loadingCategory || !categories) {
     return;
   }
+
+  const handleMouseEnter = (value: string) => {
+    if (value === "PRICE") {
+      setIsOpen({
+        brands: false,
+        categories: false,
+        sort: false,
+        price: true,
+      });
+    } else if (value === "BRANDS") {
+      setIsOpen({
+        price: false,
+        categories: false,
+        sort: false,
+        brands: true,
+      });
+    } else if (value === "CATEGORIES") {
+      setIsOpen({
+        price: false,
+        brands: false,
+        sort: false,
+        categories: true,
+      });
+    } else {
+      setIsOpen({
+        price: false,
+        brands: false,
+        categories: false,
+        sort: true,
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsOpen({ price: false, brands: false, categories: false, sort: false });
+  };
 
   return (
     <Navbar maxWidth="full" className="bg-white h-12">
@@ -286,143 +329,186 @@ export const Menubar = () => {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end" className="flex items-center gap-0">
-        <PopoverFilterWrapper title="Pricing Range" priceRange={priceRange}>
-          <PriceSlider
-            aria-label="Pricing Filter"
-            range={{
-              min: 0,
-              defaultValue: [
-                min ? parseInt(min as string) : 0,
-                max ? parseInt(max as string) : 1500,
-              ],
-              max: 3000,
-              step: 1,
-            }}
-            setPriceRange={setPriceRange}
-          />
-        </PopoverFilterWrapper>
+        <div
+          onMouseEnter={() => {
+            handleMouseEnter("PRICE");
+          }}
+          onMouseLeave={() => {
+            handleMouseLeave();
+          }}
+        >
+          <PopoverFilterWrapper
+            title="Pricing Range"
+            priceRange={priceRange}
+            isOpen={isOpen.price}
+          >
+            <PriceSlider
+              aria-label="Pricing Filter"
+              range={{
+                min: 0,
+                defaultValue: [
+                  min ? parseInt(min as string) : 0,
+                  max ? parseInt(max as string) : 1500,
+                ],
+                max: 3000,
+                step: 1,
+              }}
+              setPriceRange={setPriceRange}
+            />
+          </PopoverFilterWrapper>
+        </div>
         <Spacer x={1} />
         {/* ========brands ======== */}
-        <Select
-          aria-label="Sort by"
-          classNames={{
-            base: "items-center justify-end max-w-fit",
-            value: "w-[9rem]",
+        <div
+          onMouseEnter={() => {
+            handleMouseEnter("BRANDS");
           }}
-          radius="full"
-          labelPlacement="outside-left"
-          placeholder="Brands"
-          variant="bordered"
-          disallowEmptySelection
-          selectedKeys={[brands ? brands : ""]}
+          onMouseLeave={() => {
+            handleMouseLeave();
+          }}
         >
-          {data.storeOwnerBrands.map((res: BrandsType) => {
-            return (
-              <SelectItem
-                key={res.title.en}
-                value={res.title.en}
-                onPress={() => {
-                  router.push(
-                    `/products?search=&brands=${res.title ? res.title?.en : ""}&category=${cat ? cat : ""}&sub_category${sub ? sub : ""}&sort=${sortParam ? sortParam : ""}`
-                  );
-                }}
-                startContent={
-                  <Image
-                    alt={res.title.en}
-                    src={
-                      res.logo
-                        ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${res.logo}`
-                        : "/images/default-thumbnail.png"
-                    }
-                    className="h-9 w-9 object-contain bg-background rounded-full p-1"
-                    radius="none"
-                  />
-                }
-              >
-                {res.title.en}
-              </SelectItem>
-            );
-          })}
-        </Select>
+          <Select
+            aria-label="Sort by"
+            classNames={{
+              base: "items-center justify-end max-w-fit",
+              value: "w-[9rem]",
+            }}
+            radius="full"
+            labelPlacement="outside-left"
+            placeholder="Brands"
+            variant="bordered"
+            disallowEmptySelection
+            selectedKeys={[brands ? brands : ""]}
+            isOpen={isOpen.brands}
+          >
+            {data.storeOwnerBrands.map((res: BrandsType) => {
+              return (
+                <SelectItem
+                  key={res.title.en}
+                  value={res.title.en}
+                  onPress={() => {
+                    router.push(
+                      `/products?search=&brands=${res.title ? res.title?.en : ""}&category=${cat ? cat : ""}&sub_category${sub ? sub : ""}&sort=${sortParam ? sortParam : ""}`
+                    );
+                  }}
+                  startContent={
+                    <Image
+                      alt={res.title.en}
+                      src={
+                        res.logo
+                          ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${res.logo}`
+                          : "/images/default-thumbnail.png"
+                      }
+                      className="h-9 w-9 object-contain bg-background rounded-full p-1"
+                      radius="none"
+                    />
+                  }
+                >
+                  {res.title.en}
+                </SelectItem>
+              );
+            })}
+          </Select>
+        </div>
         <Spacer x={1} />
         {/* ========categories ======== */}
-        <Select
-          aria-label="Sort by"
-          classNames={{
-            base: "items-center justify-end max-w-fit",
-            value: "w-[9rem]",
+        <div
+          onMouseEnter={() => {
+            handleMouseEnter("CATEGORIES");
           }}
-          radius="full"
-          labelPlacement="outside-left"
-          placeholder="Category"
-          variant="bordered"
-          disallowEmptySelection
-          selectedKeys={[cat ? cat : ""]}
+          onMouseLeave={() => {
+            handleMouseLeave();
+          }}
         >
-          {categories?.storeOwnerCategories.map((res: Category) => {
-            return (
-              <SelectItem
-                key={res.id}
-                value={res.id}
-                onPress={() => {
-                  router.push(`/products?search=&category=${res.id}`);
-                }}
-              >
-                {res.title?.en}
-              </SelectItem>
-            );
-          })}
-        </Select>
+          <Select
+            aria-label="Sort by"
+            classNames={{
+              base: "items-center justify-end max-w-fit",
+              value: "w-[9rem]",
+            }}
+            radius="full"
+            labelPlacement="outside-left"
+            placeholder="Category"
+            variant="bordered"
+            disallowEmptySelection
+            selectedKeys={[cat ? cat : ""]}
+            isOpen={isOpen.categories}
+          >
+            {categories?.storeOwnerCategories.map((res: Category) => {
+              return (
+                <SelectItem
+                  key={res.id}
+                  value={res.id}
+                  onPress={() => {
+                    router.push(`/products?search=&category=${res.id}`);
+                  }}
+                >
+                  {res.title?.en}
+                </SelectItem>
+              );
+            })}
+          </Select>
+        </div>
         <Spacer x={1} />
         {/* ======= short ======= */}
-        <Select
-          aria-label="Sort by"
-          classNames={{
-            base: "items-center justify-end max-w-fit",
-            value: "w-[9rem]",
+        <div
+          onMouseEnter={() => {
+            handleMouseEnter("SORT");
           }}
-          radius="full"
-          defaultSelectedKeys={["most_popular"]}
-          labelPlacement="outside-left"
-          placeholder="Select an option"
-          variant="bordered"
-          disallowEmptySelection
-          selectedKeys={[selected]}
-          onChange={(e) => {
-            if (e.target.value == "all") {
-              return router.push("/products");
-            }
-            router.push(
-              `/products?search=${
-                search.get("search") ? search.get("search") : ""
-              }&brands=${brands ? brands : ""}&category=${
-                search.get("category") ? search.get("category") : ""
-              }&sub_category=${
-                search.get("sub_category") ? search.get("sub_category") : ""
-              }&sort=${e.target.value ? e.target.value : ""}`
-            );
+          onMouseLeave={() => {
+            handleMouseLeave();
           }}
         >
-          <SelectItem key="all">All Product</SelectItem>
-          <SelectItem key="brand" value="brand">
-            Brand
-          </SelectItem>
-          <SelectItem key="newest" value="newest">
-            Newest
-          </SelectItem>
-          <SelectItem key="price_low_to_high" value="price_low_to_high">
-            Price: Low to High
-          </SelectItem>
-          <SelectItem key="price_high_to_low" value="price_high_to_low">
-            Price: High to Low
-          </SelectItem>
-          <SelectItem key="top_rated" value="top_rated">
-            Top Rated
-          </SelectItem>
-          <SelectItem key="most_popular" value="most_popular">
-            Most Popular
-          </SelectItem>
-        </Select>
+          <Select
+            isOpen={isOpen.sort}
+            aria-label="Sort by"
+            classNames={{
+              base: "items-center justify-end max-w-fit",
+              value: "w-[9rem]",
+            }}
+            radius="full"
+            defaultSelectedKeys={["most_popular"]}
+            labelPlacement="outside-left"
+            placeholder="Select an option"
+            variant="bordered"
+            disallowEmptySelection
+            selectedKeys={[selected]}
+            onChange={(e) => {
+              if (e.target.value == "all") {
+                return router.push("/products");
+              }
+              router.push(
+                `/products?search=${
+                  search.get("search") ? search.get("search") : ""
+                }&brands=${brands ? brands : ""}&category=${
+                  search.get("category") ? search.get("category") : ""
+                }&sub_category=${
+                  search.get("sub_category") ? search.get("sub_category") : ""
+                }&sort=${e.target.value ? e.target.value : ""}`
+              );
+            }}
+          >
+            <SelectItem key="all">All Product</SelectItem>
+            <SelectItem key="brand" value="brand">
+              Brand
+            </SelectItem>
+            <SelectItem key="newest" value="newest">
+              Newest
+            </SelectItem>
+            <SelectItem key="price_low_to_high" value="price_low_to_high">
+              Price: Low to High
+            </SelectItem>
+            <SelectItem key="price_high_to_low" value="price_high_to_low">
+              Price: High to Low
+            </SelectItem>
+            <SelectItem key="top_rated" value="top_rated">
+              Top Rated
+            </SelectItem>
+            <SelectItem key="most_popular" value="most_popular">
+              Most Popular
+            </SelectItem>
+          </Select>
+        </div>
       </NavbarContent>
     </Navbar>
   );
