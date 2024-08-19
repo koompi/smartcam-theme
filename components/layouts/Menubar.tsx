@@ -44,7 +44,7 @@ export const SubMenu: FC<SubMenuType> = (props) => {
     >
       <h1 className="text-md font-medium">{props.title}</h1>
       <Spacer y={2} />
-      <p className="font-light text-xs text-gray-600">{props.desc}</p>
+      <p className="font-light text-xs text-danger-600">{props.desc}</p>
     </Link>
   );
 };
@@ -108,22 +108,22 @@ export const Menubar = () => {
       desc: "Contact to our services center via Telegram app.",
     },
     {
-      url: "/support/video-support",
+      url: "#",
       title: "Video Support",
       isBlank: false,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, quam?",
+      desc: "Coming Soon!",
     },
     {
-      url: "/support/software_support",
+      url: "#",
       title: "Sofware Support",
       isBlank: false,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, quam?",
+      desc: "Coming Soon!",
     },
     {
-      url: "/support/others",
+      url: "#",
       title: "Helps",
       isBlank: false,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed, quam?",
+      desc: "Coming Soon!",
     },
   ];
 
@@ -253,8 +253,8 @@ export const Menubar = () => {
                     src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=3428&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   />
                   <Link
-                    href="/support"
-                    className="text-primary flex items-center gap-1 hover:underline absolute bottom-6"
+                    href="#"
+                    className="text-primary flex items-center gap-1 hover:underline absolute bottom-3"
                   >
                     See more
                     <Icon icon="solar:arrow-right-linear" fontSize={15} />

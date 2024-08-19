@@ -141,7 +141,7 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
                       id={id}
                       favorite={res?.favorite}
                       compare={res?.compare}
-                      categoryId={category.id}
+                      categoryId={category?.id}
                       thumbnail={thumbnail}
                       title={title}
                       desc={desc}
