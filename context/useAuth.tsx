@@ -13,39 +13,39 @@ interface Props {
   children: JSX.Element;
 }
 
-const getUser = async () => {
-  return await axios
-    .get(`${process.env.NEXT_PUBLIC_BACKEND}/api/me`, {
-      headers: {
-        Authorization: `Bearer ${
-          typeof window !== "undefined" && localStorage.getItem("access_token")
-        }`,
-      },
-    })
-    .then(({ status, data }) => {
-      if (status === 200) {
-        const user = data.data.user;
+// const getUser = async () => {
+//   return await axios
+//     .get(`${process.env.NEXT_PUBLIC_BACKEND}/api/me`, {
+//       headers: {
+//         Authorization: `Bearer ${
+//           typeof window !== "undefined" && localStorage.getItem("access_token")
+//         }`,
+//       },
+//     })
+//     .then(({ status, data }) => {
+//       if (status === 200) {
+//         const user = data.data.user;
 
-        return {
-          first_name: user.first_name,
-          last_name: user.last_name,
-          email: user.email,
-          avatar: user.avatar,
-          fullname: user?.fullname,
-          id: user?._id,
-          phone_number: user?.phone_number,
-          gender: user?.gender,
-        };
-      }
-      return;
-    })
-    .catch((e) => {
-      if (e.code === "ERR_NETWORK") {
-        return 401;
-      }
-      return null;
-    });
-};
+//         return {
+//           first_name: user.first_name,
+//           last_name: user.last_name,
+//           email: user.email,
+//           avatar: user.avatar,
+//           fullname: user?.fullname,
+//           id: user?._id,
+//           phone_number: user?.phone_number,
+//           gender: user?.gender,
+//         };
+//       }
+//       return;
+//     })
+//     .catch((e) => {
+//       if (e.code === "ERR_NETWORK") {
+//         return 401;
+//       }
+//       return null;
+//     });
+// };
 
 export const AppProvider: FC<Props> = (props) => {
   const [user, setUser] = useState<UserType | null>(null);
@@ -53,21 +53,25 @@ export const AppProvider: FC<Props> = (props) => {
   const { data, refetch } = useQuery(WISHLIST_NOTIFICATION);
 
   useEffect(() => {
-    setLoading(true);
-    const user = async () => {
-      const data = (await getUser()) as UserType;
-      if ((data as unknown as number) == 401) {
-        return setLoading(true);
-      }
-
-      setUser(data);
-      setTimeout(() => {
+    const fetchUserData = async () => {
+      setLoading(true);
+      try {
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/api/me`, {
+          withCredentials: true,
+        });
+        setUser({ ...data.data });
+      } catch (error) {
+        console.error(error);
+      } finally {
         setLoading(false);
-      }, 500);
+      }
     };
-    user();
+  
+    fetchUserData();
   }, []);
-
+    
+  console.log("user", user);
+  
   return (
     <AuthContext.Provider
       value={{
