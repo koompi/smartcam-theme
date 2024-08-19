@@ -28,9 +28,8 @@ const AboutPage = () => {
       >
         <TextSupportContent title="Vision">
           <p className="mb-8 text-xl text-neutral-600 md:text-2xl">
-            Our goal is to be the big and professional leading IT sales and
-            services provider in Cambodia. We are also confident that we can do
-            this because we have BEST (Services, Products and price).
+            To be the leading one-stop IT hardware solution provider in
+            Cambodia.
           </p>
         </TextSupportContent>
       </TextParallaxContent>
@@ -40,14 +39,10 @@ const AboutPage = () => {
         heading="Top hardware, best value"
       >
         <TextSupportContent title="Mission">
-          <ul className="list-disc mb-8 text-xl text-neutral-600 md:text-2xl pl-6 sm:pl-6 lg:pl-0">
-            <li>
-              Offer high quality products - competitive price and delivering
-              excellence customer services.
-            </li>
-            <li>To be the first choice of customers</li>
-            <li>Customer’s issue is our’s issue</li>
-          </ul>
+          <p className="mb-8 text-xl text-neutral-600 md:text-2xl">
+            Offer high quality products - competitive price and delivering
+            excellence customer service
+          </p>
         </TextSupportContent>
       </TextParallaxContent>
       <ClientGridCard />
