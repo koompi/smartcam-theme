@@ -154,4 +154,7 @@
   .swiper-slide {
     background: transparent;
   }
+  .fontSizeTextEditor {
+    font-size: 10px !important;
+  }
 }

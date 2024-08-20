@@ -293,7 +293,7 @@ export default function ComponentProducts({
                 id={id}
                 favorite={res?.favorite}
                 compare={res?.compare}
-                categoryId={category.id}
+                categoryId={category?.id}
                 thumbnail={thumbnail}
                 title={title}
                 desc={desc}

@@ -22,7 +22,6 @@ interface Props {
 }
 
 async function run(value: string, callback: Dispatch<SetStateAction<string>>) {
-
   return new Promise((resolve) => {
     const editor = createHeadlessEditor({
       namespace: "Editor",
@@ -55,5 +54,10 @@ export const LexicalReader: FC<Props> = ({ data = empty }) => {
     r();
   }, [data]);
 
-  return <div dangerouslySetInnerHTML={{ __html: content ?? empty }} />;
+  return (
+    <div
+      dangerouslySetInnerHTML={{ __html: content ?? empty }}
+      // className="text-danger"
+    />
+  );
 };

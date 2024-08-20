@@ -86,8 +86,6 @@ export const MainNavbar = () => {
     }
   }, [code, state, user]);
 
-  console.log("isTelegramAuth", isTelegramAuth);
-
   if (isTelegramAuth) {
     return <Loading />;
   }

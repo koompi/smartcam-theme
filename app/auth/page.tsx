@@ -28,12 +28,15 @@ export default function Telegram() {
               },
             },
             {
-              withCredentials: true
+              withCredentials: true,
             }
           )
           .then(async ({ data }) => {
-          // window.location.href =`${window.location.origin}?code=${data.token}&state=koompi`;
-          router.replace(`${window.location.origin}/code=${data.token}&state=koompi`)          })
+            // window.location.href =`${window.location.origin}?code=${data.token}&state=koompi`;
+            router.replace(
+              `${window.location.origin}/code=${data.token}&state=koompi`
+            );
+          })
           .catch((err: any) => {
             console.log("err", err);
           })
@@ -52,8 +55,11 @@ export default function Telegram() {
     return <Loading />;
   }
 
-  return<>
-  
-  <p>Token: {JSON.stringify(localStorage.getItem("access_token"), null, 4)}</p>
-  </>;
+  return (
+    <>
+      <p>
+        Token: {JSON.stringify(localStorage.getItem("access_token"), null, 4)}
+      </p>
+    </>
+  );
 }

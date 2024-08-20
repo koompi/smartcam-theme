@@ -39,6 +39,11 @@ export const WISHLISTS = gql`
           desc
           detail
           brand
+          stocks {
+            amount
+            status
+            freezed
+          }
           category {
             id
             title {
