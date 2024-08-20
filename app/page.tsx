@@ -5,7 +5,6 @@ import { Image } from "@nextui-org/react";
 import { Promotion } from "./components/Promotion";
 import ScrollingBanner from "@/components/CustomComponent/ScrollingBrandsBanner";
 import SectionListProducts from "./components/SectionListProducts";
-// import { products } from "@/data/products";
 import Banner from "./components/Banner";
 import Link from "next/link";
 import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";

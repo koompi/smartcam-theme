@@ -16,11 +16,11 @@ interface Props {
 // const getUser = async () => {
 //   return await axios
 //     .get(`${process.env.NEXT_PUBLIC_BACKEND}/api/me`, {
-//       headers: {
-//         Authorization: `Bearer ${
-//           typeof window !== "undefined" && localStorage.getItem("access_token")
-//         }`,
-//       },
+      // headers: {
+      //   Authorization: `Bearer ${
+      //     typeof window !== "undefined" && localStorage.getItem("access_token")
+      //   }`,
+      // },
 //     })
 //     .then(({ status, data }) => {
 //       if (status === 200) {
@@ -47,31 +47,71 @@ interface Props {
 //     });
 // };
 
+// let cookie = getCookie('access_token', {});
+// console.log("cookie", cookie);
+
+// const fetchUserData = async () => {
+//   // setLoading(true);
+//   fetch(`${process.env.NEXT_PUBLIC_BACKEND}/api/me`, {
+//     credentials: "include",
+//     method: "GET",
+//     headers: {
+//       Accept: "application/json",
+//       "Content-Type": "application/json",
+//     },
+//   }).then(function (response) {
+//     console.log("response", response);
+//   });
+// };
+
 export const AppProvider: FC<Props> = (props) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
   const { data, refetch } = useQuery(WISHLIST_NOTIFICATION);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      setLoading(true);
-      try {
-        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/api/me`, {
-          withCredentials: true,
+    setLoading(true);
+    try {
+      axios
+        .get(`${process.env.NEXT_PUBLIC_BACKEND}/api/me`, {
+          headers: {
+            Authorization: `Bearer ${
+              typeof window !== "undefined" &&
+              localStorage.getItem("access_token")
+            }`,
+          },
+        })
+        .then(
+          ({
+            status,
+            data,
+          }: {
+            status: number;
+            data: { data: UserType };
+          }) => {
+            if (status === 200) {
+              const user = data.data;                            
+              setLoading(false);              
+              setUser(user);
+              return
+            }            
+            setLoading(false);
+            setUser(null);
+          }
+        )
+        .catch((_) => {
+          setLoading(false);
+          setUser(null);
+          return;
         });
-        setUser({ ...data.data });
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    fetchUserData();
+    } catch (e) {
+      setLoading(false);
+      setUser(null);
+    }
   }, []);
-    
+
   console.log("user", user);
-  
+
   return (
     <AuthContext.Provider
       value={{

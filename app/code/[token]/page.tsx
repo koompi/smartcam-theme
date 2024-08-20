@@ -11,7 +11,7 @@ export default function Token() {
 
   useEffect(() => {
     if (param.token) {
-      customer_login(param.token).then((_) => {
+      customer_login(param.token).then((res) => {
         localStorage.setItem("access_token", param.token);
 
         if (typeof window !== "undefined") {
