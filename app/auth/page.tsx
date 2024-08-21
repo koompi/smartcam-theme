@@ -43,7 +43,7 @@ export default function Telegram() {
               .request(config)
               .then((response) => {
                 setTest(response.data);
-
+                router.push(`/code/${response.data.data.token}`)
                 // if (typeof window !== "undefined") {
                 //   router.replace(
                 //     `${window.location.origin}/code/${response.data.token}`
