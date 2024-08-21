@@ -33,8 +33,9 @@ export default function Telegram() {
           )
           .then(async (data) => {
             setTest(data)
-          // window.location.href =`${window.location.origin}?code=${data.token}&state=koompi`;
-          router.replace(`${window.location.origin}/code=${data.data.token}&state=koompi`)          })
+            // window.location.href =`${window.location.origin}?code=${data.token}&state=koompi`;
+            router.replace(`${window.location.origin}/code=${data.data.token}&state=koompi`)
+          })
           .catch((err: any) => {
             console.log("err", err);
           })
@@ -56,7 +57,7 @@ export default function Telegram() {
   return (
     <>
       <p>
-        Token: {JSON.stringify(localStorage.getItem("access_token"), null, 4)}
+        Token: {JSON.stringify(test, null, 4)}
       </p>
     </>
   );
