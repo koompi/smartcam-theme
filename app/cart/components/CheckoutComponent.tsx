@@ -435,7 +435,7 @@ const CheckoutComponent = () => {
               ) : (
                 <Button
                   as={Link}
-                  href="https://backend.riverbase.org/sso/store"
+                  href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
                   fullWidth
                   color="primary"
                   className="mt-8 text-background"

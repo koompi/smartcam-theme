@@ -108,7 +108,7 @@ export default function ComponentProducts({
                 rating={rating}
                 price={price}
                 slug={slug}
-                categoryId={category.id}
+                categoryId={category?.id}
                 promotion={{
                   isMembership: res.promotion?.isMembership,
                   discount: {
@@ -150,7 +150,7 @@ export default function ComponentProducts({
                 id={id}
                 favorite={res?.favorite}
                 compare={res?.compare}
-                categoryId={category.id}
+                categoryId={category?.id}
                 thumbnail={thumbnail}
                 title={title}
                 desc={desc}
@@ -198,7 +198,7 @@ export default function ComponentProducts({
                 id={id}
                 favorite={res?.favorite}
                 compare={res?.compare}
-                categoryId={category.id}
+                categoryId={category?.id}
                 thumbnail={thumbnail}
                 title={title}
                 desc={desc}
@@ -246,7 +246,7 @@ export default function ComponentProducts({
                 id={id}
                 favorite={res?.favorite}
                 compare={res?.compare}
-                categoryId={category.id}
+                categoryId={category?.id}
                 thumbnail={thumbnail}
                 title={title}
                 desc={desc}

@@ -363,7 +363,7 @@ export const MainNavbar = () => {
               <Button
                 as={Link}
                 color="primary"
-                href={`https://backend.riverbase.org/sso/store`}
+                href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
                 variant="flat"
                 radius="full"
                 size="md"
