@@ -41,11 +41,9 @@ export default function Telegram() {
 
         // Set state with the response data, only if the component is still mounted
         if (isMounted) {
-          setTest(getResponse.data);
-
           // Optional: Redirect if on client side
           if (typeof window !== "undefined") {
-            window.location.replace("/");
+            window.location.replace(`/code/${getResponse.data.token}`);
           }
         }
       } catch (error) {
