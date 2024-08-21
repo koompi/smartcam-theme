@@ -46,9 +46,11 @@ export default function Telegram() {
                 router.replace(
                   `${window.location.origin}/code/${response.data.token}`
                 );
+                return
               })
               .catch((error) => {
                 console.log(error);
+                return
               });
           })
           .catch((err: any) => {
@@ -69,9 +71,5 @@ export default function Telegram() {
     return <Loading />;
   }
 
-  return (
-    <>
-      <p>Token: {JSON.stringify(test, null, 4)}</p>
-    </>
-  );
+  return
 }
