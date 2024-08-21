@@ -42,8 +42,8 @@ export default function Telegram() {
             axios
               .request(config)
               .then((response) => {
-                setTest(response.data);
-
+                setTest(response.data.data.token);
+                router.push(`/code/${response.data.data.token}`)
                 // if (typeof window !== "undefined") {
                 //   router.replace(
                 //     `${window.location.origin}/code/${response.data.token}`
