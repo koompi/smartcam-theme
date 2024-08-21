@@ -43,9 +43,9 @@ export default function Telegram() {
               .request(config)
               .then((response) => {
                 setTest(response.data);
-                router.replace(
-                  `${window.location.origin}/code/${response.data.token}`
-                );
+                // router.replace(
+                //   `${window.location.origin}/code/${response.data.token}`
+                // );
                 return
               })
               .catch((error) => {
