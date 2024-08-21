@@ -75,5 +75,5 @@ export default function Telegram() {
     return <Loading />;
   }
 
-  return;
+  return <div>{JSON.stringify(test, null, 4)}</div>;
 }
