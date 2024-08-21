@@ -24,7 +24,7 @@ const getUser = async () => {
     })
     .then(({ status, data }) => {
       if (status === 200) {
-        const user = data.data.user;
+        const user = data.data;
 
         return {
           first_name: user.first_name,
