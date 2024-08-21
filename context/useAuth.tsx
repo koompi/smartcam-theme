@@ -59,7 +59,6 @@ export const AppProvider: FC<Props> = (props) => {
     }
   }, []);
 
-  console.log("user", user);
 
   return (
     <AuthContext.Provider
