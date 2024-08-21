@@ -92,7 +92,7 @@ const Banner = () => {
                     ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${res.thumbnail}`
                     : "/images/banner/default-banner.jpg"
                 }
-                className="h-[12rem] sm:h-[12rem] lg:h-[45rem] object-cover object-center w-screen"
+                className="h-[12rem] sm:h-[12rem] lg:h-[45rem] object-fill object-center w-screen"
               />
               {res.products.length > 0 && (
                 <div className="hidden sm:hidden lg:flex items-center mx-auto justify-center absolute z-30 bottom-12">
