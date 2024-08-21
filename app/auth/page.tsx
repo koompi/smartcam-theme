@@ -13,61 +13,67 @@ export default function Telegram() {
 
   const { user, webApp } = useTelegram();
 
- 
   useEffect(() => {
-    let isMounted = true; // Flag to track if the component is mounted
-
-    const fetchData = async () => {
+    setIsLoading(true);
+    const fetchUserAuth = async () => {
       try {
-        // First API call
-        const postResponse = await axios.post(
-          `https://oauth.selendra.org/v1/telegram/app?client_id=2141a78e3d57c22151da6d179fafc8a1.selendra.org&scope=default&response_type=code&state=koompi&redirect_uri=${window.location.origin}`,
-          {
-            data: {
-              ...user,
-              auth_date: webApp?.initDataUnsafe.auth_date,
-              hash: webApp?.initDataUnsafe.hash,
+        await axios
+          .post(
+            `https://oauth.selendra.org/v1/telegram/app?client_id=2141a78e3d57c22151da6d179fafc8a1.selendra.org&scope=default&response_type=code&state=koompi&redirect_uri=${window.location.origin}`,
+            {
+              data: {
+                ...user,
+                auth_date: webApp?.initDataUnsafe.auth_date,
+                hash: webApp?.initDataUnsafe.hash,
+              },
             },
-          },
-          {
-            withCredentials: true,
-          }
-        );
+            {
+              withCredentials: true,
+            }
+          )
+          .then(async (data) => {
+            let config = {
+              method: "get",
+              maxBodyLength: Infinity,
+              url: `${process.env.NEXT_PUBLIC_BACKEND}/telegram?code=${data.data.token}&state=`,
+              headers: {},
+            };
 
-        // Second API call using data from the first call
-        const getResponse = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND}/telegram?code=${postResponse.data.token}&state=`
-        );
+            axios
+              .request(config)
+              .then((response) => {
+                setTest(response.data);
 
-        // Set state with the response data, only if the component is still mounted
-        if (isMounted) {
-          // Optional: Redirect if on client side
-          if (typeof window !== "undefined") {
-            window.location.replace(`/code/${getResponse.data.token}`);
-          }
-        }
+                // if (typeof window !== "undefined") {
+                //   router.replace(
+                //     `${window.location.origin}/code/${response.data.token}`
+                //   );
+                //   return;
+                // }
+                return;
+              })
+              .catch((error) => {
+                console.log(error);
+                return;
+              });
+          })
+          .catch((err: any) => {
+            console.log("err", err);
+          })
+          .finally(() => setIsLoading(false));
       } catch (error) {
-        if (isMounted) {
-          console.error("Error fetching data:", error);
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false);
-        }
+        console.error("Error fetching data:", error);
       }
     };
 
-    // Call the async function
-    fetchData();
-
-    // Cleanup function to avoid memory leaks or race conditions
-    return () => {
-      isMounted = false;
-    };
-  }, [user, webApp]); 
-  
+    if (user) {
+      fetchUserAuth();
+    }
+  }, [webApp, user]);
 
   if (isLoading) {
     return <Loading />;
   }
+
+  return;
 }
