@@ -44,7 +44,7 @@ export default function Telegram() {
               .then((response) => {
                 setTest(response.data);
                 router.replace(
-                  `${window.location.origin}/code/${response.data.token}&state=koompi`
+                  `${window.location.origin}/code/${response.data.token}`
                 );
               })
               .catch((error) => {
