@@ -8,72 +8,52 @@ import React, { useEffect, useState } from "react";
 
 export default function Telegram() {
   const router = useRouter();
-  const [test, setTest] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
 
   const { user, webApp } = useTelegram();
 
   useEffect(() => {
-    setIsLoading(true);
     const fetchUserAuth = async () => {
+      setIsLoading(true);
       try {
-        await axios
-          .post(
-            `https://oauth.selendra.org/v1/telegram/app?client_id=2141a78e3d57c22151da6d179fafc8a1.selendra.org&scope=default&response_type=code&state=koompi&redirect_uri=${window.location.origin}`,
-            {
-              data: {
-                ...user,
-                auth_date: webApp?.initDataUnsafe.auth_date,
-                hash: webApp?.initDataUnsafe.hash,
-              },
+        // First API call
+        const postResponse = await axios.post(
+          `https://oauth.selendra.org/v1/telegram/app?client_id=2141a78e3d57c22151da6d179fafc8a1.selendra.org&scope=default&response_type=code&state=koompi&redirect_uri=${window.location.origin}`,
+          {
+            data: {
+              ...user,
+              auth_date: webApp?.initDataUnsafe.auth_date,
+              hash: webApp?.initDataUnsafe.hash,
             },
-            {
-              withCredentials: true,
-            }
-          )
-          .then(async (data) => {
-            let config = {
-              method: "get",
-              maxBodyLength: Infinity,
-              url: `${process.env.NEXT_PUBLIC_BACKEND}/telegram?code=${data.data.token}&state=`,
-              headers: {},
-            };
+          },
+          {
+            withCredentials: true,
+          }
+        );
 
-            axios
-              .request(config)
-              .then((response) => {
-                setTest(response.data.token);
-                router.push(`/code/${response.data.token}`)
-                // if (typeof window !== "undefined") {
-                //   router.replace(
-                //     `${window.location.origin}/code/${response.data.token}`
-                //   );
-                //   return;
-                // }
-                return;
-              })
-              .catch((error) => {
-                console.log(error);
-                return;
-              });
-          })
-          .catch((err: any) => {
-            console.log("err", err);
-          })
-          .finally(() => setIsLoading(false));
+        // Second API call using data from the first call
+        const getResponse = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND}/telegram?code=${postResponse.data.token}&state=`
+        );
+
+        // Redirect to the new page
+        router.push(`/code/${getResponse.data.token}`);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    if (user) {
+    // Conditionally trigger the effect if user and webApp are defined
+    if (user && webApp) {
       fetchUserAuth();
     }
-  }, [webApp, user]);
+  }, [user, webApp, router]); // Add router to the dependency array
 
   if (isLoading) {
     return <Loading />;
   }
 
-  return <div>{JSON.stringify(test, null, 4)}</div>;
+  return
 }
