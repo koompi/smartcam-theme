@@ -32,9 +32,24 @@ export default function Telegram() {
             }
           )
           .then(async (data) => {
-            setTest(data)
-            // window.location.href =`${window.location.origin}?code=${data.token}&state=koompi`;
-            router.replace(`${window.location.origin}/code/${data.data.token}&state=koompi`)
+            let config = {
+              method: "get",
+              maxBodyLength: Infinity,
+              url: `${process.env.NEXT_PUBLIC_BACKEND}/telegram?code=${data.data.token}&state=`,
+              headers: {},
+            };
+
+            axios
+              .request(config)
+              .then((response) => {
+                setTest(response.data);
+                router.replace(
+                  `${window.location.origin}/code/${response.data.token}&state=koompi`
+                );
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           })
           .catch((err: any) => {
             console.log("err", err);
@@ -56,9 +71,7 @@ export default function Telegram() {
 
   return (
     <>
-      <p>
-        Token: {JSON.stringify(test, null, 4)}
-      </p>
+      <p>Token: {JSON.stringify(test, null, 4)}</p>
     </>
   );
 }
