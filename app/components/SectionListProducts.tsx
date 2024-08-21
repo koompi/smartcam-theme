@@ -135,7 +135,7 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
                 return (
                   <div
                     key={idx}
-                    className="flex-shrink-0 w-1/6 h-full snap-center"
+                    className="flex-shrink-0 w-64 sm:w-64 lg:w-[21rem] h-full snap-center"
                   >
                     <ProductCard
                       id={id}
