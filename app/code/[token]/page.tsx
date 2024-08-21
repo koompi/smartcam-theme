@@ -11,13 +11,13 @@ export default function Token() {
 
   useEffect(() => {
     if (param.token) {
-      customer_login(param.token).then((res) => {
+      customer_login(param.token).then((_) => {
         localStorage.setItem("access_token", param.token);
 
         if (typeof window !== "undefined") {
           global && window.location.replace("/");
+          return
         }
-        return
       });
     }
     return;
