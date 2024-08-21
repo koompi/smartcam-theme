@@ -114,7 +114,7 @@ export const Promotion = () => {
               </Card>
             )}
           </div>
-          {saving.specialSaving.products?.length > 0 && (
+          {saving?.specialSaving.products?.length > 0 && (
             <Card
               shadow="none"
               className="col-span-4 rounded-3xl p-6 bg-danger/5 h-full"
@@ -142,7 +142,7 @@ export const Promotion = () => {
                     pagination={false}
                     modules={[EffectCube, Autoplay]}
                   >
-                    {saving.specialSaving.products.map(
+                    {saving?.specialSaving.products.map(
                       (res: ProductProps, idx: number) => {
                         return (
                           <SwiperSlide key={idx}>
@@ -161,7 +161,7 @@ export const Promotion = () => {
 
           <div className="col-span-5 flex flex-col gap-3">
             {/* limited time offer  */}
-            {data.promotionSpecialOffer.products.filter(
+            {data?.promotionSpecialOffer.products.filter(
               (t: any) =>
                 t.promotion.discount?.promotionStatus === "LIMITED_TIME"
             ).length > 0 && (
@@ -172,7 +172,7 @@ export const Promotion = () => {
                   </h1>
                   <p className="text-gray-600">Expired 30days</p>
                   <div className="grid grid-cols-3 items-stretch">
-                    {data.promotionSpecialOffer.products
+                    {data?.promotionSpecialOffer.products
                       .filter(
                         (t: any) =>
                           t.promotion.discount?.promotionStatus ===
@@ -195,7 +195,7 @@ export const Promotion = () => {
             )}
 
             {/* up coming promotion */}
-            {data.promotionSpecialOffer.products.filter(
+            {data?.promotionSpecialOffer.products.filter(
               (t: any) => t.promotion.discount?.promotionStatus === "UP_COMING"
             ).length > 0 && (
               <Card shadow="none" className="rounded-3xl p-6 bg-background">
@@ -203,7 +203,7 @@ export const Promotion = () => {
                   <h1 className="text-2xl font-semibold text-black">New</h1>
                   <p className="text-gray-600">Up coming promotion</p>
                   <div className="grid grid-cols-3 items-stretch">
-                    {data.promotionSpecialOffer.products
+                    {data?.promotionSpecialOffer.products
                       .filter(
                         (t: any) =>
                           t.promotion.discount?.promotionStatus === "UP_COMING"

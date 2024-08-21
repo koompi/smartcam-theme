@@ -28,7 +28,7 @@ export default function Telegram() {
               },
             },
             {
-              withCredentials: true
+              withCredentials: true,
             }
           )
           .then(async (data) => {
@@ -53,8 +53,11 @@ export default function Telegram() {
     return <Loading />;
   }
 
-  return<>
-  
-  <p>Token: {JSON.stringify(test, null, 4)}</p>
-  </>;
+  return (
+    <>
+      <p>
+        Token: {JSON.stringify(localStorage.getItem("access_token"), null, 4)}
+      </p>
+    </>
+  );
 }

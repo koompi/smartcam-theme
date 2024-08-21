@@ -25,6 +25,7 @@
     "baray-js": "github:baray-io/baray-js#dev",
     "baray-js-react": "github:baray-io/baray-js-react",
     "clsx": "^2.1.1",
+    "cookies-next": "^4.2.1",
     "dayjs": "^1.11.11",
     "framer-motion": "^11.2.11",
     "gsap": "^3.12.5",
