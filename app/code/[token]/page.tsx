@@ -17,6 +17,7 @@ export default function Token() {
         if (typeof window !== "undefined") {
           global && window.location.replace("/");
         }
+        return
       });
     }
     return;
