@@ -46,6 +46,10 @@ export default function Telegram() {
                 // router.replace(
                 //   `${window.location.origin}/code/${response.data.token}`
                 // );
+                if (typeof window !== "undefined") {
+                  global && window.location.replace("/");
+                  return
+                }
                 return
               })
               .catch((error) => {
