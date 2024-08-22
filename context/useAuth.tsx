@@ -31,19 +31,15 @@ export const AppProvider: FC<Props> = (props) => {
           },
         })
         .then(
-          ({
-            status,
-            data,
-          }: {
-            status: number;
-            data: { data: UserType };
-          }) => {
+          ({ status, data }: { status: number; data: { data: UserType } }) => {
             if (status === 200) {
-              const user = data.data;                            
-              setLoading(false);              
-              setUser(user);
-              return
-            }            
+              const user = data.data;
+              setUser({
+                ...user,
+              });
+              setLoading(false);
+              return;
+            }
             setLoading(false);
             setUser(null);
           }
@@ -58,7 +54,6 @@ export const AppProvider: FC<Props> = (props) => {
       setUser(null);
     }
   }, []);
-
 
   return (
     <AuthContext.Provider

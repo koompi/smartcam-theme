@@ -173,7 +173,7 @@ export default function PageLocation() {
 
   //   axios
   //     .post(
-  //       `https://backend.riverbase.org/api/upload/image/${user?.id}`,
+  //       `${process.env.NEXT_PUBLIC_BACKEND}/api/upload/image/${user?.id}`,
   //       body,
   //       {
   //         headers: {
