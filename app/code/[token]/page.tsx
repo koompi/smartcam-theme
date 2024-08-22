@@ -13,9 +13,9 @@ export default function Token() {
     if (param.token) {
       customer_login(param.token).then((_) => {
         localStorage.setItem("access_token", param.token);
-        window.location.href = "/";
         // router.replace("/");
       });
+      window.location.href = "/";
     }
     return;
   }, [param, router]);
