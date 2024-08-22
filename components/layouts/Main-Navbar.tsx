@@ -456,20 +456,19 @@ export const MainNavbar = () => {
             {/* </Link> */}
           </NavbarItem>
           <NavbarItem>
-            {user ? (
+            {loading ? (
+              <Skeleton className="flex rounded-full w-12 h-12" />
+            ) : user ? (
               <Dropdown placement="bottom-end">
-                {loading ? (
-                  <Skeleton className="flex rounded-full w-12 h-12" />
-                ) : (
-                  <DropdownTrigger>
-                    <Avatar
-                      isBordered
-                      as="button"
-                      className="transition-transform"
-                      src={user?.avatar}
-                    />
-                  </DropdownTrigger>
-                )}
+                <DropdownTrigger>
+                  <Avatar
+                    isBordered
+                    as="button"
+                    className="transition-transform"
+                    src={user?.avatar}
+                  />
+                </DropdownTrigger>
+
                 <DropdownMenu aria-label="User Actions" variant="flat">
                   <DropdownItem key="profile" className="h-14 gap-2">
                     <p className="font-bold">Signed in as</p>

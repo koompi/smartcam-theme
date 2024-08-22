@@ -13,7 +13,8 @@ export default function Token() {
     if (param.token) {
       customer_login(param.token).then((_) => {
         localStorage.setItem("access_token", param.token);
-        router.push("/");
+        window.location.href = "/";
+        // router.replace("/");
       });
     }
     return;
