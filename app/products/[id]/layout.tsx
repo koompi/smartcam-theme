@@ -40,18 +40,19 @@ export async function generateMetadata(
 
     return {
       title: product.product.title || "Default Title",
-      description: product.product.desc || "Default Description",
+      description: product.product.brand || "Default Description",
+      metadataBase: new URL("https://smartcam.riverbase.org"),
       openGraph: {
         title: {
           default: product.product.title || "Default Title",
           template: `%s - ${product.product.title || "Default Title"}`,
         },
-        description: product.product.desc || "Default Description",
+        description: product.product.brand || "Default Description",
         images: [
           {
             url: `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${product.product.thumbnail}`,
-            width: 800,
-            height: 600,
+            width: 1200,
+            height: 630,
           },
           ...previousImages,
         ],

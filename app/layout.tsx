@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   description:
     "Smartcam  is the leading company focus on electronics ( computer , Printer ( EPSON, HP, CANON) and parts). we will our best to offer best services and products.",
 
-  metadataBase: new URL("https://riverbase.org"),
+  metadataBase: new URL("https://smartcam.riverbase.org"),
   alternates: {
     canonical: "/",
     languages: {
@@ -40,18 +40,18 @@ export const metadata: Metadata = {
     },
     description:
       "Smartcam  is the leading company focus on electronics ( computer , Printer ( EPSON, HP, CANON) and parts). we will our best to offer best services and products.",
-    url: "https://riverbase.org",
-    siteName: "Riverbase",
+    url: "https://smartcam.riverbase.org",
+    siteName: "Smartcam",
     images: [
       {
-        url: "http://localhost:3000/images/smartcam-logo.png",
-        width: 800,
-        height: 600,
+        url: "/images/smartcam-logo.png",
+        width: 1200,
+        height: 630,
       },
       {
-        url: "http://localhost:3000/images/smartcam-logo.png",
-        width: 1800,
-        height: 1600,
+        url: "/images/smartcam-logo.png",
+        width: 1200,
+        height: 630,
         alt: "My custom alt",
       },
     ],

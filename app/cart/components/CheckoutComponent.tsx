@@ -112,7 +112,7 @@ const CheckoutComponent = () => {
           const intentId = res.data.customerCheckout["intentId"];
           baray!.confirmPayment({
             intent_id:intentId,
-            use_iframe:false,
+            use_iframe:false, 
             on_success: ()=> cleanCartItems()
           });
           setLoading(false);

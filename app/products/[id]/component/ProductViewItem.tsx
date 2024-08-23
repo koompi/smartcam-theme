@@ -512,7 +512,7 @@ export const ProductViewItem = React.forwardRef<
                                         "https://drive.backend.riverbase.org"
                                       }/api/drive?hash=${item?.previews}`}
                                       className="h-12 col-span-1"
-                                      radius="md" 
+                                      radius="md"
                                     />
                                     <div className="col-span-4">
                                       <span className="text-md font-semibold line-clamp-1">
@@ -624,7 +624,7 @@ export const ProductViewItem = React.forwardRef<
                     </Button>
                   </div>
                   <div className="mt-6">
-                    <Button
+                    {/* <Button
                       className="col-span-6"
                       variant="shadow"
                       size="lg"
@@ -636,7 +636,7 @@ export const ProductViewItem = React.forwardRef<
                       }
                     >
                       Buy Now
-                    </Button>
+                    </Button> */}
                     <div className="grid grid-cols-12 place-items-center gap-3 mt-3">
                       <Button
                         className="col-span-6"
@@ -1135,7 +1135,7 @@ export const ProductViewItem = React.forwardRef<
               </p> */}
 
               <div className="mt-6">
-                <Button
+                {/* <Button
                   className="col-span-6"
                   variant="shadow"
                   size="lg"
@@ -1145,7 +1145,7 @@ export const ProductViewItem = React.forwardRef<
                   startContent={<Icon icon="solar:bag-3-bold" fontSize={24} />}
                 >
                   Buy Now
-                </Button>
+                </Button> */}
                 <div className="grid grid-cols-12 place-items-center gap-3 mt-3">
                   <Button
                     className="col-span-6"
