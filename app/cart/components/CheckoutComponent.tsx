@@ -110,8 +110,10 @@ const CheckoutComponent = () => {
       .then((res) => {
         if (paymentOption === "ONLINE") {
           const intentId = res.data.customerCheckout["intentId"];
-          baray!.confirmPayment(intentId, () => {
-            cleanCartItems();
+          baray!.confirmPayment({
+            intent_id:intentId,
+            use_iframe:false,
+            on_success: ()=> cleanCartItems()
           });
           setLoading(false);
         } else {
