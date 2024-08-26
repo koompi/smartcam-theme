@@ -13,6 +13,9 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import axios, { AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { useAuth } from "@/context/useAuth";
+import { SelectProvince } from "./SelectProvince";
+import { SelectDistrict } from "./SelectDistrict";
+import { SelectCommune } from "./SelectCommune";
 
 type LocationForm = {
   firstName: string;
@@ -29,11 +32,12 @@ type LocationForm = {
 
 export const LocationForm: FC<{
   register: any;
+  watch: any;
   photo: string;
   setPhoto: Function;
   addressLabel: string;
   setAddressLabel: Function;
-}> = ({ register, photo, setPhoto, addressLabel, setAddressLabel }) => {
+}> = ({ register, photo, setPhoto, addressLabel, setAddressLabel, watch }) => {
   const { user } = useAuth();
   async function handleChange(e: any) {
     e.preventDefault();
@@ -60,6 +64,7 @@ export const LocationForm: FC<{
         toast.error(error.message);
       });
   }
+
   return (
     <>
       {/* <Modal
@@ -303,7 +308,7 @@ export const LocationForm: FC<{
         <div className="col-span-6 pb-2">
           <RadioGroup
             aria-label="Color"
-            label="Label"
+            label={<p className="text-black">Label</p>}
             classNames={{
               base: "mt-2",
               wrapper: "gap-2",
@@ -311,7 +316,7 @@ export const LocationForm: FC<{
             orientation="horizontal"
             {...register("label")}
             value={addressLabel}
-            onValueChange={setAddressLabel}
+            onValueChange={(value) => setAddressLabel(value)}
           >
             <LocationLabel value="Home" />
             <LocationLabel value="School" />
@@ -320,9 +325,9 @@ export const LocationForm: FC<{
           </RadioGroup>
         </div>
         <div className="col-span-6">
-          <label>Photo</label>
+          <label className="text-black">Photo</label>
           {!photo ? (
-            <div className="text-center mt-2 font-medium text-gray-900 w-full">
+            <div className="text-center mt-2 font-medium w-full">
               <label className="relative cursor-pointer flex flex-col justify-center items-center border border-dashed rounded-xl h-72">
                 <Icon icon="solar:streets-map-point-broken" fontSize={70} />
                 <span>Location picture</span>
@@ -364,17 +369,23 @@ export const LocationForm: FC<{
             </div>
           )}
         </div>
-        <div className="col-span-2 ">
+        <div className="col-span-2">
           <Select
             {...register("salutation", {
               required: "Salutation is required",
             })}
-            variant="flat"
-            label="Salutation"
             placeholder="Salutation"
+            label="Salutation"
             labelPlacement="outside"
             size="lg"
-          // defaultSelectedKeys={[store?.location?.salutation]}
+            selectionMode="single"
+            defaultSelectedKeys={
+              user?.gender === "MALE"
+                ? ["MR"]
+                : user?.gender === "FEMALE"
+                  ? ["MS"]
+                  : ["OTHER"]
+            }
           >
             <SelectItem key="MR">MR</SelectItem>
             <SelectItem key="MS">MS</SelectItem>
@@ -389,10 +400,10 @@ export const LocationForm: FC<{
             {...register("firstName", {
               required: "First name is required",
             })}
-            // defaultValue={store?.location?.firstName}
+            defaultValue={user?.first_name}
             size="lg"
             isRequired
-            placeholder="Eg: VAN"
+            placeholder="eg. VAN"
           />
         </div>
         <div className="col-span-2">
@@ -403,10 +414,10 @@ export const LocationForm: FC<{
             {...register("lastName", {
               required: "Last name is required",
             })}
-            // defaultValue={store?.location?.lastName}
+            defaultValue={user?.last_name}
             size="lg"
             isRequired
-            placeholder="Eg: Soklay"
+            placeholder="eg. Soklay"
           />
         </div>
         <div className="col-span-6">
@@ -417,10 +428,10 @@ export const LocationForm: FC<{
             {...register("email", {
               required: "Email is required",
             })}
-            // defaultValue={store?.location?.email}
+            defaultValue={user?.email}
             size="lg"
             isRequired
-            placeholder="Eg: example@gmail.com"
+            placeholder="eg. example@gmail.com"
           />
         </div>
         <div className="col-span-6">
@@ -431,10 +442,10 @@ export const LocationForm: FC<{
             {...register("phoneNumber", {
               required: "Phone number is required",
             })}
-            // defaultValue={store?.location?.phoneNumber}
+            defaultValue={user?.phone_number}
             size="lg"
             isRequired
-            placeholder="Eg: 010959402"
+            placeholder="0xxxxxxxx"
           />
         </div>
         <div className="col-span-3">
@@ -448,117 +459,26 @@ export const LocationForm: FC<{
             labelPlacement="outside"
             size="lg"
             placeholder="Country"
-          // defaultSelectedKeys={[parseInt(store?.location?.countryId)]}
           >
             <SelectItem key="1">Cambodia</SelectItem>
           </Select>
         </div>
         <div className="col-span-3">
-          <Select
-            {...register("provinceId", {
-              required: "Salutation is required",
-            })}
-            placeholder="Province"
-            variant="flat"
-            label="Province"
-            labelPlacement="outside"
-            size="lg"
-          // defaultSelectedKeys={[parseInt(store?.location?.provinceId)]}
-          >
-            {[
-              {
-                id: 2,
-                name_kh: "បន្ទាយមានជ័យ",
-                name_en: "BANTEAY MEANCHEY",
-                text: "បន្ទាយមានជ័យ",
-              },
-              {
-                id: 3,
-                name_kh: "បាត់ដំបង",
-                name_en: "BATTAMBANG",
-                text: "បាត់ដំបង",
-              },
-              {
-                id: 13,
-                name_kh: "ភ្នំពេញ",
-                name_en: "PHNOM PENH",
-                text: "ភ្នំពេញ",
-              },
-            ].map((item) => (
-              <SelectItem key={item.id}>{item.name_en}</SelectItem>
-            ))}
-          </Select>
+          <SelectProvince register={register} active="" />
         </div>
         <div className="col-span-3">
-          <Select
-            {...register("districtId", {
-              required: "District is required",
-            })}
-            placeholder="District"
-            variant="flat"
-            label="District"
-            labelPlacement="outside"
-            size="lg"
-          // defaultSelectedKeys={[parseInt(store?.location?.districtId)]}
-          >
-            {[
-              {
-                id: 95,
-                name_kh: "ចំការមន",
-                name_en: "CHAMKAR MON",
-                text: "ចំការមន",
-                display: "ខណ្ឌ ចំការមន",
-              },
-              {
-                id: 96,
-                name_kh: "ដូនពេញ",
-                name_en: "DAUN PENH",
-                text: "ដូនពេញ",
-                display: "ខណ្ឌ ដូនពេញ",
-              },
-              {
-                id: 97,
-                name_kh: "៧មករា",
-                name_en: "PRAMPIR MAKARA",
-                text: "៧មករា",
-                display: "ខណ្ឌ ៧មករា",
-              },
-            ].map((item) => (
-              <SelectItem key={item.id}>{item.name_en}</SelectItem>
-            ))}
-          </Select>
+          <SelectDistrict
+            register={register}
+            id={watch("provinceId")}
+            active=""
+          />
         </div>
         <div className="col-span-3">
-          <Select
-            {...register("communeId", {
-              required: "Commune is required",
-            })}
-            placeholder="Commune"
-            variant="flat"
-            label="Commune"
-            labelPlacement="outside"
-            size="lg"
-          // defaultSelectedKeys={[store?.location?.communeId]}
-          >
-            {[
-              {
-                id: "7169",
-                name_kh: "ទន្លេបាសាក់",
-                name_en: "TONLE BASAK",
-                text: "ទន្លេបាសាក់",
-                display: "សង្កាត់ ទន្លេបាសាក់",
-              },
-              {
-                id: 7170,
-                name_kh: "បឹងកេងកងទី ១",
-                name_en: "BOENG KENG KANG I",
-                text: "បឹងកេងកងទី ១",
-                display: "សង្កាត់ បឹងកេងកងទី ១",
-              },
-            ].map((item) => (
-              <SelectItem key={item.id}>{item.name_en}</SelectItem>
-            ))}
-          </Select>
+          <SelectCommune
+            register={register}
+            id={watch("districtId")}
+            active=""
+          />
         </div>
       </div>
     </>

@@ -4,13 +4,33 @@ import React from "react";
 import { Link as MyLink, Button } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import MyLocation from "./components/MyLocation";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { LocationType } from "@/types/location";
 import { GET_ALL_LOCATIONS } from "@/graphql/location";
 import Link from "next/link";
+import { DELETE_LOCATION } from "@/graphql/mutation/location";
+import { toast } from "sonner";
 
 export default function Page() {
-  const { data, loading } = useQuery(GET_ALL_LOCATIONS);
+  const { data, loading, refetch } = useQuery(GET_ALL_LOCATIONS);
+
+  const [deleteLocation] = useMutation(DELETE_LOCATION);
+
+  const handleDeleteLocation = (id: string) => {
+    deleteLocation({
+      variables: {
+        deleteLocationId: id,
+      },
+    })
+      .then((_) => {
+        refetch();
+        toast.success("Successfully to remove your location!");
+      })
+      .catch((err) => {
+        toast.error("Failed to remove your location!");
+        console.log("err", err);
+      });
+  };
 
   if (loading) {
     return null;
@@ -21,7 +41,13 @@ export default function Page() {
       <h1 className="text-xl font-medium">My Locations</h1>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-3 mt-3">
         {data?.storeLocations?.map((location: LocationType, idx: number) => {
-          return <MyLocation key={idx} {...location} />;
+          return (
+            <MyLocation
+              key={idx}
+              {...location}
+              handleDeleteLocation={handleDeleteLocation}
+            />
+          );
         })}
         <MyLink
           as={Link}

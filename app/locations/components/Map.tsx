@@ -19,8 +19,6 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 
-import axios from "axios";
-
 interface MapProps {
   zoom: number;
   position: L.LatLngExpression;
@@ -37,14 +35,12 @@ function DraggableMarker({
   addressName,
   setLatitude,
   setLongitude,
-  setMap,
 }: {
   position: L.LatLngExpression | L.LatLngTuple;
   setPosition: Function;
   addressName: string;
   setLatitude: Function;
   setLongitude: Function;
-  setMap: Function;
 }) {
   const [draggable, setDraggable] = useState(true);
   const markerRef = useRef<any>(null);
@@ -109,18 +105,22 @@ const Map: React.FC<MapProps> = ({
   useEffect(() => {
     const fetchAddress = async () => {
       const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
+
       try {
-        const response = await axios.get(url);
-        setAddress(response.data.address);
-        setAddressName(response.data.display_name);
-        setMap(response.data);
+        const response = await fetch(url);
+        const data = await response.json(); // Parse JSON manually
+
+        setAddress(data.address);
+        setAddressName(data.display_name);
+        setMap(data);
       } catch (error) {
         console.error("Error fetching address:", error);
       }
     };
 
     if (position) {
-      fetchAddress();
+      const debounceFetch = setTimeout(fetchAddress, 300);
+      return () => clearTimeout(debounceFetch);
     }
   }, [latitude, longitude, position, setAddressName, setAddress, setMap]);
 
@@ -141,7 +141,6 @@ const Map: React.FC<MapProps> = ({
         addressName={addressName}
         setLatitude={setLatitude}
         setLongitude={setLongitude}
-        setMap={setMap}
       />
     </MapContainer>
   );

@@ -6,15 +6,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import {
   Button,
-  Chip,
-  Image,
-  Input,
-  RadioGroup,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   useDisclosure,
   Card,
   CardFooter,
@@ -23,13 +14,11 @@ import {
 } from "@nextui-org/react";
 import { LocationForm } from "./components/LocationForm";
 import { validateNumber } from "@/utils/phone";
-import axios, { AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { useMutation } from "@apollo/client";
 import { CREATE_CUSTOMER_LOCATION } from "@/graphql/mutation/location";
 import { useAuth } from "@/context/useAuth";
 import dynamic from "next/dynamic";
-import LocationLabel from "../components/LocationLabel";
 
 const MyMap = dynamic(() => import("../components/Map"), {
   ssr: false,
@@ -64,11 +53,9 @@ export default function PageLocation() {
   ]);
   const [addressName, setAddressName] = useState<string>("");
 
-  const location: L.LatLngExpression = [11.562108, 104.888535];
   const [address, setAddress] = useState<any | null>(null);
   const [map, setMap] = useState<any | null>(null);
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [newPhone, setNewPhone] = useState(initialNewPhone);
   const [isValid, setIsValid] = useState(false);
   const [validationMessage, setValidationMessage] = useState("");
@@ -82,13 +69,7 @@ export default function PageLocation() {
 
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm<FormCreateLocation>();
+  const { register, handleSubmit, watch } = useForm<FormCreateLocation>();
 
   const [storeCreateLocation] = useMutation(CREATE_CUSTOMER_LOCATION);
 
@@ -128,6 +109,7 @@ export default function PageLocation() {
     let bodyLocation = {
       ...values,
       ...position,
+      label: addressLabel,
       photos: photo.length > 0 ? [photo] : null,
       map: address,
     };
@@ -145,8 +127,8 @@ export default function PageLocation() {
       },
     })
       .then(() => {
-        toast.success("New location has been created!");
-        router.push(`/cart?steps=shipping`);
+        toast.success("Successfully added location!");
+        router.back();
       })
       .catch((err) => {
         toast.error(err.message);
@@ -205,7 +187,7 @@ export default function PageLocation() {
       <div className="container max-w-4xl mx-auto px-6 w-full pt-9 pb-36">
         <div className="mb-4">
           <Button
-            className="-ml-2 text-default-700"
+            className="-ml-2"
             radius="full"
             variant="flat"
             onClick={() => router.back()}
@@ -215,7 +197,7 @@ export default function PageLocation() {
           </Button>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Card shadow="sm" className="p-4 text-black">
+          <Card shadow="sm" className="p-4">
             <CardHeader>
               <h1 className="text-xl font-semibold">
                 <div>
@@ -228,13 +210,14 @@ export default function PageLocation() {
                 </div>
               </h1>
             </CardHeader>
-            <CardBody>
+            <CardBody className="text-gray-400">
               <LocationForm
                 register={register}
                 photo={photo}
                 setPhoto={setPhoto}
                 addressLabel={addressLabel}
                 setAddressLabel={setAddressLabel}
+                watch={watch}
               />
             </CardBody>
             <CardHeader>

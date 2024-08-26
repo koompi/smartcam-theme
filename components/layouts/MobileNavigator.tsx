@@ -64,7 +64,7 @@ const MobileNavigator = () => {
                 {nav.is_badge ? (
                   <>
                     <Badge
-                      content={cartItems?.length}
+                      content={cartItems?.length > 0 && cartItems?.length}
                       shape="circle"
                       color="danger"
                     >
@@ -106,7 +106,7 @@ const MobileNavigator = () => {
                     <Badge
                       shape="circle"
                       color="danger"
-                      content={cartItems?.length}
+                      content={cartItems?.length > 0 && cartItems?.length}
                     >
                       <Button
                         as={Link}

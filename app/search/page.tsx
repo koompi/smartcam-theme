@@ -112,7 +112,7 @@ export default function SearchPage() {
                   slug,
                   currencyPrice,
                   stocks,
-                  category
+                  category,
                 } = res?.product;
 
                 return (

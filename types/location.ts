@@ -32,4 +32,5 @@ export type LocationType = {
   address: Address;
   photos: string[];
   label: string;
+  handleDeleteLocation: (id: string) => void;
 };

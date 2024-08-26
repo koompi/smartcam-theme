@@ -31,8 +31,8 @@ import { PromotionType } from "@/types/promotion";
 import { ESTIMATION_PRICE } from "@/graphql/order";
 import { ProductType } from "@/types/product";
 import { ESTIMATE_PRICE } from "@/graphql/delivery";
-import RecommendProducts from "./RecommendProducts";
-import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
+// import RecommendProducts from "./RecommendProducts";
+// import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
 import { useBaray } from "@/hooks/baray";
 
 interface OrderCart {
@@ -81,15 +81,15 @@ const CheckoutComponent = () => {
     },
   });
 
-  const { data: products } = useQuery(GLOBAL_PRODUCT_FILTERING, {
-    variables: {
-      filter: {
-        limit: 10,
-        skip: 0,
-        sort: -1,
-      },
-    },
-  });
+  // const { data: products } = useQuery(GLOBAL_PRODUCT_FILTERING, {
+  //   variables: {
+  //     filter: {
+  //       limit: 10,
+  //       skip: 0,
+  //       sort: -1,
+  //     },
+  //   },
+  // });
 
   // checkout orders product
   const onSubmitCheckout = async () => {
@@ -111,9 +111,9 @@ const CheckoutComponent = () => {
         if (paymentOption === "ONLINE") {
           const intentId = res.data.customerCheckout["intentId"];
           baray!.confirmPayment({
-            intent_id:intentId,
-            use_iframe:false, 
-            on_success: ()=> cleanCartItems()
+            intent_id: intentId,
+            use_iframe: false,
+            on_success: () => cleanCartItems(),
           });
           setLoading(false);
         } else {
@@ -452,19 +452,92 @@ const CheckoutComponent = () => {
         </div>
       </div>
       <div className="col-span-2">
-        {page <= 0 ? (
-          <RecommendProducts
-            products={products?.storeGlobalFilterProducts?.products}
-          />
-        ) : (
-          <div className="sticky top-28 hidden sm:hidden lg:block">
-            <Card shadow="sm" isBlurred>
-              <CardHeader>Summary</CardHeader>
-              <CardBody>
-                <dl className="flex flex-col gap-4 py-4">
-                  <div className="flex justify-between">
-                    <dt className="text-small text-default-500">Subtotal</dt>
+        <div className="sticky top-28 hidden sm:hidden lg:block">
+          <Card shadow="sm" isBlurred>
+            <CardHeader>Summary</CardHeader>
+            <CardBody>
+              <dl className="flex flex-col gap-4 py-4">
+                <div className="flex justify-between">
+                  <dt className="text-small text-default-500">Subtotal</dt>
+                  <dd className="text-small font-semibold text-default-700">
+                    $
+                    {orders?.estimationOrders
+                      ?.reduce(
+                        (accumulator: number, currentObject: OrderCart) => {
+                          return (
+                            accumulator +
+                            (currentObject?.promotion?.discount
+                              ? currentObject?.promotion?.discount
+                                  ?.originalPrice
+                              : currentObject?.product?.price) *
+                              currentObject?.qty
+                          );
+                        },
+                        0
+                      )
+                      .toFixed(2)}
+                  </dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-small text-default-500">Discount</dt>
+                  <dd className="text-small font-semibold text-default-700">
+                    {/* ${(price - priceDiscount).toFixed(2)} */}$
+                    {orders?.estimationOrders
+                      ?.reduce(
+                        (accumulator: number, currentObject: OrderCart) => {
+                          return (
+                            accumulator +
+                            ((currentObject?.promotion?.discount
+                              ? currentObject?.promotion?.discount
+                                  ?.originalPrice
+                              : currentObject.product.price) *
+                              currentObject?.qty -
+                              (currentObject?.promotion?.discount
+                                ? currentObject?.promotion?.discount
+                                    ?.totalDiscount
+                                : currentObject.product.price) *
+                                currentObject?.qty)
+                          );
+                        },
+                        0
+                      )
+                      .toFixed(2)}
+                  </dd>
+                </div>
+
+                <div className="flex justify-between">
+                  <dt className="text-small text-default-500 flex items-center gap-3">
+                    Delivery
+                    <Icon
+                      icon="streamline:transfer-motorcycle-solid"
+                      fontSize={16}
+                    />
+                  </dt>
+
+                  {delivery === "PERSONAL" ? (
                     <dd className="text-small font-semibold text-default-700">
+                      Free
+                    </dd>
+                  ) : (
+                    <dd className="text-small font-semibold text-default-700">
+                      {loading ? "...." : ship?.toFixed(2)}
+                    </dd>
+                  )}
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-small text-default-500">Tax</dt>
+                  <dd className="text-small font-semibold text-default-700">
+                    $0.00
+                  </dd>
+                </div>
+
+                <Divider />
+                <div className="flex justify-between">
+                  <dt className="text-small font-semibold text-default-500">
+                    Total
+                  </dt>
+                  {delivery === "PERSONAL" ? (
+                    <dd className="font-semibold text-primary text-xl">
                       $
                       {orders?.estimationOrders
                         ?.reduce(
@@ -473,8 +546,8 @@ const CheckoutComponent = () => {
                               accumulator +
                               (currentObject?.promotion?.discount
                                 ? currentObject?.promotion?.discount
-                                    ?.originalPrice
-                                : currentObject?.product?.price) *
+                                    ?.totalDiscount
+                                : currentObject.product.price) *
                                 currentObject?.qty
                             );
                           },
@@ -482,110 +555,31 @@ const CheckoutComponent = () => {
                         )
                         .toFixed(2)}
                     </dd>
-                  </div>
-                  <div className="flex justify-between">
-                    <dt className="text-small text-default-500">Discount</dt>
-                    <dd className="text-small font-semibold text-default-700">
-                      {/* ${(price - priceDiscount).toFixed(2)} */}$
-                      {orders?.estimationOrders
-                        ?.reduce(
+                  ) : (
+                    <dd className="font-semibold text-primary text-xl">
+                      $
+                      {(
+                        orders?.estimationOrders?.reduce(
                           (accumulator: number, currentObject: OrderCart) => {
                             return (
                               accumulator +
-                              ((currentObject?.promotion?.discount
+                              (currentObject?.promotion?.discount
                                 ? currentObject?.promotion?.discount
-                                    ?.originalPrice
+                                    ?.totalDiscount
                                 : currentObject.product.price) *
-                                currentObject?.qty -
-                                (currentObject?.promotion?.discount
-                                  ? currentObject?.promotion?.discount
-                                      ?.totalDiscount
-                                  : currentObject.product.price) *
-                                  currentObject?.qty)
+                                currentObject?.qty
                             );
                           },
                           0
-                        )
-                        .toFixed(2)}
+                        ) + ship
+                      ).toFixed(2)}
                     </dd>
-                  </div>
-
-                  <div className="flex justify-between">
-                    <dt className="text-small text-default-500 flex items-center gap-3">
-                      Delivery
-                      <Icon
-                        icon="streamline:transfer-motorcycle-solid"
-                        fontSize={16}
-                      />
-                    </dt>
-
-                    {delivery === "PERSONAL" ? (
-                      <dd className="text-small font-semibold text-default-700">
-                        Free
-                      </dd>
-                    ) : (
-                      <dd className="text-small font-semibold text-default-700">
-                        {loading ? "...." : ship?.toFixed(2)}
-                      </dd>
-                    )}
-                  </div>
-                  <div className="flex justify-between">
-                    <dt className="text-small text-default-500">Tax</dt>
-                    <dd className="text-small font-semibold text-default-700">
-                      $0.00
-                    </dd>
-                  </div>
-
-                  <Divider />
-                  <div className="flex justify-between">
-                    <dt className="text-small font-semibold text-default-500">
-                      Total
-                    </dt>
-                    {delivery === "PERSONAL" ? (
-                      <dd className="font-semibold text-primary text-xl">
-                        $
-                        {orders?.estimationOrders
-                          ?.reduce(
-                            (accumulator: number, currentObject: OrderCart) => {
-                              return (
-                                accumulator +
-                                (currentObject?.promotion?.discount
-                                  ? currentObject?.promotion?.discount
-                                      ?.totalDiscount
-                                  : currentObject.product.price) *
-                                  currentObject?.qty
-                              );
-                            },
-                            0
-                          )
-                          .toFixed(2)}
-                      </dd>
-                    ) : (
-                      <dd className="font-semibold text-primary text-xl">
-                        $
-                        {(
-                          orders?.estimationOrders?.reduce(
-                            (accumulator: number, currentObject: OrderCart) => {
-                              return (
-                                accumulator +
-                                (currentObject?.promotion?.discount
-                                  ? currentObject?.promotion?.discount
-                                      ?.totalDiscount
-                                  : currentObject.product.price) *
-                                  currentObject?.qty
-                              );
-                            },
-                            0
-                          ) + ship
-                        ).toFixed(2)}
-                      </dd>
-                    )}
-                  </div>
-                </dl>
-              </CardBody>
-            </Card>
-          </div>
-        )}
+                  )}
+                </div>
+              </dl>
+            </CardBody>
+          </Card>
+        </div>
       </div>
     </section>
   );

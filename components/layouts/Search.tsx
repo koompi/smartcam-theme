@@ -56,6 +56,7 @@ export const Search = () => {
         color="primary"
         isIconOnly
         onPress={onOpen}
+        className="hidden sm:hidden lg:flex"
       >
         <Icon icon="mingcute:menu-fill" fontSize={26} />
       </Button>

@@ -16,11 +16,15 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Skeleton,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
   Link as MyLink,
   cn,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+  Chip,
 } from "@nextui-org/react";
 import React, { useEffect, useRef, useState } from "react";
 import Header from "./Header";
@@ -33,6 +37,7 @@ import { Search } from "./Search";
 import { Drawer } from "vaul";
 import axios from "axios";
 import { Loading } from "../globals/Loading";
+import { icon } from "leaflet";
 
 export const MainNavbar = () => {
   const router = useRouter();
@@ -41,7 +46,8 @@ export const MainNavbar = () => {
   const { cartItems, logout } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const [popOpen, setPopOpen] = useState(true);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const cartIconRef = useRef<HTMLDivElement>(null);
 
   const [isTelegramAuth, setIsTelegramAuth] = useState<boolean>(false);
@@ -94,22 +100,27 @@ export const MainNavbar = () => {
     {
       url: "/",
       title: "Home",
+      icon: "solar:home-2-bold",
     },
     {
       url: "/products",
       title: "Products",
+      icon: "solar:bag-3-bold",
     },
     {
       url: "/promotions",
       title: "Special Offer",
+      icon: "solar:tag-price-bold",
     },
     {
       url: "/about",
       title: "Who We Are?",
+      icon: "solar:question-circle-bold",
     },
     {
       url: "/contact",
       title: "Contact US",
+      icon: "mingcute:contacts-3-fill",
     },
     // {
     //   url: "/events",
@@ -121,118 +132,177 @@ export const MainNavbar = () => {
     //   title: "Careers",
     // },
 
-    {
-      url: "/support/video-support",
-      title: "Video Support",
-    },
-    {
-      url: "/support/software_support",
-      title: "Sofware Support",
-    },
-    {
-      url: "/support/others",
-      title: "Helps",
-    },
+    // {
+    //   url: "#",
+    //   title: "Video Support",
+    // },
+    // {
+    //   url: "#",
+    //   title: "Sofware Support",
+    // },
+    // {
+    //   url: "#",
+    //   title: "Helps",
+    // },
   ];
 
   return (
-    <header className="sticky top-0 inset-x-0 flex flex-col flex-wrap z-50 w-full bg-background border-b border-gray-200">
-      <Header />
-      <Navbar
-        maxWidth="full"
-        isMenuOpen={isMenuOpen}
-        onMenuOpenChange={setIsMenuOpen}
-        className="bg-background flex flex-col h-14 sm:h-auto"
+    <>
+      <Modal
+        isOpen={isOpen}
+        placement="bottom-center"
+        onOpenChange={onOpenChange}
+        backdrop="blur"
       >
-        <NavbarContent className="sm:hidden" justify="start">
-          <Drawer.Root
-            dismissible={true}
-            shouldScaleBackground
-            open={open}
-            onOpenChange={setOpen}
-          >
-            <Drawer.Trigger asChild onClick={() => setOpen(!open)}>
-              <Button isIconOnly variant="light" color="primary">
-                <Icon icon="heroicons-outline:menu-alt-2" fontSize={24} />
-              </Button>
-            </Drawer.Trigger>
-            <Drawer.Portal>
-              <Drawer.Overlay className="fixed inset-0" />
-              <Drawer.Content className="bg-white/60 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-60 flex flex-col rounded-t-3xl h-[60dvh] mt-24 fixed z-40 bottom-0 left-0 right-0">
-                <div className="p-4 bg-white/30 rounded-t-3xl flex-1">
-                  <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-500 mb-8" />
-                  <div className="max-w-md mx-auto px-3">
-                    {menuItems.map((item, index) => (
-                      <div
-                        key={`${item}-${index}`}
-                        className="my-3 text-xl font-semibold"
-                        onClick={() => {
-                          router.push(item.url);
-                          setOpen(!open);
-                        }}
-                      >
-                        <p>{item.title}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <Popover
-                  isOpen={popOpen}
-                  onOpenChange={(popOpen) => setPopOpen(!popOpen)}
-                  showArrow
-                  placement="left"
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex gap-1 items-center">
+                Helps
+                <Icon icon="material-symbols:help" />
+              </ModalHeader>
+              <ModalBody className="flex flex-col gap-3">
+                <Link
+                  href="#"
+                  // target={props.isBlank ? "_blank" : "_self"}
+                  className="col-span-1 min-h-[6rem] flex items-center text-start justify-between rounded-md border-2 border-background transition-all hover:border-primary hover:bg-background p-3"
                 >
-                  <PopoverTrigger>
-                    <Button
-                      variant="shadow"
-                      size="lg"
-                      isIconOnly
-                      as={Link}
-                      href="https://t.me/T_thith"
-                      target="_blank"
-                      radius="full"
-                      color="primary"
-                      className="absolute bottom-12 right-9"
-                    >
-                      <Icon icon="mingcute:telegram-fill" fontSize={27} />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <div className="px-1 py-2">Chat to Customer Service</div>
-                  </PopoverContent>
-                </Popover>
-              </Drawer.Content>
-            </Drawer.Portal>
-          </Drawer.Root>
-          <Link href="/">
-            <Image
-              alt="logo"
-              src="/images/smartcam-logo.png"
-              className="h-8 sm:h-12"
-              radius="none"
-            />
-          </Link>
-        </NavbarContent>
-        <NavbarContent className="hidden sm:flex" justify="start">
-          <NavbarBrand as={Link} href="/">
-            <Image
-              alt="logo"
-              src="/images/smartcam-logo.png"
-              className="h-11 sm:h-12"
-              radius="none"
-            />
-            <Spacer x={3} />
-            <Image
-              alt="logo"
-              src="/images/smartcam-solutions.png"
-              className="hidden sm:flex h-16"
-              radius="none"
-            />
-          </NavbarBrand>
-        </NavbarContent>
+                  <div>
+                    <h1 className="text-md font-medium">Customer Support</h1>
+                    <p className="font-light text-xs">(+855) 17 819 419</p>
+                  </div>
+                  <Icon
+                    icon="mdi:facebook-messenger"
+                    className="text-primary"
+                    fontSize={30}
+                  />
+                </Link>
+                <Link
+                  href="#"
+                  // target={props.isBlank ? "_blank" : "_self"}
+                  className="col-span-1 min-h-[6rem] flex items-center text-start justify-between rounded-md border-2 border-background transition-all hover:border-primary hover:bg-background p-3"
+                >
+                  <div>
+                    <h1 className="text-md font-medium">Technical Support</h1>
+                    <p className="font-light text-xs">(+855) 17 819 419</p>
+                  </div>
+                  <Icon
+                    icon="ic:baseline-telegram"
+                    className="text-primary"
+                    fontSize={30}
+                  />
+                </Link>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="danger"
+                  variant="flat"
+                  onPress={onClose}
+                  fullWidth
+                  radius="lg"
+                >
+                  CLOSE
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <header className="sticky top-0 inset-x-0 flex flex-col flex-wrap z-50 w-full bg-background border-b border-gray-200">
+        <Header />
+        <Navbar
+          maxWidth="full"
+          isMenuOpen={isMenuOpen}
+          onMenuOpenChange={setIsMenuOpen}
+          className="bg-background flex flex-col h-14 sm:h-auto"
+        >
+          <NavbarContent className="sm:hidden" justify="start">
+            <Drawer.Root
+              dismissible={true}
+              shouldScaleBackground
+              open={open}
+              onOpenChange={setOpen}
+            >
+              <Drawer.Trigger asChild onClick={() => setOpen(!open)}>
+                <Button isIconOnly variant="light" color="primary">
+                  <Icon icon="heroicons-outline:menu-alt-2" fontSize={24} />
+                </Button>
+              </Drawer.Trigger>
+              <Drawer.Portal>
+                <Drawer.Overlay className="fixed inset-0 z-10 bg-black/40 bg-clip-padding backdrop-filter backdrop-blur-md" />
+                <Drawer.Content className="bg-white flex flex-col rounded-t-3xl h-[60dvh] mt-24 fixed z-40 bottom-0 left-0 right-0">
+                  <div className="p-4 bg-white/30 rounded-t-3xl flex-1">
+                    <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-500 mb-8" />
+                    <div className="max-w-md mx-auto px-3">
+                      {menuItems.map((item, index) => (
+                        <div
+                          key={`${item}-${index}`}
+                          onClick={() => {
+                            router.push(item.url);
+                            setOpen(!open);
+                          }}
+                        >
+                          <div className="flex items-center gap-3">
+                            <Icon
+                              icon={item.icon}
+                              className="text-primary"
+                              fontSize={27}
+                            />
+                            <p className="my-3 text-xl font-medium">
+                              {item.title}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="lg:block fixed z-50 bottom-12 right-6 ">
+                    <div className="btn-effect">
+                      <Button
+                        onPress={onOpen}
+                        isIconOnly
+                        size="lg"
+                        radius="full"
+                        color="primary"
+                        variant="flat"
+                        className="p-3"
+                      >
+                        <Icon icon="mdi:facebook-messenger" fontSize={30} />
+                      </Button>
+                    </div>
+                  </div>
+                </Drawer.Content>
+              </Drawer.Portal>
+            </Drawer.Root>
+            <Link href="/">
+              <Image
+                alt="logo"
+                src="/images/smartcam-logo.png"
+                className="h-8 sm:h-12"
+                radius="none"
+              />
+            </Link>
+          </NavbarContent>
+          <NavbarContent className="hidden sm:flex" justify="start">
+            <NavbarBrand as={Link} href="/">
+              <Image
+                alt="logo"
+                src="/images/smartcam-logo.png"
+                className="h-11 sm:h-12"
+                radius="none"
+              />
+              <Spacer x={3} />
+              <Image
+                alt="logo"
+                src="/images/smartcam-solutions.png"
+                className="hidden sm:flex h-16"
+                radius="none"
+              />
+            </NavbarBrand>
+          </NavbarContent>
 
-        <NavbarContent className="hidden sm:flex gap-4" justify="center">
-          {/* <NavbarItem>
+          <NavbarContent className="hidden sm:flex gap-4" justify="center">
+            {/* <NavbarItem>
             <Popover placement="bottom" showArrow={true}>
               <PopoverTrigger>
                 <Button isIconOnly radius="full" color="primary" variant="flat">
@@ -250,225 +320,63 @@ export const MainNavbar = () => {
               </PopoverContent>
             </Popover>
           </NavbarItem> */}
-          <NavbarItem>
-            <Search />
-          </NavbarItem>
-        </NavbarContent>
-        <NavbarContent
-          justify="end"
-          className="flex sm:hidden items-center gap-6"
-        >
-          <NavbarItem
-            className="mt-2"
-            as={Link}
-            href="/wishlist"
-            isActive={pathname === "/wishlist"}
-          >
-            <Badge color="danger" content={9} size="sm" shape="circle">
-              <Button
-                color="primary"
-                variant="light"
-                radius="full"
-                className="font-semibold mt-1"
-                size="sm"
-                isIconOnly
-              >
-                <Icon
-                  icon={
-                    pathname === "/wishlist"
-                      ? "solar:heart-bold"
-                      : "solar:heart-linear"
-                  }
-                  fontSize={30}
-                />
-              </Button>
-            </Badge>
-          </NavbarItem>
-
-          {user ? (
-            <Dropdown placement="bottom-end">
-              {loading ? (
-                <Skeleton className="flex rounded-full w-12 h-12" />
-              ) : (
-                <DropdownTrigger>
-                  <Avatar
-                    isBordered
-                    as="button"
-                    className="transition-transform"
-                    src={user?.avatar}
-                  />
-                </DropdownTrigger>
-              )}
-              <DropdownMenu aria-label="User Actions" variant="flat">
-                <DropdownItem key="profile" className="h-14 gap-2">
-                  <p className="font-bold">Signed in as</p>
-                  <p className="font-bold">{user?.email}</p>
-                </DropdownItem>
-                <DropdownItem
-                  as={Link}
-                  key="settings"
-                  href="/settings"
-                  startContent={
-                    <Icon icon="solar:settings-outline" fontSize={21} />
-                  }
-                >
-                  Settings
-                </DropdownItem>
-                <DropdownItem
-                  as={Link}
-                  key="locations"
-                  href="/locations"
-                  startContent={
-                    <Icon icon="solar:streets-map-point-broken" fontSize={21} />
-                  }
-                >
-                  My Locations
-                </DropdownItem>
-                <DropdownItem
-                  as={Link}
-                  key="orders"
-                  href="/orders"
-                  startContent={
-                    <Icon
-                      icon="solar:cart-large-minimalistic-linear"
-                      fontSize={21}
-                    />
-                  }
-                >
-                  Orders
-                </DropdownItem>
-                {/* <DropdownItem
-                  key="wallet"
-                  startContent={
-                    <Icon icon="solar:wallet-linear" fontSize={21} />
-                  }
-                >
-                  Wallet
-                </DropdownItem> */}
-
-                <DropdownItem
-                  key="logout"
-                  color="danger"
-                  onPress={() => logout()}
-                  startContent={
-                    <Icon icon="solar:logout-outline" fontSize={21} />
-                  }
-                >
-                  Log Out
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          ) : (
             <NavbarItem>
-              <Button
-                as={Link}
-                color="primary"
-                href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
-                variant="flat"
-                radius="full"
-                size="md"
-                isIconOnly
-              >
-                <Icon icon="solar:user-rounded-bold" fontSize={24} />
-              </Button>
+              <Search />
             </NavbarItem>
-          )}
-        </NavbarContent>
-        <NavbarContent
-          justify="end"
-          className="hidden sm:flex items-center gap-6"
-        >
-          <NavbarItem isActive={pathname === "/compare"}>
-            {/* <Link href="/compare"> */}
-            <Badge
-              color="danger"
-              content={notifications ? notifications.count_compare : 0}
-              shape="circle"
+          </NavbarContent>
+          <NavbarContent
+            justify="end"
+            className="flex sm:hidden items-center gap-6"
+          >
+            <NavbarItem
+              className="mt-2"
+              as={Link}
+              href="/wishlist"
+              isActive={pathname === "/wishlist"}
             >
-              <Button
-                as={MyLink}
-                color={pathname === "/compare" ? "primary" : "default"}
-                variant={pathname === "/compare" ? "flat" : "light"}
-                radius="full"
-                className={cn("text-black hover:underline hover:text-primary", {
-                  "text-primary": pathname === "/compare",
-                })}
-                href="/compare"
+              <Badge
+                color="danger"
+                content={
+                  notifications?.count_favorite > 0 &&
+                  notifications?.count_favorite
+                }
+                size="sm"
+                shape="circle"
               >
-                Compare
-              </Button>
-            </Badge>
-            {/* </Link> */}
-          </NavbarItem>
-          <NavbarItem>
-            <Badge
-              color="danger"
-              content={notifications ? notifications?.count_favorite : 0}
-              shape="circle"
-            >
-              <Button
-                as={MyLink}
-                isIconOnly
-                radius="full"
-                color={pathname === "/wishlist" ? "primary" : "default"}
-                variant={pathname === "/wishlist" ? "flat" : "light"}
-                href="/wishlist"
-              >
-                <Icon
-                  icon={
-                    pathname === "/wishlist"
-                      ? "solar:heart-bold"
-                      : "solar:heart-linear"
-                  }
-                  className="text-primary"
-                  fontSize={27}
-                />
-              </Button>
-            </Badge>
-          </NavbarItem>
-          <NavbarItem className="mr-12">
-            {/* <Link href="/cart"> */}
-            <Badge
-              ref={cartIconRef}
-              color="danger"
-              content={cartItems?.length}
-              isInvisible={cartItems?.length <= 0}
-              shape="circle"
-            >
-              <Button
-                isIconOnly
-                radius="full"
-                color={pathname === "/cart" ? "primary" : "default"}
-                variant={pathname === "/cart" ? "flat" : "light"}
-                onClick={() => router.push("/cart")}
-              >
-                <Icon
-                  icon={
-                    pathname === "/cart"
-                      ? "solar:cart-large-minimalistic-bold"
-                      : "solar:cart-large-minimalistic-bold-duotone"
-                  }
-                  fontSize={30}
-                  className="text-primary"
-                />
-              </Button>
-            </Badge>
-            {/* </Link> */}
-          </NavbarItem>
-          <NavbarItem>
-            {loading ? (
-              <Skeleton className="flex rounded-full w-12 h-12" />
-            ) : user ? (
-              <Dropdown placement="bottom-end">
-                <DropdownTrigger>
-                  <Avatar
-                    isBordered
-                    as="button"
-                    className="transition-transform"
-                    src={user?.avatar}
+                <Button
+                  color="primary"
+                  variant="light"
+                  radius="full"
+                  className="font-semibold mt-1"
+                  size="sm"
+                  isIconOnly
+                >
+                  <Icon
+                    icon={
+                      pathname === "/wishlist"
+                        ? "solar:heart-bold"
+                        : "solar:heart-linear"
+                    }
+                    fontSize={30}
                   />
-                </DropdownTrigger>
+                </Button>
+              </Badge>
+            </NavbarItem>
 
+            {user ? (
+              <Dropdown placement="bottom-end">
+                {loading ? (
+                  <Skeleton className="flex rounded-full w-12 h-12" />
+                ) : (
+                  <DropdownTrigger>
+                    <Avatar
+                      isBordered
+                      as="button"
+                      className="transition-transform"
+                      src={user?.avatar}
+                    />
+                  </DropdownTrigger>
+                )}
                 <DropdownMenu aria-label="User Actions" variant="flat">
                   <DropdownItem key="profile" className="h-14 gap-2">
                     <p className="font-bold">Signed in as</p>
@@ -483,6 +391,23 @@ export const MainNavbar = () => {
                     }
                   >
                     Settings
+                  </DropdownItem>
+                  <DropdownItem
+                    as={Link}
+                    key="compare"
+                    href="/compare"
+                    startContent={
+                      <Icon icon="fluent-mdl2:compare-uneven" fontSize={21} />
+                    }
+                    endContent={
+                      notifications?.count_compare > 0 && (
+                        <Chip color="danger" size="sm" variant="solid">
+                          {notifications && notifications.count_compare}
+                        </Chip>
+                      )
+                    }
+                  >
+                    Compare
                   </DropdownItem>
                   <DropdownItem
                     as={Link}
@@ -532,20 +457,202 @@ export const MainNavbar = () => {
                 </DropdownMenu>
               </Dropdown>
             ) : (
-              <Button
-                as={Link}
-                color="primary"
-                href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
-                variant="flat"
-                radius="full"
-                className="px-10 font-semibold"
-              >
-                Login
-              </Button>
+              <NavbarItem>
+                <Button
+                  as={Link}
+                  color="primary"
+                  href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
+                  variant="flat"
+                  radius="full"
+                  size="md"
+                  isIconOnly
+                >
+                  <Icon icon="solar:user-rounded-bold" fontSize={24} />
+                </Button>
+              </NavbarItem>
             )}
-          </NavbarItem>
-        </NavbarContent>
-        {/* <NavbarMenu className="pt-12">
+          </NavbarContent>
+          <NavbarContent
+            justify="end"
+            className="hidden sm:flex items-center gap-6"
+          >
+            <NavbarItem isActive={pathname === "/compare"}>
+              {/* <Link href="/compare"> */}
+              <Badge
+                color="danger"
+                content={
+                  notifications?.count_compare > 0 &&
+                  notifications.count_compare
+                }
+                shape="circle"
+              >
+                <Button
+                  as={MyLink}
+                  color={pathname === "/compare" ? "primary" : "default"}
+                  variant={pathname === "/compare" ? "flat" : "light"}
+                  radius="full"
+                  className={cn(
+                    "text-black hover:underline hover:text-primary",
+                    {
+                      "text-primary": pathname === "/compare",
+                    }
+                  )}
+                  href="/compare"
+                >
+                  Compare
+                </Button>
+              </Badge>
+              {/* </Link> */}
+            </NavbarItem>
+            <NavbarItem>
+              <Badge
+                color="danger"
+                content={
+                  notifications?.count_favorite > 0 &&
+                  notifications?.count_favorite
+                }
+                shape="circle"
+              >
+                <Button
+                  as={MyLink}
+                  isIconOnly
+                  radius="full"
+                  color={pathname === "/wishlist" ? "primary" : "default"}
+                  variant={pathname === "/wishlist" ? "flat" : "light"}
+                  href="/wishlist"
+                >
+                  <Icon
+                    icon={
+                      pathname === "/wishlist"
+                        ? "solar:heart-bold"
+                        : "solar:heart-linear"
+                    }
+                    className="text-primary"
+                    fontSize={27}
+                  />
+                </Button>
+              </Badge>
+            </NavbarItem>
+            <NavbarItem className="mr-12">
+              {/* <Link href="/cart"> */}
+              <Badge
+                ref={cartIconRef}
+                color="danger"
+                content={cartItems?.length}
+                isInvisible={cartItems?.length <= 0}
+                shape="circle"
+              >
+                <Button
+                  isIconOnly
+                  radius="full"
+                  color={pathname === "/cart" ? "primary" : "default"}
+                  variant={pathname === "/cart" ? "flat" : "light"}
+                  onClick={() => router.push("/cart")}
+                >
+                  <Icon
+                    icon={
+                      pathname === "/cart"
+                        ? "solar:cart-large-minimalistic-bold"
+                        : "solar:cart-large-minimalistic-bold-duotone"
+                    }
+                    fontSize={30}
+                    className="text-primary"
+                  />
+                </Button>
+              </Badge>
+              {/* </Link> */}
+            </NavbarItem>
+            <NavbarItem>
+              {loading ? (
+                <Skeleton className="flex rounded-full w-12 h-12" />
+              ) : user ? (
+                <Dropdown placement="bottom-end">
+                  <DropdownTrigger>
+                    <Avatar
+                      isBordered
+                      as="button"
+                      className="transition-transform"
+                      src={user?.avatar}
+                    />
+                  </DropdownTrigger>
+
+                  <DropdownMenu aria-label="User Actions" variant="flat">
+                    <DropdownItem key="profile" className="h-14 gap-2">
+                      <p className="font-bold">Signed in as</p>
+                      <p className="font-bold">{user?.email}</p>
+                    </DropdownItem>
+                    <DropdownItem
+                      as={Link}
+                      key="settings"
+                      href="/settings"
+                      startContent={
+                        <Icon icon="solar:settings-outline" fontSize={21} />
+                      }
+                    >
+                      Settings
+                    </DropdownItem>
+                    <DropdownItem
+                      as={Link}
+                      key="locations"
+                      href="/locations"
+                      startContent={
+                        <Icon
+                          icon="solar:streets-map-point-broken"
+                          fontSize={21}
+                        />
+                      }
+                    >
+                      My Locations
+                    </DropdownItem>
+                    <DropdownItem
+                      as={Link}
+                      key="orders"
+                      href="/orders"
+                      startContent={
+                        <Icon
+                          icon="solar:cart-large-minimalistic-linear"
+                          fontSize={21}
+                        />
+                      }
+                    >
+                      Orders
+                    </DropdownItem>
+                    {/* <DropdownItem
+                  key="wallet"
+                  startContent={
+                    <Icon icon="solar:wallet-linear" fontSize={21} />
+                  }
+                >
+                  Wallet
+                </DropdownItem> */}
+
+                    <DropdownItem
+                      key="logout"
+                      color="danger"
+                      onPress={() => logout()}
+                      startContent={
+                        <Icon icon="solar:logout-outline" fontSize={21} />
+                      }
+                    >
+                      Log Out
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              ) : (
+                <Button
+                  as={Link}
+                  color="primary"
+                  href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
+                  variant="flat"
+                  radius="full"
+                  className="px-10 font-semibold"
+                >
+                  Login
+                </Button>
+              )}
+            </NavbarItem>
+          </NavbarContent>
+          {/* <NavbarMenu className="pt-12">
           {menuItems.map((item, index) => (
             <NavbarMenuItem
               key={`${item}-${index}`}
@@ -570,10 +677,11 @@ export const MainNavbar = () => {
             <Icon icon="mingcute:telegram-fill" fontSize={27} />
           </Button>
         </NavbarMenu> */}
-      </Navbar>
-      <div className="hidden sm:inline">
-        <Menubar />
-      </div>
-    </header>
+        </Navbar>
+        <div className="hidden sm:inline">
+          <Menubar />
+        </div>
+      </header>
+    </>
   );
 };

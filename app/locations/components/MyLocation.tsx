@@ -13,6 +13,7 @@ import {
 } from "@nextui-org/react";
 import React, { FC } from "react";
 import { LocationType } from "@/types/location";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const MyLocation: FC<LocationType> = (props) => {
   return (
@@ -21,7 +22,7 @@ const MyLocation: FC<LocationType> = (props) => {
       className="border-none bg-background/60 dark:bg-default-100/50 max-w-full "
       shadow="sm"
     >
-      {/* <Dropdown>
+      <Dropdown>
         <DropdownTrigger>
           <Button
             isIconOnly
@@ -34,29 +35,33 @@ const MyLocation: FC<LocationType> = (props) => {
           </Button>
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions">
-          <DropdownItem
+          {/* <DropdownItem
             key="edit"
             startContent={<Icon icon="solar:pen-bold" />}
           >
             Edit
-          </DropdownItem>
+          </DropdownItem> */}
           <DropdownItem
             key="delete"
             className="text-danger"
             color="danger"
             startContent={<Icon icon="solar:trash-bin-minimalistic-2-bold" />}
+            onPress={() => {
+              props.handleDeleteLocation(props.id);
+            }}
           >
             Delete
           </DropdownItem>
         </DropdownMenu>
-      </Dropdown> */}
+      </Dropdown>
       <CardBody className="px-4">
         <div className="grid grid-cols-3 space-x-6 items-center justify-center">
           <div className="relative col-span-1">
             <Image
               alt={props?.address?.streetValue}
-              className="object-cover w-full h-full"
+              className="object-cover bg-gray-200 object-center w-full min-w-36 h-full min-h-36"
               shadow="none"
+              isZoomed
               src={
                 props?.photos?.length > 0
                   ? props?.photos[0]
