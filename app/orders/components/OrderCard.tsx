@@ -17,7 +17,6 @@ import Link from "next/link";
 import { useMutation } from "@apollo/client";
 import { toast } from "sonner";
 import { CONFIRM_ORDER } from "@/graphql/mutation/order";
-import VerticalSteps from "./VerticalSteps";
 
 const OrderCard: FC<OrdersType> = (props) => {
   const [storeConfirmOrder] = useMutation(CONFIRM_ORDER);
@@ -37,6 +36,8 @@ const OrderCard: FC<OrdersType> = (props) => {
       });
   };
 
+  console.log("data", props);
+
   return (
     <Card
       className="w-full border-2 border-spacing-1 border-dashed bg-none"
@@ -52,6 +53,19 @@ const OrderCard: FC<OrdersType> = (props) => {
             </span>
           </div>
           <div className="flex flex-wrap items-center gap-0 sm:gap-0 lg:gap-3">
+            {props?.checkout?.payment === "ONLINE" &&
+              props?.checkout?.payment_status === "PENDING" && (
+                <Button
+                  color="danger"
+                  radius="lg"
+                  variant="flat"
+                  startContent={
+                    <Icon icon="fluent:payment-16-regular" fontSize={21} />
+                  }
+                >
+                  Finish Payment Process
+                </Button>
+              )}
             <Button
               color="primary"
               variant="light"
@@ -63,18 +77,6 @@ const OrderCard: FC<OrdersType> = (props) => {
             >
               View order details
             </Button>
-            {/* <Button
-              color="primary"
-              variant="light"
-              startContent={
-                <Icon
-                  icon="solar:archive-down-minimlistic-line-duotone"
-                  fontSize={21}
-                />
-              }
-            >
-              Save your invoice
-            </Button> */}
           </div>
         </div>
         <Divider className="my-3" />
@@ -144,10 +146,10 @@ const OrderCard: FC<OrdersType> = (props) => {
                   props?.status === "START"
                     ? 0
                     : props?.status === "CONFIRM"
-                    ? 1
-                    : props?.status === "PROCESS"
-                    ? 2
-                    : 3
+                      ? 1
+                      : props?.status === "PROCESS"
+                        ? 2
+                        : 3
                 }
                 direction="vertical"
                 progressDot

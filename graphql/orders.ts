@@ -28,6 +28,7 @@ export const GET_ORDERS = gql`
           }
           discountPercentage
         }
+        checkout
         code
         createdAt
         id

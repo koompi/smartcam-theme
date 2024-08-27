@@ -1,32 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import OrderCard from "./components/OrderCard";
 import { useQuery } from "@apollo/client";
 import { GET_ORDERS } from "@/graphql/orders";
 import { OrdersType } from "@/types/checkout";
 import { Skeleton } from "@nextui-org/react";
-import { useSearchParams } from "next/navigation";
+// import { useSearchParams } from "next/navigation";
 // import { PaginationProduct } from "../components/Pagination";
 
 const OrderPage = () => {
-  const offset = useSearchParams().get("page") ?? "1";
-  const limit = useSearchParams().get("size") ?? "16";
-  const query_search = useSearchParams().get("search") ?? null;
+  // const query_search = useSearchParams().get("search") ?? null;
 
-  const [page, setPage] = useState(parseInt(offset));
-
-  const { data, loading, refetch } = useQuery(GET_ORDERS, {
-    variables: {
-      filter: !query_search
-        ? {
-            limit: parseInt(limit),
-            skip: page == 1 ? 0 : page,
-            sort: -1,
-          }
-        : null,
-    },
-  });
+  const { data, loading, refetch } = useQuery(GET_ORDERS);
 
   useEffect(() => {
     refetch();
@@ -67,24 +53,23 @@ const OrderPage = () => {
         </div>
         <div className="flex flex-col gap-6 items-center">
           {data?.customerOrders?.orders.length <= 0 && <div>No Orders</div>}
-          {data?.customerOrders?.orders.map((order: OrdersType, idx: number) => {
-            return (
-              <OrderCard
-                key={idx}
-                {...order}
-                refetch={refetch}
-              />
-            );
-          })}
+          {data?.customerOrders?.orders
+            ?.slice() // Create a shallow copy of the orders array
+            .sort((a: OrdersType, b: OrdersType) => {
+              // Normalize the date string by removing the trailing ":00"
+              const normalizedDateA = a.createdAt.replace(" +00:00:00", "Z");
+              const normalizedDateB = b.createdAt.replace(" +00:00:00", "Z");
+
+              // Parse the normalized date strings into Date objects
+              const dateA = new Date(normalizedDateA).getTime();
+              const dateB = new Date(normalizedDateB).getTime();
+
+              return dateB - dateA; // Sort in descending order (latest date first)
+            })
+            ?.map((order: OrdersType, idx: number) => {
+              return <OrderCard key={idx} {...order} refetch={refetch} />;
+            })}
         </div>
-        {/* <div className="w-full flex justify-end mt-8 space-x-2">
-        <PaginationProduct
-          page={page}
-          total={data?.storeOrders?.pages}
-          rowsPerPage={parseInt(limit)}
-          setPage={setPage}
-        />
-      </div> */}
       </div>
     </section>
   );

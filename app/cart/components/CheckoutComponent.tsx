@@ -30,7 +30,7 @@ import { useRouter } from "next/navigation";
 import { PromotionType } from "@/types/promotion";
 import { ESTIMATION_PRICE } from "@/graphql/order";
 import { ProductType } from "@/types/product";
-import { ESTIMATE_PRICE } from "@/graphql/delivery";
+import { ESTIMATE_PRICE, SHIPPING_LIST } from "@/graphql/delivery";
 // import RecommendProducts from "./RecommendProducts";
 // import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
 import { useBaray } from "@/hooks/baray";
@@ -55,6 +55,13 @@ const CheckoutComponent = () => {
   const [delivery, setDelivery] = useState<"PERSONAL" | "L192" | "CP">(
     "PERSONAL"
   );
+
+  const {
+    data: shippingProvider,
+    loading: shippingLoading,
+    refetch: shippingRefetch,
+  } = useQuery(SHIPPING_LIST);
+
   const [location, setLocation] = useState<string>("");
   const [position, setPosition] = useState<{
     lat: number | null;
@@ -115,6 +122,7 @@ const CheckoutComponent = () => {
             use_iframe: false,
             on_success: () => cleanCartItems(),
           });
+          cleanCartItems();
           setLoading(false);
         } else {
           toast.success(
@@ -226,7 +234,8 @@ const CheckoutComponent = () => {
           <div className="mt-0 sm:mt-0 lg:mt-4 flex flex-col gap-6">
             <ShippingForm
               hideTitle
-              delivery={delivery}
+              shippingProvider={shippingProvider?.storeShippings}
+              // delivery={delivery}
               setDelivery={setDelivery}
               location={location}
               setLocation={setLocation}
@@ -344,6 +353,10 @@ const CheckoutComponent = () => {
   // </section>
   //   );
   // }
+
+  if (shippingLoading) {
+    return "Loading ...";
+  }
 
   return (
     <section className="container mx-auto px-3 sm:px-3 lg:px-6 py-4 sm:py-4 lg:py-9 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-5 w-full gap-8">
