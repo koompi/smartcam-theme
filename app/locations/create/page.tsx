@@ -11,9 +11,14 @@ import {
   CardFooter,
   CardHeader,
   CardBody,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Textarea,
 } from "@nextui-org/react";
 import { LocationForm } from "./components/LocationForm";
-import { validateNumber } from "@/utils/phone";
 import { toast } from "sonner";
 import { useMutation } from "@apollo/client";
 import { CREATE_CUSTOMER_LOCATION } from "@/graphql/mutation/location";
@@ -38,33 +43,20 @@ interface FormCreateLocation {
 }
 
 export default function PageLocation() {
-  const { user } = useAuth();
+  const { isOpen, onOpenChange, onOpen } = useDisclosure();
 
-  const initialNewPhone = {
-    phoneNumber: user?.phone_number ? user?.phone_number : "",
-    isInternal: false,
-    isVerified: false,
-    isActived: false,
-    isBanned: false,
-  };
+  // const [position, setPosition] = useState<L.LatLngExpression | any>([
+  //   11.562108, 104.888535,
+  // ]);
 
-  const [position, setPosition] = useState<L.LatLngExpression | any>([
-    11.562108, 104.888535,
-  ]);
+  const [position, setPosition] = useState<L.LatLngExpression | null>(null);
+
   const [addressName, setAddressName] = useState<string>("");
 
   const [address, setAddress] = useState<any | null>(null);
   const [map, setMap] = useState<any | null>(null);
 
-  const [newPhone, setNewPhone] = useState(initialNewPhone);
-  const [isValid, setIsValid] = useState(false);
-  const [validationMessage, setValidationMessage] = useState("");
-  const [operator, setOperator] = useState("");
-  const [color, setColor] = useState<"warning" | "success" | "danger" | null>(
-    null
-  );
   const [photo, setPhoto] = useState<string>("");
-  const [email, setEmail] = useState("");
   const [addressLabel, setAddressLabel] = useState<string>("");
 
   const router = useRouter();
@@ -72,37 +64,6 @@ export default function PageLocation() {
   const { register, handleSubmit, watch } = useForm<FormCreateLocation>();
 
   const [storeCreateLocation] = useMutation(CREATE_CUSTOMER_LOCATION);
-
-  useEffect(() => {
-    if (operator.toLocaleLowerCase() === "cellcard") {
-      setColor("warning");
-    }
-    if (operator.toLocaleLowerCase() === "smart") {
-      setColor("success");
-    }
-    if (operator.toLocaleLowerCase() === "metfone") {
-      setColor("danger");
-    }
-  }, [operator]);
-
-  useEffect(() => {
-    if (newPhone.phoneNumber !== "") {
-      try {
-        const valid = validateNumber({ phoneNumber: newPhone.phoneNumber });
-        if (valid.name) {
-          setIsValid(true);
-          setValidationMessage("");
-          setOperator(valid.name);
-        }
-      } catch (error: any) {
-        if (error) {
-          setIsValid(false);
-          setValidationMessage(error.detail.message);
-          setOperator("");
-        }
-      }
-    }
-  }, [newPhone.phoneNumber]);
 
   //  onSubmit to create location
   const onSubmit = (values: FormCreateLocation) => {
@@ -136,54 +97,97 @@ export default function PageLocation() {
       });
   };
 
-  // function handleNewPhoneChange(e: any) {
-  //   const { name, value } = e.target;
-  //   const object = {
-  //     ...newPhone,
-  //     [name]: value,
-  //   };
-  //   setNewPhone(() => object);
-  // }
+  useEffect(() => {
+    // Check if the browser supports geolocation
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // Success: set the position to the current location
+          const { latitude, longitude } = position.coords;
+          setPosition([latitude, longitude]);
+        },
+        (error) => {
+          console.error("Error retrieving location:", error);
+          // Fallback: set a default position (e.g., a city center or a specific location)
+          setPosition([11.55836, 104.91214]); // Olympic coordinates as an example
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+      // Fallback: set a default position
+      setPosition([11.55836, 104.91214]); // Olympic coordinates as an example
+    }
+  }, []);
 
-  // //  function to upload img
-  // async function handleChange(e: any) {
-  //   e.preventDefault();
-
-  //   const body = {
-  //     upload: e.target?.files[0],
-  //   };
-
-  //   axios
-  //     .post(
-  //       `${process.env.NEXT_PUBLIC_BACKEND}/api/upload/image/${user?.id}`,
-  //       body,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //         },
-  //       }
-  //     )
-  //     .then((res: AxiosResponse<any, any>) => {
-  //       setPhoto(res.data.path);
-  //       toast.success("File has been added");
-  //     })
-  //     .catch(function (error) {
-  //       console.log(error);
-  //     });
-  // }
-
-  // email verify partern
-  const validateEmail = (value: string) =>
-    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
-
-  const isInvalidEmail = React.useMemo(() => {
-    if (email === "") return false;
-
-    return validateEmail(email) ? false : true;
-  }, [email]);
+  if (!position) {
+    return <div>Loading map...</div>; // Render loading state while position is null
+  }
 
   return (
     <>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement="bottom-center"
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: 20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+        size="full"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                <h1>Select your location</h1>
+                <p className="text-sm font-light">
+                  Drag the icon to change your location
+                </p>
+              </ModalHeader>
+              <ModalBody>
+                <div className="min-h-[60dvh] sm:h-[60dvh] lg:min-h-[80dvh] ">
+                  <MyMap
+                    zoom={13}
+                    position={position && position}
+                    setPosition={setPosition}
+                    addressName={addressName}
+                    setAddressName={setAddressName}
+                    setAddress={setAddress}
+                    setMap={setMap}
+                  />
+                </div>
+              </ModalBody>
+              <ModalFooter className="flex flex-col gap-3">
+                <p className="text-black">{addressName}</p>
+                <Button
+                  color="primary"
+                  onPress={onClose}
+                  className="text-background w-full"
+                  size="lg"
+                >
+                  Deliver to this location
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
       <div className="container max-w-4xl mx-auto px-6 w-full pt-9 pb-36">
         <div className="mb-4">
           <Button
@@ -223,18 +227,19 @@ export default function PageLocation() {
             <CardHeader>
               <h1 className="text-xl font-semibold">Address</h1>
             </CardHeader>
-            <CardBody>
-              <div className="h-80 w-max-full">
-                <MyMap
-                  zoom={13}
-                  position={position}
-                  setPosition={setPosition}
-                  addressName={addressName}
-                  setAddressName={setAddressName}
-                  setAddress={setAddress}
-                  setMap={setMap}
-                />
-              </div>
+            <CardBody className="text-gray-400">
+              <Textarea
+                placeholder="eg. Phnom Penh ..."
+                size="lg"
+                isRequired
+                readOnly
+                minRows={3}
+                value={addressName}
+                onClick={(e: any) => {
+                  e.preventDefault();
+                  onOpen();
+                }}
+              />
             </CardBody>
             <CardFooter>
               <div className="w-full">
