@@ -72,5 +72,6 @@ export type OrdersType = {
     khr: number;
     usd: number;
   };
+  checkout: any;
   refetch: Function;
 };
