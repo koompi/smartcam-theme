@@ -73,6 +73,18 @@ export const ORDER_BY_ID = gql`
         usd
       }
       checkout
+      customer {
+        id
+        membershipCard {
+          id
+          status
+          membershipType
+          label
+          discountType
+          discountPrice
+          discountPercentage
+        }
+      }
     }
   }
 `;

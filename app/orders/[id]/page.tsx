@@ -77,12 +77,28 @@ const OrderSinglePage = () => {
       });
   };
 
+  const isCashPaymentPending =
+    data?.storeOrder?.checkout?.payment === "CASH" &&
+    data?.storeOrder?.checkout?.order_status === "PENDING";
+
+  const isOnlinePaymentPaid =
+    data?.storeOrder?.checkout?.payment === "ONLINE" &&
+    (data?.storeOrder?.checkout?.payment_status !== "PAID" ||
+      data?.storeOrder?.checkout?.payment_status !== "REFUNDED");
+
+  const isOnlinePaymentFailed =
+    data?.storeOrder?.checkout?.payment === "ONLINE" &&
+    (data?.storeOrder?.checkout?.payment_status === "UNPAID" ||
+      data?.storeOrder?.checkout?.payment_status === "FAIL");
+
   if (loading || !data)
     return (
       <section className="container max-w-full grid place-items-center h-screen">
         <Spinner label="Loading..." />
       </section>
     );
+
+  console.log("data", data);
 
   return (
     <section className="bg-white">
@@ -138,24 +154,37 @@ const OrderSinglePage = () => {
               View your order history and check the delivery status for items.
             </p>
           </div>
-          {data?.storeOrder?.checkout?.payment === "CASH" &&
-            data?.storeOrder?.checkout?.order_status === "PENDING" && (
-              <Button
-                size="lg"
-                variant="flat"
-                color="danger"
-                radius="full"
-                className="mt-3 hidden sm:hidden lg:inline"
-                onPress={() => {
-                  onOpen();
-                }}
-              >
-                Cancel Order
-              </Button>
-            )}
+          {(isCashPaymentPending || isOnlinePaymentPaid) && (
+            <Button
+              size="lg"
+              variant="flat"
+              color="danger"
+              radius="full"
+              className="mt-3 hidden sm:hidden lg:inline"
+              onPress={() => {
+                onOpen();
+              }}
+            >
+              Cancel Order
+            </Button>
+          )}
+          {data?.storeOrder?.checkout?.order_status === "DELIVERY" && (
+            <Button
+              size="lg"
+              variant="flat"
+              color="primary"
+              fullWidth
+              className="mt-3"
+              onPress={() => {
+                onConfirm(data?.storeOrder?.id);
+              }}
+            >
+              Confirm
+            </Button>
+          )}
         </div>
         {/*  -------- steps ---------- */}
-        {data?.storeOrder?.checkout?.order_status !== "CANCEL" ? (
+        {data?.storeOrder?.checkout?.order_status !== "CANCELLED" ? (
           <>
             <div className="hidden sm:hidden lg:inline ">
               <Steps
@@ -304,18 +333,53 @@ const OrderSinglePage = () => {
                 );
               }
             )}
-            <div className="flex justify-end">
+            <div className="flex justify-between items-start text-sm">
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center justify-between gap-6">
+                  <p>Payment Method:</p>
+                  <p>{data?.storeOrder?.checkout?.payment}</p>
+                </div>
+                <div className="flex items-center justify-between gap-6">
+                  <p>Delivery By:</p>
+                  <p>
+                    {data?.storeOrder?.checkout?.shipping_type === "PERSONAL"
+                      ? "Shop"
+                      : data?.storeOrder?.checkout?.shipping_type}
+                  </p>
+                </div>
+              </div>
+
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-6">
                   <p>Price</p>
                   <p>
                     {formatToUSD(
                       parseFloat(
-                        data?.storeOrder?.totalPrice?.usd.toString()
-                          ? data?.storeOrder?.totalPrice?.usd.toString()
+                        data?.storeOrder?.totalUnitPrice?.usd.toString()
+                          ? data?.storeOrder?.totalUnitPrice?.usd.toString()
                           : "0"
                       )
                     )}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between gap-6">
+                  <p>Membership</p>
+                  <p className="text-danger">
+                    -{" "}
+                    {data?.storeOrder?.customer?.membershipCard?.status ===
+                    "ACTIVE"
+                      ? data?.storeOrder?.customer?.membershipCard
+                          ?.discountType === "PRICE"
+                        ? formatToUSD(
+                            parseFloat(
+                              data?.storeOrder?.customer?.membershipCard
+                                ?.discountPrice
+                            )
+                          )
+                        : data?.storeOrder?.customer?.membershipCard
+                            ?.discountPercentage
+                      : "N/A"}
                   </p>
                 </div>
                 <div className="flex items-center justify-between gap-6">
@@ -323,7 +387,21 @@ const OrderSinglePage = () => {
                   <p>
                     {formatToUSD(
                       parseFloat(
-                        data?.storeOrder?.tax ? data?.storeOrder?.tax : "0"
+                        data?.storeOrder?.checkout?.tax_fee
+                          ? data?.storeOrder?.checkout?.tax_fee
+                          : "0"
+                      )
+                    )}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between gap-6">
+                  <p>Shipping fee</p>
+                  <p>
+                    {formatToUSD(
+                      parseFloat(
+                        data?.storeOrder?.checkout?.shipping_fee
+                          ? data?.storeOrder?.checkout?.shipping_fee
+                          : "0"
                       )
                     )}
                   </p>
@@ -343,40 +421,38 @@ const OrderSinglePage = () => {
                 </div>
               </div>
             </div>
-            {data?.storeOrder?.checkout?.payment === "ONLINE" &&
-              data?.storeOrder?.checkout?.payment_status === "UNPAID" && (
-                <Button
-                  size="lg"
-                  variant="flat"
-                  color="danger"
-                  radius="lg"
-                  className="mt-3 hidden sm:hidden lg:inline"
-                  // onPress={() => {
-                  //   onOpen();
-                  // }}
-                >
-                  Finish Payment Process
-                </Button>
-              )}
+            {isOnlinePaymentFailed && (
+              <Button
+                size="lg"
+                variant="flat"
+                color="danger"
+                radius="lg"
+                className="mt-3 hidden sm:hidden lg:inline"
+                // onPress={() => {
+                //   onOpen();
+                // }}
+              >
+                Finish Payment Process
+              </Button>
+            )}
           </div>
         </div>
-        {data?.storeOrder?.checkout?.payment === "ONLINE" &&
-          data?.storeOrder?.checkout?.payment_status === "UNPAID" && (
-            <Button
-              size="lg"
-              variant="flat"
-              color="danger"
-              radius="full"
-              fullWidth
-              className="mt-3 block sm:block lg:hidden"
-              // onPress={() => {
-              //   onOpen();
-              // }}
-            >
-              Finish Payment Process
-            </Button>
-          )}
-        {data?.storeOrder?.checkout?.order_status === "START" && (
+        {isOnlinePaymentFailed && (
+          <Button
+            size="lg"
+            variant="flat"
+            color="danger"
+            radius="full"
+            fullWidth
+            className="mt-3 block sm:block lg:hidden"
+            // onPress={() => {
+            //   onOpen();
+            // }}
+          >
+            Finish Payment Process
+          </Button>
+        )}
+        {(isCashPaymentPending || isOnlinePaymentPaid) && (
           <Button
             size="lg"
             variant="flat"

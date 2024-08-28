@@ -37,7 +37,10 @@ const OrderCard: FC<OrdersType> = (props) => {
       });
   };
 
-  console.log("props", props);
+  const isOnlinePaymentFailed =
+    props?.checkout?.payment === "ONLINE" &&
+    (props?.checkout?.payment_status === "UNPAID" ||
+      props?.checkout?.payment_status === "FAIL");
 
   return (
     <Card
@@ -55,20 +58,18 @@ const OrderCard: FC<OrdersType> = (props) => {
           </div>
           <BrowserView>
             <div className="flex flex-wrap items-center gap-0 sm:gap-0 lg:gap-3">
-              {props?.checkout?.payment === "ONLINE" &&
-                (props?.checkout?.payment_status === "UNPAID" ||
-                  props?.checkout?.payment_status === "FAIL") && (
-                  <Button
-                    color="danger"
-                    radius="full"
-                    variant="flat"
-                    startContent={
-                      <Icon icon="fluent:payment-16-regular" fontSize={21} />
-                    }
-                  >
-                    Finish Payment Process
-                  </Button>
-                )}
+              {isOnlinePaymentFailed && (
+                <Button
+                  color="danger"
+                  radius="full"
+                  variant="flat"
+                  startContent={
+                    <Icon icon="fluent:payment-16-regular" fontSize={21} />
+                  }
+                >
+                  Finish Payment Process
+                </Button>
+              )}
               <Button
                 color="primary"
                 variant="bordered"
@@ -85,21 +86,19 @@ const OrderCard: FC<OrdersType> = (props) => {
           </BrowserView>
           <MobileView>
             <div className="flex items-center gap-1 sm:gap-1 lg:gap-3">
-              {props?.checkout?.payment === "ONLINE" &&
-                (props?.checkout?.payment_status === "UNPAID" ||
-                  props?.checkout?.payment_status === "FAIL") && (
-                  <Button
-                    color="danger"
-                    radius="full"
-                    variant="flat"
-                    size="sm"
-                    startContent={
-                      <Icon icon="fluent:payment-16-regular" fontSize={21} />
-                    }
-                  >
-                    Pay Now
-                  </Button>
-                )}
+              {isOnlinePaymentFailed && (
+                <Button
+                  color="danger"
+                  radius="full"
+                  variant="flat"
+                  size="sm"
+                  startContent={
+                    <Icon icon="fluent:payment-16-regular" fontSize={21} />
+                  }
+                >
+                  Pay Now
+                </Button>
+              )}
               <Button
                 color="primary"
                 variant="bordered"
