@@ -6,12 +6,8 @@ import { useQuery } from "@apollo/client";
 import { GET_ORDERS } from "@/graphql/orders";
 import { OrdersType } from "@/types/checkout";
 import { Skeleton } from "@nextui-org/react";
-// import { useSearchParams } from "next/navigation";
-// import { PaginationProduct } from "../components/Pagination";
 
 const OrderPage = () => {
-  // const query_search = useSearchParams().get("search") ?? null;
-
   const { data, loading, refetch } = useQuery(GET_ORDERS);
 
   useEffect(() => {

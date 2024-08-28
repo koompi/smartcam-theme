@@ -39,6 +39,7 @@
     "next-nprogress-bar": "^2.3.12",
     "next-share": "^0.27.0",
     "react": "^18",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^18",
     "react-hook-form": "^7.52.1",
     "react-leaflet": "^4.2.1",

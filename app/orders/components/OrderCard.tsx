@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useMutation } from "@apollo/client";
 import { toast } from "sonner";
 import { CONFIRM_ORDER } from "@/graphql/mutation/order";
+import { BrowserView, MobileView } from "react-device-detect";
 
 const OrderCard: FC<OrdersType> = (props) => {
   const [storeConfirmOrder] = useMutation(CONFIRM_ORDER);
@@ -36,7 +37,7 @@ const OrderCard: FC<OrdersType> = (props) => {
       });
   };
 
-  console.log("data", props);
+  console.log("props", props);
 
   return (
     <Card
@@ -52,32 +53,68 @@ const OrderCard: FC<OrdersType> = (props) => {
               {dayjs(props.createdAt.split(" ")[0]).format("DD-MMM-YYYY")}
             </span>
           </div>
-          <div className="flex flex-wrap items-center gap-0 sm:gap-0 lg:gap-3">
-            {props?.checkout?.payment === "ONLINE" &&
-              props?.checkout?.payment_status === "PENDING" && (
-                <Button
-                  color="danger"
-                  radius="lg"
-                  variant="flat"
-                  startContent={
-                    <Icon icon="fluent:payment-16-regular" fontSize={21} />
-                  }
-                >
-                  Finish Payment Process
-                </Button>
-              )}
-            <Button
-              color="primary"
-              variant="light"
-              startContent={
-                <Icon icon="solar:eye-line-duotone" fontSize={21} />
-              }
-              as={Link}
-              href={`/orders/${props.id}`}
-            >
-              View order details
-            </Button>
-          </div>
+          <BrowserView>
+            <div className="flex flex-wrap items-center gap-0 sm:gap-0 lg:gap-3">
+              {props?.checkout?.payment === "ONLINE" &&
+                (props?.checkout?.payment_status === "UNPAID" ||
+                  props?.checkout?.payment_status === "FAIL") && (
+                  <Button
+                    color="danger"
+                    radius="full"
+                    variant="flat"
+                    startContent={
+                      <Icon icon="fluent:payment-16-regular" fontSize={21} />
+                    }
+                  >
+                    Finish Payment Process
+                  </Button>
+                )}
+              <Button
+                color="primary"
+                variant="bordered"
+                radius="full"
+                startContent={
+                  <Icon icon="solar:eye-line-duotone" fontSize={21} />
+                }
+                as={Link}
+                href={`/orders/${props.id}`}
+              >
+                View order details
+              </Button>
+            </div>
+          </BrowserView>
+          <MobileView>
+            <div className="flex items-center gap-1 sm:gap-1 lg:gap-3">
+              {props?.checkout?.payment === "ONLINE" &&
+                (props?.checkout?.payment_status === "UNPAID" ||
+                  props?.checkout?.payment_status === "FAIL") && (
+                  <Button
+                    color="danger"
+                    radius="full"
+                    variant="flat"
+                    size="sm"
+                    startContent={
+                      <Icon icon="fluent:payment-16-regular" fontSize={21} />
+                    }
+                  >
+                    Pay Now
+                  </Button>
+                )}
+              <Button
+                color="primary"
+                variant="bordered"
+                radius="full"
+                size="sm"
+                startContent={
+                  <Icon icon="solar:eye-line-duotone" fontSize={21} />
+                }
+                as={Link}
+                href={`/orders/${props.id}`}
+              >
+                Details
+              </Button>
+            </div>
+          </MobileView>
         </div>
         <Divider className="my-3" />
         <div className="flex items-center justify-between">
@@ -122,35 +159,24 @@ const OrderCard: FC<OrdersType> = (props) => {
             </div>
           )}
 
-          {/* <VerticalSteps
-            steps={[
-              {
-                title: "Ordered",
-              },
-              {
-                title: "Confirmed",
-              },
-              {
-                title: "Out for delivery",
-              },
-              {
-                title: "Delivered",
-              },
-            ]}
-          /> */}
-
-          {props?.status !== "CANCEL" ? (
+          {props?.checkout?.order_status !== "CANCELLED" ? (
             <div className="mt-3">
               <Steps
-                current={
-                  props?.status === "START"
-                    ? 0
-                    : props?.status === "CONFIRM"
-                      ? 1
-                      : props?.status === "PROCESS"
-                        ? 2
-                        : 3
-                }
+                current={(() => {
+                  switch (props?.checkout?.order_status) {
+                    case "PENDING":
+                      return 0; // Ordered
+                    case "CONFIRMED":
+                    case "PROCESSING":
+                      return 1; // Confirmed
+                    case "SHIPPED":
+                      return 2; // Out for delivery
+                    case "DELIVERED":
+                      return 3; // Delivered
+                    default:
+                      return 0; // Default to Delivered
+                  }
+                })()}
                 direction="vertical"
                 progressDot
               >
@@ -176,7 +202,7 @@ const OrderCard: FC<OrdersType> = (props) => {
             </div>
           )}
         </div>
-        {props.status === "DELIVERY" && (
+        {props?.checkout?.order_status === "DELIVERED" && (
           <Button
             size="lg"
             variant="flat"
