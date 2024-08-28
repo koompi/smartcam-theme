@@ -49,7 +49,7 @@ export default function PageLocation() {
   //   11.562108, 104.888535,
   // ]);
 
-  const [position, setPosition] = useState<L.LatLngExpression | null>(null);
+  const [position, setPosition] = useState<[number, number] | null>([11.5564, 104.9282]);
 
   const [addressName, setAddressName] = useState<string>("");
 
@@ -109,13 +109,13 @@ export default function PageLocation() {
         (error) => {
           console.error("Error retrieving location:", error);
           // Fallback: set a default position (e.g., a city center or a specific location)
-          setPosition([11.55836, 104.91214]); // Olympic coordinates as an example
+          setPosition([11.5564, 104.9282]); // Olympic coordinates as an example
         }
       );
     } else {
       console.error("Geolocation is not supported by this browser.");
       // Fallback: set a default position
-      setPosition([11.55836, 104.91214]); // Olympic coordinates as an example
+      setPosition([11.5564, 104.9282]); // Olympic coordinates as an example
     }
   }, []);
 
@@ -164,7 +164,7 @@ export default function PageLocation() {
                 <div className="min-h-[60dvh] sm:h-[60dvh] lg:min-h-[80dvh] ">
                   <MyMap
                     zoom={13}
-                    position={position && position}
+                    position={position}
                     setPosition={setPosition}
                     addressName={addressName}
                     setAddressName={setAddressName}

@@ -13,7 +13,6 @@ import {
   Marker,
   Popup,
   useMapEvents,
-  useMap,
 } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
@@ -21,13 +20,14 @@ import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { LatLngTuple } from "leaflet";
 
 interface MapProps {
   zoom: number;
-  position: L.LatLngExpression;
+  position: [number, number];
   addressName: string;
   setAddressName: Function;
-  setPosition: Function;
+  setPosition: (pos: [number, number]) => void;
   setAddress: any;
   setMap: any;
 }
@@ -39,8 +39,8 @@ function DraggableMarker({
   setLatitude,
   setLongitude,
 }: {
-  position: L.LatLngExpression | L.LatLngTuple;
-  setPosition: Function;
+  position: [number, number];
+  setPosition: (pos: [number, number]) => void;
   addressName: string;
   setLatitude: Function;
   setLongitude: Function;
@@ -63,6 +63,7 @@ function DraggableMarker({
     [setLatitude, setLongitude, setPosition]
   );
 
+
   const toggleDraggable = useCallback(() => {
     setDraggable((d) => !d);
   }, []);
@@ -71,18 +72,31 @@ function DraggableMarker({
     click() {
       map.locate();
     },
-    locationfound(e) {
-      setPosition(e.latlng);
-      map.flyTo(e.latlng, map.getZoom());
-      // map.flyTo(position, map.getZoom());
+    locationfound(_) {
+      map.flyTo(position, map.getZoom());
     },
   });
+
+  useEffect(() => {
+    if (!map) return; // Ensure map is defined before running
+  
+    map.whenReady(() => {
+      // Check if the new position is different from the current map center
+      const currentCenter = map.getCenter();
+      if (
+        currentCenter.lat !== position[0] || 
+        currentCenter.lng !== position[1]
+      ) {
+        map.flyTo(position, map.getZoom());
+      }
+    });
+  }, [map, position]);
 
   return (
     <Marker
       draggable={draggable}
       eventHandlers={eventHandlers}
-      position={position}
+      position={position as LatLngTuple}
       ref={markerRef}
     >
       <Popup minWidth={90}>
@@ -103,11 +117,13 @@ const Map: React.FC<MapProps> = ({
   setAddress,
   setMap,
 }) => {
-  const [latitude, setLatitude] = useState<number>(11.551512108111616);
-  const [longitude, setLongitude] = useState<number>(104.88767623901369);
+  const [latitude, setLatitude] = useState<number>(11.5564);
+  const [longitude, setLongitude] = useState<number>(104.9282);
   const center: L.LatLngExpression = [latitude, longitude];
 
   const [listPlace, setListPlace] = useState([]);
+
+  const mapRef = useRef<any>(null); // Ref to store the map instance
 
   const [searchText, setSearchText] = useState<string>(""); // State for new text input
   const isFetching = useRef<boolean>(false); // Ref to track the fetching state
@@ -117,7 +133,11 @@ const Map: React.FC<MapProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      if (isFetching.current || !searchText) return;
+      if (isFetching.current || !searchText) {
+        setSearchText("");
+        setPosition([11.5564, 104.9282])
+        return;
+      }
 
       isFetching.current = true; // Lock the loop
 
@@ -148,7 +168,7 @@ const Map: React.FC<MapProps> = ({
       try {
         // Search
         const params = {
-          q: searchText,
+          q: searchText ? searchText : "",
           format: "json",
           addressdetails: 1,
           polygon_geojson: 0,
@@ -190,19 +210,25 @@ const Map: React.FC<MapProps> = ({
         clearTimeout(timeoutId.current); // Cleanup the timeout on unmount or when searchText changes
       }
     };
-  }, [searchText]);
+  }, [searchText, setPosition]);
 
   useEffect(() => {
     const fetchAddress = async () => {
-      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
+      if (latitude === null || longitude === null) return;
+
+      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude ? latitude : position[0]}&lon=${longitude ? longitude : position[1]}`;
 
       try {
         const response = await fetch(url);
         const data = await response.json(); // Parse JSON manually
 
-        setAddress(data.address);
-        setAddressName(data.display_name);
-        setMap(data);
+        // Check if the new position is different from the current one
+        if (!position || position[0] !== data.lat || position[1] !== data.lon) {
+          setPosition([data.lat, data.lon]);
+          setAddress(data.address);
+          setAddressName(data.display_name);
+          setMap(data);
+        }
       } catch (error) {
         console.error("Error fetching address:", error);
       }
@@ -212,18 +238,27 @@ const Map: React.FC<MapProps> = ({
       const debounceFetch = setTimeout(fetchAddress, 300);
       return () => clearTimeout(debounceFetch);
     }
-  }, [latitude, longitude, position, setAddressName, setAddress, setMap]);
+  }, [
+    latitude,
+    longitude,
+    position,
+    setPosition,
+    setAddressName,
+    setAddress,
+    setMap,
+  ]);
 
-  const handlChange = (key: any) => {
-    setPosition(key?.toString()?.split(","));
-    const map = useMapEvents({
-      click() {
-        map.locate();
-      },
-      locationfound() {
-        map.flyTo(position, map.getZoom());
-      },
-    });
+  const handleChange = (key: any) => {
+    setLongitude(key?.toString()?.split(",")[1]);
+    setLatitude(key?.toString()?.split(",")[0]);
+
+    // Fly the map to the new position
+    if (mapRef.current) {
+      mapRef.current.flyTo(
+        [key?.toString()?.split(",")[0], key?.toString()?.split(",")[1]],
+        mapRef.current.getZoom()
+      );
+    }
   };
 
   return (
@@ -238,7 +273,7 @@ const Map: React.FC<MapProps> = ({
         className="absolute top-24 right-8 max-w-[36rem] z-[10000] text-gray-400"
         placeholder="Search Maps"
         startContent={<Icon icon="fluent-mdl2:map-directions" fontSize={24} />}
-        onSelectionChange={handlChange}
+        onSelectionChange={handleChange}
       >
         {(item: any) => (
           <AutocompleteItem
