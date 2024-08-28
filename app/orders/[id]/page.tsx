@@ -77,12 +77,12 @@ const OrderSinglePage = () => {
       });
   };
 
-  // if (loading || !data)
-  //   return (
-  //     <section className="container max-w-full grid place-items-center h-screen">
-  //       <Spinner label="Loading..." />
-  //     </section>
-  //   );
+  if (loading || !data)
+    return (
+      <section className="container max-w-full grid place-items-center h-screen">
+        <Spinner label="Loading..." />
+      </section>
+    );
 
   return (
     <section className="bg-white">
@@ -138,35 +138,42 @@ const OrderSinglePage = () => {
               View your order history and check the delivery status for items.
             </p>
           </div>
-          {data?.storeOrder?.checkout?.order_status === "PENDING" && (
-            <Button
-              size="lg"
-              variant="flat"
-              color="danger"
-              radius="full"
-              className="mt-3 hidden sm:hidden lg:inline"
-              onPress={() => {
-                onOpen();
-              }}
-            >
-              Cancel Order
-            </Button>
-          )}
+          {data?.storeOrder?.checkout?.payment === "CASH" &&
+            data?.storeOrder?.checkout?.order_status === "PENDING" && (
+              <Button
+                size="lg"
+                variant="flat"
+                color="danger"
+                radius="full"
+                className="mt-3 hidden sm:hidden lg:inline"
+                onPress={() => {
+                  onOpen();
+                }}
+              >
+                Cancel Order
+              </Button>
+            )}
         </div>
         {/*  -------- steps ---------- */}
         {data?.storeOrder?.checkout?.order_status !== "CANCEL" ? (
           <>
             <div className="hidden sm:hidden lg:inline ">
               <Steps
-                current={
-                  data?.storeOrder?.checkout?.order_status === "PENDING"
-                    ? 0
-                    : data?.storeOrder?.checkout?.order_status === "CONFIRMED"
-                    ? 1
-                    : data?.storeOrder?.checkout?.order_status === "SHIPPED"
-                    ? 2
-                    : 3
-                }
+                current={(() => {
+                  switch (data?.storeOrder?.checkout?.order_status) {
+                    case "PENDING":
+                      return 0; // Ordered
+                    case "CONFIRMED":
+                    case "PROCESSING":
+                      return 1; // Confirmed
+                    case "SHIPPED":
+                      return 2; // Out for delivery
+                    case "DELIVERED":
+                      return 3; // Delivered
+                    default:
+                      return 0; // Default to Delivered
+                  }
+                })()}
                 direction="horizontal"
               >
                 <Steps.Step
@@ -206,10 +213,10 @@ const OrderSinglePage = () => {
                   data?.storeOrder?.checkout?.order_status === "PENDING"
                     ? 0
                     : data?.storeOrder?.checkout?.order_status === "CONFIRMED"
-                    ? 1
-                    : data?.storeOrder?.checkout?.order_status === "SHIPPED"
-                    ? 2
-                    : 3
+                      ? 1
+                      : data?.storeOrder?.checkout?.order_status === "SHIPPED"
+                        ? 2
+                        : 3
                 }
                 direction="horizontal"
                 progressDot
@@ -336,8 +343,39 @@ const OrderSinglePage = () => {
                 </div>
               </div>
             </div>
+            {data?.storeOrder?.checkout?.payment === "ONLINE" &&
+              data?.storeOrder?.checkout?.payment_status === "UNPAID" && (
+                <Button
+                  size="lg"
+                  variant="flat"
+                  color="danger"
+                  radius="lg"
+                  className="mt-3 hidden sm:hidden lg:inline"
+                  // onPress={() => {
+                  //   onOpen();
+                  // }}
+                >
+                  Finish Payment Process
+                </Button>
+              )}
           </div>
         </div>
+        {data?.storeOrder?.checkout?.payment === "ONLINE" &&
+          data?.storeOrder?.checkout?.payment_status === "UNPAID" && (
+            <Button
+              size="lg"
+              variant="flat"
+              color="danger"
+              radius="full"
+              fullWidth
+              className="mt-3 block sm:block lg:hidden"
+              // onPress={() => {
+              //   onOpen();
+              // }}
+            >
+              Finish Payment Process
+            </Button>
+          )}
         {data?.storeOrder?.checkout?.order_status === "START" && (
           <Button
             size="lg"
