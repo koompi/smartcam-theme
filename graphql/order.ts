@@ -59,6 +59,19 @@ export const ORDER_BY_ID = gql`
           usd
           khr
         }
+        discountPercentage
+        totalPrice {
+          khr
+          usd
+        }
+        discountTotalPrice {
+          khr
+          usd
+        }
+        totalUnitPrice {
+          khr
+          usd
+        }
       }
       totalPrice {
         khr
@@ -72,7 +85,25 @@ export const ORDER_BY_ID = gql`
         khr
         usd
       }
-      checkout
+      checkout {
+        amount
+        id
+        orderId
+        membershipCard {
+          id
+          label
+          membershipType
+          discountPrice
+          discountType
+          discountPercentage
+          status
+        }
+        paymentStatus
+        orderStatus
+        payment
+        shippingType
+        shippingFee
+      }
       customer {
         id
         membershipCard {

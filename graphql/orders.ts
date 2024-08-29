@@ -28,7 +28,25 @@ export const GET_ORDERS = gql`
           }
           discountPercentage
         }
-        checkout
+        checkout {
+          amount
+          id
+          orderId
+          membershipCard {
+            id
+            label
+            membershipType
+            discountPrice
+            discountType
+            discountPercentage
+            status
+          }
+          paymentStatus
+          orderStatus
+          payment
+          shippingType
+          shippingFee
+        }
         code
         createdAt
         id
@@ -39,6 +57,10 @@ export const GET_ORDERS = gql`
         totalUnitPrice {
           khr
           usd
+        }
+        totalPrice {
+          usd
+          khr
         }
       }
     }

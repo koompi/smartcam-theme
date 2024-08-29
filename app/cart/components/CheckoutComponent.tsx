@@ -10,8 +10,14 @@ import {
   CardHeader,
   Divider,
   Link,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Progress,
   RadioGroup,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -45,6 +51,8 @@ const CheckoutComponent = () => {
   const { user } = useAuth();
   const router = useRouter();
   const baray = useBaray();
+
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const { cartItems, cleanCartItems, membershipId } = useCart();
   const [loading, setLoading] = useState(false);
@@ -124,10 +132,12 @@ const CheckoutComponent = () => {
           });
           cleanCartItems();
           setLoading(false);
+          onClose();
         } else {
           toast.success(
             "Congratulation! you've been order the product(s) successfully!"
           );
+          onClose();
           cleanCartItems();
           setTimeout(() => {
             setLoading(false);
@@ -359,198 +369,17 @@ const CheckoutComponent = () => {
   }
 
   return (
-    <section className="container mx-auto px-3 sm:px-3 lg:px-6 py-4 sm:py-4 lg:py-9 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-5 w-full gap-8">
-      {/* Left */}
-      <div className="col-span-3 w-full flex-none">
-        <div className="flex h-full flex-1 flex-col p-0">
-          <div>
-            <Button
-              className="text-default-700 flex"
-              isDisabled={page === 0}
-              radius="full"
-              variant="flat"
-              onPress={() => {
-                paginate(-1);
-              }}
-            >
-              <Icon icon="solar:arrow-left-outline" width={20} />
-              Go back
-            </Button>
-          </div>
-
-          <div className="py-6 flex w-full justify-between gap-8">
-            <div className="flex w-full flex-col items-start gap-2">
-              <p className="text-small font-medium">Review</p>
-              <Progress
-                classNames={{
-                  indicator: "!bg-primary",
-                }}
-                value={page >= 0 ? 100 : 0}
-              />
-            </div>
-            <div className="flex w-full flex-col items-start gap-2">
-              <p className="text-small font-medium">Delivery</p>
-              <Progress
-                classNames={{
-                  indicator: "!bg-primary",
-                }}
-                value={page >= 1 ? 100 : 0}
-              />
-            </div>
-            <div className="flex w-full flex-col items-start gap-2">
-              <p className="text-small font-medium">Payment</p>
-              <Progress
-                classNames={{
-                  indicator: "!bg-primary",
-                }}
-                value={page >= 2 ? 100 : 0}
-              />
-            </div>
-          </div>
-
-          <AnimatePresence custom={direction} initial={false} mode="wait">
-            <motion.form
-              key={page}
-              animate="center"
-              className="mt-3 sm:mt-3 lg:mt-8 flex flex-col gap-3"
-              custom={direction}
-              exit="exit"
-              initial="enter"
-              transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 },
-              }}
-              variants={variants}
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <h1 className="text-2xl font-medium">{stepTitle}</h1>
-              {stepsContent}
-              {user ? (
-                <Button
-                  fullWidth
-                  color="primary"
-                  className="mt-8 text-background"
-                  size="lg"
-                  radius="full"
-                  onPress={() => {
-                    if (page === 2) {
-                      onSubmitCheckout();
-                    }
-                    router.push("?query=delivery");
-                    paginate(1);
-                  }}
-                  isDisabled={
-                    orders?.estimationOrders?.length <= 0 ||
-                    (page === 1 && !(delivery && location))
-                  }
-                  isLoading={loading}
-                >
-                  {ctaLabel}
-                </Button>
-              ) : (
-                <Button
-                  as={Link}
-                  href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
-                  fullWidth
-                  color="primary"
-                  className="mt-8 text-background"
-                  size="lg"
-                  radius="full"
-                >
-                  Login
-                </Button>
-              )}
-            </motion.form>
-          </AnimatePresence>
-        </div>
-      </div>
-      <div className="col-span-2">
-        <div className="sticky top-28 hidden sm:hidden lg:block">
-          <Card shadow="sm" isBlurred>
-            <CardHeader>Summary</CardHeader>
-            <CardBody>
-              <dl className="flex flex-col gap-4 py-4">
-                <div className="flex justify-between">
-                  <dt className="text-small text-default-500">Subtotal</dt>
-                  <dd className="text-small font-semibold text-default-700">
-                    $
-                    {orders?.estimationOrders
-                      ?.reduce(
-                        (accumulator: number, currentObject: OrderCart) => {
-                          return (
-                            accumulator +
-                            (currentObject?.promotion?.discount
-                              ? currentObject?.promotion?.discount
-                                  ?.originalPrice
-                              : currentObject?.product?.price) *
-                              currentObject?.qty
-                          );
-                        },
-                        0
-                      )
-                      .toFixed(2)}
-                  </dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-small text-default-500">Discount</dt>
-                  <dd className="text-small font-semibold text-default-700">
-                    {/* ${(price - priceDiscount).toFixed(2)} */}$
-                    {orders?.estimationOrders
-                      ?.reduce(
-                        (accumulator: number, currentObject: OrderCart) => {
-                          return (
-                            accumulator +
-                            ((currentObject?.promotion?.discount
-                              ? currentObject?.promotion?.discount
-                                  ?.originalPrice
-                              : currentObject.product.price) *
-                              currentObject?.qty -
-                              (currentObject?.promotion?.discount
-                                ? currentObject?.promotion?.discount
-                                    ?.totalDiscount
-                                : currentObject.product.price) *
-                                currentObject?.qty)
-                          );
-                        },
-                        0
-                      )
-                      .toFixed(2)}
-                  </dd>
-                </div>
-
-                <div className="flex justify-between">
-                  <dt className="text-small text-default-500 flex items-center gap-3">
-                    Delivery
-                    <Icon
-                      icon="streamline:transfer-motorcycle-solid"
-                      fontSize={16}
-                    />
-                  </dt>
-
-                  {delivery === "PERSONAL" ? (
+    <>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Summary</ModalHeader>
+              <ModalBody>
+                <dl className="flex flex-col gap-4 py-4">
+                  <div className="flex justify-between">
+                    <dt className="text-small text-default-500">Subtotal</dt>
                     <dd className="text-small font-semibold text-default-700">
-                      Free
-                    </dd>
-                  ) : (
-                    <dd className="text-small font-semibold text-default-700">
-                      {loading ? "...." : ship?.toFixed(2)}
-                    </dd>
-                  )}
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-small text-default-500">Tax</dt>
-                  <dd className="text-small font-semibold text-default-700">
-                    $0.00
-                  </dd>
-                </div>
-
-                <Divider />
-                <div className="flex justify-between">
-                  <dt className="text-small font-semibold text-default-500">
-                    Total
-                  </dt>
-                  {delivery === "PERSONAL" ? (
-                    <dd className="font-semibold text-primary text-xl">
                       $
                       {orders?.estimationOrders
                         ?.reduce(
@@ -559,8 +388,8 @@ const CheckoutComponent = () => {
                               accumulator +
                               (currentObject?.promotion?.discount
                                 ? currentObject?.promotion?.discount
-                                    ?.totalDiscount
-                                : currentObject.product.price) *
+                                    ?.originalPrice
+                                : currentObject?.product?.price) *
                                 currentObject?.qty
                             );
                           },
@@ -568,33 +397,361 @@ const CheckoutComponent = () => {
                         )
                         .toFixed(2)}
                     </dd>
-                  ) : (
-                    <dd className="font-semibold text-primary text-xl">
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-small text-default-500">Discount</dt>
+                    <dd className="text-small font-semibold text-default-700">
+                      {/* ${(price - priceDiscount).toFixed(2)} */}$
+                      {orders?.estimationOrders
+                        ?.reduce(
+                          (accumulator: number, currentObject: OrderCart) => {
+                            return (
+                              accumulator +
+                              ((currentObject?.promotion?.discount
+                                ? currentObject?.promotion?.discount
+                                    ?.originalPrice
+                                : currentObject.product.price) *
+                                currentObject?.qty -
+                                (currentObject?.promotion?.discount
+                                  ? currentObject?.promotion?.discount
+                                      ?.totalDiscount
+                                  : currentObject.product.price) *
+                                  currentObject?.qty)
+                            );
+                          },
+                          0
+                        )
+                        .toFixed(2)}
+                    </dd>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <dt className="text-small text-default-500 flex items-center gap-3">
+                      Delivery
+                      <Icon
+                        icon="streamline:transfer-motorcycle-solid"
+                        fontSize={16}
+                      />
+                    </dt>
+
+                    {delivery === "PERSONAL" ? (
+                      <dd className="text-small font-semibold text-default-700">
+                        Free
+                      </dd>
+                    ) : (
+                      <dd className="text-small font-semibold text-default-700">
+                        {loading ? "...." : ship?.toFixed(2)}
+                      </dd>
+                    )}
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-small text-default-500">Tax</dt>
+                    <dd className="text-small font-semibold text-default-700">
+                      $0.00
+                    </dd>
+                  </div>
+
+                  <Divider />
+                  <div className="flex justify-between">
+                    <dt className="text-small font-semibold text-default-500">
+                      Total
+                    </dt>
+                    {delivery === "PERSONAL" ? (
+                      <dd className="font-semibold text-primary text-xl">
+                        $
+                        {orders?.estimationOrders
+                          ?.reduce(
+                            (accumulator: number, currentObject: OrderCart) => {
+                              return (
+                                accumulator +
+                                (currentObject?.promotion?.discount
+                                  ? currentObject?.promotion?.discount
+                                      ?.totalDiscount
+                                  : currentObject.product.price) *
+                                  currentObject?.qty
+                              );
+                            },
+                            0
+                          )
+                          .toFixed(2)}
+                      </dd>
+                    ) : (
+                      <dd className="font-semibold text-primary text-xl">
+                        $
+                        {(
+                          orders?.estimationOrders?.reduce(
+                            (accumulator: number, currentObject: OrderCart) => {
+                              return (
+                                accumulator +
+                                (currentObject?.promotion?.discount
+                                  ? currentObject?.promotion?.discount
+                                      ?.totalDiscount
+                                  : currentObject.product.price) *
+                                  currentObject?.qty
+                              );
+                            },
+                            0
+                          ) + ship
+                        ).toFixed(2)}
+                      </dd>
+                    )}
+                  </div>
+                </dl>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onPress={() => onSubmitCheckout()}
+                  fullWidth
+                  size="lg"
+                  radius="lg"
+                  variant="shadow"
+                >
+                  Pay Now
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <section className="container mx-auto px-3 sm:px-3 lg:px-6 py-4 sm:py-4 lg:py-9 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-5 w-full gap-8">
+        {/* Left */}
+        <div className="col-span-3 w-full flex-none">
+          <div className="flex h-full flex-1 flex-col p-0">
+            <div>
+              <Button
+                className="text-default-700 flex"
+                isDisabled={page === 0}
+                radius="full"
+                variant="flat"
+                onPress={() => {
+                  paginate(-1);
+                }}
+              >
+                <Icon icon="solar:arrow-left-outline" width={20} />
+                Go back
+              </Button>
+            </div>
+
+            <div className="py-6 flex w-full justify-between gap-8">
+              <div className="flex w-full flex-col items-start gap-2">
+                <p className="text-small font-medium">Review</p>
+                <Progress
+                  classNames={{
+                    indicator: "!bg-primary",
+                  }}
+                  value={page >= 0 ? 100 : 0}
+                />
+              </div>
+              <div className="flex w-full flex-col items-start gap-2">
+                <p className="text-small font-medium">Delivery</p>
+                <Progress
+                  classNames={{
+                    indicator: "!bg-primary",
+                  }}
+                  value={page >= 1 ? 100 : 0}
+                />
+              </div>
+              <div className="flex w-full flex-col items-start gap-2">
+                <p className="text-small font-medium">Payment</p>
+                <Progress
+                  classNames={{
+                    indicator: "!bg-primary",
+                  }}
+                  value={page >= 2 ? 100 : 0}
+                />
+              </div>
+            </div>
+
+            <AnimatePresence custom={direction} initial={false} mode="wait">
+              <motion.form
+                key={page}
+                animate="center"
+                className="mt-3 sm:mt-3 lg:mt-8 flex flex-col gap-3"
+                custom={direction}
+                exit="exit"
+                initial="enter"
+                transition={{
+                  x: { type: "spring", stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.2 },
+                }}
+                variants={variants}
+                onSubmit={(e) => e.preventDefault()}
+              >
+                <h1 className="text-2xl font-medium">{stepTitle}</h1>
+                {stepsContent}
+                {user ? (
+                  <Button
+                    fullWidth
+                    color="primary"
+                    className="mt-8 text-background"
+                    size="lg"
+                    radius="full"
+                    onPress={() => {
+                      if (page === 2) {
+                        // onSubmitCheckout();
+                        onOpen();
+                      }
+                      router.push("?query=delivery");
+                      paginate(1);
+                    }}
+                    isDisabled={
+                      orders?.estimationOrders?.length <= 0 ||
+                      (page === 1 && !(delivery && location))
+                    }
+                    isLoading={loading}
+                  >
+                    {ctaLabel}
+                  </Button>
+                ) : (
+                  <Button
+                    as={Link}
+                    href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
+                    fullWidth
+                    color="primary"
+                    className="mt-8 text-background"
+                    size="lg"
+                    radius="full"
+                  >
+                    Login
+                  </Button>
+                )}
+              </motion.form>
+            </AnimatePresence>
+          </div>
+        </div>
+        <div className="col-span-2">
+          <div className="sticky top-28 hidden sm:hidden lg:block">
+            <Card shadow="sm" isBlurred>
+              <CardHeader>Summary</CardHeader>
+              <CardBody>
+                <dl className="flex flex-col gap-4 py-4">
+                  <div className="flex justify-between">
+                    <dt className="text-small text-default-500">Subtotal</dt>
+                    <dd className="text-small font-semibold text-default-700">
                       $
-                      {(
-                        orders?.estimationOrders?.reduce(
+                      {orders?.estimationOrders
+                        ?.reduce(
                           (accumulator: number, currentObject: OrderCart) => {
                             return (
                               accumulator +
                               (currentObject?.promotion?.discount
                                 ? currentObject?.promotion?.discount
-                                    ?.totalDiscount
-                                : currentObject.product.price) *
+                                    ?.originalPrice
+                                : currentObject?.product?.price) *
                                 currentObject?.qty
                             );
                           },
                           0
-                        ) + ship
-                      ).toFixed(2)}
+                        )
+                        .toFixed(2)}
                     </dd>
-                  )}
-                </div>
-              </dl>
-            </CardBody>
-          </Card>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-small text-default-500">Discount</dt>
+                    <dd className="text-small font-semibold text-default-700">
+                      {/* ${(price - priceDiscount).toFixed(2)} */}$
+                      {orders?.estimationOrders
+                        ?.reduce(
+                          (accumulator: number, currentObject: OrderCart) => {
+                            return (
+                              accumulator +
+                              ((currentObject?.promotion?.discount
+                                ? currentObject?.promotion?.discount
+                                    ?.originalPrice
+                                : currentObject.product.price) *
+                                currentObject?.qty -
+                                (currentObject?.promotion?.discount
+                                  ? currentObject?.promotion?.discount
+                                      ?.totalDiscount
+                                  : currentObject.product.price) *
+                                  currentObject?.qty)
+                            );
+                          },
+                          0
+                        )
+                        .toFixed(2)}
+                    </dd>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <dt className="text-small text-default-500 flex items-center gap-3">
+                      Delivery
+                      <Icon
+                        icon="streamline:transfer-motorcycle-solid"
+                        fontSize={16}
+                      />
+                    </dt>
+
+                    {delivery === "PERSONAL" ? (
+                      <dd className="text-small font-semibold text-default-700">
+                        Free
+                      </dd>
+                    ) : (
+                      <dd className="text-small font-semibold text-default-700">
+                        {loading ? "...." : ship?.toFixed(2)}
+                      </dd>
+                    )}
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-small text-default-500">Tax</dt>
+                    <dd className="text-small font-semibold text-default-700">
+                      $0.00
+                    </dd>
+                  </div>
+
+                  <Divider />
+                  <div className="flex justify-between">
+                    <dt className="text-small font-semibold text-default-500">
+                      Total
+                    </dt>
+                    {delivery === "PERSONAL" ? (
+                      <dd className="font-semibold text-primary text-xl">
+                        $
+                        {orders?.estimationOrders
+                          ?.reduce(
+                            (accumulator: number, currentObject: OrderCart) => {
+                              return (
+                                accumulator +
+                                (currentObject?.promotion?.discount
+                                  ? currentObject?.promotion?.discount
+                                      ?.totalDiscount
+                                  : currentObject.product.price) *
+                                  currentObject?.qty
+                              );
+                            },
+                            0
+                          )
+                          .toFixed(2)}
+                      </dd>
+                    ) : (
+                      <dd className="font-semibold text-primary text-xl">
+                        $
+                        {(
+                          orders?.estimationOrders?.reduce(
+                            (accumulator: number, currentObject: OrderCart) => {
+                              return (
+                                accumulator +
+                                (currentObject?.promotion?.discount
+                                  ? currentObject?.promotion?.discount
+                                      ?.totalDiscount
+                                  : currentObject.product.price) *
+                                  currentObject?.qty
+                              );
+                            },
+                            0
+                          ) + ship
+                        ).toFixed(2)}
+                      </dd>
+                    )}
+                  </div>
+                </dl>
+              </CardBody>
+            </Card>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
