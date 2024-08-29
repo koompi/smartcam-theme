@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  CardBody,
-  Chip,
-  Divider,
-  Image,
-} from "@nextui-org/react";
+import { Button, Card, CardBody, Divider, Image } from "@nextui-org/react";
 import React, { FC } from "react";
 import { Icon } from "@iconify/react";
 import Steps from "@uiw/react-steps";
@@ -18,9 +11,17 @@ import { useMutation } from "@apollo/client";
 import { toast } from "sonner";
 import { CONFIRM_ORDER } from "@/graphql/mutation/order";
 import { BrowserView, MobileView } from "react-device-detect";
+import { formatToUSD } from "@/utils/formatUSD";
+import { FINISH_PAYMENT_PROCESS } from "@/graphql/mutation/checkout";
+import { useBaray } from "@/hooks/baray";
+import { useRouter } from "next/navigation";
 
 const OrderCard: FC<OrdersType> = (props) => {
+  const baray = useBaray();
+  const router = useRouter();
+
   const [storeConfirmOrder] = useMutation(CONFIRM_ORDER);
+  const [customerCheckoutPayment] = useMutation(FINISH_PAYMENT_PROCESS);
 
   const onConfirm = (id: string) => {
     const variables = {
@@ -37,7 +38,40 @@ const OrderCard: FC<OrdersType> = (props) => {
       });
   };
 
-  console.log("props", props);
+  const onFinishPayment = (id: string) => {
+    const variables = {
+      orderId: id,
+    };
+
+    customerCheckoutPayment({
+      variables: variables,
+    })
+      .then((res) => {
+        const intentId = res.data.customerCheckoutPayment["intentId"];
+        baray!.confirmPayment({
+          intent_id: intentId,
+          use_iframe: false,
+          on_success: () => {
+            toast.success(
+              "Your payment process has been completed successful!"
+            );
+            props.refetch();
+          },
+        });
+        setTimeout(() => {
+          router.push("/orders");
+        }, 500);
+      })
+      .catch((e) => {
+        toast.error(e.message);
+        console.log("err", e);
+      });
+  };
+
+  const isOnlinePaymentFailed =
+    props?.checkout?.payment === "ONLINE" &&
+    (props?.checkout?.paymentStatus === "UNPAID" ||
+      props?.checkout?.paymentStatus === "FAIL");
 
   return (
     <Card
@@ -55,20 +89,21 @@ const OrderCard: FC<OrdersType> = (props) => {
           </div>
           <BrowserView>
             <div className="flex flex-wrap items-center gap-0 sm:gap-0 lg:gap-3">
-              {props?.checkout?.payment === "ONLINE" &&
-                (props?.checkout?.payment_status === "UNPAID" ||
-                  props?.checkout?.payment_status === "FAIL") && (
-                  <Button
-                    color="danger"
-                    radius="full"
-                    variant="flat"
-                    startContent={
-                      <Icon icon="fluent:payment-16-regular" fontSize={21} />
-                    }
-                  >
-                    Finish Payment Process
-                  </Button>
-                )}
+              {isOnlinePaymentFailed && (
+                <Button
+                  color="danger"
+                  radius="full"
+                  variant="flat"
+                  startContent={
+                    <Icon icon="fluent:payment-16-regular" fontSize={21} />
+                  }
+                  onPress={() => {
+                    onFinishPayment(props?.id);
+                  }}
+                >
+                  Finish Payment Process
+                </Button>
+              )}
               <Button
                 color="primary"
                 variant="bordered"
@@ -85,21 +120,22 @@ const OrderCard: FC<OrdersType> = (props) => {
           </BrowserView>
           <MobileView>
             <div className="flex items-center gap-1 sm:gap-1 lg:gap-3">
-              {props?.checkout?.payment === "ONLINE" &&
-                (props?.checkout?.payment_status === "UNPAID" ||
-                  props?.checkout?.payment_status === "FAIL") && (
-                  <Button
-                    color="danger"
-                    radius="full"
-                    variant="flat"
-                    size="sm"
-                    startContent={
-                      <Icon icon="fluent:payment-16-regular" fontSize={21} />
-                    }
-                  >
-                    Pay Now
-                  </Button>
-                )}
+              {isOnlinePaymentFailed && (
+                <Button
+                  color="danger"
+                  radius="full"
+                  variant="flat"
+                  size="sm"
+                  startContent={
+                    <Icon icon="fluent:payment-16-regular" fontSize={21} />
+                  }
+                  onPress={() => {
+                    onFinishPayment(props?.id);
+                  }}
+                >
+                  Pay Now
+                </Button>
+              )}
               <Button
                 color="primary"
                 variant="bordered"
@@ -137,9 +173,28 @@ const OrderCard: FC<OrdersType> = (props) => {
                   Brand: {props.carts[0]?.product?.brand}
                 </p>
                 <p className="text-sm font-light">Qty: {props.carts[0]?.qty}</p>
-                <p className="text-sm font-light">
-                  {props?.totalUnitPrice.usd.toFixed(2)}
-                </p>
+
+                {props.discountUnitPrice?.usd > 0 ||
+                props.carts[0]?.discountPercentage > 0 ? (
+                  <div className="flex items-center gap-3">
+                    <p className="text-sm font-light line-through text-danger">
+                      {formatToUSD(
+                        parseFloat(props?.totalUnitPrice.usd.toString())
+                      )}
+                    </p>
+                    <p>
+                      {formatToUSD(
+                        parseFloat(props?.totalPrice.usd.toString())
+                      )}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-sm font-light">
+                    {formatToUSD(
+                      parseFloat(props?.totalUnitPrice.usd.toString())
+                    )}
+                  </p>
+                )}
               </div>
             </div>
           ) : (
@@ -159,11 +214,11 @@ const OrderCard: FC<OrdersType> = (props) => {
             </div>
           )}
 
-          {props?.checkout?.order_status !== "CANCELLED" ? (
+          {props?.checkout?.orderStatus !== "CANCELLED" ? (
             <div className="mt-3">
               <Steps
                 current={(() => {
-                  switch (props?.checkout?.order_status) {
+                  switch (props?.checkout?.orderStatus) {
                     case "PENDING":
                       return 0; // Ordered
                     case "CONFIRMED":
@@ -172,6 +227,7 @@ const OrderCard: FC<OrdersType> = (props) => {
                     case "SHIPPED":
                       return 2; // Out for delivery
                     case "DELIVERED":
+                    case "CLOSED":
                       return 3; // Delivered
                     default:
                       return 0; // Default to Delivered
@@ -202,7 +258,7 @@ const OrderCard: FC<OrdersType> = (props) => {
             </div>
           )}
         </div>
-        {props?.checkout?.order_status === "DELIVERED" && (
+        {props?.checkout?.orderStatus === "DELIVERED" && (
           <Button
             size="lg"
             variant="flat"

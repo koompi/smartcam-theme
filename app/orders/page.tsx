@@ -8,7 +8,15 @@ import { OrdersType } from "@/types/checkout";
 import { Skeleton } from "@nextui-org/react";
 
 const OrderPage = () => {
-  const { data, loading, refetch } = useQuery(GET_ORDERS);
+  const { data, loading, refetch } = useQuery(GET_ORDERS, {
+    variables: {
+      filter: {
+        limit: 999,
+        skip: 0,
+        sort: -1,
+      },
+    },
+  });
 
   useEffect(() => {
     refetch();

@@ -19,3 +19,9 @@ export const CHECKOUT = gql`
     )
   }
 `;
+
+export const FINISH_PAYMENT_PROCESS = gql`
+  mutation CustomerCheckoutPayment($orderId: String!) {
+    customerCheckoutPayment(orderId: $orderId)
+  }
+`;

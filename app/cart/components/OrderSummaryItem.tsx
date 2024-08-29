@@ -66,28 +66,17 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
                   <div>${(promotion?.discount.originalPrice).toFixed(2)}</div>
                 </div> */}
                 <div className="font-bold">
-                  <div className="line-through text-sm">
+                  <div className="line-through text-sm text-danger">
                     ${(promotion?.discount.originalPrice * qty).toFixed(2)}
                     {/* <span className="text-danger"> x {qty}</span> */}
                   </div>
                   <div>
-                    (
-                    {promotion?.discount &&
-                      (promotion?.discount.discountType == "PERCENTAGE" ? (
-                        <label color="danger">
-                          {promotion?.discount.discountPercentage}% OFF
-                        </label>
-                      ) : (
-                        <label color="danger">
-                          ${promotion?.discount.discountPrice} OFF
-                        </label>
-                      ))}
-                    ) - ${(promotion?.discount.totalDiscount * qty).toFixed(2)}{" "}
-                    x ({qty} QTY)
+                    ${(promotion?.discount.totalDiscount * qty).toFixed(2)} x (
+                    {qty} QTY)
                   </div>
-                  <div className="text-danger">
+                  {/* <div className="text-danger">
                     ${product?.price.toFixed(2)}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             ) : (
