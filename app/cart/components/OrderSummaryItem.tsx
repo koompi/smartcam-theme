@@ -120,7 +120,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
             radius="full"
             variant="flat"
             isDisabled={qty <= 1}
-            onPress={() => minusCart(product.id)}
+            onPress={() => minusCart(product?.id)}
           >
             <Icon icon="lucide:minus" width={14} />
           </Button>
@@ -130,7 +130,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
             radius="full"
             variant="flat"
             color="success"
-            onPress={() => addToCart(product.id)}
+            onPress={() => addToCart(product?.id)}
           >
             <Icon icon="lucide:plus" width={14} />
           </Button>
@@ -141,7 +141,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
             variant="flat"
             color="danger"
             onPress={() => {
-              removeFromCart(product.id);
+              removeFromCart(product?.id);
             }}
           >
             <Icon icon="lucide:x" width={14} />

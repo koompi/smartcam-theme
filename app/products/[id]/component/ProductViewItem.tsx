@@ -15,7 +15,6 @@ import {
   CardBody,
   Tab,
   Tabs,
-  useDisclosure,
   Input,
 } from "@nextui-org/react";
 import React, { useEffect, useRef, useState } from "react";
@@ -34,7 +33,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import { VariantRadio } from "./VariantRadio";
 import { formatToUSD } from "@/utils/formatUSD";
-import productReviews from "@/data/productReviews";
+// import productReviews from "@/data/productReviews";
 import {
   TwitterShareButton,
   TwitterIcon,
@@ -43,9 +42,9 @@ import {
   FacebookShareButton,
   FacebookIcon,
 } from "next-share";
-import ModalReview from "./ReviewModal";
-import Review from "./Reviews";
-import SummaryRatingCard from "./SummaryRatingCard";
+// import ModalReview from "./ReviewModal";
+// import Review from "./Reviews";
+// import SummaryRatingCard from "./SummaryRatingCard";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "@/context/useCart";
 import { ProductType, Variants } from "@/types/product";
@@ -120,7 +119,6 @@ export const ProductViewItem = React.forwardRef<
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const swiperRef = useRef<SwiperType | null>(null);
     const fullHost = window.location.href;
-    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
     const [isFavorite, setIsFavorite] = useState(favorite);
     const { refetch } = useAuth();
     const [isCompare, setIsCompare] = useState(compare);
@@ -394,15 +392,7 @@ export const ProductViewItem = React.forwardRef<
 
               <div className="col-span-12 flex sm:flex lg:hidden w-full">
                 <div className="bg-white rounded-3xl shadow-sm p-3">
-                  <h1 className="text-xl font-bold tracking-tight">
-                    {title}
-                    {props.promotion.discount &&
-                      ` - (${
-                        props.promotion?.discount.discountType == "PRICE"
-                          ? `$${props.promotion?.discount.discountPrice}`
-                          : `${props.promotion?.discount.discountPercentage}%`
-                      })`}
-                  </h1>
+                  <h1 className="text-xl font-bold tracking-tight">{title}</h1>
                   <Spacer y={6} />
                   <h2 className="text-4xl font-bold text-primary">
                     {props.promotion?.discount ? (
@@ -415,15 +405,11 @@ export const ProductViewItem = React.forwardRef<
                           )}
                         </div>
                         <label>
-                          $
-                          {props?.promotion?.discount.discountType === "PRICE"
-                            ? variant.price -
-                              (props.promotion.discount.discountPrice ?? 0)
-                            : variant.price -
-                              ((props.promotion?.discount.discountPercentage ??
-                                0) *
-                                variant.price) /
-                                100}
+                          {formatToUSD(
+                            parseFloat(
+                              props?.promotion?.discount?.totalDiscount.toString()
+                            )
+                          )}
                         </label>
                       </div>
                     ) : (
@@ -903,15 +889,7 @@ export const ProductViewItem = React.forwardRef<
           {/* desc info */}
           <div className="hidden sm:hidden lg:block w-1/4">
             <div className="sticky top-40 bg-white rounded-3xl shadow-sm p-6">
-              <h1 className="text-2xl font-bold tracking-tight">
-                {title}
-                {props.promotion.discount &&
-                  ` - (${
-                    props.promotion?.discount.discountType == "PRICE"
-                      ? `$${props.promotion?.discount.discountPrice}`
-                      : `${props.promotion?.discount.discountPercentage}%`
-                  })`}
-              </h1>
+              <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
               <Spacer y={6} />
               <h2 className="text-4xl font-bold text-primary">
                 {props.promotion?.discount ? (
@@ -924,14 +902,11 @@ export const ProductViewItem = React.forwardRef<
                       )}
                     </div>
                     <label>
-                      $
-                      {props?.promotion?.discount.discountType === "PRICE"
-                        ? variant.price -
-                          (props.promotion.discount.discountPrice ?? 0)
-                        : variant.price -
-                          ((props.promotion?.discount.discountPercentage ?? 0) *
-                            variant.price) /
-                            100}
+                      {formatToUSD(
+                        parseFloat(
+                          props?.promotion?.discount?.totalDiscount.toString()
+                        )
+                      )}
                     </label>
                   </div>
                 ) : (

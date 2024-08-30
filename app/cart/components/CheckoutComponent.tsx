@@ -91,6 +91,7 @@ const CheckoutComponent = () => {
     },
   });
 
+  // cart
   const { data: orders, loading: loadingOrder } = useQuery(ESTIMATION_PRICE, {
     variables: {
       input: [...cartItems],
@@ -363,7 +364,7 @@ const CheckoutComponent = () => {
   //   );
   // }
 
-  if (shippingLoading) {
+  if (shippingLoading || !shippingProvider) {
     return "Loading ...";
   }
 
@@ -409,12 +410,12 @@ const CheckoutComponent = () => {
                               ((currentObject?.promotion?.discount
                                 ? currentObject?.promotion?.discount
                                     ?.originalPrice
-                                : currentObject.product.price) *
+                                : currentObject?.product?.price) *
                                 currentObject?.qty -
                                 (currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
                                       ?.totalDiscount
-                                  : currentObject.product.price) *
+                                  : currentObject?.product?.price) *
                                   currentObject?.qty)
                             );
                           },
@@ -466,7 +467,7 @@ const CheckoutComponent = () => {
                                 (currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
                                       ?.totalDiscount
-                                  : currentObject.product.price) *
+                                  : currentObject?.product?.price) *
                                   currentObject?.qty
                               );
                             },
@@ -485,7 +486,7 @@ const CheckoutComponent = () => {
                                 (currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
                                       ?.totalDiscount
-                                  : currentObject.product.price) *
+                                  : currentObject?.product?.price) *
                                   currentObject?.qty
                               );
                             },
@@ -582,7 +583,19 @@ const CheckoutComponent = () => {
                 variants={variants}
                 onSubmit={(e) => e.preventDefault()}
               >
-                <h1 className="text-2xl font-medium">{stepTitle}</h1>
+                <div className="flex flex-grow items-center justify-between">
+                  <h1 className="text-2xl font-medium">{stepTitle}</h1>
+                  {cartItems.length > 0 && (
+                    <Button
+                      variant="flat"
+                      color="danger"
+                      radius="full"
+                      onPress={() => cleanCartItems()}
+                    >
+                      Clear Cart
+                    </Button>
+                  )}
+                </div>
                 {stepsContent}
                 {user ? (
                   <Button
@@ -663,12 +676,12 @@ const CheckoutComponent = () => {
                               ((currentObject?.promotion?.discount
                                 ? currentObject?.promotion?.discount
                                     ?.originalPrice
-                                : currentObject.product.price) *
+                                : currentObject?.product?.price) *
                                 currentObject?.qty -
                                 (currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
                                       ?.totalDiscount
-                                  : currentObject.product.price) *
+                                  : currentObject?.product?.price) *
                                   currentObject?.qty)
                             );
                           },
@@ -720,7 +733,7 @@ const CheckoutComponent = () => {
                                 (currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
                                       ?.totalDiscount
-                                  : currentObject.product.price) *
+                                  : currentObject?.product?.price) *
                                   currentObject?.qty
                               );
                             },
@@ -739,7 +752,7 @@ const CheckoutComponent = () => {
                                 (currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
                                       ?.totalDiscount
-                                  : currentObject.product.price) *
+                                  : currentObject?.product?.price) *
                                   currentObject?.qty
                               );
                             },

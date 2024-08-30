@@ -195,33 +195,6 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                 )}
                 title={
                   <div className="flex space-x-4 text-black">
-                    {/* {delivery === "CP" ? (
-                      <>
-                        <Image
-                          src="/images/logo_v1.png"
-                          className="h-12"
-                          alt=""
-                        />
-                        <div>
-                          <div className="font-semibold">
-                            Delivery: ${ship?.toFixed(2)}
-                          </div>
-                          <div>Cambodia POS</div>
-                        </div>
-                      </>
-                    ) : delivery === "L192" ? (
-                      <>
-                        <Image src="/images/l192.png" className="h-12" alt="" />
-                        <div>
-                          <div className="font-semibold">
-                            Delivery: ${ship?.toFixed(2)}
-                          </div>
-                          <div>L912 Delivery</div>
-                        </div>
-                      </>
-                    ) : (
-                      "Delivery Options"
-                    )} */}
                     {shippingProvider?.map((res: Shpping) => {
                       if (res.deliveryType === "PERSONAL") {
                         return (
@@ -298,7 +271,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                     }}
                     defaultValue={shippingProvider[0]?.deliveryType}
                   >
-                    {shippingProvider.map((delivery: Shpping) => {
+                    {shippingProvider?.map((delivery: Shpping) => {
                       return (
                         <CustomRadio
                           key={delivery?.deliveryType}
