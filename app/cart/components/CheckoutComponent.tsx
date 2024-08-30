@@ -18,6 +18,7 @@ import {
   Progress,
   RadioGroup,
   useDisclosure,
+  Image,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -59,6 +60,7 @@ const CheckoutComponent = () => {
   const [ship, setShip] = useState<number>(0.0);
   const [paymentOption, setPaymentOption] = useState("ONLINE");
   const [mailShippingId, setMailShippingId] = useState<string | null>("445");
+  const [payLink, setPayLink] = useState<string>("");
 
   const [delivery, setDelivery] = useState<"PERSONAL" | "L192" | "CP">(
     "PERSONAL"
@@ -125,14 +127,11 @@ const CheckoutComponent = () => {
       .then((res) => {
         if (paymentOption === "ONLINE") {
           const intentId = res.data.customerCheckout["intentId"];
-          baray!.confirmPayment({
-            intent_id: intentId,
-            use_iframe: false,
-            on_success: () => cleanCartItems(),
-          });
-          cleanCartItems();
-          setLoading(false);
-          onClose();
+          if (intentId) {
+            onOpen();
+            setPayLink(baray!.getPayLink(intentId));
+            setLoading(false);
+          }
         } else {
           toast.success(
             "Congratulation! you've been order the product(s) successfully!"
@@ -283,12 +282,12 @@ const CheckoutComponent = () => {
                     <PaymentMethodRadio
                       isRecommended
                       classNames={paymentRadioClasses}
-                      description="coming soon"
+                      description="Settle with Baray"
                       icon={
-                        <Icon
-                          icon="solar:filters-bold-duotone"
-                          className="text-danger"
-                          fontSize={32}
+                        <Image
+                          alt="Baray"
+                          src="/images/baray-logo.png"
+                          className="w-12"
                         />
                       }
                       label="Online Payment"
@@ -299,12 +298,12 @@ const CheckoutComponent = () => {
                       description="Paid by cash"
                       icon={
                         <Icon
-                          icon="solar:wallet-money-bold"
-                          className="text-danger"
-                          fontSize={32}
+                          icon="solar:hand-money-bold"
+                          className="text-primary"
+                          fontSize={36}
                         />
                       }
-                      label="Cash on Delivery"
+                      label="Cash on Hands"
                       value="CASH"
                     />
                   </RadioGroup>
@@ -501,7 +500,12 @@ const CheckoutComponent = () => {
               <ModalFooter>
                 <Button
                   color="primary"
-                  onPress={() => onSubmitCheckout()}
+                  onPress={() => {
+                    window.open(payLink, "_blank");
+                    cleanCartItems();
+                    router.push("/orders");
+                    onClose();
+                  }}
                   fullWidth
                   size="lg"
                   radius="lg"
@@ -589,8 +593,8 @@ const CheckoutComponent = () => {
                     radius="full"
                     onPress={() => {
                       if (page === 2) {
-                        // onSubmitCheckout();
-                        onOpen();
+                        onSubmitCheckout();
+                        // onOpen();
                       }
                       router.push("?query=delivery");
                       paginate(1);
