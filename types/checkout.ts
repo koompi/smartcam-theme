@@ -1,3 +1,4 @@
+import { MembershipType } from "./membership";
 import { ProductType } from "./product";
 
 export type DeliveryType = {
@@ -53,6 +54,34 @@ export type CheckoutCartType = {
     usd: number;
   };
   discountPercentage: number;
+  totalUnitPrice: {
+    khr: number;
+    usd: number;
+  };
+  totalPrice: {
+    khr: number;
+    usd: number;
+  };
+};
+
+export type Checkout = {
+  id: string;
+  amount: number;
+  membershipCard: MembershipType;
+  orderId: string;
+  orderStatus:
+    | "PENDING"
+    | "CONFIRMED"
+    | "PROCESSING"
+    | "SHIPPED"
+    | "DELIVERED"
+    | "CANCELLED"
+    | "CLOSED";
+  payment: "CASH" | "ONLINE";
+  paymentStatus: "FAIL" | "PAID" | "UNPAID" | "REFUNDED" | "CLOSED";
+  shippingFee: number;
+  shippingId: string;
+  shippingType: "PERSONAL" | "L192" | "CP";
 };
 
 export type OrdersType = {
@@ -72,5 +101,10 @@ export type OrdersType = {
     khr: number;
     usd: number;
   };
+  totalPrice: {
+    khr: number;
+    usd: number;
+  };
+  checkout: Checkout;
   refetch: Function;
 };

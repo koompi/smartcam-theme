@@ -1,13 +1,8 @@
 interface Address {
   id: string;
-  houseNo: string;
-  floorNo: string;
-  addressTypeId: string;
-  poBoxNo: string;
-  streetNo: string;
-  streetValue: string;
+  addressName: string;
+  label: string;
   zipCode: string;
-  streetId: string;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
@@ -21,7 +16,6 @@ export type LocationType = {
   lastName: string;
   email: string;
   phoneNumber: string;
-  salutation: string;
   code: string;
   districtId: string;
   countryId: string;
@@ -32,4 +26,5 @@ export type LocationType = {
   address: Address;
   photos: string[];
   label: string;
+  handleDeleteLocation: (id: string) => void;
 };

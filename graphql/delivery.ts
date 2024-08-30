@@ -58,3 +58,17 @@ export const ESTIMATE_PRICE = gql`
     }
   }
 `;
+
+export const SHIPPING_LIST = gql`
+  query StoreShippings {
+    storeShippings {
+      id
+      isActive
+      freeDelivery
+      deliveryFee
+      isCustomFee
+      deliveryType
+      mailDelivery
+    }
+  }
+`;

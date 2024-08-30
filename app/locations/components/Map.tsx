@@ -18,15 +18,16 @@ import {
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-
-import axios from "axios";
+import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { LatLngTuple } from "leaflet";
 
 interface MapProps {
   zoom: number;
-  position: L.LatLngExpression;
+  position: [number, number];
   addressName: string;
   setAddressName: Function;
-  setPosition: Function;
+  setPosition: (pos: [number, number]) => void;
   setAddress: any;
   setMap: any;
 }
@@ -37,14 +38,12 @@ function DraggableMarker({
   addressName,
   setLatitude,
   setLongitude,
-  setMap,
 }: {
-  position: L.LatLngExpression | L.LatLngTuple;
-  setPosition: Function;
+  position: [number, number];
+  setPosition: (pos: [number, number]) => void;
   addressName: string;
   setLatitude: Function;
   setLongitude: Function;
-  setMap: Function;
 }) {
   const [draggable, setDraggable] = useState(true);
   const markerRef = useRef<any>(null);
@@ -64,6 +63,7 @@ function DraggableMarker({
     [setLatitude, setLongitude, setPosition]
   );
 
+
   const toggleDraggable = useCallback(() => {
     setDraggable((d) => !d);
   }, []);
@@ -72,16 +72,31 @@ function DraggableMarker({
     click() {
       map.locate();
     },
-    locationfound() {
+    locationfound(_) {
       map.flyTo(position, map.getZoom());
     },
   });
+
+  useEffect(() => {
+    if (!map) return; // Ensure map is defined before running
+  
+    map.whenReady(() => {
+      // Check if the new position is different from the current map center
+      const currentCenter = map.getCenter();
+      if (
+        currentCenter.lat !== position[0] || 
+        currentCenter.lng !== position[1]
+      ) {
+        map.flyTo(position, map.getZoom());
+      }
+    });
+  }, [map, position]);
 
   return (
     <Marker
       draggable={draggable}
       eventHandlers={eventHandlers}
-      position={position}
+      position={position as LatLngTuple}
       ref={markerRef}
     >
       <Popup minWidth={90}>
@@ -102,48 +117,207 @@ const Map: React.FC<MapProps> = ({
   setAddress,
   setMap,
 }) => {
-  const [latitude, setLatitude] = useState<number>(11.551512108111616);
-  const [longitude, setLongitude] = useState<number>(104.88767623901369);
+  const [latitude, setLatitude] = useState<number>(11.5564);
+  const [longitude, setLongitude] = useState<number>(104.9282);
   const center: L.LatLngExpression = [latitude, longitude];
+
+  const [listPlace, setListPlace] = useState([]);
+
+  const mapRef = useRef<any>(null); // Ref to store the map instance
+
+  const [searchText, setSearchText] = useState<string>(""); // State for new text input
+  const isFetching = useRef<boolean>(false); // Ref to track the fetching state
+  const timeoutId = useRef<NodeJS.Timeout | null>(null); // Ref to store the timeout ID
+
+  const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isFetching.current || !searchText) {
+        setSearchText("");
+        setPosition([11.5564, 104.9282])
+        return;
+      }
+
+      isFetching.current = true; // Lock the loop
+
+      const timeout = 5000; // Timeout in milliseconds
+
+      const fetchWithTimeout = (
+        url: string,
+        options: RequestInit,
+        timeout: number
+      ): Promise<Response> => {
+        return new Promise((resolve, reject) => {
+          const timer = setTimeout(() => {
+            reject(new Error("Request timed out"));
+          }, timeout);
+
+          fetch(url, options)
+            .then((response) => {
+              clearTimeout(timer);
+              resolve(response);
+            })
+            .catch((err) => {
+              clearTimeout(timer);
+              reject(err);
+            });
+        });
+      };
+
+      try {
+        // Search
+        const params = {
+          q: searchText ? searchText : "",
+          format: "json",
+          addressdetails: 1,
+          polygon_geojson: 0,
+        };
+        const queryString = new URLSearchParams(params as any).toString();
+
+        const requestOptions: RequestInit = {
+          method: "GET",
+          redirect: "follow",
+        };
+
+        const response = await fetchWithTimeout(
+          `${NOMINATIM_BASE_URL}${queryString}&accept-language=en%2Ckh&countrycodes=kh`,
+          requestOptions,
+          timeout
+        );
+        const result = await response.json();
+
+        setListPlace(result);
+      } catch (err) {
+        console.log("err: ", err);
+      } finally {
+        isFetching.current = false; // Unlock the loop
+      }
+    };
+
+    // Cleanup existing timeout if searchText changes
+    if (timeoutId.current) {
+      clearTimeout(timeoutId.current);
+    }
+
+    // Set a new timeout
+    timeoutId.current = setTimeout(() => {
+      fetchData();
+    }, 1000); // Delay search by 1 second after the user stops typing
+
+    return () => {
+      if (timeoutId.current) {
+        clearTimeout(timeoutId.current); // Cleanup the timeout on unmount or when searchText changes
+      }
+    };
+  }, [searchText, setPosition]);
 
   useEffect(() => {
     const fetchAddress = async () => {
-      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`;
+      if (latitude === null || longitude === null) return;
+
+      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude ? latitude : position[0]}&lon=${longitude ? longitude : position[1]}`;
+
       try {
-        const response = await axios.get(url);
-        setAddress(response.data.address);
-        setAddressName(response.data.display_name);
-        setMap(response.data);
+        const response = await fetch(url);
+        const data = await response.json(); // Parse JSON manually
+
+        // Check if the new position is different from the current one
+        if (!position || position[0] !== data.lat || position[1] !== data.lon) {
+          setPosition([data.lat, data.lon]);
+          setAddress(data.address);
+          setAddressName(data.display_name);
+          setMap(data);
+        }
       } catch (error) {
         console.error("Error fetching address:", error);
       }
     };
 
     if (position) {
-      fetchAddress();
+      const debounceFetch = setTimeout(fetchAddress, 300);
+      return () => clearTimeout(debounceFetch);
     }
-  }, [latitude, longitude, position, setAddressName, setAddress, setMap]);
+  }, [
+    latitude,
+    longitude,
+    position,
+    setPosition,
+    setAddressName,
+    setAddress,
+    setMap,
+  ]);
+
+  const handleChange = (key: any) => {
+    setLongitude(key?.toString()?.split(",")[1]);
+    setLatitude(key?.toString()?.split(",")[0]);
+
+    // Fly the map to the new position
+    if (mapRef.current) {
+      mapRef.current.flyTo(
+        [key?.toString()?.split(",")[0], key?.toString()?.split(",")[1]],
+        mapRef.current.getZoom()
+      );
+    }
+  };
 
   return (
-    <MapContainer
-      center={center}
-      zoom={zoom}
-      scrollWheelZoom={false}
-      style={{ height: "100%", width: "100%" }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <DraggableMarker
-        position={position}
-        setPosition={setPosition}
-        addressName={addressName}
-        setLatitude={setLatitude}
-        setLongitude={setLongitude}
-        setMap={setMap}
-      />
-    </MapContainer>
+    <>
+      <Autocomplete
+        defaultItems={listPlace}
+        onValueChange={(e) => setSearchText(e)}
+        radius="lg"
+        variant="flat"
+        size="lg"
+        color="default"
+        className="absolute top-24 right-8 max-w-[36rem] z-[10000] text-gray-400"
+        placeholder="Search Maps"
+        startContent={<Icon icon="fluent-mdl2:map-directions" fontSize={24} />}
+        onSelectionChange={handleChange}
+      >
+        {(item: any) => (
+          <AutocompleteItem
+            key={[item.lat, item.lon] as any}
+            textValue={item.name}
+          >
+            <div className="flex justify-between items-center">
+              <div className="flex gap-2 items-center">
+                <Icon
+                  icon="fluent:location-ripple-12-filled"
+                  fontSize={30}
+                  className="text-primary"
+                />
+                <div className="flex flex-col">
+                  <span className="text-small">{item.name}</span>
+                  <span className="text-tiny text-default-400">
+                    {item.display_name}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </AutocompleteItem>
+        )}
+      </Autocomplete>
+
+      <MapContainer
+        center={center}
+        zoom={zoom}
+        scrollWheelZoom={true}
+        style={{ height: "100%", width: "100%" }}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <DraggableMarker
+          position={position}
+          setPosition={setPosition}
+          addressName={addressName}
+          setLatitude={setLatitude}
+          setLongitude={setLongitude}
+        />
+      </MapContainer>
+    </>
   );
 };
 

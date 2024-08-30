@@ -3,34 +3,19 @@ import { gql } from "@apollo/client";
 export const GET_ALL_LOCATIONS = gql`
   query {
     storeLocations {
-      id
       lat
       lng
+      storeId
+      email
       firstName
       lastName
-      email
       phoneNumber
-      salutation
-      code
-      districtId
-      countryId
-      communeId
-      provinceId
-      createdAt
-      updatedAt
+      id
       address {
-        id
-        houseNo
-        floorNo
-        addressTypeId
-        poBoxNo
-        streetNo
-        streetValue
+        addressName
+        label
         zipCode
-        streetId
-        createdAt
-        updatedAt
-        deletedAt
+        photos
       }
     }
   }

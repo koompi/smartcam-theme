@@ -5,8 +5,6 @@ import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionItem,
-  Button,
-  Card,
   Chip,
   Divider,
   Image,
@@ -19,33 +17,40 @@ import { LocationType } from "@/types/location";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import CustomRadio from "./CustomRadio";
 import axios from "axios";
-import { headers } from "next/headers";
+
+interface Shpping {
+  [x: string]: any;
+  id: string;
+  isActive: boolean;
+  freeDelivery: boolean;
+  deliveryFee: number;
+  isCustomFee: boolean;
+  deliveryType: "L192" | "PERSONAL" | "CP";
+  mailDelivery: string;
+}
 
 export type ShippingFormProps = React.HTMLAttributes<HTMLDivElement> & {
   variant?: InputProps["variant"];
   hideTitle?: boolean;
-  delivery: "PERSONAL" | "L192" | "CP";
+  // delivery: "PERSONAL" | "L192" | "CP";
   setDelivery: Function;
   location: string;
   setLocation: Function;
   setPosition: Function;
   setMailShippingId: Function;
   ship: number;
+  shippingProvider: Shpping;
 };
 
 const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
-  (
-    {
-      delivery,
-      setDelivery,
-      location,
-      setLocation,
-      ship,
-      setPosition,
-      className,
-    },
-    ref
-  ) => {
+  ({
+    setDelivery,
+    location,
+    setLocation,
+    ship,
+    shippingProvider,
+    setPosition,
+  }) => {
     const deliveryRadioClasses = {
       wrapper: "group-data-[selected=true]:border-primary",
       base: "data-[selected=true]:border-primary",
@@ -190,7 +195,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                 )}
                 title={
                   <div className="flex space-x-4 text-black">
-                    {delivery === "CP" ? (
+                    {/* {delivery === "CP" ? (
                       <>
                         <Image
                           src="/images/logo_v1.png"
@@ -216,7 +221,67 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                       </>
                     ) : (
                       "Delivery Options"
-                    )}
+                    )} */}
+                    {shippingProvider?.map((res: Shpping) => {
+                      if (res.deliveryType === "PERSONAL") {
+                        return (
+                          <>
+                            <Image
+                              src="/images/shop.png"
+                              className="h-12"
+                              alt="PERSONAL delivery"
+                            />
+                            <div>
+                              <div className="font-semibold">
+                                {res?.deliveryType === "PERSONAL"
+                                  ? "Shop Delivery"
+                                  : res?.deliveryType}
+                              </div>
+                              <div className="text-sm">
+                                Fee:{" "}
+                                {res?.freeDelivery
+                                  ? "Free delivery"
+                                  : res?.deliveryFee}
+                              </div>
+                            </div>
+                          </>
+                        );
+                      } else if (res?.deliveryType === "CP") {
+                        return (
+                          <>
+                            <Image
+                              src="/images/logo_v1.png"
+                              className="h-12"
+                              alt=""
+                            />
+                            <div>
+                              <div className="font-semibold">
+                                Delivery: ${ship?.toFixed(2)}
+                              </div>
+                              <div>Cambodia POS</div>
+                            </div>
+                          </>
+                        );
+                      } else if (res?.deliveryType === "L192") {
+                        return (
+                          <>
+                            <Image
+                              src="/images/l192.png"
+                              className="h-12"
+                              alt=""
+                            />
+                            <div>
+                              <div className="font-semibold">
+                                Delivery: ${ship?.toFixed(2)}
+                              </div>
+                              <div>L912 Delivery</div>
+                            </div>
+                          </>
+                        );
+                      } else {
+                        return "Deliver Options";
+                      }
+                    })}
                   </div>
                 }
               >
@@ -224,7 +289,6 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                   <RadioGroup
                     aria-label="Select existing payment method"
                     classNames={{ wrapper: "gap-3" }}
-                    defaultValue={delivery}
                     onValueChange={(value: string) => {
                       setPosition({
                         lat: myLocation.lat,
@@ -232,66 +296,47 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                       });
                       setDelivery(value);
                     }}
+                    defaultValue={shippingProvider[0]?.deliveryType}
                   >
-                    {["CP", "L192"]?.map((delivery: string) => {
+                    {shippingProvider.map((delivery: Shpping) => {
                       return (
                         <CustomRadio
-                          key={delivery}
+                          key={delivery?.deliveryType}
                           classNames={deliveryRadioClasses}
+                          isRecommended
                           description={
                             <div className="space-y-0.5">
                               <div className="font-semibold text-black text-lg">
-                                {delivery}
+                                {delivery?.deliveryType === "PERSONAL"
+                                  ? `Shop Delivery (${delivery?.freeDelivery ? "Free delivery" : delivery?.deliveryFee})`
+                                  : delivery?.deliveryType}
                               </div>
-                              <div>(Delivery within 2-3 days)</div>
+                              <div>
+                                (Delivery within 2-3 days),{" "}
+                                {delivery?.deliveryType === "PERSONAL"
+                                  ? "Deliver your product by shop."
+                                  : null}
+                              </div>
                             </div>
                           }
                           icon={
                             <Image
                               alt="delivery"
                               src={
-                                delivery === "CP"
+                                delivery?.deliveryType === "CP"
                                   ? "/images/logo_v1.png"
-                                  : "/images/l192.png"
+                                  : delivery?.deliveryType === "L192"
+                                    ? "/images/l192.png"
+                                    : "/images/shop.png"
                               }
-                              radius="none"
-                              className="w-20"
+                              radius="md"
+                              className="w-36"
                             />
                           }
-                          value={delivery}
+                          value={delivery?.deliveryType}
                         />
                       );
                     })}
-
-                    {/* {shipping.map((ship: any, idx) => {
-                      return (
-                        <CustomRadio
-                          key={idx}
-                          classNames={deliveryRadioClasses}
-                          description={
-                            <div className="space-y-0.5">
-                              <div className="font-semibold text-black text-lg">
-                                {ship.english}
-                              </div>
-                              <div>Weight: ({ship.min_weight} - {ship.max_weight}) Kg</div>
-                            </div>
-                          }
-                          icon={
-                            <Image
-                              alt="delivery"
-                              src={
-                                delivery === "CP"
-                                  ? "/images/logo_v1.png"
-                                  : "/images/l192.png"
-                              }
-                              radius="none"
-                              className="w-20"
-                            />
-                          }
-                          value={delivery}
-                        />
-                      );
-                    })} */}
                   </RadioGroup>
                 </div>
               </AccordionItem>
@@ -306,117 +351,3 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
 ShippingForm.displayName = "ShippingForm";
 
 export default ShippingForm;
-
-//  <>
-//    <Accordion
-//      defaultExpandedKeys={["1", "2"]}
-//      selectionMode="multiple"
-//      showDivider={false}
-//    >
-//      <AccordionItem key="1" aria-label="Delivery" title="Delivery Option">
-//        <RadioGroup
-//          aria-label="Select existing payment method"
-//          classNames={{ wrapper: "gap-3" }}
-//          onValueChange={(value) => {
-//            setShip(value);
-//          }}
-//        >
-//          {data?.storeDeliveries?.map((del: DeliveryType, idx: number) => {
-//               return (
-//                 <CustomRadio
-//                   key={idx}
-//                   classNames={deliveryRadioClasses}
-//                   description={del?.instruction}
-//                   icon={
-//                     <Image
-//                       alt="delivery logo"
-//                       // src={del?.logo ? del?.logo : "/images/shop.png"}
-//                       src="/images/l192.svg"
-//                       radius="none"
-//                       className="h-12"
-//                     />
-//                   }
-//                   label={
-//                     del?.express === "PERSONAL"
-//                       ? "Shop Delivery"
-//                       : "L192 Delivery"
-//                   }
-//                   value={del?.id}
-//                 />
-//               );
-//             })}
-//          <CustomRadio
-//            key={2}
-//            classNames={deliveryRadioClasses}
-//            isRecommended
-//            description=""
-//            icon={
-//              <Image
-//                alt="delivery logo"
-//                src={
-//                  !value?.header?.logo
-//                    ? "/images/shop.png"
-//                    : value?.header?.logo
-//                }
-//                radius="none"
-//                className="w-24"
-//              />
-//            }
-//            label="Shop Delivery"
-//            value="PERSONAL"
-//          />
-//        </RadioGroup>
-//      </AccordionItem>
-//      <AccordionItem
-//        key="2"
-//        aria-label="Delivery to address"
-//        title="Delivery to address"
-//      >
-//        <RadioGroup
-//          aria-label="Select existing payment method"
-//          classNames={{ wrapper: "gap-3" }}
-//          defaultValue={toDelivery as any}
-//          onValueChange={async (value) => {
-//            setToDelivery(value as unknown as CustomerAddressType);
-//          }}
-//        >
-//          {address?.storeAddress?.map(
-//         (ad: CustomerAddressType, idx: number) => {
-//           return (
-//             <CustomRadio
-//               key={idx}
-//               classNames={deliveryRadioClasses}
-//               description={`${ad.firstName} ${ad.lastName}, ${ad.phoneNumber}`}
-//               chip={ad.label}
-//               icon={
-//                 <Image
-//                   alt="shop"
-//                   src={
-//                     ad.photos.length > 0
-//                       ? ad.photos[0]
-//                       : "/images/shop.png"
-//                   }
-//                   radius="none"
-//                   className="w-12"
-//                 />
-//               }
-//               label={ad.addressName}
-//               value={ad as any}
-//             />
-//           );
-//         }
-//       )}
-//        </RadioGroup>
-//      </AccordionItem>
-//    </Accordion>
-//    <Link
-//      href="/locations/create"
-//      className="w-full h-28 border border-dashed rounded-xl items-center justify-center "
-//      underline="hover"
-//    >
-//      <div className="flex gap-3">
-//        <Icon icon="solar:map-point-add-linear" fontSize={24} />
-//        Add Location
-//      </div>
-//    </Link>
-//  </>;
