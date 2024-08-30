@@ -18,7 +18,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import CustomRadio from "./CustomRadio";
 import axios from "axios";
 
-interface Shpping {
+interface Shipping {
   [x: string]: any;
   id: string;
   isActive: boolean;
@@ -39,7 +39,7 @@ export type ShippingFormProps = React.HTMLAttributes<HTMLDivElement> & {
   setPosition: Function;
   setMailShippingId: Function;
   ship: number;
-  shippingProvider: Shpping;
+  shippingProvider: Shipping;
 };
 
 const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
@@ -118,7 +118,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                       <Chip size="sm" color="primary">
                         {myLocation?.label}
                       </Chip>
-                      <p>{myLocation?.address?.streetValue}</p>
+                      <p>{myLocation?.address?.addressName}</p>
                     </div>
                   </div>
                 }
@@ -150,8 +150,8 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                                 className="w-24"
                               />
                             }
-                            label={location?.address?.streetValue}
-                            chip={myLocation?.label}
+                            label={location?.address?.addressName}
+                            chip={myLocation?.address?.label}
                             description={
                               <div className="leading-snug flex items-center gap-2">
                                 <div>{myLocation?.email}</div>
@@ -222,7 +222,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                     ) : (
                       "Delivery Options"
                     )} */}
-                    {shippingProvider?.map((res: Shpping) => {
+                    {shippingProvider?.map((res: Shipping) => {
                       if (res.deliveryType === "PERSONAL") {
                         return (
                           <>
@@ -298,7 +298,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                     }}
                     defaultValue={shippingProvider[0]?.deliveryType}
                   >
-                    {shippingProvider.map((delivery: Shpping) => {
+                    {shippingProvider.map((delivery: Shipping) => {
                       return (
                         <CustomRadio
                           key={delivery?.deliveryType}
