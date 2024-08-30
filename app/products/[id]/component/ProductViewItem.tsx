@@ -853,7 +853,7 @@ export const ProductViewItem = React.forwardRef<
                         </CardBody>
                       </Card>
                     </Tab>
-                    <Tab key="rerviews" title="Reviews">
+                    {/* <Tab key="rerviews" title="Reviews">
                       <Card
                         className="rounded-xl sm:rounded-xl lg:rounded-3xl"
                         shadow="none"
@@ -893,7 +893,7 @@ export const ProductViewItem = React.forwardRef<
                           </section>
                         </CardBody>
                       </Card>
-                    </Tab>
+                    </Tab> */}
                   </Tabs>
                 </div>
               </div>

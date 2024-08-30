@@ -13,7 +13,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
@@ -28,13 +28,17 @@ import { toast } from "sonner";
 import { useMutation } from "@apollo/client";
 import { FINISH_PAYMENT_PROCESS } from "@/graphql/mutation/checkout";
 import { useBaray } from "@/hooks/baray";
+import { isMobile } from "react-device-detect";
 
 const OrderSinglePage = () => {
   const router = useRouter();
   const params = useParams();
   const baray = useBaray();
+  const [payLink, setPayLink] = useState<string>("");
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const finishedPayment = useDisclosure();
 
   const [storeConfirmOrder] = useMutation(CONFIRM_ORDER);
   const [storeCancelOrder] = useMutation(CANCEL_ORDER);
@@ -92,19 +96,10 @@ const OrderSinglePage = () => {
     })
       .then((res) => {
         const intentId = res.data.customerCheckoutPayment["intentId"];
-        baray!.confirmPayment({
-          intent_id: intentId,
-          use_iframe: false,
-          on_success: () => {
-            toast.success(
-              "Your payment process has been completed successful!"
-            );
-            refetch();
-          },
-        });
-        setTimeout(() => {
-          router.push(`orders/${data?.storeOrder?.id}`);
-        }, 500);
+        if (intentId) {
+          finishedPayment.onOpen();
+          setPayLink(baray!.getPayLink(intentId));
+        }
       })
       .catch((e) => {
         toast.error(e.message);
@@ -151,6 +146,52 @@ const OrderSinglePage = () => {
   return (
     <section className="bg-white">
       <div className="container max-w-full sm:max-w-full lg:max-w-5xl py-9 px-3 sm:px-3 lg:px-6 mx-auto">
+        {/*  ----modal finish payment ---------- */}
+        <Modal
+          isOpen={finishedPayment.isOpen}
+          onOpenChange={finishedPayment.onOpenChange}
+        >
+          <ModalContent>
+            {(_) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Confirm Payment
+                </ModalHeader>
+                <ModalBody>
+                  <div className="flex items-center justify-center text-center">
+                    <Icon
+                      icon="solar:question-circle-bold-duotone"
+                      fontSize={96}
+                      className="text-primary"
+                    />
+                  </div>
+                  <p className="text-center">
+                    Are you sure you want to proceed with the payment? Once
+                    confirmed, the payment will be processed, and your order
+                    will be completed.
+                  </p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    fullWidth
+                    color="primary"
+                    onPress={() => {
+                      window.open(payLink, "_blank");
+                      refetch();
+                      finishedPayment.onClose();
+                      router.push(`/orders/${data?.storeOrder?.id}`);
+                    }}
+                    radius="lg"
+                    variant="shadow"
+                    size={isMobile ? "lg" : "md"}
+                  >
+                    PAY NOW
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
         {/* ------ modal cancel order ------- */}
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
