@@ -22,7 +22,6 @@ import { LocationForm } from "./components/LocationForm";
 import { toast } from "sonner";
 import { useMutation } from "@apollo/client";
 import { CREATE_CUSTOMER_LOCATION } from "@/graphql/mutation/location";
-import { useAuth } from "@/context/useAuth";
 import dynamic from "next/dynamic";
 
 const MyMap = dynamic(() => import("../components/Map"), {
@@ -34,22 +33,16 @@ interface FormCreateLocation {
   lastName: string;
   phoneNumber: string;
   email: string;
-  salutation: string;
   countryId: string;
   communeId: string;
   districtId: string;
   provinceId: string;
-  label: string;
 }
 
 export default function PageLocation() {
   const { isOpen, onOpenChange, onOpen } = useDisclosure();
 
-  // const [position, setPosition] = useState<L.LatLngExpression | any>([
-  //   11.562108, 104.888535,
-  // ]);
-
-  const [position, setPosition] = useState<[number, number] | null>([11.5564, 104.9282]);
+  const [position, setPosition] = useState<[number, number]>([11.5564, 104.9282]);
 
   const [addressName, setAddressName] = useState<string>("");
 
@@ -68,17 +61,24 @@ export default function PageLocation() {
   //  onSubmit to create location
   const onSubmit = (values: FormCreateLocation) => {
     let bodyLocation = {
-      ...values,
-      ...position,
-      label: addressLabel,
-      photos: photo.length > 0 ? [photo] : null,
-      map: address,
+      communeId: values.communeId,
+      countryId: "1",
+      districtId: values.districtId,
+      provinceId: values.provinceId,
+      phoneNumber: values.phoneNumber,
+      email: values.email,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      lat: position[0].toString(),
+      lng: position[1].toString(),
+      map: JSON.stringify(addressName).toString(),
     };
 
     let bodyAddress = {
-      streetValue: addressName,
+      addressName: addressName,
       zipCode: parseInt(address?.postcode),
-      addressTypeId: "1",
+      label: addressLabel,
+      photos: photo.length > 0 ? [photo] : null,
     };
 
     storeCreateLocation({
