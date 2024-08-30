@@ -26,7 +26,6 @@ interface Shipping {
   deliveryFee: number;
   isCustomFee: boolean;
   deliveryType: "L192" | "PERSONAL" | "CP";
-  mailDelivery: string;
 }
 
 export type ShippingFormProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -116,7 +115,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                   <div>
                     <div className="flex items-center gap-3">
                       <Chip size="sm" color="primary">
-                        {myLocation?.label}
+                        {myLocation?.address?.label}
                       </Chip>
                       <p>{myLocation?.address?.addressName}</p>
                     </div>
