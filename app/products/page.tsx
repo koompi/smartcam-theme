@@ -12,7 +12,7 @@ export default function ProductsPage() {
   const cat = searchParams.get("category") || null;
   const sub = searchParams.get("sub_category") || null;
   const page = (searchParams.get("page") as string) || "1";
-  const size = (searchParams.get("size") as string) || "16";
+  const size = (searchParams.get("size") as string) || "12";
   const minPice = (searchParams.get("min_price") as string) || null;
   const maxPice = (searchParams.get("max_price") as string) || null;
   const sortParam = (searchParams.get("sort") as string) || null;
@@ -22,11 +22,9 @@ export default function ProductsPage() {
 
   const brands = searchParams.get("brands") || null;
 
-  let skip =
-    parseInt(page as string) > 1
-      ? (parseInt(size as string) / 2) * parseInt(page as string) + 1
-      : 0;
   let limit = parseInt(size as string);
+  let skip =
+    parseInt(page as string) > 1 ? limit * parseInt(page as string) - limit : 0;
   let rangePrice = minPice
     ? {
         start: parseInt(minPice as string),

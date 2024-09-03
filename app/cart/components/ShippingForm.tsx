@@ -115,10 +115,12 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                 title={
                   <div>
                     <div className="flex items-center gap-3">
-                      <Chip size="sm" color="primary">
-                        {myLocation?.label}
-                      </Chip>
-                      <p>{myLocation?.address?.streetValue}</p>
+                      {myLocation?.address?.label && (
+                        <Chip size="sm" color="primary">
+                          {myLocation?.address?.label}
+                        </Chip>
+                      )}
+                      <p>{myLocation?.address?.addressName}</p>
                     </div>
                   </div>
                 }
@@ -142,16 +144,16 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                               <Image
                                 alt="delivery logo"
                                 src={
-                                  !location?.photos
+                                  location?.address?.photos.length <= 0
                                     ? "/images/shop.png"
-                                    : location?.photos[0]
+                                    : location?.address?.photos[0]
                                 }
                                 radius="none"
                                 className="w-24"
                               />
                             }
-                            label={location?.address?.streetValue}
-                            chip={myLocation?.label}
+                            label={location?.address?.addressName}
+                            chip={myLocation?.address?.label}
                             description={
                               <div className="leading-snug flex items-center gap-2">
                                 <div>{myLocation?.email}</div>

@@ -1,4 +1,5 @@
 interface Address {
+  photos: string[];
   id: string;
   addressName: string;
   label: string;
