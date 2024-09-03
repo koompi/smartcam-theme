@@ -133,7 +133,7 @@ export const LocationForm: FC<{
             </div>
           )}
         </div>
-        <div className="col-span-2">
+        {/* <div className="col-span-2">
           <Select
             {...register("salutation", {
               required: "Salutation is required",
@@ -155,8 +155,8 @@ export const LocationForm: FC<{
             <SelectItem key="MS">MS</SelectItem>
             <SelectItem key="OTHER">OTHER</SelectItem>
           </Select>
-        </div>
-        <div className="col-span-2">
+        </div> */}
+        <div className="col-span-3">
           <Input
             variant="flat"
             label="First Name"
@@ -167,10 +167,10 @@ export const LocationForm: FC<{
             defaultValue={user?.first_name}
             size="lg"
             isRequired
-            placeholder="eg. VAN"
+            placeholder="eg. First Name"
           />
         </div>
-        <div className="col-span-2">
+        <div className="col-span-3">
           <Input
             variant="flat"
             label="Last Name"
@@ -181,7 +181,7 @@ export const LocationForm: FC<{
             defaultValue={user?.last_name}
             size="lg"
             isRequired
-            placeholder="eg. Soklay"
+            placeholder="eg. Last Name"
           />
         </div>
         <div className="col-span-6">

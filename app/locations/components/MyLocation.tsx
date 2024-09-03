@@ -58,7 +58,7 @@ const MyLocation: FC<LocationType> = (props) => {
         <div className="grid grid-cols-3 space-x-6 items-center justify-center">
           <div className="relative col-span-1">
             <Image
-              alt={props?.address?.streetValue}
+              alt={props?.address?.addressName}
               className="object-cover bg-gray-200 object-center w-full min-w-36 h-full min-h-36"
               shadow="none"
               isZoomed
@@ -77,13 +77,13 @@ const MyLocation: FC<LocationType> = (props) => {
                     {props.label}
                   </Chip>
                 )}
-                {props?.address?.streetNo && (
+                {props?.address?.addressName && (
                   <Chip color="primary" variant="flat" size="sm">
-                    {props?.address?.streetNo}
+                    {props?.address?.label}
                   </Chip>
                 )}
                 <h3 className="font-semibold mt-2 line-clamp-3">
-                  {props?.address?.streetValue}
+                  {props?.address?.addressName}
                 </h3>
                 <div className="flex gap-3 mt-2">
                   <p className=" text-sm font-light">
