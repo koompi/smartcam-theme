@@ -47,7 +47,9 @@ const MainFooter = () => {
               <ul className="flex items-center space-x-3 mt-9">
                 <li>
                   <Link
-                    href="#"
+                    href="https://www.facebook.com/smartcam168"
+                    target="_blank"
+                    rel="noreferer"
                     className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
                   >
                     <Icon icon="ic:baseline-facebook" fontSize={21} />
@@ -56,7 +58,9 @@ const MainFooter = () => {
 
                 <li>
                   <Link
-                    href="#"
+                    href="https://t.me/joinchat/09E4pilK89llNDM1"
+                    target="_blank"
+                    rel="noreferer"
                     className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
                   >
                     <Icon icon="mingcute:telegram-fill" fontSize={18} />
@@ -65,19 +69,12 @@ const MainFooter = () => {
 
                 <li>
                   <Link
-                    href="#"
+                    href="https://www.youtube.com/@smartcam123"
+                    target="_blank"
+                    rel="noreferer"
                     className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
                   >
-                    <Icon icon="hugeicons:instagram" fontSize={18} />
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="#"
-                    className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
-                  >
-                    <Icon icon="ri:twitter-x-fill" />
+                    <Icon icon="mingcute:youtube-fill" fontSize={18} />
                   </Link>
                 </li>
               </ul>
@@ -205,7 +202,14 @@ const MainFooter = () => {
                     My Locations
                   </Link>
                 </li>
-
+                <li>
+                  <Link
+                    href="/compare"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                  >
+                    Compare
+                  </Link>
+                </li>
                 <li>
                   <Link
                     href="/cart"
@@ -225,7 +229,7 @@ const MainFooter = () => {
 
                 <li>
                   <Link
-                    href="#"
+                    href="/wishlist"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                   >
                     My Wishlist
