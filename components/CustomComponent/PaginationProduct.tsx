@@ -51,7 +51,7 @@ export const PaginationProduct = ({
   return (
     <>
       <Button
-        isDisabled={page == 1}
+        isDisabled={page === 1}
         size="md"
         variant="flat"
         onPress={onPreviousPage}
@@ -81,7 +81,7 @@ export const PaginationProduct = ({
         }}
       />
       <Button
-        isDisabled={page == total}
+        isDisabled={page === total}
         size="md"
         variant="flat"
         onPress={onNextPage}

@@ -68,7 +68,7 @@ export default function ProductsPage() {
   });
 
   return (
-    <section className="px-3 sm:px-3 lg:px-6 py-3 sm:py-3 lg:py-9">
+    <section className="px-3 sm:px-3 lg:px-6 pt-3 pb-3 sm:pb-3 lg:pb-9">
       <div className="flex gap-x-6">
         <ComponentProducts
           categories={categories?.storeOwnerCategories}
