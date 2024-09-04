@@ -152,7 +152,7 @@ const ProductCard: FC<ProductCardProps> = ({
             >
               Add to Compare
             </DropdownItem>
-            <DropdownItem
+            {/* <DropdownItem
               key="buy"
               color="primary"
               className="text-primary"
@@ -160,7 +160,7 @@ const ProductCard: FC<ProductCardProps> = ({
               startContent={<Icon icon="solar:bag-3-bold" fontSize={21} />}
             >
               Buy Now
-            </DropdownItem>
+            </DropdownItem> */}
           </DropdownMenu>
         </Dropdown>
         <div className="flex justify-center items-center overflow-hidden ">

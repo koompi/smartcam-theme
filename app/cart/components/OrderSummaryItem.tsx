@@ -147,7 +147,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
             variant="flat"
             color="danger"
             onPress={() => {
-              removeFromCart(product.id);
+              removeFromCart(product?.id);
             }}
           >
             <Icon icon="lucide:x" width={14} />

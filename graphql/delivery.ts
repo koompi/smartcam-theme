@@ -68,7 +68,6 @@ export const SHIPPING_LIST = gql`
       deliveryFee
       isCustomFee
       deliveryType
-      mailDelivery
     }
   }
 `;

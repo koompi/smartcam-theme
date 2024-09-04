@@ -12,7 +12,7 @@ import { PaginationProduct } from "./PaginationProduct";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { CardLoading } from "../globals/Loading";
-import { useCart } from "@/context/useCart";
+// import { useCart } from "@/context/useCart";
 
 export default function ComponentProducts({
   categories,
@@ -30,7 +30,7 @@ export default function ComponentProducts({
   const searchParams = useSearchParams();
 
   const offset = searchParams.get("page") ?? "1";
-  const limit = searchParams.get("size") ?? "16";
+  const limit = searchParams.get("size") ?? "12";
   const query_search = searchParams.get("search") ?? null;
   const cat = searchParams.get("category") || null;
   const sub = searchParams.get("sub_category") || null;
@@ -144,6 +144,9 @@ export default function ComponentProducts({
               currencyPrice,
               category,
             } = res?.product;
+
+            // console.log("res", res);
+
             return (
               <ProductCard
                 key={idx}
@@ -368,7 +371,7 @@ export default function ComponentProducts({
                   />
                 </div>
                 <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                  Whoops! No products.
+                  No Products.
                 </h1>
                 <p className="mt-6 text-base leading-7 text-gray-600">
                   Browse our amazing selection of products and fill your cart
@@ -381,7 +384,7 @@ export default function ComponentProducts({
               <ProductSortComponent />
             </div>
           )}
-          <div className="w-full flex justify-end mt-8 space-x-2">
+          <div className="w-full flex justify-center mt-20 space-x-2">
             {loading ? null : (
               <PaginationProduct
                 page={page}

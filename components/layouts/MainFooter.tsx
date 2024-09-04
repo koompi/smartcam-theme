@@ -5,25 +5,35 @@ import Link from "next/link";
 import { Image } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useAuth } from "@/context/useAuth";
+import { BRANDS } from "@/graphql/brands";
+import { BrandsType } from "@/types/product";
+import { useQuery } from "@apollo/client";
 
 const MainFooter = () => {
   const { user } = useAuth();
 
+  const { data, loading } = useQuery(BRANDS);
+
+  if (loading || !data) {
+    return;
+  }
+
   return (
     <section className="relative overflow-hidden">
       <footer className="py-10 bg-white sm:pt-16 lg:pt-24">
-        <div className="absolute right-0 z-0">
+        <div className="absolute top-0 right-6 z-0">
           <Image
             alt="logo"
+            isBlurred
             src="/images/logo-only-grayscale.png"
-            className="h-[45rem]"
+            className="h-[36rem]"
             radius="none"
           />
         </div>
         <div className="px-4 mx-auto sm:px-6 lg:px-8 max-full relative">
-          <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-6 gap-y-16 gap-x-12">
+          <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-12 gap-y-16 gap-x-3">
             {/* main */}
-            <div className="col-span-2 md:col-span-3 lg:col-span-3 lg:pr-8">
+            <div className="col-span-2 md:col-span-3 lg:col-span-7 lg:pr-8">
               <Image
                 alt="logo"
                 src="/images/smartcam-logo.png"
@@ -31,12 +41,9 @@ const MainFooter = () => {
                 radius="none"
               />
 
-              <p className="text-base leading-relaxed text-gray-600 mt-7 max-w-xl">
-                Smartcam is the leading company focus on electronics ( computer
-                , Printer ( EPSON, HP, CANON) and parts). we will our best to
-                offer best services and products.
+              <p className="text-2xl font-semibold leading-relaxed text-primary mt-3 max-w-xl">
+                Make your IT Business Growth
               </p>
-
               <ul className="flex items-center space-x-3 mt-9">
                 <li>
                   <Link
@@ -75,9 +82,27 @@ const MainFooter = () => {
                 </li>
               </ul>
             </div>
+            {/* Products */}
+            <div className="col-span-2">
+              <p className="text-md underline font-semibold tracking-widest uppercase">
+                Products
+              </p>
+
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                {data.storeOwnerBrands.map((b: BrandsType, idx: number) => (
+                  <Link
+                    href={`/products?search=&brands=${b.title ? b.title?.en : ""}`}
+                    key={idx}
+                    className="hover:text-primary hover:underline"
+                  >
+                    {b?.title?.en}
+                  </Link>
+                ))}
+              </div>
+            </div>
             {/* Terms */}
-            <div>
-              <p className="text-sm font-semibold tracking-widest uppercase">
+            <div className="col-span-1">
+              <p className="text-md underline font-semibold tracking-widest uppercase">
                 Terms
               </p>
 
@@ -102,8 +127,8 @@ const MainFooter = () => {
               </ul>
             </div>
             {/* Company */}
-            <div>
-              <p className="text-sm font-semibold tracking-widest uppercase">
+            <div className="col-span-1">
+              <p className="text-md underline font-semibold tracking-widest uppercase">
                 Company
               </p>
 
@@ -155,8 +180,8 @@ const MainFooter = () => {
               </ul>
             </div>
             {/* Account */}
-            <div>
-              <p className="text-sm font-semibold tracking-widest uppercase">
+            <div className="col-span-1">
+              <p className="text-md underline font-semibold tracking-widest uppercase">
                 Account
               </p>
 

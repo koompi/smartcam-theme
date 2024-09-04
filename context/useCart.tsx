@@ -94,11 +94,18 @@ export function CartProvider(props: { children: JSX.Element }) {
   };
 
   const removeFromCart = (id: String) => {
-    setCartItems((prevItems) => {
-      const item = prevItems.filter((item) => item.productId != id);
-      localStorage.setItem("cartItems", JSON.stringify(item));
-      return item;
-    });
+    if (id) {
+      setCartItems((prevItems) => {
+        const item = prevItems.filter((item) => item.productId != id);
+        localStorage.setItem("cartItems", JSON.stringify(item));
+        return item;
+      });
+    } else {
+      setCartItems((prevItems) => {
+        localStorage.setItem("cartItems", JSON.stringify(prevItems));
+        return prevItems;
+      });
+    }
   };
 
   const cleanCartItems = () => {

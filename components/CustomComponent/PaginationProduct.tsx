@@ -28,7 +28,7 @@ export const PaginationProduct = ({
       `?search=${search ? search : ""}&brands=${brands ? brands : ""}&category=${
         cat ? cat : ""
       }&sub_category=${sub ? sub : ""}&sort=${
-        sub ? sub : ""
+        sortParam ? sortParam : ""
       }&min_price=${minPice ? minPice : ""}&max_price=${
         maxPice ? maxPice : ""
       }&page=${page + 1}&size=${rowsPerPage}`
@@ -41,7 +41,7 @@ export const PaginationProduct = ({
       `?search=${search ? search : ""}&brands=${brands ? brands : ""}&category=${
         cat ? cat : ""
       }&sub_category=${sub ? sub : ""}&sort=${
-        sub ? sub : ""
+        sortParam ? sortParam : ""
       }&min_price=${minPice ? minPice : ""}&max_price=${
         maxPice ? maxPice : ""
       }&page=${page - 1}&size=${rowsPerPage}`
@@ -73,7 +73,7 @@ export const PaginationProduct = ({
             `?search=${search ? search : ""}&brands=${brands ? brands : ""}&category=${
               cat ? cat : ""
             }&sub_category=${sub ? sub : ""}&sort=${
-              sub ? sub : ""
+              sortParam ? sortParam : ""
             }&min_price=${minPice ? minPice : ""}&max_price=${
               maxPice ? maxPice : ""
             }&page=${p}&size=${rowsPerPage}`
