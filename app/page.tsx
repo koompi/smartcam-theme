@@ -54,7 +54,7 @@ export default function Home() {
       filter: {
         limit: 10,
         skip: 1,
-        sort: 1,
+        sort: -1,
       },
     },
   });

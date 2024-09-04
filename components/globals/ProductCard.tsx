@@ -7,6 +7,7 @@ import {
   ADD_COMPARE_WISHLIST,
   ADD_WISHLIST,
 } from "@/graphql/mutation/wishlist";
+import { AddCart } from "@/types/global";
 import { StockType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { usd } from "@/utils/formatUSD";
@@ -227,7 +228,7 @@ const ProductCard: FC<ProductCardProps> = ({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              addToCart(id);
+              addToCart({product_id: id, variant_id: null} as AddCart);
               toast.success("The product is added into the cart!");
             }}
             isDisabled={stocks?.status === "OUT-STOCK"}
