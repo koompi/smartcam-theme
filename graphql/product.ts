@@ -190,10 +190,11 @@ export const PRODUCTS = gql`
 `;
 
 export const GLOBAL_PRODUCT_FILTERING = gql`
-  query (
+  query StoreGlobalFilterProducts(
     $tagId: [String!]
     $keyword: String
     $status: String
+    $brand: [String!]
     $range: RangeProduct
     $filter: OrderBy
   ) {
@@ -201,6 +202,7 @@ export const GLOBAL_PRODUCT_FILTERING = gql`
       id: $tagId
       keyword: $keyword
       status: $status
+      brand: $brand
       range: $range
       filter: $filter
     ) {
@@ -437,6 +439,86 @@ export const PROMOTIONS_BY_SPECIAL_SAVING = gql`
           }
           store {
             name
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const PRODUCT_SECTION_TYPE = gql`
+  query StoreSortProducts(
+    $statusType: ProductSort!
+    $category: String
+    $filter: OrderBy
+  ) {
+    storeSortProducts(
+      statusType: $statusType
+      category: $category
+      filter: $filter
+    ) {
+      products {
+        compare
+        favorite
+        product {
+          id
+          createdAt
+          thumbnail
+          title
+          brand
+          price
+          previews
+          slug
+          sell
+          rating
+          status
+          desc
+          stocks {
+            amount
+            status
+          }
+          category {
+            id
+            title {
+              en
+            }
+            children {
+              id
+              title {
+                en
+              }
+            }
+          }
+          subcategories {
+            id
+            title {
+              en
+            }
+          }
+          variants {
+            default
+            id
+            label
+            price
+            attributes {
+              type
+              option
+            }
+            previews
+          }
+          currencyPrice {
+            khr
+            usd
+          }
+        }
+        promotion {
+          isMembership
+          discount {
+            discountPercentage
+            discountPrice
+            discountType
+            originalPrice
+            totalDiscount
           }
         }
       }

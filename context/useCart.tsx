@@ -8,11 +8,11 @@ import React, {
   JSX,
 } from "react";
 import { Toaster, toast } from "sonner";
+import { destroyCookie } from "nookies";
 
 import { useQuery } from "@apollo/client";
 import { GET_CUSTOMER } from "@/graphql/store";
 import { AddCart, CartContextType, CartItem } from "@/types/global";
-import { WISHLISTS } from "@/graphql/wishlist";
 
 export const CartContext = createContext({});
 
@@ -52,7 +52,9 @@ export function CartProvider(props: { children: JSX.Element }) {
   const addToCart = (cart: AddCart, qty?: number) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
-        (item) => item.productId === cart.product_id && item.variantId == cart.variant_id
+        (item) =>
+          item.productId === cart.product_id &&
+          item.variantId == cart.variant_id
       );
       if (existingItem) {
         return prevItems.map((res) =>
@@ -121,6 +123,9 @@ export function CartProvider(props: { children: JSX.Element }) {
 
   const logout = () => {
     localStorage.removeItem("access_token");
+    destroyCookie(null, "access_token", {
+      path: "/", // Ensure path matches the one set when creating the cookie
+    });
     if (typeof window !== "undefined") {
       global && window.location.reload();
     }

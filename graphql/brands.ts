@@ -12,3 +12,9 @@ export const BRANDS = gql`
     }
   }
 `;
+
+export const BRANDS_BY_CATEGORY = gql`
+  query ($category: String!, $subcategories: [String!]) {
+    storeFilteredBrands(category: $category, subcategories: $subcategories)
+  }
+`;

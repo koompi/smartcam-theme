@@ -6,8 +6,14 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Spacer } from "@nextui-org/react";
 import ProductCard from "@/components/globals/ProductCard";
 
-import { MessageProduct, ProductType } from "@/types/product";
+import { ProductType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
+import {
+  GLOBAL_PRODUCT_FILTERING,
+  PRODUCT_SECTION_TYPE,
+} from "@/graphql/product";
+import { useQuery } from "@apollo/client";
+import { CardLoading } from "@/components/globals/Loading";
 
 interface ProductProps {
   product: ProductType;
@@ -18,39 +24,39 @@ interface ProductProps {
 
 interface Props {
   title: string;
-  data: any;
   type: string;
 }
 
-const SectionListProducts: FC<Props> = ({ title, data, type }) => {
+export const dynamic = "force-dyanmic";
+
+const SectionListProducts: FC<Props> = ({ title, type }) => {
+  const { data: products, loading } = useQuery(GLOBAL_PRODUCT_FILTERING, {
+    variables: {
+      filter: {
+        limit: 10,
+        skip: 1,
+        sort: -1,
+      },
+    },
+  });
+
+  // product by type
+  const { data: productsBy, loading: loadingProductBy } = useQuery(
+    PRODUCT_SECTION_TYPE,
+    {
+      variables: {
+        statusType: type === "MOST POPULAR" ? "BESTSELLER" : "ARRIVAL",
+        category: null,
+        filter: {
+          limit: 10,
+          skip: 0,
+          sort: -1,
+        },
+      },
+    }
+  );
+
   const carouselRef = useRef<HTMLDivElement>(null);
-
-  const mostPopularSort = (): MessageProduct[] => {
-    if (!data) {
-      return [];
-    }
-    return [...data?.products].sort((a: MessageProduct, b: MessageProduct) =>
-      a.product?.sell > b.product?.sell ? -1 : 1
-    );
-  };
-
-  const newestSort = (): MessageProduct[] => {
-    if (!data?.products) {
-      return [];
-    }
-    return [...data?.products].sort((a: MessageProduct, b: MessageProduct) =>
-      a.product?.createdAt > b.product?.createdAt ? -1 : 1
-    );
-  };
-
-  const topRated = (): MessageProduct[] => {
-    if (!data?.products) {
-      return [];
-    }
-    return [...data?.products].sort((a: MessageProduct, b: MessageProduct) =>
-      a.product?.rating > b.product?.rating ? -1 : 1
-    );
-  };
 
   const scrollLeft = () => {
     if (carouselRef.current) {
@@ -71,6 +77,14 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
       });
     }
   };
+
+  if (loadingProductBy || !productsBy || !products || loading) {
+    return <CardLoading />;
+  }
+
+  const randomizeArray = [
+    ...products?.storeGlobalFilterProducts?.products,
+  ].sort(() => 0.5 - Math.random());
 
   return (
     <section className="px-3 sm:px-3 lg:px-6 py-6">
@@ -111,14 +125,63 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
           ref={carouselRef}
           className="flex overflow-x-scroll gap-3 items-stretch scrollbar-hide snap-x snap-mandatory scroll-smooth"
         >
-          <div className="flex flex-nowrap gap-2">
-            {Array.from(
-              type === "MOST POPULAR"
-                ? mostPopularSort()
-                : type === "NEW ARRIVAL"
-                  ? newestSort()
-                  : topRated(),
-              (res: ProductProps, idx) => {
+          {type === "MOST POPULAR" || type === "NEW ARRIVAL" ? (
+            <div className="flex flex-nowrap gap-2">
+              {productsBy?.storeSortProducts?.products?.map(
+                (res: ProductProps, idx: number) => {
+                  const {
+                    thumbnail,
+                    title,
+                    desc,
+                    rating,
+                    price,
+                    id,
+                    slug,
+                    stocks,
+                    currencyPrice,
+                    category,
+                  } = res?.product;
+                  return (
+                    <div
+                      key={idx}
+                      className="flex-shrink-0 w-64 sm:w-64 lg:w-[21rem] h-full snap-center"
+                    >
+                      <ProductCard
+                        id={id}
+                        favorite={res?.favorite}
+                        compare={res?.compare}
+                        categoryId={category?.id}
+                        thumbnail={thumbnail}
+                        title={title}
+                        desc={desc}
+                        rating={rating ? rating : 4}
+                        price={price}
+                        promotion={{
+                          isMembership: res.promotion?.isMembership,
+                          discount: {
+                            discountPercentage:
+                              res.promotion?.discount?.discountPercentage,
+                            discountPrice:
+                              res.promotion?.discount?.discountPrice,
+                            discountType: res.promotion?.discount?.discountType,
+                            originalPrice:
+                              res.promotion?.discount?.originalPrice,
+                            totalDiscount:
+                              res.promotion?.discount?.totalDiscount,
+                          },
+                        }}
+                        slug={slug}
+                        stocks={stocks}
+                        currencyPrice={currencyPrice}
+                      />
+                    </div>
+                  );
+                }
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-nowrap gap-2">
+              {randomizeArray?.map((res: ProductProps, idx: number) => {
                 const {
                   thumbnail,
                   title,
@@ -131,7 +194,6 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
                   currencyPrice,
                   category,
                 } = res?.product;
-
                 return (
                   <div
                     key={idx}
@@ -164,9 +226,9 @@ const SectionListProducts: FC<Props> = ({ title, data, type }) => {
                     />
                   </div>
                 );
-              }
-            )}
-          </div>
+              })}
+            </div>
+          )}
         </div>
       </div>
     </section>

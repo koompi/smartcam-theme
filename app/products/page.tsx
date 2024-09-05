@@ -36,21 +36,10 @@ export default function ProductsPage() {
     GLOBAL_PRODUCT_FILTERING,
     {
       variables: {
-        tagId: brands
-          ? cat
-            ? sub
-              ? [...brands?.split(","), cat, sub]
-              : [...brands?.split(","), cat]
-            : [...brands?.split(",")]
-          : cat
-            ? sub
-              ? [sub]
-              : [cat]
-            : search
-              ? []
-              : null,
+        tagId: cat ? (sub ? [sub] : [cat]) : search ? [] : null,
         keyword: search ? search : search,
         status: price ? "price" : null,
+        brand: brands ? [...brands?.split(",")] : null,
         range: rangePrice,
         filter: {
           limit: limit,

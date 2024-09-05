@@ -2,15 +2,10 @@
 
 import React, { useState, useCallback } from "react";
 import {
-  Accordion,
-  AccordionItem,
   Button,
   Checkbox,
   CheckboxGroup,
-  Chip,
   Divider,
-  Radio,
-  RadioGroup,
   Skeleton,
   useDisclosure,
 } from "@nextui-org/react";
@@ -23,9 +18,8 @@ import PriceSlider from "./PriceSlider";
 import { Category, SubCategory } from "@/types/category";
 import { useSearchParams } from "next/navigation";
 import SidebarDrawer from "./SidebarDrawer";
-import { BRANDS } from "@/graphql/brands";
+import { BRANDS_BY_CATEGORY } from "@/graphql/brands";
 import { useQuery } from "@apollo/client";
-import { BrandsType } from "@/types/product";
 
 export type RangeValue = [number, number];
 
@@ -101,7 +95,13 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
 
     const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
 
-    const { data, loading } = useQuery(BRANDS);
+    const { data, loading } = useQuery(BRANDS_BY_CATEGORY, {
+      variables: {
+        category: cat,
+        subcategories: sub ? [sub] : null,
+      },
+      skip: !cat || cat === null || cat === "",
+    });
 
     const handleApply = useCallback(() => {
       router.push(
@@ -239,44 +239,48 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
 
           {/* Brands */}
 
-          {/* <div className="mt-6">
-            <h3 className="text-lg font-semibold leading-8 text-default-600">
-              Brands
-            </h3>
-            {loading ? (
-              <div className="flex flex-col gap-6 mt-3">
-                <Skeleton isLoaded={loading} className="w-full rounded-lg">
-                  <div className="h-3 w-full rounded-lg bg-secondary-200"></div>
-                </Skeleton>
-                <Skeleton isLoaded={loading} className="w-full rounded-lg">
-                  <div className="h-3 w-full rounded-lg bg-secondary-200"></div>
-                </Skeleton>
-                <Skeleton isLoaded={loading} className="w-full rounded-lg">
-                  <div className="h-3 w-full rounded-lg bg-secondary-200"></div>
-                </Skeleton>
-              </div>
-            ) : (
-              <CheckboxGroup
-                color="default"
-                onChange={(value) => {
-                  router.push(
-                    `?search=${search ? search : ""}&brands=${value ? value : ""}&category=${
-                      cat ? cat : ""
-                    }&sort=${sortParam ? sortParam : ""}`
-                  );
-                }}
-                defaultValue={brands?.split(",")}
-              >
-                {data?.storeOwnerBrands.map((b: BrandsType) => {
-                  return (
-                    <Checkbox key={b?.id} value={b?.title?.en}>
-                      {b?.title?.en}
-                    </Checkbox>
-                  );
-                })}
-              </CheckboxGroup>
-            )}
-          </div> */}
+          {data && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold leading-8 text-default-600">
+                Brands
+              </h3>
+              {loading ? (
+                <div className="flex flex-col gap-6 mt-3">
+                  <Skeleton isLoaded={loading} className="w-full rounded-lg">
+                    <div className="h-3 w-full rounded-lg bg-secondary-200"></div>
+                  </Skeleton>
+                  <Skeleton isLoaded={loading} className="w-full rounded-lg">
+                    <div className="h-3 w-full rounded-lg bg-secondary-200"></div>
+                  </Skeleton>
+                  <Skeleton isLoaded={loading} className="w-full rounded-lg">
+                    <div className="h-3 w-full rounded-lg bg-secondary-200"></div>
+                  </Skeleton>
+                </div>
+              ) : (
+                <CheckboxGroup
+                  color="default"
+                  onChange={(value) => {
+                    router.push(
+                      `?search=${search ? search : ""}&brands=${value ? value : ""}&category=${
+                        cat ? cat : ""
+                      }&sort=${sortParam ? sortParam : ""}`
+                    );
+                  }}
+                  defaultValue={brands?.split(",")}
+                >
+                  {data?.storeFilteredBrands
+                    ?.filter((t: string) => t !== "")
+                    ?.map((b: string, idx: number) => {
+                      return (
+                        <Checkbox key={idx} value={b}>
+                          {b}
+                        </Checkbox>
+                      );
+                    })}
+                </CheckboxGroup>
+              )}
+            </div>
+          )}
 
           {/* Categories */}
 
@@ -303,7 +307,7 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
                           onClick={() => {
                             setSelectedCat(cat?.id);
                             router.push(
-                              `?search=${search ? search : ""}&brands=${brands ? brands : ""}&category=${
+                              `?search=${search ? search : ""}&category=${
                                 cat?.id ? cat?.id : ""
                               }&sort=${sortParam ? sortParam : ""}`
                             );

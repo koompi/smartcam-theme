@@ -95,9 +95,6 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
       (l: LocationType) => l.id == location
     );
 
-    console.log("l", myLocation);
-    
-
     return (
       <>
         <div>
