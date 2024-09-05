@@ -63,8 +63,8 @@ const MyLocation: FC<LocationType> = (props) => {
               shadow="none"
               isZoomed
               src={
-                props?.photos?.length > 0
-                  ? props?.photos[0]
+                props?.address?.photos?.length > 0
+                  ? props?.address?.photos[0]
                   : "/images/shop.png"
               }
             />

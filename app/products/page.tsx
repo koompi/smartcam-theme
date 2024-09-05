@@ -12,7 +12,7 @@ export default function ProductsPage() {
   const cat = searchParams.get("category") || null;
   const sub = searchParams.get("sub_category") || null;
   const page = (searchParams.get("page") as string) || "1";
-  const size = (searchParams.get("size") as string) || "16";
+  const size = (searchParams.get("size") as string) || "12";
   const minPice = (searchParams.get("min_price") as string) || null;
   const maxPice = (searchParams.get("max_price") as string) || null;
   const sortParam = (searchParams.get("sort") as string) || null;
@@ -22,11 +22,9 @@ export default function ProductsPage() {
 
   const brands = searchParams.get("brands") || null;
 
-  let skip =
-    parseInt(page as string) > 1
-      ? (parseInt(size as string) / 2) * parseInt(page as string) + 1
-      : 0;
   let limit = parseInt(size as string);
+  let skip =
+    parseInt(page as string) > 1 ? limit * parseInt(page as string) - limit : 0;
   let rangePrice = minPice
     ? {
         start: parseInt(minPice as string),
@@ -70,7 +68,7 @@ export default function ProductsPage() {
   });
 
   return (
-    <section className="px-3 sm:px-3 lg:px-6 py-3 sm:py-3 lg:py-9">
+    <section className="px-3 sm:px-3 lg:px-6 pt-3 pb-3 sm:pb-3 lg:pb-9">
       <div className="flex gap-x-6">
         <ComponentProducts
           categories={categories?.storeOwnerCategories}

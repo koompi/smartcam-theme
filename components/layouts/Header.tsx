@@ -30,17 +30,29 @@ export default function Header() {
           className="h-6 bg-white hidden sm:hidden lg:flex"
         />
         <div className="flex items-center gap-2 sm:gap-2 lg:gap-3">
-          <Link href="#" className="text-white">
+          <Link
+            href="https://www.facebook.com/smartcam168"
+            target="_blank"
+            rel="noreferer"
+            className="text-white"
+          >
             <Icon icon="ic:baseline-facebook" fontSize={18} />
           </Link>
-          <Link href="#" className="text-white">
+          <Link
+            href="https://t.me/joinchat/09E4pilK89llNDM1"
+            target="_blank"
+            rel="noreferer"
+            className="text-white"
+          >
             <Icon icon="mingcute:telegram-fill" fontSize={18} />
           </Link>
-          <Link href="#" className="text-white">
-            <Icon icon="hugeicons:instagram" fontSize={18} />
-          </Link>
-          <Link href="#" className="text-white">
-            <Icon icon="ri:twitter-x-fill" fontSize={18} />
+          <Link
+            href="https://www.youtube.com/@smartcam123"
+            target="_blank"
+            rel="noreferer"
+            className="text-white"
+          >
+            <Icon icon="mingcute:youtube-fill" fontSize={18} />
           </Link>
         </div>
       </div>

@@ -63,7 +63,6 @@ function DraggableMarker({
     [setLatitude, setLongitude, setPosition]
   );
 
-
   const toggleDraggable = useCallback(() => {
     setDraggable((d) => !d);
   }, []);
@@ -79,12 +78,12 @@ function DraggableMarker({
 
   useEffect(() => {
     if (!map) return; // Ensure map is defined before running
-  
+
     map.whenReady(() => {
       // Check if the new position is different from the current map center
       const currentCenter = map.getCenter();
       if (
-        currentCenter.lat !== position[0] || 
+        currentCenter.lat !== position[0] ||
         currentCenter.lng !== position[1]
       ) {
         map.flyTo(position, map.getZoom());
@@ -135,7 +134,7 @@ const Map: React.FC<MapProps> = ({
     const fetchData = async () => {
       if (isFetching.current || !searchText) {
         setSearchText("");
-        setPosition([11.5564, 104.9282])
+        setPosition([11.5564, 104.9282]);
         return;
       }
 
@@ -271,7 +270,7 @@ const Map: React.FC<MapProps> = ({
         size="lg"
         color="default"
         className="absolute top-24 right-8 max-w-[36rem] z-[10000] text-gray-400"
-        placeholder="Search Maps"
+        placeholder="Search your area"
         startContent={<Icon icon="fluent-mdl2:map-directions" fontSize={24} />}
         onSelectionChange={handleChange}
       >

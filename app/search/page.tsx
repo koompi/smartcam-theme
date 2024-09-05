@@ -124,7 +124,7 @@ export default function SearchPage() {
                       desc={desc}
                       favorite={res?.favorite}
                       compare={res?.compare}
-                      categoryId={category.id}
+                      categoryId={category?.id}
                       rating={rating ? rating : 4}
                       price={price}
                       promotion={{

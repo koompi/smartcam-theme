@@ -140,6 +140,23 @@ export const ESTIMATION_PRICE = gql`
         price
         thumbnail
       }
+      variant {
+        price
+        previews
+        label
+        id
+        default
+        attributes {
+          option
+          type
+        }
+        details
+        stock {
+          amount
+          freezed
+          status
+        }
+      }
     }
   }
 `;

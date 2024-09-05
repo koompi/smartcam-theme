@@ -1,4 +1,5 @@
 interface Address {
+  photos: string[];
   id: string;
   addressName: string;
   label: string;
@@ -24,7 +25,5 @@ export type LocationType = {
   createdAt: string;
   updatedAt: string;
   address: Address;
-  photos: string[];
-  label: string;
   handleDeleteLocation: (id: string) => void;
 };

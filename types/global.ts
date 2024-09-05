@@ -11,8 +11,14 @@ export type ContextAuth = {
 
 export type CartItem = {
   productId: string;
+  variantId: string | null;
   qty: number;
 };
+
+export type AddCart = {
+  product_id: string,
+  variant_id: string | null
+}
 
 export type CartContextType = {
   cartItems: CartItem[];
@@ -20,7 +26,7 @@ export type CartContextType = {
   wishlistFav: any;
   wishlistCompare: any;
   refetchFav: Function;
-  addToCart: (product_id: string, qty?: number) => void;
+  addToCart: (cart: AddCart, qty?: number) => void;
   minusCart: (product_id: string) => void;
   removeFromCart: (id: String) => void;
   addCarts: (cartItems: CartItem[]) => void;
