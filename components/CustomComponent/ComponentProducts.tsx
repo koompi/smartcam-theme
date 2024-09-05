@@ -1,18 +1,28 @@
 "use client";
 
-import { Category } from "@/types/category";
+import { Category, SubCategory } from "@/types/category";
 import ecommerceItems from "./EcommerceItems";
 import FiltersWrapper from "./FilterWrapper";
 import SidebarDrawer from "./SidebarDrawer";
-import { useDisclosure, Image } from "@nextui-org/react";
+import {
+  useDisclosure,
+  Image,
+  CheckboxGroup,
+  RadioGroup,
+  Button,
+} from "@nextui-org/react";
 import MenuBar from "./MenuBar";
 import ProductCard from "../globals/ProductCard";
 import { MessageProduct } from "@/types/product";
 import { PaginationProduct } from "./PaginationProduct";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { CardLoading } from "../globals/Loading";
-import { useCart } from "@/context/useCart";
+import { useQuery } from "@apollo/client";
+import { SUB_CATEGORY_BY_ID } from "@/graphql/category";
+import { CustomCheckbox } from "./CustomCheckBox";
+import { BrowserView } from "react-device-detect";
+// import { useCart } from "@/context/useCart";
 
 export default function ComponentProducts({
   categories,
@@ -28,15 +38,30 @@ export default function ComponentProducts({
   loading: boolean;
 }) {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const offset = searchParams.get("page") ?? "1";
-  const limit = searchParams.get("size") ?? "16";
+  const limit = searchParams.get("size") ?? "12";
   const query_search = searchParams.get("search") ?? null;
   const cat = searchParams.get("category") || null;
   const sub = searchParams.get("sub_category") || null;
   const minPrice = (searchParams.get("min_price") as string) || null;
   const maxPrice = (searchParams.get("max_price") as string) || null;
   const sort = searchParams.get("sort") ?? null;
+  const brands = searchParams.get("brands") || null;
+
+  const [subId, setSubId] = useState(sub);
+
+  const {
+    data: subCat,
+    loading: loadingSubCat,
+    refetch,
+  } = useQuery(SUB_CATEGORY_BY_ID, {
+    variables: {
+      parentId: cat,
+    },
+    skip: !cat || cat === "" || cat === null,
+  });
 
   const [page, setPage] = useState(parseInt(offset));
 
@@ -144,6 +169,9 @@ export default function ComponentProducts({
               currencyPrice,
               category,
             } = res?.product;
+
+            // console.log("res", res);
+
             return (
               <ProductCard
                 key={idx}
@@ -353,44 +381,91 @@ export default function ComponentProducts({
           <MenuBar onOpen={onOpen} />
         </div>
         <main className="h-full w-full overflow-visible px-1">
+          <BrowserView>
+            {subCat?.storeOwnerSubcategories.length > 0 && (
+              <div className="flex flex-wrap gap-3 w-full mb-6">
+                <Button
+                  radius="lg"
+                  variant={!sub ? "shadow" : "flat"}
+                  size="sm"
+                  color={!sub ? "primary" : "default"}
+                  className="text-sm px-4"
+                  onPress={() => {
+                    setSubId("");
+                    router.push(
+                      `?search=${query_search ? query_search : ""}&brands=${brands ? brands : ""}&category=${
+                        cat ? cat : ""
+                      }&sub_category=&sort=${sort ? sort : ""}`
+                    );
+                  }}
+                >
+                  All SubCategory
+                </Button>
+                {subCat?.storeOwnerSubcategories
+                  ?.filter((sub: SubCategory) => sub?.products > 0)
+                  ?.map((sub: SubCategory, idx: number) => {
+                    return (
+                      <Button
+                        radius="lg"
+                        variant={sub?.id === subId ? "shadow" : "flat"}
+                        size="sm"
+                        key={idx}
+                        color={sub?.id === subId ? "primary" : "default"}
+                        className="text-sm px-4"
+                        onPress={() => {
+                          setSubId(sub?.id);
+                          router.push(
+                            `?search=${query_search ? query_search : ""}&brands=${brands ? brands : ""}&category=${
+                              cat ? cat : ""
+                            }&sub_category=${sub?.id ? sub?.id : ""}&sort=${
+                              sort ? sort : ""
+                            }`
+                          );
+                        }}
+                      >
+                        {sub.title?.en}
+                      </Button>
+                    );
+                  })}
+              </div>
+            )}
+          </BrowserView>
           {loading ? (
             <CardLoading />
           ) : products?.length <= 0 || !products ? (
             <div className="text-center h-[60vh] flex items-center justify-center">
-              <div>
-                <div className="flex justify-center items-center">
-                  <Image
-                    isBlurred
-                    radius="none"
-                    alt="Empty"
-                    src="/images/empty-cart.svg"
-                    className="h-32 sm:h-32 lg:h-60"
-                  />
-                </div>
+              <div className="flex flex-col justify-center items-center">
+                <Image
+                  isBlurred
+                  radius="none"
+                  alt="Empty"
+                  src="/images/empty-cart.svg"
+                  className="h-32 sm:h-32 lg:h-60"
+                />
                 <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                  Whoops! No products.
+                  No Products.
                 </h1>
-                <p className="mt-6 text-base leading-7 text-gray-600">
-                  Browse our amazing selection of products and fill your cart
-                  with goodies!
-                </p>
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 place-items-stretch gap-3">
-              <ProductSortComponent />
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 place-items-stretch gap-3">
+                <ProductSortComponent />
+              </div>
+            </>
+          )}
+          {total > 12 && (
+            <div className="w-full flex justify-center mt-20 space-x-2">
+              {loading ? null : (
+                <PaginationProduct
+                  page={page}
+                  total={pageFilter === 0 ? 1 : pageFilter}
+                  rowsPerPage={parseInt(limit as string)}
+                  setPage={setPage}
+                />
+              )}
             </div>
           )}
-          <div className="w-full flex justify-end mt-8 space-x-2">
-            {loading ? null : (
-              <PaginationProduct
-                page={page}
-                total={pageFilter == 0 ? 1 : pageFilter}
-                rowsPerPage={parseInt(limit as string)}
-                setPage={setPage}
-              />
-            )}
-          </div>
         </main>
       </div>
     </>

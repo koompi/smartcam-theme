@@ -44,8 +44,6 @@ export const Promotion = () => {
     return null;
   }
 
-  // console.log("data", data);
-
   return (
     <section className="hidden sm:hidden lg:block py-9 bg-white">
       <div className="container mx-auto">

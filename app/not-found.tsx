@@ -13,7 +13,7 @@ export default function NotFound() {
             isBlurred
             radius="none"
             alt="Empty"
-            src="/images/empty-cart.svg"
+            src="/images/404.png"
             className="h-32 sm:h-32 lg:h-60"
           />
         </div>

@@ -49,47 +49,16 @@ const OrderSummary = React.forwardRef<HTMLDivElement, OrderSummaryProps>(
               <OrderSummaryItem key={idx} {...item} />
             ))
           ) : (
-            <section className="grid place-items-center px-6 py-12 sm:py-14 lg:px-8">
-              <div className="text-center">
-                <div className="flex justify-center items-center">
-                  <Image
-                    isBlurred
-                    radius="none"
-                    alt="Empty"
-                    src="/images/empty-cart.svg"
-                    className="h-12 sm:h-20 lg:h-32"
-                  />
-                </div>
-                <h1 className="mt-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                  Whoops! Your cart is currently empty.
-                </h1>
-                <p className="mt-6 text-base leading-7 text-gray-600">
-                  Browse our amazing selection of products and fill your cart
-                  with goodies!
-                </p>
-                <div className="mt-10 flex items-center justify-center gap-x-6">
-                  <Button
-                    variant="shadow"
-                    color="primary"
-                    as={Link}
-                    href="/"
-                    className="text-background"
-                  >
-                    Go back home
-                  </Button>
-
-                  <Button
-                    variant="light"
-                    color="primary"
-                    as={Link}
-                    href="/products"
-                    endContent={<span aria-hidden="true">&rarr;</span>}
-                  >
-                    Products
-                  </Button>
-                </div>
-              </div>
-            </section>
+            <div className="flex flex-col gap-3 justify-center items-center">
+              <Image
+                isBlurred
+                radius="none"
+                alt="Empty"
+                src="/images/empty-cart.svg"
+                className="h-12 sm:h-20 lg:h-32"
+              />
+              <p className="font-semibold text-xl text-center">Emtpy Cart</p>
+            </div>
           )}
         </ul>
       </div>

@@ -5,25 +5,35 @@ import Link from "next/link";
 import { Image } from "@nextui-org/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useAuth } from "@/context/useAuth";
+import { BRANDS } from "@/graphql/brands";
+import { BrandsType } from "@/types/product";
+import { useQuery } from "@apollo/client";
 
 const MainFooter = () => {
   const { user } = useAuth();
 
+  const { data, loading } = useQuery(BRANDS);
+
+  if (loading || !data) {
+    return;
+  }
+
   return (
     <section className="relative overflow-hidden">
       <footer className="py-10 bg-white sm:pt-16 lg:pt-24">
-        <div className="absolute right-0 z-0">
+        <div className="absolute top-0 right-6 z-0">
           <Image
             alt="logo"
+            isBlurred
             src="/images/logo-only-grayscale.png"
-            className="h-[45rem]"
+            className="h-[36rem]"
             radius="none"
           />
         </div>
         <div className="px-4 mx-auto sm:px-6 lg:px-8 max-full relative">
-          <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-6 gap-y-16 gap-x-12">
+          <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-12 gap-y-16 gap-x-3">
             {/* main */}
-            <div className="col-span-2 md:col-span-3 lg:col-span-3 lg:pr-8">
+            <div className="col-span-2 md:col-span-3 lg:col-span-7 lg:pr-8">
               <Image
                 alt="logo"
                 src="/images/smartcam-logo.png"
@@ -31,16 +41,15 @@ const MainFooter = () => {
                 radius="none"
               />
 
-              <p className="text-base leading-relaxed text-gray-600 mt-7 max-w-xl">
-                Smartcam is the leading company focus on electronics ( computer
-                , Printer ( EPSON, HP, CANON) and parts). we will our best to
-                offer best services and products.
+              <p className="text-2xl font-semibold leading-relaxed text-primary mt-3 max-w-xl">
+                Make your IT Business Growth
               </p>
-
               <ul className="flex items-center space-x-3 mt-9">
                 <li>
                   <Link
-                    href="#"
+                    href="https://www.facebook.com/smartcam168"
+                    target="_blank"
+                    rel="noreferer"
                     className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
                   >
                     <Icon icon="ic:baseline-facebook" fontSize={21} />
@@ -49,7 +58,9 @@ const MainFooter = () => {
 
                 <li>
                   <Link
-                    href="#"
+                    href="https://t.me/joinchat/09E4pilK89llNDM1"
+                    target="_blank"
+                    rel="noreferer"
                     className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
                   >
                     <Icon icon="mingcute:telegram-fill" fontSize={18} />
@@ -58,26 +69,37 @@ const MainFooter = () => {
 
                 <li>
                   <Link
-                    href="#"
+                    href="https://www.youtube.com/@smartcam123"
+                    target="_blank"
+                    rel="noreferer"
                     className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
                   >
-                    <Icon icon="hugeicons:instagram" fontSize={18} />
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    href="#"
-                    className="flex items-center justify-center text-primary transition-all duration-200 bg-content2 rounded-full w-7 h-7 hover:bg-primary focus:bg-primary hover:text-white"
-                  >
-                    <Icon icon="ri:twitter-x-fill" />
+                    <Icon icon="mingcute:youtube-fill" fontSize={18} />
                   </Link>
                 </li>
               </ul>
             </div>
+            {/* Products */}
+            <div className="col-span-2">
+              <p className="text-md underline font-semibold tracking-widest uppercase">
+                Products
+              </p>
+
+              <div className="mt-6 grid grid-cols-2 gap-3">
+                {data.storeOwnerBrands.map((b: BrandsType, idx: number) => (
+                  <Link
+                    href={`/products?search=&brands=${b.title ? b.title?.en : ""}`}
+                    key={idx}
+                    className="hover:text-primary hover:underline"
+                  >
+                    {b?.title?.en}
+                  </Link>
+                ))}
+              </div>
+            </div>
             {/* Terms */}
-            <div>
-              <p className="text-sm font-semibold tracking-widest uppercase">
+            <div className="col-span-1">
+              <p className="text-md underline font-semibold tracking-widest uppercase">
                 Terms
               </p>
 
@@ -102,8 +124,8 @@ const MainFooter = () => {
               </ul>
             </div>
             {/* Company */}
-            <div>
-              <p className="text-sm font-semibold tracking-widest uppercase">
+            <div className="col-span-1">
+              <p className="text-md underline font-semibold tracking-widest uppercase">
                 Company
               </p>
 
@@ -155,8 +177,8 @@ const MainFooter = () => {
               </ul>
             </div>
             {/* Account */}
-            <div>
-              <p className="text-sm font-semibold tracking-widest uppercase">
+            <div className="col-span-1">
+              <p className="text-md underline font-semibold tracking-widest uppercase">
                 Account
               </p>
 
@@ -180,7 +202,14 @@ const MainFooter = () => {
                     My Locations
                   </Link>
                 </li>
-
+                <li>
+                  <Link
+                    href="/compare"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                  >
+                    Compare
+                  </Link>
+                </li>
                 <li>
                   <Link
                     href="/cart"
@@ -200,7 +229,7 @@ const MainFooter = () => {
 
                 <li>
                   <Link
-                    href="#"
+                    href="/wishlist"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                   >
                     My Wishlist

@@ -7,6 +7,7 @@ import {
   ADD_COMPARE_WISHLIST,
   ADD_WISHLIST,
 } from "@/graphql/mutation/wishlist";
+import { AddCart } from "@/types/global";
 import { StockType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { usd } from "@/utils/formatUSD";
@@ -151,7 +152,7 @@ const ProductCard: FC<ProductCardProps> = ({
             >
               Add to Compare
             </DropdownItem>
-            <DropdownItem
+            {/* <DropdownItem
               key="buy"
               color="primary"
               className="text-primary"
@@ -159,7 +160,7 @@ const ProductCard: FC<ProductCardProps> = ({
               startContent={<Icon icon="solar:bag-3-bold" fontSize={21} />}
             >
               Buy Now
-            </DropdownItem>
+            </DropdownItem> */}
           </DropdownMenu>
         </Dropdown>
         <div className="flex justify-center items-center overflow-hidden ">
@@ -227,7 +228,7 @@ const ProductCard: FC<ProductCardProps> = ({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              addToCart(id);
+              addToCart({product_id: id, variant_id: null} as AddCart);
               toast.success("The product is added into the cart!");
             }}
             isDisabled={stocks?.status === "OUT-STOCK"}

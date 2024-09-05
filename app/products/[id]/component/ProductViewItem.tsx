@@ -15,7 +15,6 @@ import {
   CardBody,
   Tab,
   Tabs,
-  useDisclosure,
   Input,
 } from "@nextui-org/react";
 import React, { useEffect, useRef, useState } from "react";
@@ -34,7 +33,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import { VariantRadio } from "./VariantRadio";
 import { formatToUSD } from "@/utils/formatUSD";
-import productReviews from "@/data/productReviews";
+// import productReviews from "@/data/productReviews";
 import {
   TwitterShareButton,
   TwitterIcon,
@@ -46,7 +45,7 @@ import {
 import ModalReview from "./ReviewModal";
 import Review from "./Reviews";
 import SummaryRatingCard from "./SummaryRatingCard";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/context/useCart";
 import { ProductType, Variants } from "@/types/product";
 import { toast } from "sonner";
@@ -63,6 +62,7 @@ import {
 } from "@/graphql/mutation/wishlist";
 import { useMutation } from "@apollo/client";
 import { useAuth } from "@/context/useAuth";
+import { AddCart } from "@/types/global";
 
 type ProductViewInfoProps = Omit<React.HTMLAttributes<HTMLDivElement>, "id"> & {
   isPopular?: boolean;
@@ -117,10 +117,11 @@ export const ProductViewItem = React.forwardRef<
     const sortParam = searchParams.get("sort") || null;
     const brands = searchParams.get("brands") || null;
 
+    const router = useRouter();
+
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const swiperRef = useRef<SwiperType | null>(null);
     const fullHost = window.location.href;
-    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
     const [isFavorite, setIsFavorite] = useState(favorite);
     const { refetch } = useAuth();
     const [isCompare, setIsCompare] = useState(compare);
@@ -394,15 +395,7 @@ export const ProductViewItem = React.forwardRef<
 
               <div className="col-span-12 flex sm:flex lg:hidden w-full">
                 <div className="bg-white rounded-3xl shadow-sm p-3">
-                  <h1 className="text-xl font-bold tracking-tight">
-                    {title}
-                    {props.promotion.discount &&
-                      ` - (${
-                        props.promotion?.discount.discountType == "PRICE"
-                          ? `$${props.promotion?.discount.discountPrice}`
-                          : `${props.promotion?.discount.discountPercentage}%`
-                      })`}
-                  </h1>
+                  <h1 className="text-xl font-bold tracking-tight">{title}</h1>
                   <Spacer y={6} />
                   <h2 className="text-4xl font-bold text-primary">
                     {props.promotion?.discount ? (
@@ -415,15 +408,11 @@ export const ProductViewItem = React.forwardRef<
                           )}
                         </div>
                         <label>
-                          $
-                          {props?.promotion?.discount.discountType === "PRICE"
-                            ? variant.price -
-                              (props.promotion.discount.discountPrice ?? 0)
-                            : variant.price -
-                              ((props.promotion?.discount.discountPercentage ??
-                                0) *
-                                variant.price) /
-                                100}
+                          {formatToUSD(
+                            parseFloat(
+                              props?.promotion?.discount?.totalDiscount.toString()
+                            )
+                          )}
                         </label>
                       </div>
                     ) : (
@@ -497,12 +486,13 @@ export const ProductViewItem = React.forwardRef<
                                 <VariantRadio
                                   key={idx}
                                   value={item?.id ? item.id : props.id}
-                                  onChange={(_) =>
+                                  onChange={(_) => {
                                     setVariant({
                                       ...item,
                                       default: item.id ? false : true,
-                                    })
-                                  }
+                                    });
+                                    router.push(`?variant=${item.id}`);
+                                  }}
                                 >
                                   <div className="grid items-center grid-cols-5 justify-between">
                                     <Image
@@ -652,7 +642,7 @@ export const ProductViewItem = React.forwardRef<
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          addToCart(variant.id ? variant.id : props.id, qty);
+                          addToCart({ product_id: props.id, variant_id: variant.id } as AddCart, qty);
                           toast.success("The product is added into the cart!");
                         }}
                       >
@@ -903,15 +893,7 @@ export const ProductViewItem = React.forwardRef<
           {/* desc info */}
           <div className="hidden sm:hidden lg:block w-1/4">
             <div className="sticky top-40 bg-white rounded-3xl shadow-sm p-6">
-              <h1 className="text-2xl font-bold tracking-tight">
-                {title}
-                {props.promotion.discount &&
-                  ` - (${
-                    props.promotion?.discount.discountType == "PRICE"
-                      ? `$${props.promotion?.discount.discountPrice}`
-                      : `${props.promotion?.discount.discountPercentage}%`
-                  })`}
-              </h1>
+              <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
               <Spacer y={6} />
               <h2 className="text-4xl font-bold text-primary">
                 {props.promotion?.discount ? (
@@ -924,14 +906,11 @@ export const ProductViewItem = React.forwardRef<
                       )}
                     </div>
                     <label>
-                      $
-                      {props?.promotion?.discount.discountType === "PRICE"
-                        ? variant.price -
-                          (props.promotion.discount.discountPrice ?? 0)
-                        : variant.price -
-                          ((props.promotion?.discount.discountPercentage ?? 0) *
-                            variant.price) /
-                            100}
+                      {formatToUSD(
+                        parseFloat(
+                          props?.promotion?.discount?.totalDiscount.toString()
+                        )
+                      )}
                     </label>
                   </div>
                 ) : (
@@ -1161,7 +1140,7 @@ export const ProductViewItem = React.forwardRef<
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      addToCart(variant.id ? variant.id : props.id, qty);
+                      addToCart({ product_id: props.id, variant_id: variant.id } as AddCart, qty);
                       toast.success("The product is added into the cart!");
                     }}
                   >

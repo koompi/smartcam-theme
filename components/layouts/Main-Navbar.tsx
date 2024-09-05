@@ -37,7 +37,6 @@ import { Search } from "./Search";
 import { Drawer } from "vaul";
 import axios from "axios";
 import { Loading } from "../globals/Loading";
-import { icon } from "leaflet";
 
 export const MainNavbar = () => {
   const router = useRouter();
@@ -196,10 +195,11 @@ export const MainNavbar = () => {
               <ModalFooter>
                 <Button
                   color="danger"
-                  variant="flat"
+                  variant="shadow"
                   onPress={onClose}
                   fullWidth
                   radius="lg"
+                  size="lg"
                 >
                   CLOSE
                 </Button>
