@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { StockType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { useCart } from "@/context/useCart";
+import { AddCart } from "@/types/global";
 
 interface WishListProps {
   id: string;
@@ -257,7 +258,7 @@ const WishingListCard: FC<WishListProps> = ({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            addToCart(id);
+            addToCart({ product_id: id, variant_id: null } as AddCart);
             toast.success("The product is added into the cart!");
           }}
           isDisabled={stocks?.status === "OUT-STOCK"}
