@@ -11,7 +11,7 @@ import { Toaster, toast } from "sonner";
 
 import { useQuery } from "@apollo/client";
 import { GET_CUSTOMER } from "@/graphql/store";
-import { CartContextType, CartItem } from "@/types/global";
+import { AddCart, CartContextType, CartItem } from "@/types/global";
 import { WISHLISTS } from "@/graphql/wishlist";
 
 export const CartContext = createContext({});
@@ -49,35 +49,44 @@ export function CartProvider(props: { children: JSX.Element }) {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   };
 
-  const addToCart = (product_id: string, qty?: number) => {
+  const addToCart = (cart: AddCart, qty?: number) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find(
-        (item) => item.productId === product_id
+        (item) => item.productId === cart.product_id && item.variantId == cart.variant_id
       );
       if (existingItem) {
         return prevItems.map((res) =>
-          res.productId === product_id ? { ...res, qty: res.qty + 1 } : res
+          res.productId === cart.product_id
+            ? { ...res, variantId: cart.variant_id, qty: res.qty + 1 }
+            : res
         );
       }
-      const newItem: CartItem = { productId: product_id, qty: qty ? qty : 1 };
+      const newItem: CartItem = {
+        productId: cart.product_id,
+        variantId: cart.variant_id,
+        qty: qty ? qty : 1,
+      };
       const updatedItems = [...prevItems, newItem];
       localStorage.setItem("cartItems", JSON.stringify(updatedItems));
       return updatedItems;
     });
   };
 
-  const minusCart = (product_id: string) => {
+  const minusCart = (product_id: string, variantId: string) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems?.find(
         (item) => item.productId === product_id
       );
       if (existingItem) {
         return prevItems?.map((res) =>
-          res.productId === product_id ? { ...res, qty: res.qty - 1 } : res
+          res.productId === product_id
+            ? { ...res, variantId: variantId, qty: res.qty - 1 }
+            : res
         );
       }
       const updatedItems = prevItems?.filter(
-        (item: CartItem) => item.productId === product_id
+        (item: CartItem) =>
+          item.productId === product_id && item.variantId == variantId
       );
       localStorage.setItem("cartItems", JSON.stringify(updatedItems));
       return updatedItems;

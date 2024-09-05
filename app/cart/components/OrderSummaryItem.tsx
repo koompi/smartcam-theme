@@ -9,19 +9,26 @@ import { useCart } from "@/context/useCart";
 // import { formatToUSD } from "@/utils/usd";
 import { ProductType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
+import { AddCart } from "@/types/global";
 
 interface Product {
   product: ProductType;
   promotion: PromotionType;
   qty: number;
 }
+
 export type OrderSummaryItemProps = React.HTMLAttributes<HTMLLIElement> &
   Product;
 
 const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
   ({ children, product, promotion, qty, className, ...props }, ref) => {
     const { addToCart, minusCart, removeFromCart } = useCart();
-
+      
+    let cart: AddCart = {
+      product_id: product.id,
+      variant_id: null
+    };
+    
     return (
       <li
         ref={ref}
@@ -31,7 +38,6 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
         )}
         {...props}
       >
-        {/* {productId} */}
         <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center">
           <Image
             alt={product?.title}
@@ -120,7 +126,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
             radius="full"
             variant="flat"
             isDisabled={qty <= 1}
-            onPress={() => minusCart(product?.id)}
+            onPress={() => minusCart(cart.product_id)}
           >
             <Icon icon="lucide:minus" width={14} />
           </Button>
@@ -130,7 +136,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
             radius="full"
             variant="flat"
             color="success"
-            onPress={() => addToCart(product?.id)}
+            onPress={() => addToCart(cart)}
           >
             <Icon icon="lucide:plus" width={14} />
           </Button>

@@ -42,10 +42,10 @@ import {
   FacebookShareButton,
   FacebookIcon,
 } from "next-share";
-// import ModalReview from "./ReviewModal";
-// import Review from "./Reviews";
-// import SummaryRatingCard from "./SummaryRatingCard";
-import { useSearchParams } from "next/navigation";
+import ModalReview from "./ReviewModal";
+import Review from "./Reviews";
+import SummaryRatingCard from "./SummaryRatingCard";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/context/useCart";
 import { ProductType, Variants } from "@/types/product";
 import { toast } from "sonner";
@@ -62,6 +62,7 @@ import {
 } from "@/graphql/mutation/wishlist";
 import { useMutation } from "@apollo/client";
 import { useAuth } from "@/context/useAuth";
+import { AddCart } from "@/types/global";
 
 type ProductViewInfoProps = Omit<React.HTMLAttributes<HTMLDivElement>, "id"> & {
   isPopular?: boolean;
@@ -115,6 +116,8 @@ export const ProductViewItem = React.forwardRef<
     const search = searchParams.get("search") || null;
     const sortParam = searchParams.get("sort") || null;
     const brands = searchParams.get("brands") || null;
+
+    const router = useRouter();
 
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const swiperRef = useRef<SwiperType | null>(null);
@@ -483,12 +486,13 @@ export const ProductViewItem = React.forwardRef<
                                 <VariantRadio
                                   key={idx}
                                   value={item?.id ? item.id : props.id}
-                                  onChange={(_) =>
+                                  onChange={(_) => {
                                     setVariant({
                                       ...item,
                                       default: item.id ? false : true,
-                                    })
-                                  }
+                                    });
+                                    router.push(`?variant=${item.id}`);
+                                  }}
                                 >
                                   <div className="grid items-center grid-cols-5 justify-between">
                                     <Image
@@ -638,7 +642,7 @@ export const ProductViewItem = React.forwardRef<
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          addToCart(variant.id ? variant.id : props.id, qty);
+                          addToCart({ product_id: props.id, variant_id: variant.id } as AddCart, qty);
                           toast.success("The product is added into the cart!");
                         }}
                       >
@@ -1136,7 +1140,7 @@ export const ProductViewItem = React.forwardRef<
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      addToCart(variant.id ? variant.id : props.id, qty);
+                      addToCart({ product_id: props.id, variant_id: variant.id } as AddCart, qty);
                       toast.success("The product is added into the cart!");
                     }}
                   >

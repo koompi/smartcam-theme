@@ -95,6 +95,9 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
       (l: LocationType) => l.id == location
     );
 
+    console.log("l", myLocation);
+    
+
     return (
       <>
         <div>
@@ -144,7 +147,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                               <Image
                                 alt="delivery logo"
                                 src={
-                                  location?.address?.photos.length <= 0
+                                  !location?.address?.photos
                                     ? "/images/shop.png"
                                     : location?.address?.photos[0]
                                 }
