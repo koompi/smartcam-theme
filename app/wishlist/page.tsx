@@ -1,10 +1,11 @@
 "use client";
 
 import Empty from "@/components/globals/Empty";
+import { Loading } from "@/components/globals/Loading";
 import WishingListCard from "@/components/globals/WishingListCard";
 import { WISHLISTS } from "@/graphql/wishlist";
 import { useQuery } from "@apollo/client";
-import { Spacer, Spinner } from "@nextui-org/react";
+import { Spacer } from "@nextui-org/react";
 import React from "react";
 
 const WishListPage = () => {
@@ -15,7 +16,7 @@ const WishListPage = () => {
   });
 
   return loading ? (
-    <Spinner />
+    <Loading />
   ) : error ? (
     <Empty />
   ) : (
