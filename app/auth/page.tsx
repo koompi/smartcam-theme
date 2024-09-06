@@ -37,7 +37,9 @@ export default function Telegram() {
         );
 
         // Redirect to the new page
-        router.push(`/code/${getResponse.data.token}`);
+        // router.push(`/code/${getResponse.data.token}`);
+        // Redirect to the new page using window.location
+        window.location.href = `/code/${getResponse.data.token}`;
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
