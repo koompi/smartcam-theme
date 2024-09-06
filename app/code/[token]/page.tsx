@@ -12,16 +12,16 @@ export default function Token() {
   const { user } = useAuth();
 
   useEffect(() => {
-    // Check if the token is present and if the redirect flag is not set
     if (param.token) {
-      customer_login(param.token).then(() => {
-        // Store the token and set a flag indicating the redirect has occurred
+      customer_login(param.token).then((_) => {
         localStorage.setItem("access_token", param.token);
-        localStorage.setItem("redirected", "true"); // Set a flag to avoid loops
-        window.location.href = "/"; // Use href to reload the page
+        router.replace("/");
       });
     }
-  }, [param]);
+    router.replace("/");
+  }, [param, router]);
+
+  console.log("user", user);
   
   return (
     <div className="h-screen flex justify-center items-center">
