@@ -62,7 +62,7 @@ export const MainNavbar = () => {
             localStorage.setItem("access_token", res.data.token);
           })
           .then(() => {
-            window.location.href = "/";
+            // window.location.href = "/";
             // router.push();
             return;
           })
