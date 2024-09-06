@@ -20,6 +20,7 @@ import { useSearchParams } from "next/navigation";
 import SidebarDrawer from "./SidebarDrawer";
 import { BRANDS_BY_CATEGORY } from "@/graphql/brands";
 import { useQuery } from "@apollo/client";
+import TagGroupItem from "./TagGroupItem";
 
 export type RangeValue = [number, number];
 
@@ -88,10 +89,11 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
     const min = searchParams.get("min_price") || null;
     const max = searchParams.get("max_price") || null;
     const brands = searchParams.get("brands") || null;
+
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 1500]);
 
     const [selectedCat, setSelectedCat] = useState(cat);
-    const [subcat, setSubCat] = useState<SubCategory[]>();
+    const [subcat, setSubCat] = useState<SubCategory[] | null>();
 
     const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure();
 
@@ -105,13 +107,11 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
 
     const handleApply = useCallback(() => {
       router.push(
-        `/products?search=${
-          search ? search : ""
-        }&brands=${brands ? brands : ""}&category=${
+        `/products?brands=${brands ? brands : ""}&category=${
           cat ? cat : ""
         }&sub_category=${
           sub ? sub : ""
-        }&sort=${sortParam ? sortParam : ""}&min_price=${priceRange[0]}&max_price=${priceRange[1]}`
+        }&min_price=${priceRange[0]}&max_price=${priceRange[1]}`
       );
       setPriceRange([0, 1500]);
     }, [priceRange, router, onClose]);
@@ -136,7 +136,7 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
                         className="text-start w-full justify-start"
                         onClick={() => {
                           router.push(
-                            `?search=${search ? search : ""}&brands=${brands ? brands : ""}&category=${
+                            `?category=${
                               cat ? cat : ""
                             }&sub_category=${sub?.id ? sub?.id : ""}&sort=${
                               sortParam ? sortParam : ""
@@ -257,27 +257,59 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
                   </Skeleton>
                 </div>
               ) : (
-                <CheckboxGroup
-                  color="default"
-                  onChange={(value) => {
-                    router.push(
-                      `?search=${search ? search : ""}&brands=${value ? value : ""}&category=${
-                        cat ? cat : ""
-                      }&sort=${sortParam ? sortParam : ""}`
-                    );
-                  }}
-                  defaultValue={brands?.split(",")}
-                >
-                  {data?.storeFilteredBrands
-                    ?.filter((t: string) => t !== "")
-                    ?.map((b: string, idx: number) => {
-                      return (
-                        <Checkbox key={idx} value={b}>
-                          {b}
-                        </Checkbox>
+                // <CheckboxGroup
+                //   color="default"
+                //   onChange={(value) => {
+                //     router.push(
+                //       `?brands=${value ? value : ""}&category=${
+                //         cat ? cat : ""
+                //       }&sort=${sortParam ? sortParam : ""}`
+                //     );
+                //   }}
+                //   defaultValue={brands?.split(",")}
+                // >
+                //   {data?.storeFilteredBrands
+                //     ?.filter((t: string) => t !== "")
+                //     ?.map((b: string, idx: number) => {
+                //       return (
+                //         <Checkbox key={b} value={b}>
+                //           {b}
+                //         </Checkbox>
+                //       );
+                //     })}
+                // </CheckboxGroup>
+                <div className="flex flex-grow flex-wrap gap-1">
+                  <CheckboxGroup
+                    aria-label="Select amenities"
+                    className="gap-1"
+                    orientation="horizontal"
+                    onChange={(value) => {
+                      router.push(
+                        `?brands=${value ? value : ""}&category=${
+                          cat ? cat : ""
+                        }&sub_category=${
+                          sub ? sub : ""
+                        }&sort=${sortParam ? sortParam : ""}`
                       );
-                    })}
-                </CheckboxGroup>
+                    }}
+                    value={!brands ? [] : brands?.split(",")}
+                  >
+                    {data?.storeFilteredBrands
+                      ?.filter((t: string) => t !== "")
+                      ?.map((b: string, idx: number) => {
+                        return (
+                          <TagGroupItem
+                            size="lg"
+                            key={idx}
+                            // icon="solar:home-wifi-angle-bold"
+                            value={b}
+                          >
+                            {b}
+                          </TagGroupItem>
+                        );
+                      })}
+                  </CheckboxGroup>
+                </div>
               )}
             </div>
           )}
@@ -285,7 +317,7 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
           {/* Categories */}
 
           {categories && (
-            <div className="mt-12">
+            <div className="mt-9">
               <div className="hidden sm:hidden lg:block">
                 <h3 className="text-lg font-semibold leading-8 text-default-600">
                   Categories
@@ -307,10 +339,11 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
                           onClick={() => {
                             setSelectedCat(cat?.id);
                             router.push(
-                              `?search=${search ? search : ""}&category=${
+                              `?brands=&category=${
                                 cat?.id ? cat?.id : ""
                               }&sort=${sortParam ? sortParam : ""}`
                             );
+
                             setSubCat(cat?.children);
                           }}
                         >
@@ -329,39 +362,48 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
                     })}
                 </div>
               </div>
-              <div className="flex sm:flex lg:hidden flex-col gap-1 my-3">
-                {categories
-                  ?.filter((t: Category) => t?.products > 0)
-                  ?.map((cat: Category, idx: number) => {
-                    return (
-                      <Button
-                        key={idx}
-                        variant={selectedCat === cat?.id ? "solid" : "light"}
-                        color={selectedCat === cat?.id ? "primary" : "default"}
-                        size="md"
-                        radius="lg"
-                        className="text-start w-full justify-start"
-                        onClick={() => {
-                          onOpen();
-                          router.push(
-                            `?search=${search ? search : ""}&brands=${brands ? brands : ""}&category=${
-                              cat?.id ? cat?.id : ""
-                            }&sort=${sortParam ? sortParam : ""}`
-                          );
-                          setSubCat(cat?.children);
-                        }}
-                      >
-                        <span className="text-sm w-full flex items-center justify-between gap-3">
-                          <span className="text-medium">{cat?.title?.en}</span>
-                          {cat?.products > 0 && (
-                            <div className="w-6 h-6 bg-primary-100 rounded-full text-primary flex justify-center items-center">
-                              {cat?.products}
-                            </div>
-                          )}
-                        </span>
-                      </Button>
-                    );
-                  })}
+              <div className="block sm:block lg:hidden">
+                <h3 className="text-lg font-semibold leading-8 text-default-600">
+                  Categories
+                </h3>
+                <div className="flex flex-col gap-1 my-3">
+                  {categories
+                    ?.filter((t: Category) => t?.products > 0)
+                    ?.map((cat: Category, idx: number) => {
+                      return (
+                        <Button
+                          key={idx}
+                          variant={selectedCat === cat?.id ? "solid" : "light"}
+                          color={
+                            selectedCat === cat?.id ? "primary" : "default"
+                          }
+                          size="md"
+                          radius="lg"
+                          className="text-start w-full justify-start"
+                          onClick={() => {
+                            onOpen();
+                            router.push(
+                              `?brands=&category=${
+                                cat?.id ? cat?.id : ""
+                              }&sort=${sortParam ? sortParam : ""}`
+                            );
+                            setSubCat(cat?.children);
+                          }}
+                        >
+                          <span className="text-sm w-full flex items-center justify-between gap-3">
+                            <span className="text-medium">
+                              {cat?.title?.en}
+                            </span>
+                            {cat?.products > 0 && (
+                              <div className="w-6 h-6 bg-primary-100 rounded-full text-primary flex justify-center items-center">
+                                {cat?.products}
+                              </div>
+                            )}
+                          </span>
+                        </Button>
+                      );
+                    })}
+                </div>
               </div>
             </div>
           )}

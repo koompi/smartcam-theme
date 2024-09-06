@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { StockType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { useCart } from "@/context/useCart";
+import { AddCart } from "@/types/global";
 
 interface WishListProps {
   id: string;
@@ -61,6 +62,7 @@ const WishingListCard: FC<WishListProps> = ({
   categoryId,
   compare,
   refetch,
+  price,
 }) => {
   const [isCompare, setIsCompare] = useState(compare);
 
@@ -216,9 +218,9 @@ const WishingListCard: FC<WishListProps> = ({
           {title}
         </h2>
         <Spacer y={3} />
-        <div className="fontSizeTextEditor">
+        <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-9 whitespace-pre-line mt-2 sm:mt-2 lg:mt-3 fontSizeTextEditor">
           {desc ? <LexicalReader data={desc.toString()} /> : null}
-        </div>
+        </p>
         <Spacer y={3} />
         <div className="flex items-center gap-3 mt-2 sm:mt-2 lg:mt-3">
           {promotion?.discount?.discountType ? (
@@ -232,13 +234,13 @@ const WishingListCard: FC<WishListProps> = ({
             </>
           ) : (
             <p className="text-black  text-lg sm:text-lg lg:text-2xl font-bold">
-              {usd(currencyPrice?.usd)}
+              {currencyPrice?.usd ? usd(currencyPrice?.usd) : usd(price)}
             </p>
           )}
         </div>
       </CardBody>
-      <CardFooter className="flex gap-3 items-center justify-between">
-        <Button
+      <CardFooter className="flex gap-3 items-center justify-end">
+        {/* <Button
           radius="full"
           color="primary"
           onClick={(e) => {
@@ -248,7 +250,7 @@ const WishingListCard: FC<WishListProps> = ({
           fullWidth
         >
           Buy Now
-        </Button>
+        </Button> */}
         <Button
           isIconOnly
           variant="flat"
@@ -257,7 +259,7 @@ const WishingListCard: FC<WishListProps> = ({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            addToCart(id);
+            addToCart({ product_id: id, variant_id: null } as AddCart);
             toast.success("The product is added into the cart!");
           }}
           isDisabled={stocks?.status === "OUT-STOCK"}

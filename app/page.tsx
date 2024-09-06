@@ -109,7 +109,7 @@ const BrandsScrolling = () => {
       <ScrollingBanner shouldPauseOnHover gap="40px">
         {data.storeOwnerBrands.map((b: BrandsType, idx: number) => (
           <Link
-            href={`/products?search=&brands=${b.title ? b.title?.en : ""}`}
+            href={`/products?brands=${b.title ? b.title?.en : ""}`}
             key={idx}
             className="flex items-center justify-center text-white w-12 sm:w-12 lg:w-20 object-contain aspect-square mix-blend-color-burn"
           >

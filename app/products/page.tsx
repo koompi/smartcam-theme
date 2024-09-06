@@ -36,8 +36,8 @@ export default function ProductsPage() {
     GLOBAL_PRODUCT_FILTERING,
     {
       variables: {
-        tagId: cat ? (sub ? [sub] : [cat]) : search ? [] : null,
-        keyword: search ? search : search,
+        tagId: cat ? (sub ? [sub] : [cat]) : null,
+        keyword: search ? search : null,
         status: price ? "price" : null,
         brand: brands ? [...brands?.split(",")] : null,
         range: rangePrice,
