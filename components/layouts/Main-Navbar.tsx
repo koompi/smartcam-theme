@@ -42,51 +42,51 @@ export const MainNavbar = () => {
 
   const cartIconRef = useRef<HTMLDivElement>(null);
 
-  const [isTelegramAuth, setIsTelegramAuth] = useState<boolean>(false);
+  // const [isTelegramAuth, setIsTelegramAuth] = useState<boolean>(false);
 
-  const searchParams = useSearchParams();
-  const code = searchParams.get("code");
-  const state = searchParams.get("state");
+  // const searchParams = useSearchParams();
+  // const code = searchParams.get("code");
+  // const state = searchParams.get("state");
 
   // const {data, refetch} = useQuery(WISHLIST_NOTIFICATION)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        axios
-          .get(
-            `${process.env.NEXT_PUBLIC_BACKEND}/user/sel/callback?code=${code}&scope=default&state=${state}`
-          )
-          .then((res) => {
-            // setCookie("token", res.data.token, { maxAge: 60 * 60 * 24 * 7 });
-            localStorage.setItem("access_token", res.data.token);
-          })
-          .then(() => {
-            // window.location.href = "/";
-            // router.push();
-            return;
-          })
-          .catch((err) => {
-            console.log("auth err:", err);
-            return;
-          })
-          .finally(() => {
-            setIsTelegramAuth(false);
-            return;
-          });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       axios
+  //         .get(
+  //           `${process.env.NEXT_PUBLIC_BACKEND}/user/sel/callback?code=${code}&scope=default&state=${state}`
+  //         )
+  //         .then((res) => {
+  //           // setCookie("token", res.data.token, { maxAge: 60 * 60 * 24 * 7 });
+  //           localStorage.setItem("access_token", res.data.token);
+  //         })
+  //         .then(() => {
+  //           // window.location.href = "/";
+  //           // router.push();
+  //           return;
+  //         })
+  //         .catch((err) => {
+  //           console.log("auth err:", err);
+  //           return;
+  //         })
+  //         .finally(() => {
+  //           setIsTelegramAuth(false);
+  //           return;
+  //         });
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
 
-    if (!user && code && state) {
-      fetchData();
-    }
-  }, [code, state, user]);
+  //   if (!user && code && state) {
+  //     fetchData();
+  //   }
+  // }, [code, state, user]);
 
-  if (isTelegramAuth) {
-    return <Loading />;
-  }
+  // if (isTelegramAuth) {
+  //   return <Loading />;
+  // }
 
   const menuItems = [
     {
