@@ -140,9 +140,7 @@ export const Search = () => {
                         return (
                           <Button
                             onPress={() => {
-                              router.push(
-                                `/products?search=&category=${res.id}`
-                              );
+                              router.push(`/products?category=${res.id}`);
                               onClose();
                             }}
                             fullWidth
@@ -171,7 +169,7 @@ export const Search = () => {
                               className="flex flex-col gap-2 items-center cursor-pointer"
                               onClick={() => {
                                 router.push(
-                                  `/products?search=&brands=${res.title ? res.title?.en : ""}`
+                                  `/products?brands=${res.title ? res.title?.en : ""}`
                                 );
                                 onClose();
                               }}
