@@ -10,14 +10,16 @@ export default function Token() {
   const router = useRouter();
 
   useEffect(() => {
-    if (param.token) {
-      customer_login(param.token).then((_) => {
+    // Check if the token is present and a flag is not set to prevent loops
+    if (param.token && !localStorage.getItem("redirected")) {
+      customer_login(param.token).then(() => {
+        // Store the token and a flag indicating the redirect has occurred
         localStorage.setItem("access_token", param.token);
-        router.replace("/");
+        localStorage.setItem("redirected", "true"); // Set a flag to avoid loops
+        window.location.replace("/"); // Use replace to prevent going back to the previous page
       });
     }
-    return;
-  }, [param, router]);
+  }, [param]);
 
   return (
     <div className="h-screen flex justify-center items-center">
