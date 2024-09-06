@@ -231,13 +231,12 @@ const CheckoutComponent = () => {
       case 1:
         return (
           <div className="mt-0 sm:mt-0 lg:mt-4 flex flex-col gap-6">
-            {shippingLoading ? (
+            {shippingLoading || !shippingProvider ? (
               "Loading ..."
             ) : (
               <ShippingForm
                 hideTitle
                 shippingProvider={shippingProvider?.storeShippings}
-                // delivery={delivery}
                 setDelivery={setDelivery}
                 location={location}
                 setLocation={setLocation}
