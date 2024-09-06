@@ -65,11 +65,8 @@ const CheckoutComponent = () => {
     "PERSONAL"
   );
 
-  const {
-    data: shippingProvider,
-    loading: shippingLoading,
-    refetch: shippingRefetch,
-  } = useQuery(SHIPPING_LIST);
+  const { data: shippingProvider, loading: shippingLoading } =
+    useQuery(SHIPPING_LIST);
 
   const [location, setLocation] = useState<string>("");
   const [position, setPosition] = useState<{
@@ -231,12 +228,14 @@ const CheckoutComponent = () => {
       case 1:
         return (
           <div className="mt-0 sm:mt-0 lg:mt-4 flex flex-col gap-6">
-            {shippingLoading || !shippingProvider ? (
+            {shippingLoading ? (
               "Loading ..."
             ) : (
               <ShippingForm
                 hideTitle
-                shippingProvider={shippingProvider?.storeShippings}
+                shippingProvider={
+                  shippingProvider && shippingProvider?.storeShippings
+                }
                 setDelivery={setDelivery}
                 location={location}
                 setLocation={setLocation}
