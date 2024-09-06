@@ -205,7 +205,7 @@ export const ProductViewItem = React.forwardRef<
           <BreadcrumbItem href="/products">Products</BreadcrumbItem>
           {props?.category && (
             <BreadcrumbItem
-              href={`/products/?search=${search ? search : ""}&brands=${
+              href={`/products?search=${search ? search : ""}&brands=${
                 brands ? brands : ""
               }&category=${
                 props?.category?.id ? props?.category?.id : ""
@@ -216,7 +216,7 @@ export const ProductViewItem = React.forwardRef<
           )}
           {props?.subcategories.length > 0 && (
             <BreadcrumbItem
-              href={`/products/?search=${search ? search : ""}&brands=${
+              href={`/products?search=${search ? search : ""}&brands=${
                 brands ? brands : ""
               }&category=${
                 props?.category?.id ? props?.category?.id : ""
@@ -642,7 +642,13 @@ export const ProductViewItem = React.forwardRef<
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          addToCart({ product_id: props.id, variant_id: variant.id } as AddCart, qty);
+                          addToCart(
+                            {
+                              product_id: props.id,
+                              variant_id: variant.id,
+                            } as AddCart,
+                            qty
+                          );
                           toast.success("The product is added into the cart!");
                         }}
                       >
@@ -1140,7 +1146,13 @@ export const ProductViewItem = React.forwardRef<
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      addToCart({ product_id: props.id, variant_id: variant.id } as AddCart, qty);
+                      addToCart(
+                        {
+                          product_id: props.id,
+                          variant_id: variant.id,
+                        } as AddCart,
+                        qty
+                      );
                       toast.success("The product is added into the cart!");
                     }}
                   >

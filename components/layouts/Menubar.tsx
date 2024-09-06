@@ -56,8 +56,6 @@ export const Menubar = () => {
   const search = useSearchParams();
   const brands = searchParams.get("brands") || null;
   const cat = searchParams.get("category") || null;
-  const sub = searchParams.get("sub_category") || null;
-  const sortParam = searchParams.get("sort") || null;
   const min = searchParams.get("min_price") || null;
   const max = searchParams.get("max_price") || null;
 
@@ -102,7 +100,7 @@ export const Menubar = () => {
   ];
   const support_menu = [
     {
-      url: "https://t.me/T_thith",
+      url: "https://t.me/ProfessionalIT1",
       isBlank: true,
       title: "Chat to Technical",
       desc: "Contact to our services center via Telegram app.",
@@ -388,7 +386,7 @@ export const Menubar = () => {
                   value={res.title.en}
                   onPress={() => {
                     router.push(
-                      `/products?search=&brands=${res.title ? res.title?.en : ""}&category=${cat ? cat : ""}&sub_category${sub ? sub : ""}&sort=${sortParam ? sortParam : ""}`
+                      `/products?brands=${res.title ? res.title?.en : ""}`
                     );
                   }}
                   startContent={
@@ -440,7 +438,7 @@ export const Menubar = () => {
                   key={res.id}
                   value={res.id}
                   onPress={() => {
-                    router.push(`/products?search=&category=${res.id}`);
+                    router.push(`/products?category=${res?.id}`);
                   }}
                 >
                   {res.title?.en}

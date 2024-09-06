@@ -18,12 +18,6 @@ import {
   Skeleton,
   Link as MyLink,
   cn,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
   Chip,
 } from "@nextui-org/react";
 import React, { useEffect, useRef, useState } from "react";
@@ -45,7 +39,6 @@ export const MainNavbar = () => {
   const { cartItems, logout } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const cartIconRef = useRef<HTMLDivElement>(null);
 
@@ -147,67 +140,6 @@ export const MainNavbar = () => {
 
   return (
     <>
-      <Modal
-        isOpen={isOpen}
-        placement="bottom-center"
-        onOpenChange={onOpenChange}
-        backdrop="blur"
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex gap-1 items-center">
-                Helps
-                <Icon icon="material-symbols:help" />
-              </ModalHeader>
-              <ModalBody className="flex flex-col gap-3">
-                <Link
-                  href="#"
-                  // target={props.isBlank ? "_blank" : "_self"}
-                  className="col-span-1 min-h-[6rem] flex items-center text-start justify-between rounded-md border-2 border-background transition-all hover:border-primary hover:bg-background p-3"
-                >
-                  <div>
-                    <h1 className="text-md font-medium">Customer Support</h1>
-                    <p className="font-light text-xs">(+855) 17 819 419</p>
-                  </div>
-                  <Icon
-                    icon="mdi:facebook-messenger"
-                    className="text-primary"
-                    fontSize={30}
-                  />
-                </Link>
-                <Link
-                  href="#"
-                  // target={props.isBlank ? "_blank" : "_self"}
-                  className="col-span-1 min-h-[6rem] flex items-center text-start justify-between rounded-md border-2 border-background transition-all hover:border-primary hover:bg-background p-3"
-                >
-                  <div>
-                    <h1 className="text-md font-medium">Technical Support</h1>
-                    <p className="font-light text-xs">(+855) 17 819 419</p>
-                  </div>
-                  <Icon
-                    icon="ic:baseline-telegram"
-                    className="text-primary"
-                    fontSize={30}
-                  />
-                </Link>
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="shadow"
-                  onPress={onClose}
-                  fullWidth
-                  radius="lg"
-                  size="lg"
-                >
-                  CLOSE
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
       <header className="sticky top-0 inset-x-0 flex flex-col flex-wrap z-50 w-full bg-background border-b border-gray-200">
         <Header />
         <Navbar
@@ -230,7 +162,7 @@ export const MainNavbar = () => {
               </Drawer.Trigger>
               <Drawer.Portal>
                 <Drawer.Overlay className="fixed inset-0 z-10 bg-black/40 bg-clip-padding backdrop-filter backdrop-blur-md" />
-                <Drawer.Content className="bg-white flex flex-col rounded-t-3xl h-[60dvh] mt-24 fixed z-40 bottom-0 left-0 right-0">
+                <Drawer.Content className="bg-white flex flex-col rounded-t-3xl h-[45dvh] mt-24 fixed z-40 bottom-0 left-0 right-0">
                   <div className="p-4 bg-white/30 rounded-t-3xl flex-1">
                     <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-500 mb-8" />
                     <div className="max-w-md mx-auto px-3">
@@ -254,21 +186,6 @@ export const MainNavbar = () => {
                           </div>
                         </div>
                       ))}
-                    </div>
-                  </div>
-                  <div className="lg:block fixed z-50 bottom-12 right-6 ">
-                    <div className="btn-effect">
-                      <Button
-                        onPress={onOpen}
-                        isIconOnly
-                        size="lg"
-                        radius="full"
-                        color="primary"
-                        variant="flat"
-                        className="p-3"
-                      >
-                        <Icon icon="mdi:facebook-messenger" fontSize={30} />
-                      </Button>
                     </div>
                   </div>
                 </Drawer.Content>
@@ -302,24 +219,6 @@ export const MainNavbar = () => {
           </NavbarContent>
 
           <NavbarContent className="hidden sm:flex gap-4" justify="center">
-            {/* <NavbarItem>
-            <Popover placement="bottom" showArrow={true}>
-              <PopoverTrigger>
-                <Button isIconOnly radius="full" color="primary" variant="flat">
-                  <Icon icon="solar:widget-5-bold" fontSize={21} />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="p-0">
-                <ul className=" p-6 list-none flex flex-col gap-3 text-lg">
-                  <Tooltip content=" Computer" placement="right-end">
-                    <li>Computer</li>
-                  </Tooltip>
-                  <li>Printers</li>
-                  <li>Accessories</li>
-                </ul>
-              </PopoverContent>
-            </Popover>
-          </NavbarItem> */}
             <NavbarItem>
               <Search />
             </NavbarItem>
@@ -477,7 +376,6 @@ export const MainNavbar = () => {
             className="hidden sm:flex items-center gap-6"
           >
             <NavbarItem isActive={pathname === "/compare"}>
-              {/* <Link href="/compare"> */}
               <Badge
                 color="danger"
                 content={
@@ -502,7 +400,6 @@ export const MainNavbar = () => {
                   Compare
                 </Button>
               </Badge>
-              {/* </Link> */}
             </NavbarItem>
             <NavbarItem>
               <Badge
@@ -534,7 +431,6 @@ export const MainNavbar = () => {
               </Badge>
             </NavbarItem>
             <NavbarItem className="mr-12">
-              {/* <Link href="/cart"> */}
               <Badge
                 ref={cartIconRef}
                 color="danger"
@@ -560,7 +456,6 @@ export const MainNavbar = () => {
                   />
                 </Button>
               </Badge>
-              {/* </Link> */}
             </NavbarItem>
             <NavbarItem>
               {loading ? (
@@ -652,31 +547,6 @@ export const MainNavbar = () => {
               )}
             </NavbarItem>
           </NavbarContent>
-          {/* <NavbarMenu className="pt-12">
-          {menuItems.map((item, index) => (
-            <NavbarMenuItem
-              key={`${item}-${index}`}
-              className="my-1 font-semibold"
-            >
-              <Link className="w-full" href={item?.url}>
-                {item.title}
-              </Link>
-            </NavbarMenuItem>
-          ))}
-          <Button
-            variant="shadow"
-            size="lg"
-            isIconOnly
-            as={Link}
-            href="https://t.me/T_thith"
-            target="_blank"
-            radius="full"
-            color="primary"
-            className="absolute bottom-20 right-6"
-          >
-            <Icon icon="mingcute:telegram-fill" fontSize={27} />
-          </Button>
-        </NavbarMenu> */}
         </Navbar>
         <div className="hidden sm:inline">
           <Menubar />
