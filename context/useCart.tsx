@@ -8,11 +8,12 @@ import React, {
   JSX,
 } from "react";
 import { Toaster, toast } from "sonner";
-import { destroyCookie } from "nookies";
+// import { destroyCookie } from "nookies";
 
 import { useQuery } from "@apollo/client";
 import { GET_CUSTOMER } from "@/graphql/store";
 import { AddCart, CartContextType, CartItem } from "@/types/global";
+import axios from "axios";
 
 export const CartContext = createContext({});
 
@@ -123,12 +124,11 @@ export function CartProvider(props: { children: JSX.Element }) {
 
   const logout = () => {
     localStorage.removeItem("access_token");
-    destroyCookie(null, "access_token", {
-      path: "/", // Ensure path matches the one set when creating the cookie
+    axios.post(`${process.env.NEXT_PUBLIC_BACKEND}/logout`).then((_) => {
+      if (typeof window !== "undefined") {
+        global && window.location.reload();
+      }
     });
-    if (typeof window !== "undefined") {
-      global && window.location.reload();
-    }
   };
 
   if (loading || loading_store) {

@@ -4,6 +4,7 @@ export type ContextAuth = {
   user: UserType;
   getUser: () => void;
   loading: boolean;
+  setLoading: Function;
   login: (model: string | null) => void;
   notifications: any;
   refetch: Function;
