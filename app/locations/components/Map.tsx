@@ -264,12 +264,12 @@ const Map: React.FC<MapProps> = ({
     <>
       <Autocomplete
         defaultItems={listPlace}
-        onValueChange={(e) => setSearchText(e)}
+        onValueChange={(e: any) => setSearchText(e)}
         radius="lg"
         variant="flat"
         size="lg"
         color="default"
-        className="absolute top-24 right-8 max-w-[36rem] z-[10000] text-gray-400"
+        className="absolute top-24 right-8 max-w-[18rem] sm:max-w-[18rem] lg:max-w-[36rem] z-[10000] text-gray-400"
         placeholder="Search your area"
         startContent={<Icon icon="fluent-mdl2:map-directions" fontSize={24} />}
         onSelectionChange={handleChange}

@@ -42,7 +42,9 @@ interface FormCreateLocation {
 export default function PageLocation() {
   const { isOpen, onOpenChange, onOpen } = useDisclosure();
 
-  const [position, setPosition] = useState<[number, number]>([11.5564, 104.9282]);
+  const [position, setPosition] = useState<[number, number]>([
+    11.5564, 104.9282,
+  ]);
 
   const [addressName, setAddressName] = useState<string>("");
 
@@ -161,7 +163,7 @@ export default function PageLocation() {
                 </p>
               </ModalHeader>
               <ModalBody>
-                <div className="min-h-[60dvh] sm:h-[60dvh] lg:min-h-[80dvh] ">
+                <div className="h-[70dvh] sm:h-[70dvh] lg:min-h-[80dvh] ">
                   <MyMap
                     zoom={13}
                     position={position}
@@ -201,7 +203,7 @@ export default function PageLocation() {
           </Button>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Card shadow="sm" className="p-4">
+          <Card shadow="none" className="p-1 sm:p-1 lg:p-4">
             <CardHeader>
               <h1 className="text-xl font-semibold">
                 <div>

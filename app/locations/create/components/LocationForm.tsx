@@ -156,7 +156,7 @@ export const LocationForm: FC<{
             <SelectItem key="OTHER">OTHER</SelectItem>
           </Select>
         </div> */}
-        <div className="col-span-3">
+        <div className="col-span-6 sm:col-span-6 lg:col-span-3">
           <Input
             variant="flat"
             label="First Name"
@@ -170,7 +170,7 @@ export const LocationForm: FC<{
             placeholder="eg. First Name"
           />
         </div>
-        <div className="col-span-3">
+        <div className="col-span-6 sm:col-span-6 lg:col-span-3">
           <Input
             variant="flat"
             label="Last Name"
@@ -212,7 +212,7 @@ export const LocationForm: FC<{
             placeholder="0xxxxxxxx"
           />
         </div>
-        <div className="col-span-3">
+        <div className="col-span-6 sm:col-span-6 lg:col-span-3">
           <Select
             {...register("countryId", {
               required: "Country is required",
@@ -227,17 +227,17 @@ export const LocationForm: FC<{
             <SelectItem key="1">Cambodia</SelectItem>
           </Select>
         </div>
-        <div className="col-span-3">
+        <div className="col-span-6 sm:col-span-6 lg:col-span-3">
           <SelectProvince register={register} active="" />
         </div>
-        <div className="col-span-3">
+        <div className="col-span-6 sm:col-span-6 lg:col-span-3">
           <SelectDistrict
             register={register}
             id={watch("provinceId")}
             active=""
           />
         </div>
-        <div className="col-span-3">
+        <div className="col-span-6 sm:col-span-6 lg:col-span-3">
           <SelectCommune
             register={register}
             id={watch("districtId")}
