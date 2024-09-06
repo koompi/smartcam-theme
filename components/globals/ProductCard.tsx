@@ -83,7 +83,7 @@ const ProductCard: FC<ProductCardProps> = ({
         <Chip
           size="sm"
           color="danger"
-          className="rounded-br-lg absolute top-0 left-0 z-20"
+          className="rounded-br-lg absolute top-0 left-0 z-10"
           radius="none"
           variant="shadow"
         >
@@ -228,7 +228,7 @@ const ProductCard: FC<ProductCardProps> = ({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              addToCart({product_id: id, variant_id: null} as AddCart);
+              addToCart({ product_id: id, variant_id: null } as AddCart);
               toast.success("The product is added into the cart!");
             }}
             isDisabled={stocks?.status === "OUT-STOCK"}

@@ -7,58 +7,11 @@ import ScrollingBanner from "@/components/CustomComponent/ScrollingBrandsBanner"
 import SectionListProducts from "./components/SectionListProducts";
 import Banner from "./components/Banner";
 import Link from "next/link";
-import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
 import { useQuery } from "@apollo/client";
-import { useSearchParams } from "next/navigation";
-import { CardLoading } from "@/components/globals/Loading";
 import { BRANDS } from "@/graphql/brands";
 import { BrandsType } from "@/types/product";
 
 export default function Home() {
-  const searchParams = useSearchParams();
-  const search = searchParams.get("search") || null;
-  const cat = searchParams.get("category") || null;
-  const sub = searchParams.get("sub_category") || null;
-  const minPice = (searchParams.get("min_price") as string) || null;
-  const maxPice = (searchParams.get("max_price") as string) || null;
-  const sortParam = (searchParams.get("sort") as string) || null;
-  const price =
-    ["price_low_to_high", "price_high_to_low"].includes(sortParam as string) ||
-    null;
-  const brands = searchParams.get("brands") || null;
-  let rangePrice = minPice
-    ? {
-        start: parseInt(minPice as string),
-        end: parseInt(maxPice as string),
-      }
-    : null;
-
-  const { data: products, loading } = useQuery(GLOBAL_PRODUCT_FILTERING, {
-    variables: {
-      tagId: brands
-        ? cat
-          ? sub
-            ? [...brands?.split(","), cat, sub]
-            : [...brands?.split(","), cat]
-          : [...brands?.split(",")]
-        : cat
-          ? sub
-            ? [sub]
-            : [cat]
-          : search
-            ? []
-            : null,
-      keyword: search ? search : search,
-      status: price ? "price" : null,
-      range: rangePrice,
-      filter: {
-        limit: 10,
-        skip: 1,
-        sort: -1,
-      },
-    },
-  });
-
   return (
     <main className="min-h-96">
       <Banner />
@@ -66,37 +19,13 @@ export default function Home() {
       <Promotion />
 
       {/* most popular */}
-      {loading || !products ? (
-        <CardLoading />
-      ) : (
-        <SectionListProducts
-          title="Most Popular"
-          data={products?.storeGlobalFilterProducts}
-          type="MOST POPULAR"
-        />
-      )}
+      <SectionListProducts title="Most Popular" type="MOST POPULAR" />
 
       {/* new arrival */}
-      {loading || !products ? (
-        <CardLoading />
-      ) : (
-        <SectionListProducts
-          title="New Arrival"
-          data={products?.storeGlobalFilterProducts}
-          type="NEW ARRIVAL"
-        />
-      )}
+      <SectionListProducts title="New Arrival" type="NEW ARRIVAL" />
 
       {/* recommended */}
-      {loading || !products ? (
-        <CardLoading />
-      ) : (
-        <SectionListProducts
-          title="Recommended"
-          data={products?.storeGlobalFilterProducts}
-          type="RECOMMENDED"
-        />
-      )}
+      <SectionListProducts title="Recommended" type="RECOMMENDED" />
     </main>
   );
 }
@@ -180,7 +109,7 @@ const BrandsScrolling = () => {
       <ScrollingBanner shouldPauseOnHover gap="40px">
         {data.storeOwnerBrands.map((b: BrandsType, idx: number) => (
           <Link
-            href={`/products?search=&brands=${b.title ? b.title?.en : ""}`}
+            href={`/products?brands=${b.title ? b.title?.en : ""}`}
             key={idx}
             className="flex items-center justify-center text-white w-12 sm:w-12 lg:w-20 object-contain aspect-square mix-blend-color-burn"
           >

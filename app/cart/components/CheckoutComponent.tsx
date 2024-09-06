@@ -38,8 +38,7 @@ import { PromotionType } from "@/types/promotion";
 import { ESTIMATION_PRICE } from "@/graphql/order";
 import { ProductType } from "@/types/product";
 import { ESTIMATE_PRICE, SHIPPING_LIST } from "@/graphql/delivery";
-// import RecommendProducts from "./RecommendProducts";
-// import { GLOBAL_PRODUCT_FILTERING } from "@/graphql/product";
+
 import { useBaray } from "@/hooks/baray";
 
 interface OrderCart {
@@ -98,16 +97,6 @@ const CheckoutComponent = () => {
       membershipId: membershipId,
     },
   });
-
-  // const { data: products } = useQuery(GLOBAL_PRODUCT_FILTERING, {
-  //   variables: {
-  //     filter: {
-  //       limit: 10,
-  //       skip: 0,
-  //       sort: -1,
-  //     },
-  //   },
-  // });
 
   // checkout orders product
   const onSubmitCheckout = async () => {
