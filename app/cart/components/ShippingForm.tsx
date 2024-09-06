@@ -18,7 +18,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import CustomRadio from "./CustomRadio";
 import axios from "axios";
 
-interface Shpping {
+interface Shipping {
   [x: string]: any;
   id: string;
   isActive: boolean;
@@ -26,7 +26,6 @@ interface Shpping {
   deliveryFee: number;
   isCustomFee: boolean;
   deliveryType: "L192" | "PERSONAL" | "CP";
-  mailDelivery: string;
 }
 
 export type ShippingFormProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -39,7 +38,7 @@ export type ShippingFormProps = React.HTMLAttributes<HTMLDivElement> & {
   setPosition: Function;
   setMailShippingId: Function;
   ship: number;
-  shippingProvider: Shpping;
+  shippingProvider: Shipping;
 };
 
 const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
@@ -197,7 +196,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                 )}
                 title={
                   <div className="flex space-x-4 text-black">
-                    {shippingProvider?.map((res: Shpping) => {
+                    {shippingProvider?.map((res: Shipping) => {
                       if (res.deliveryType === "PERSONAL") {
                         return (
                           <>
@@ -273,7 +272,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                     }}
                     defaultValue={shippingProvider[0]?.deliveryType}
                   >
-                    {shippingProvider?.map((delivery: Shpping) => {
+                    {shippingProvider?.map((delivery: Shipping) => {
                       return (
                         <CustomRadio
                           key={delivery?.deliveryType}

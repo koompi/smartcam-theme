@@ -39,7 +39,6 @@ export const ESTIMATE_PRICE = gql`
     $lng: Float
     $deliveryType: DeliveryType!
     $membershipId: String
-    $mailShippingId: String
   ) {
     estimatePriceDelivery(
       items: $items
@@ -47,7 +46,6 @@ export const ESTIMATE_PRICE = gql`
       lng: $lng
       deliveryType: $deliveryType
       membershipId: $membershipId
-      mailShippingId: $mailShippingId
     ) {
       data {
         currency

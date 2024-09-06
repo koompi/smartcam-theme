@@ -23,6 +23,7 @@ import { RESET_ITEM_COMPARE_LIST } from "@/graphql/mutation/wishlist";
 import { toast } from "sonner";
 import Empty from "@/components/globals/Empty";
 import { useCart } from "@/context/useCart";
+import { AddCart } from "@/types/global";
 
 interface Topic {
   title: string;
@@ -231,7 +232,7 @@ const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (props) => {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            addToCart(product.id);
+                            addToCart({product_id: product.id, variant_id: null} as AddCart);
                             toast.success(
                               "The product is added into the cart!"
                             );

@@ -72,9 +72,9 @@ const MyLocation: FC<LocationType> = (props) => {
           <div className="flex flex-col col-span-2">
             <div className="flex justify-between items-start">
               <div className="flex flex-col gap-0">
-                {props.label && (
+                {props?.address?.label && (
                   <Chip color="primary" variant="flat" size="sm">
-                    {props.label}
+                    {props?.address?.label}
                   </Chip>
                 )}
                 {props?.address?.addressName && (
