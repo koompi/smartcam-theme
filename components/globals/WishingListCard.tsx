@@ -29,6 +29,7 @@ import { StockType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
 import { useCart } from "@/context/useCart";
 import { AddCart } from "@/types/global";
+import { isMobile } from "react-device-detect";
 
 interface WishListProps {
   id: string;
@@ -251,30 +252,32 @@ const WishingListCard: FC<WishListProps> = ({
         >
           Buy Now
         </Button> */}
-        <Button
-          radius="full"
-          color="danger"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            removeProductFromEWishlist({
-              variables: {
-                productId: id,
-                wishlistType: "FAVORITE",
-              },
-            })
-              .then((_) => {
-                toast.success("Items has been to remove from wishlist");
-                refetch();
+        {isMobile && (
+          <Button
+            radius="full"
+            color="danger"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              removeProductFromEWishlist({
+                variables: {
+                  productId: id,
+                  wishlistType: "FAVORITE",
+                },
               })
-              .catch((e) => {
-                toast.error(e.message);
-              });
-          }}
-          fullWidth
-        >
-          Remove
-        </Button>
+                .then((_) => {
+                  toast.success("Items has been to remove from wishlist");
+                  refetch();
+                })
+                .catch((e) => {
+                  toast.error(e.message);
+                });
+            }}
+            fullWidth
+          >
+            Remove
+          </Button>
+        )}
         <Button
           isIconOnly
           variant="flat"

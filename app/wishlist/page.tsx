@@ -15,11 +15,13 @@ const WishListPage = () => {
     },
   });
 
-  return loading ? (
-    <Loading />
-  ) : error ? (
-    <Empty />
-  ) : (
+  if (loading || !data) {
+    return <Loading />;
+  } else if (error) {
+    return <Empty />;
+  }
+
+  return (
     <div className="p-3 sm:p-3 lg:p-6">
       <h1 className="text-2xl font-bold">
         Wish List ({data?.customerWishlists?.products?.length})
