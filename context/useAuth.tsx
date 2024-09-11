@@ -71,7 +71,7 @@ export const AppProvider: FC<Props> = (props) => {
             setProcessing(result);
             console.error(result);
           })
-          .catch((error) => console.error(error));
+          .catch((error) => {console.error(error), setProcessing(error)});
       }
     }
   };
