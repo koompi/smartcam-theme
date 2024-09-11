@@ -14,7 +14,6 @@ interface Props {
 export const AppProvider: FC<Props> = (props) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
-  const [processing, setProcessing] = useState<any>("");
 
   useEffect(() => {
     setLoading(true);
@@ -39,7 +38,7 @@ export const AppProvider: FC<Props> = (props) => {
       tgWebApp.ready();
       const telegramUser = tgWebApp.initDataUnsafe.user;
 
-      if (telegramUser) {
+      if (telegramUser && !user) {
         // Optionally send user data to the backend for verification
         const body = {
           id: telegramUser.id.toString(),
