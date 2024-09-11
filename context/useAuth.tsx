@@ -49,20 +49,10 @@ export const AppProvider: FC<Props> = (props) => {
           language_code: telegramUser.language_code,
           auth_date: tgWebApp.initDataUnsafe.auth_date.toString(),
           hash: tgWebApp.initDataUnsafe.hash,
-          store_id: process.env.NEXT_PUBLIC_ID_STORE,
+          store_id: process.env.NEXT_PUBLIC_ID_STORE ?? "",
           redirect_url: window.location.origin,
         };
-
-        // const myHeaders = new Headers();
-        // myHeaders.append("Content-Type", "application/json");
-
-        // const requestOptions = {
-        //   method: "POST",
-        //   headers: myHeaders,
-        //   body: JSON.stringify(body),
-        //   redirect: "follow",
-        // } as RequestInit;
-
+        setLoading(true);
         axios
           .post(
             `${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`,
@@ -75,32 +65,18 @@ export const AppProvider: FC<Props> = (props) => {
               },
             }
           )
-          .then((response) => {
-            setProcessing(JSON.stringify(response.data));
-            console.log(JSON.stringify(response.data));
+          .then((_) => {
+            setLoading(false);
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
-              setProcessing(`error ${error.message}`);
-              console.error('Axios Error:', error.message);
-              console.error('Status:', error.response?.status);
-              console.error('Data:', error.response?.data);
+              console.error("Axios Error:", error.message);
+              console.error("Status:", error.response?.status);
+              console.error("Data:", error.response?.data);
             } else {
-              console.error('Error:', error);
+              console.error("Error:", error);
             }
-           
           });
-
-        // fetch(
-        //   `${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`,
-        //   requestOptions
-        // )
-        //   .then((response) => response.text())
-        //   .then((result) => {
-        //     setProcessing(result);
-        //     console.error(result);
-        //   })
-        //   .catch((error) => { console.error(error), setProcessing(`error ${error}`) });
       }
     }
   };
@@ -127,8 +103,6 @@ export const AppProvider: FC<Props> = (props) => {
         logout: logout,
       }}
     >
-      {JSON.stringify(processing)}
-      {JSON.stringify(user)}
       {props.children}
     </AuthContext.Provider>
   );
