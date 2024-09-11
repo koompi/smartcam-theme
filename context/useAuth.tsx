@@ -67,16 +67,16 @@ export const AppProvider: FC<Props> = (props) => {
           )
           .then((_) => {
             setLoading(false);
-            window.location.reload()
+            // window.location.reload();
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
-              window.location.reload()
+              // window.location.reload()
               console.error("Axios Error:", error.message);
               console.error("Status:", error.response?.status);
               console.error("Data:", error.response?.data);
             } else {
-              window.location.reload()
+              // window.location.reload()
               console.error("Error:", error);
             }
           });
