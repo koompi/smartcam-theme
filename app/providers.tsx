@@ -3,9 +3,9 @@
 import { NextUIProvider } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
-import { TelegramProvider } from "@/context/telegramProvider";
-import Script from "next/script";
-import { useEffect } from "react";
+// import { TelegramProvider } from "@/context/telegramProvider";
+// import Script from "next/script";
+// import { useEffect } from "react";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
