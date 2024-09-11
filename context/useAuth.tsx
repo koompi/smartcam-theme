@@ -42,12 +42,12 @@ export const AppProvider: FC<Props> = (props) => {
       if (telegramUser) {
         // Optionally send user data to the backend for verification
         const body = {
-          id: parseInt(telegramUser.id.toString()),
+          id: telegramUser.id.toString(),
           first_name: telegramUser.first_name,
           last_name: telegramUser.last_name,
           username: telegramUser.username,
           language_code: telegramUser.language_code,
-          auth_date: tgWebApp.initDataUnsafe.auth_date,
+          auth_date: tgWebApp.initDataUnsafe.auth_date.toString(),
           hash: tgWebApp.initDataUnsafe.hash,
           store_id: process.env.NEXT_PUBLIC_ID_STORE,
           redirect_url: window.location.origin,
