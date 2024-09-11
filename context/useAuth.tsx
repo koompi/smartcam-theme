@@ -40,7 +40,6 @@ export const AppProvider: FC<Props> = (props) => {
       const telegramUser = tgWebApp.initDataUnsafe.user;
 
       if (telegramUser) {
-        setProcessing(JSON.stringify(telegramUser))
         // Optionally send user data to the backend for verification
         const body = {
           id: telegramUser.id,
@@ -53,26 +52,45 @@ export const AppProvider: FC<Props> = (props) => {
           store_id: process.env.NEXT_PUBLIC_ID_STORE,
           redirect_url: window.location.origin,
         };
-        
-        axios
-          .post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`, body, {
-            headers: {
-              "Content-Type": "application/json",
-            },
+
+        setProcessing(JSON.stringify(body, null, 4))
+
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: JSON.stringify(body),
+          redirect: "follow"
+        } as RequestInit;
+
+        fetch("https://backendv2.riverbase.org/sso/telegram/login", requestOptions)
+          .then((response) => response.text())
+          .then((result) => {
+            alert("success")
           })
-          .then((response) => {
-            const data = response.data;
-            // if (data.success) {
-            //   console.log("User logged in:", data.user);
-            // } else {
-            //   console.error("Login failed:", data.message);
-            // }
-            setProcessing(data)
-          })
-          .catch((error) => {
-            // setProcessing()
-            console.error("Error:", error);
-          });
+          .catch((error) => console.error(error));
+
+        // axios
+        //   .post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`, body, {
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   })
+        //   .then((response) => {
+        //     const data = response.data;
+        //     // if (data.success) {
+        //     //   console.log("User logged in:", data.user);
+        //     // } else {
+        //     //   console.error("Login failed:", data.message);
+        //     // }
+        //     setProcessing(data)
+        //   })
+        //   .catch((error) => {
+        //     // setProcessing()
+        //     console.error("Error:", error);
+        //   });
       }
     }
   };
