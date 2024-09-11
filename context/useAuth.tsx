@@ -4,6 +4,7 @@ import { createContext, useContext, JSX, FC, useState, useEffect } from "react";
 import axios from "axios";
 import { UserType } from "@/types/user";
 import { ContextAuth } from "@/types/global";
+import Cookies from 'js-cookie'
 
 export const AuthContext = createContext({});
 
@@ -72,26 +73,6 @@ export const AppProvider: FC<Props> = (props) => {
             console.error(result);
           })
           .catch((error) => console.error(error));
-
-        // axios
-        //   .post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`, body, {
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //   })
-        //   .then((response) => {
-        //     const data = response.data;
-        //     // if (data.success) {
-        //     //   console.log("User logged in:", data.user);
-        //     // } else {
-        //     //   console.error("Login failed:", data.message);
-        //     // }
-        //     setProcessing(data)
-        //   })
-        //   .catch((error) => {
-        //     // setProcessing()
-        //     console.error("Error:", error);
-        //   });
       }
     }
   };
@@ -110,6 +91,7 @@ export const AppProvider: FC<Props> = (props) => {
     });
   };
 
+  const token = Cookies.get('token');
   return (
     <AuthContext.Provider
       value={{
@@ -118,6 +100,7 @@ export const AppProvider: FC<Props> = (props) => {
         logout: logout,
       }}
     >
+      {token}
       {JSON.stringify(processing)}
       {JSON.stringify(user)}
       {props.children}
