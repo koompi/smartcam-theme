@@ -70,9 +70,11 @@ export const AppProvider: FC<Props> = (props) => {
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
-              window.location.reload()
+              window.location.reload();
+              setLoading(false);
             } else {
-              window.location.reload()
+              window.location.reload();
+              setLoading(false);
             }
           });
       }
@@ -83,6 +85,7 @@ export const AppProvider: FC<Props> = (props) => {
     if (typeof window !== "undefined" && window.Telegram?.WebApp) {
       handleTelegramLogin();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const logout = () => {
