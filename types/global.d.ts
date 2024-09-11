@@ -2,12 +2,8 @@ import { UserType } from "./user";
 
 export type ContextAuth = {
   user: UserType;
-  getUser: () => void;
   loading: boolean;
-  setLoading: Function;
-  login: (model: string | null) => void;
-  notifications: any;
-  refetch: Function;
+  logout: Function;
 };
 
 export type CartItem = {
@@ -22,6 +18,7 @@ export type AddCart = {
 }
 
 export type CartContextType = {
+  loading: boolean;
   cartItems: CartItem[];
   membershipId: string;
   wishlistFav: any;
@@ -32,8 +29,8 @@ export type CartContextType = {
   removeFromCart: (id: String) => void;
   addCarts: (cartItems: CartItem[]) => void;
   cleanCartItems: Function;
-  logout: Function;
-  loading: boolean;
+  notifications: any;
+  refetch: Function;
 };
 
 export type LoginForm = {
@@ -118,4 +115,29 @@ export interface IWebApp {
     isActive: boolean;
   };
   HapticFeedback: any;
+}
+
+
+export {};
+
+declare global {
+  interface Window {
+    Telegram: {
+      WebApp: {
+        ready: () => void;
+        initDataUnsafe: {
+          query_id: string;
+          user: {
+            id: number;
+            first_name: string;
+            last_name: string;
+            username: string;
+            language_code: string;
+          };
+          auth_date: number;
+          hash: string;
+        };
+      };
+    };
+  }
 }

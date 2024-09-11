@@ -4,8 +4,6 @@ import { createContext, useContext, JSX, FC, useState, useEffect } from "react";
 import axios from "axios";
 import { UserType } from "@/types/user";
 import { ContextAuth } from "@/types/global";
-import { useQuery } from "@apollo/client";
-import { WISHLIST_NOTIFICATION } from "@/graphql/wishlist";
 
 export const AuthContext = createContext({});
 
@@ -16,52 +14,86 @@ interface Props {
 export const AppProvider: FC<Props> = (props) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
-  const { data, refetch } = useQuery(WISHLIST_NOTIFICATION);
 
   useEffect(() => {
     setLoading(true);
-    try {
-      axios
-        .get(`${process.env.NEXT_PUBLIC_BACKEND}/api/me`, {
-          headers: {
-            Authorization: `Bearer ${
-              typeof window !== "undefined" &&
-              localStorage.getItem("access_token")
-            }`,
-          },
-        })
-        .then(
-          ({ status, data }: { status: number; data: { data: UserType } }) => {
-            if (status === 200) {
-              const user = data.data;
-              setUser({
-                ...user,
-              });
-              setLoading(false);
-              return;
-            }
-            setLoading(false);
-            setUser(null);
-          }
-        )
-        .catch((_) => {
-          setLoading(false);
-          setUser(null);
-          return;
-        });
-    } catch (e) {
-      setLoading(false);
-      setUser(null);
-    }
+    axios
+      .get(`${process.env.NEXT_PUBLIC_BACKEND}/users/me`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setUser(res.data.data);
+        setLoading(false);
+        return;
+      })
+      .catch((e) => {
+        setLoading(false);
+        return;
+      });
   }, []);
+
+  const handleTelegramLogin = () => {
+    if (window.Telegram?.WebApp) {
+      const tgWebApp = window.Telegram.WebApp;
+      tgWebApp.ready();
+      const telegramUser = tgWebApp.initDataUnsafe.user;
+
+      if (telegramUser) {
+        // Optionally send user data to the backend for verification
+        const body = JSON.stringify({
+          id: telegramUser.id,
+          first_name: telegramUser.first_name,
+          last_name: telegramUser.last_name,
+          username: telegramUser.username,
+          language_code: telegramUser.language_code,
+          auth_date: tgWebApp.initDataUnsafe.auth_date,
+          hash: tgWebApp.initDataUnsafe.hash,
+          store_id: process.env.NEXT_PUBLIC_ID_STORE,
+          redirect_url: window.location.origin
+        });
+        
+        fetch(`http://localhost:8000/sso/telegram/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: body,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              console.log("User logged in:", data.user);
+            } else {
+              console.error("Login failed:", data.message);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.Telegram?.WebApp) {
+      handleTelegramLogin();
+    }
+  }, [])
+
+  const logout = () => {
+    axios.post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/logout`).then((_) => {
+      if (typeof window !== "undefined") {
+        global && window.location.reload();
+      }
+    });
+  };
 
   return (
     <AuthContext.Provider
       value={{
         user: user,
         loading: loading,
-        notifications: data?.storeNotifications,
-        refetch: refetch,
+        logout: logout
       }}
     >
       {props.children}

@@ -20,23 +20,21 @@ import {
   cn,
   Chip,
 } from "@nextui-org/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { Menubar } from "./Menubar";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/useAuth";
 import { useCart } from "@/context/useCart";
 import Link from "next/link";
 import { Search } from "./Search";
 import { Drawer } from "vaul";
-import axios from "axios";
-import { Loading } from "../globals/Loading";
 
 export const MainNavbar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, loading, notifications } = useAuth();
-  const { cartItems, logout } = useCart();
+  const { user, loading, logout } = useAuth();
+  const { cartItems, notifications } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
 
