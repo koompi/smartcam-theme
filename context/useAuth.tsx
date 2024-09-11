@@ -14,7 +14,6 @@ interface Props {
 export const AppProvider: FC<Props> = (props) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
-  const [processing, setProcessing] = useState<any>("");
 
   useEffect(() => {
     setLoading(true);
@@ -39,7 +38,7 @@ export const AppProvider: FC<Props> = (props) => {
       tgWebApp.ready();
       const telegramUser = tgWebApp.initDataUnsafe.user;
 
-      if (telegramUser) {
+      if (telegramUser && !user) {
         // Optionally send user data to the backend for verification
         const body = {
           id: telegramUser.id.toString(),
@@ -67,17 +66,13 @@ export const AppProvider: FC<Props> = (props) => {
           )
           .then((_) => {
             setLoading(false);
-            // window.location.reload();
+            window.location.reload();
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
-              // window.location.reload()
-              console.error("Axios Error:", error.message);
-              console.error("Status:", error.response?.status);
-              console.error("Data:", error.response?.data);
+              window.location.reload()
             } else {
-              // window.location.reload()
-              console.error("Error:", error);
+              window.location.reload()
             }
           });
       }
