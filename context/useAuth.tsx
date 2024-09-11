@@ -52,9 +52,6 @@ export const AppProvider: FC<Props> = (props) => {
           store_id: process.env.NEXT_PUBLIC_ID_STORE,
           redirect_url: window.location.origin,
         };
-
-        setProcessing(JSON.stringify(body, null, 4))
-
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -117,7 +114,7 @@ export const AppProvider: FC<Props> = (props) => {
         logout: logout
       }}
     >
-      {processing}
+      {JSON.stringify(user)}
       {props.children}
     </AuthContext.Provider>
   );
