@@ -123,14 +123,13 @@ export const ProductViewItem = React.forwardRef<
     const swiperRef = useRef<SwiperType | null>(null);
     const fullHost = window.location.href;
     const [isFavorite, setIsFavorite] = useState(favorite);
-    const { refetch } = useAuth();
     const [isCompare, setIsCompare] = useState(compare);
     const [qty, setQty] = useState<number>(1);
 
     const [addWishlistCompare] = useMutation(ADD_COMPARE_WISHLIST);
     const [addWishlist] = useMutation(ADD_WISHLIST);
 
-    const { addToCart } = useCart();
+    const { addToCart, refetch } = useCart();
 
     useEffect(() => {
       const zoomButton = document.getElementById("zoom-button");
