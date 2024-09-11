@@ -64,21 +64,31 @@ export const AppProvider: FC<Props> = (props) => {
         // } as RequestInit;
 
         axios
-          .post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`, {
-            headers: {
-              "Content-Type": "application/json",
+          .post(
+            `${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`,
+            {
+              ...body,
             },
-            data: JSON.stringify(body),
-
-            maxBodyLength: Infinity,
-          })
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
           .then((response) => {
             setProcessing(JSON.stringify(response.data));
             console.log(JSON.stringify(response.data));
           })
           .catch((error) => {
-            console.log(error);
-            setProcessing(`error ${error}`);
+            if (axios.isAxiosError(error)) {
+              setProcessing(`error ${error.message}`);
+              console.error('Axios Error:', error.message);
+              console.error('Status:', error.response?.status);
+              console.error('Data:', error.response?.data);
+            } else {
+              console.error('Error:', error);
+            }
+           
           });
 
         // fetch(
