@@ -67,6 +67,7 @@ export const AppProvider: FC<Props> = (props) => {
           )
           .then((_) => {
             setLoading(false);
+            window.location.href = "/"
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
