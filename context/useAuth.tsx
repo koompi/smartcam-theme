@@ -65,16 +65,20 @@ export const AppProvider: FC<Props> = (props) => {
 
         axios
           .post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
             data: JSON.stringify(body),
+
             maxBodyLength: Infinity,
           })
           .then((response) => {
-            setProcessing(JSON.stringify(response.data))
+            setProcessing(JSON.stringify(response.data));
             console.log(JSON.stringify(response.data));
           })
           .catch((error) => {
             console.log(error);
-            setProcessing(`error ${error}`)
+            setProcessing(`error ${error}`);
           });
 
         // fetch(
