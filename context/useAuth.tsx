@@ -4,7 +4,6 @@ import { createContext, useContext, JSX, FC, useState, useEffect } from "react";
 import axios from "axios";
 import { UserType } from "@/types/user";
 import { ContextAuth } from "@/types/global";
-import Cookies from 'js-cookie'
 
 export const AuthContext = createContext({});
 
@@ -15,7 +14,7 @@ interface Props {
 export const AppProvider: FC<Props> = (props) => {
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
-  const [processing, setProcessing] = useState<string>("");
+  const [processing, setProcessing] = useState<any>("");
 
   useEffect(() => {
     setLoading(true);
@@ -69,7 +68,7 @@ export const AppProvider: FC<Props> = (props) => {
         )
           .then((response) => response.text())
           .then((result) => {
-            setProcessing("success");
+            setProcessing(result);
             console.error(result);
           })
           .catch((error) => console.error(error));
@@ -91,7 +90,6 @@ export const AppProvider: FC<Props> = (props) => {
     });
   };
 
-  const token = Cookies.get('token');
   return (
     <AuthContext.Provider
       value={{
@@ -100,7 +98,6 @@ export const AppProvider: FC<Props> = (props) => {
         logout: logout,
       }}
     >
-      {token}
       {JSON.stringify(processing)}
       {JSON.stringify(user)}
       {props.children}
