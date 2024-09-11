@@ -39,6 +39,7 @@ export const AppProvider: FC<Props> = (props) => {
       const telegramUser = tgWebApp.initDataUnsafe.user;
 
       if (telegramUser && !user) {
+        setLoading(true);
         // Optionally send user data to the backend for verification
         const body = {
           id: telegramUser.id.toString(),
@@ -51,7 +52,6 @@ export const AppProvider: FC<Props> = (props) => {
           store_id: process.env.NEXT_PUBLIC_ID_STORE ?? "",
           redirect_url: window.location.origin,
         };
-        setLoading(true);
         axios
           .post(
             `${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`,
@@ -64,16 +64,16 @@ export const AppProvider: FC<Props> = (props) => {
               },
             }
           )
-          .then((_) => {
+          .then((response) => {
+            setUser(response.data.data);
             setLoading(false);
-            window.location.reload();
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
-              window.location.reload();
+              setUser(null);
               setLoading(false);
             } else {
-              window.location.reload();
+              setUser(null);
               setLoading(false);
             }
           });
@@ -82,7 +82,7 @@ export const AppProvider: FC<Props> = (props) => {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.Telegram?.WebApp) {
+    if (typeof window !== "undefined" && window.Telegram?.WebApp && !user) {
       handleTelegramLogin();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

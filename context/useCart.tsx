@@ -11,7 +11,6 @@ import { Toaster, toast } from "sonner";
 import { useQuery } from "@apollo/client";
 import { GET_CUSTOMER } from "@/graphql/store";
 import { AddCart, CartContextType, CartItem } from "@/types/global";
-import axios from "axios";
 import { WISHLIST_NOTIFICATION } from "@/graphql/wishlist";
 
 export const CartContext = createContext({});
