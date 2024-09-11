@@ -42,7 +42,7 @@ export const AppProvider: FC<Props> = (props) => {
       if (telegramUser) {
         // Optionally send user data to the backend for verification
         const body = {
-          id: telegramUser.id,
+          id: parseInt(telegramUser.id.toString()),
           first_name: telegramUser.first_name,
           last_name: telegramUser.last_name,
           username: telegramUser.username,
