@@ -8,12 +8,11 @@ import React, {
   JSX,
 } from "react";
 import { Toaster, toast } from "sonner";
-// import { destroyCookie } from "nookies";
-
 import { useQuery } from "@apollo/client";
 import { GET_CUSTOMER } from "@/graphql/store";
 import { AddCart, CartContextType, CartItem } from "@/types/global";
 import axios from "axios";
+import { WISHLIST_NOTIFICATION } from "@/graphql/wishlist";
 
 export const CartContext = createContext({});
 
@@ -21,6 +20,8 @@ export function CartProvider(props: { children: JSX.Element }) {
   const [cartItems, setCartItems] = useState<CartItem[] | []>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { data: userStore, loading: loading_store } = useQuery(GET_CUSTOMER);
+  const { data:notify, refetch: refetch_notify } = useQuery(WISHLIST_NOTIFICATION);
+
   useEffect(() => {
     const carts = localStorage.getItem("cartItems");
     setLoading(true);
@@ -122,15 +123,6 @@ export function CartProvider(props: { children: JSX.Element }) {
     updateLocalStorage();
   };
 
-  const logout = () => {
-    localStorage.removeItem("access_token");
-    axios.post(`${process.env.NEXT_PUBLIC_BACKEND}/logout`).then((_) => {
-      if (typeof window !== "undefined") {
-        global && window.location.reload();
-      }
-    });
-  };
-
   if (loading || loading_store) {
     return null;
   }
@@ -146,7 +138,8 @@ export function CartProvider(props: { children: JSX.Element }) {
         removeFromCart: removeFromCart,
         minusCart: minusCart,
         cleanCartItems: cleanCartItems,
-        logout: logout,
+        notifications: notify?.storeNotifications,
+        refetch: refetch_notify,
       }}
     >
       <Toaster position="top-center" closeButton richColors />
