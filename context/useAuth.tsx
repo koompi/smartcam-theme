@@ -52,7 +52,7 @@ export const AppProvider: FC<Props> = (props) => {
           redirect_url: window.location.origin
         });
         
-        fetch(`http://localhost:8000/sso/telegram/login`, {
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
