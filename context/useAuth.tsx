@@ -42,7 +42,7 @@ export const AppProvider: FC<Props> = (props) => {
       if (telegramUser) {
         setProcessing(JSON.stringify(telegramUser))
         // Optionally send user data to the backend for verification
-        const body = JSON.stringify({
+        const body = {
           id: telegramUser.id,
           first_name: telegramUser.first_name,
           last_name: telegramUser.last_name,
@@ -51,25 +51,26 @@ export const AppProvider: FC<Props> = (props) => {
           auth_date: tgWebApp.initDataUnsafe.auth_date,
           hash: tgWebApp.initDataUnsafe.hash,
           store_id: process.env.NEXT_PUBLIC_ID_STORE,
-          redirect_url: window.location.origin
-        });
+          redirect_url: window.location.origin,
+        };
         
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: body,
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.success) {
-              console.log("User logged in:", data.user);
-            } else {
-              console.error("Login failed:", data.message);
-            }
+        axios
+          .post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`, body, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            const data = response.data;
+            // if (data.success) {
+            //   console.log("User logged in:", data.user);
+            // } else {
+            //   console.error("Login failed:", data.message);
+            // }
+            setProcessing(data)
           })
           .catch((error) => {
+            setProcessing(error)
             console.error("Error:", error);
           });
       }
