@@ -52,26 +52,41 @@ export const AppProvider: FC<Props> = (props) => {
           store_id: process.env.NEXT_PUBLIC_ID_STORE,
           redirect_url: window.location.origin,
         };
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
 
-        const requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: JSON.stringify(body),
-          redirect: "follow",
-        } as RequestInit;
+        // const myHeaders = new Headers();
+        // myHeaders.append("Content-Type", "application/json");
 
-        fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`,
-          requestOptions
-        )
-          .then((response) => response.text())
-          .then((result) => {
-            setProcessing(result);
-            console.error(result);
+        // const requestOptions = {
+        //   method: "POST",
+        //   headers: myHeaders,
+        //   body: JSON.stringify(body),
+        //   redirect: "follow",
+        // } as RequestInit;
+
+        axios
+          .post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`, {
+            data: JSON.stringify(body),
+            maxBodyLength: Infinity,
           })
-          .catch((error) => {console.error(error), setProcessing(error)});
+          .then((response) => {
+            setProcessing(JSON.stringify(response.data))
+            console.log(JSON.stringify(response.data));
+          })
+          .catch((error) => {
+            console.log(error);
+            setProcessing(`error ${error}`)
+          });
+
+        // fetch(
+        //   `${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`,
+        //   requestOptions
+        // )
+        //   .then((response) => response.text())
+        //   .then((result) => {
+        //     setProcessing(result);
+        //     console.error(result);
+        //   })
+        //   .catch((error) => { console.error(error), setProcessing(`error ${error}`) });
       }
     }
   };
