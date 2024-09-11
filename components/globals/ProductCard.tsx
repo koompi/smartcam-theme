@@ -63,8 +63,7 @@ const ProductCard: FC<ProductCardProps> = ({
   favorite,
   compare,
 }) => {
-  const { addToCart } = useCart();
-  const { refetch } = useAuth();
+  const { addToCart, refetch } = useCart();
   const [addWishlist] = useMutation(ADD_WISHLIST);
   const [addWishlistCompare] = useMutation(ADD_COMPARE_WISHLIST);
   const [isFavorite, setIsFavorite] = useState(favorite);
