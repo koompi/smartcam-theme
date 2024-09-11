@@ -13,26 +13,26 @@ axios.defaults.withCredentials = true;
 export function Providers({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
-  useEffect(() => {
-    if (window) {
-      const app = (window as any)?.Telegram?.WebApp;
-      // Call as soon as your page is ready for the user to see
-      app?.ready();
+  // useEffect(() => {
+  //   if (window) {
+  //     const app = (window as any)?.Telegram?.WebApp;
+  //     // Call as soon as your page is ready for the user to see
+  //     app?.ready();
 
-      // Expand your web app to full screen
-      app?.expand();
-    }
-  }, []);
+  //     // Expand your web app to full screen
+  //     app?.expand();
+  //   }
+  // }, []);
 
   return (
     <>
-      <Script
+      {/* <Script
         src="https://telegram.org/js/telegram-web-app.js"
         strategy="beforeInteractive"
         onLoad={() => console.log("loaded")}
         onError={() => console.log("error")}
         onReady={() => console.log("ready")}
-      />
+      /> */}
       <NextUIProvider navigate={router.push}>
         <ProgressBar
           height="3px"
@@ -40,7 +40,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           options={{ showSpinner: false }}
           shallowRouting
         />
-        <TelegramProvider>{children}</TelegramProvider>
+        {children}
       </NextUIProvider>
     </>
   );
