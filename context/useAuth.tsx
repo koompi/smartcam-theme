@@ -52,9 +52,6 @@ export const AppProvider: FC<Props> = (props) => {
           store_id: process.env.NEXT_PUBLIC_ID_STORE,
           redirect_url: window.location.origin,
         };
-
-        setProcessing(JSON.stringify(body, null, 4))
-
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -62,13 +59,17 @@ export const AppProvider: FC<Props> = (props) => {
           method: "POST",
           headers: myHeaders,
           body: JSON.stringify(body),
-          redirect: "follow"
+          redirect: "follow",
         } as RequestInit;
 
-        fetch("https://backendv2.riverbase.org/sso/telegram/login", requestOptions)
+        fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND}/sso/telegram/login`,
+          requestOptions
+        )
           .then((response) => response.text())
           .then((result) => {
-            alert("success")
+            setProcessing("success");
+            console.error(result);
           })
           .catch((error) => console.error(error));
 
@@ -99,7 +100,7 @@ export const AppProvider: FC<Props> = (props) => {
     if (typeof window !== "undefined" && window.Telegram?.WebApp) {
       handleTelegramLogin();
     }
-  }, [])
+  }, []);
 
   const logout = () => {
     axios.post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/logout`).then((_) => {
@@ -114,10 +115,11 @@ export const AppProvider: FC<Props> = (props) => {
       value={{
         user: user,
         loading: loading,
-        logout: logout
+        logout: logout,
       }}
     >
-      {processing}
+      {JSON.stringify(processing)}
+      {JSON.stringify(user)}
       {props.children}
     </AuthContext.Provider>
   );
