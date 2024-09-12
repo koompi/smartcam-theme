@@ -33,7 +33,7 @@ const MainFooter = () => {
         <div className="px-4 mx-auto sm:px-6 lg:px-8 max-full relative">
           <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-12 gap-y-16 gap-x-3">
             {/* main */}
-            <div className="col-span-2 md:col-span-3 lg:col-span-7 lg:pr-8">
+            <div className="col-span-2 md:col-span-3 lg:col-span-5 lg:pr-8">
               <Image
                 alt="logo"
                 src="/images/smartcam-logo.png"
@@ -80,12 +80,12 @@ const MainFooter = () => {
               </ul>
             </div>
             {/* Products */}
-            <div className="col-span-2">
+            <div className="col-span-4">
               <p className="text-md underline font-semibold tracking-widest uppercase">
                 Products
               </p>
 
-              <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 lggrid-cols-4 gap-3">
                 {data.storeOwnerBrands.map((b: BrandsType, idx: number) => (
                   <Link
                     href={`/products?search=&brands=${b.title ? b.title?.en : ""}`}
@@ -107,7 +107,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="#"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     Terms & Conditions
                   </Link>
@@ -116,7 +116,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="#"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     Privacy Policy
                   </Link>
@@ -133,7 +133,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="/about"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     About US
                   </Link>
@@ -142,7 +142,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="/contact"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     Contact US
                   </Link>
@@ -160,7 +160,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="/about#customers"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     Our Customers
                   </Link>
@@ -187,7 +187,7 @@ const MainFooter = () => {
                   {!user && (
                     <Link
                       href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
-                      className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                      className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                     >
                       Login
                     </Link>
@@ -197,7 +197,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="/locations"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     My Locations
                   </Link>
@@ -205,7 +205,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="/compare"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     Compare
                   </Link>
@@ -213,7 +213,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="/cart"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     Cart
                   </Link>
@@ -221,7 +221,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="/orders"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     Order
                   </Link>
@@ -230,7 +230,7 @@ const MainFooter = () => {
                 <li>
                   <Link
                     href="/wishlist"
-                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
+                    className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     My Wishlist
                   </Link>

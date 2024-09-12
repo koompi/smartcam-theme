@@ -394,6 +394,9 @@ export const MainNavbar = () => {
                     }
                   )}
                   href="/compare"
+                  startContent={
+                    <Icon icon="solar:undo-right-bold" fontSize={21} />
+                  }
                 >
                   Compare
                 </Button>

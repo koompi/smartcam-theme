@@ -16,6 +16,7 @@ import {
   Tab,
   Tabs,
   Input,
+  Divider,
 } from "@nextui-org/react";
 import React, { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -42,9 +43,6 @@ import {
   FacebookShareButton,
   FacebookIcon,
 } from "next-share";
-import ModalReview from "./ReviewModal";
-import Review from "./Reviews";
-import SummaryRatingCard from "./SummaryRatingCard";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/context/useCart";
 import { ProductType, Variants } from "@/types/product";
@@ -60,9 +58,11 @@ import {
   ADD_COMPARE_WISHLIST,
   ADD_WISHLIST,
 } from "@/graphql/mutation/wishlist";
-import { useMutation } from "@apollo/client";
-import { useAuth } from "@/context/useAuth";
+import { useMutation, useQuery } from "@apollo/client";
 import { AddCart } from "@/types/global";
+import { PRODUCT_SECTION_TYPE } from "@/graphql/product";
+import { CardLoading } from "@/components/globals/Loading";
+import RelatedProducts from "./RelatedProducts";
 
 type ProductViewInfoProps = Omit<React.HTMLAttributes<HTMLDivElement>, "id"> & {
   isPopular?: boolean;
@@ -131,6 +131,23 @@ export const ProductViewItem = React.forwardRef<
 
     const { addToCart, refetch } = useCart();
 
+    // related products
+    const { data: relatedProducts, loading: relatedProductsLoading } = useQuery(
+      PRODUCT_SECTION_TYPE,
+      {
+        variables: {
+          statusType: "SUGGESTION",
+          category: props?.category?.id,
+          filter: {
+            limit: 10,
+            skip: 0,
+            sort: -1,
+          },
+        },
+        skip: !props?.category?.id,
+      }
+    );
+
     useEffect(() => {
       const zoomButton = document.getElementById("zoom-button");
       const handleZoom = () => {
@@ -191,6 +208,10 @@ export const ProductViewItem = React.forwardRef<
         console.error("Failed to copy: ", err);
       }
     };
+
+    if (!relatedProducts || relatedProductsLoading) {
+      return <CardLoading />;
+    }
 
     return (
       <main>
@@ -396,17 +417,17 @@ export const ProductViewItem = React.forwardRef<
                 <div className="bg-white rounded-3xl shadow-sm p-3">
                   <h1 className="text-xl font-bold tracking-tight">{title}</h1>
                   <Spacer y={6} />
-                  <h2 className="text-4xl font-bold text-primary">
+                  <h2 className="text-4xl font-bold">
                     {props.promotion?.discount ? (
                       <div className="flex items-center gap-3">
-                        <div className="line-through text-xl">
+                        <div className="line-through text-xl text-danger">
                           {formatToUSD(
                             parseInt(
                               props?.promotion?.discount.originalPrice.toString()
                             )
                           )}
                         </div>
-                        <label>
+                        <label className="text-primary">
                           {formatToUSD(
                             parseFloat(
                               props?.promotion?.discount?.totalDiscount.toString()
@@ -415,7 +436,12 @@ export const ProductViewItem = React.forwardRef<
                         </label>
                       </div>
                     ) : (
-                      `${formatToUSD(parseInt(variant.price.toString()))}`
+                      <label className="text-primary">
+                        {formatToUSD(
+                          parseFloat(props?.currencyPrice?.usd.toString())
+                        )}
+                      </label>
+                      // `${formatToUSD(parseInt(variant.price.toString()))}`
                     )}
                   </h2>
                   <div className="flex items-center gap-1">
@@ -468,9 +494,9 @@ export const ProductViewItem = React.forwardRef<
                       </p>
                     )}
                   </div>
-                  <div className="mt-4">
+                  <div className="divide-y divide-dashed mt-3">
                     <p className="sr-only">Product desc</p>
-                    <p className="line-clamp-9 text-medium text-gray-500 whitespace-pre-line">
+                    <p className="line-clamp-9 text-medium text-gray-500 whitespace-pre-line pt-3">
                       <LexicalReader data={desc} />
                     </p>
                   </div>
@@ -900,17 +926,17 @@ export const ProductViewItem = React.forwardRef<
             <div className="sticky top-40 bg-white rounded-3xl shadow-sm p-6">
               <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
               <Spacer y={6} />
-              <h2 className="text-4xl font-bold text-primary">
+              <h2 className="text-4xl font-bold">
                 {props.promotion?.discount ? (
                   <div className="flex items-center gap-3">
-                    <div className="line-through text-xl">
+                    <div className="line-through text-xl text-danger">
                       {formatToUSD(
                         parseInt(
                           props?.promotion?.discount.originalPrice.toString()
                         )
                       )}
                     </div>
-                    <label>
+                    <label className="text-primary">
                       {formatToUSD(
                         parseFloat(
                           props?.promotion?.discount?.totalDiscount.toString()
@@ -919,7 +945,12 @@ export const ProductViewItem = React.forwardRef<
                     </label>
                   </div>
                 ) : (
-                  `${formatToUSD(parseInt(variant.price.toString()))}`
+                  <label className="text-primary">
+                    {formatToUSD(
+                      parseFloat(props?.currencyPrice?.usd.toString())
+                    )}
+                  </label>
+                  // `${formatToUSD(parseInt(variant.price.toString()))}`
                 )}
               </h2>
               <div className="flex items-center gap-1">
@@ -972,9 +1003,9 @@ export const ProductViewItem = React.forwardRef<
                   </p>
                 )}
               </div>
-              <div className="mt-4">
+              <div className="divide-y divide-dashed mt-3">
                 <p className="sr-only">Product desc</p>
-                <p className="line-clamp-9 text-medium text-gray-500 whitespace-pre-line">
+                <p className="line-clamp-9 text-medium text-gray-500 whitespace-pre-line pt-3">
                   {<LexicalReader data={desc} />}
                 </p>
               </div>
@@ -1298,6 +1329,12 @@ export const ProductViewItem = React.forwardRef<
             </div>
           </div>
         </div>
+        {/* related products */}
+        {relatedProducts?.storeSortProducts?.products?.length > 0 && (
+          <RelatedProducts
+            relatedProducts={relatedProducts?.storeSortProducts?.products}
+          />
+        )}
       </main>
     );
   }
