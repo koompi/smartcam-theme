@@ -367,7 +367,7 @@ const CheckoutComponent = () => {
             className="h-60 sm:h-60 lg:h-96"
           />
           <p className="text-center mb-9">
-            Unfortunately, we're unable to offer delivery right now. We
+            Unfortunately, we are unable to offer delivery right now. We
             apologize for any inconvenience.
           </p>
           {isMobile ? (
@@ -416,7 +416,7 @@ const CheckoutComponent = () => {
           />
           <p className="text-center mb-9">
             We can’t deliver to your location right now. Please let us know
-            where you'd like your order shipped.
+            where you had like your order shipped.
           </p>
           {isMobile ? (
             <Button
