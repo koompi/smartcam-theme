@@ -103,7 +103,7 @@ export const AppProvider: FC<Props> = (props) => {
 
   const login = (code: string | null, state: string | null) => {
     setLoading(true);
-    axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/sso/customer?code=${code}&state=${state}`).then((res) => {
+    axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/sso/customer?code=${code}&state=${state}&redirect_url=${window.location.origin}`).then((res) => {
       localStorage.setItem("access_token", res.data.token);
       setUser(res.data.user);
       router.push(res.data.redirect_url)
