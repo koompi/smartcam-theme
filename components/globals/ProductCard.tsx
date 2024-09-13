@@ -22,10 +22,7 @@ import {
   Button,
   Image,
   Chip,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
+  Divider,
 } from "@nextui-org/react";
 import Link from "next/link";
 import React, { FC, ReactNode, useState } from "react";
@@ -64,6 +61,7 @@ const ProductCard: FC<ProductCardProps> = ({
   compare,
 }) => {
   const { addToCart, refetch } = useCart();
+  const { user } = useAuth();
   const [addWishlist] = useMutation(ADD_WISHLIST);
   const [addWishlistCompare] = useMutation(ADD_COMPARE_WISHLIST);
   const [isFavorite, setIsFavorite] = useState(favorite);
@@ -76,7 +74,7 @@ const ProductCard: FC<ProductCardProps> = ({
       isHoverable
       as={Link}
       href={`/products/${slug}`}
-      className="flex flex-col flex-grow col-span-1 h-full group items-stretch"
+      className="group flex flex-col flex-grow col-span-1 h-full group items-stretch"
     >
       {promotion?.discount?.discountType && (
         <Chip
@@ -94,74 +92,37 @@ const ProductCard: FC<ProductCardProps> = ({
         </Chip>
       )}
       <CardBody className="flex flex-col flex-grow">
-        <Dropdown
-          showArrow
-          classNames={{
-            base: "before:bg-default-200", // change arrow background
-            content:
-              "py-1 px-1 border border-default-200 bg-gradient-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
-          }}
-        >
-          <DropdownTrigger>
-            <Button
-              className="absolute right-1 top-1 z-20  hidden group-hover:hidden sm:group-hover:hidden lg:group-hover:flex"
-              variant="light"
-              isIconOnly
-              size="sm"
-              radius="lg"
-              color="primary"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-            >
-              <Icon icon="mage:dots" fontSize={18} />
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            variant="faded"
-            aria-label="Dropdown menu with description"
-          >
-            <DropdownItem
-              key="compare"
-              color="primary"
-              description="Compare your products"
-              startContent={
-                <Icon icon="material-symbols:compare" fontSize={21} />
-              }
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                addWishlistCompare({
-                  variables: {
-                    wishlistType: "COMPARE",
-                    productId: id,
-                    categoryId: categoryId,
-                  },
+        {user && (
+          <Button
+            isIconOnly
+            radius="lg"
+            color="primary"
+            variant="shadow"
+            size="sm"
+            className="opacity-0 transition-all ease-linear duration-250 absolute right-3 top-3 z-20 group-hover:opacity-100"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              addWishlistCompare({
+                variables: {
+                  wishlistType: "COMPARE",
+                  productId: id,
+                  categoryId: categoryId,
+                },
+              })
+                .then((res) => {
+                  toast.success(res.data.storeAddCompare.message);
+                  refetch();
+                  setIsCompare(!isCompare);
                 })
-                  .then((res) => {
-                    toast.success(res.data.storeAddCompare.message);
-                    refetch();
-                    setIsCompare(!isCompare);
-                  })
-                  .catch((e) => {
-                    toast.error(e.message);
-                  });
-              }}
-            >
-              Add to Compare
-            </DropdownItem>
-            {/* <DropdownItem
-              key="buy"
-              color="primary"
-              className="text-primary"
-              description="Get product now"
-              startContent={<Icon icon="solar:bag-3-bold" fontSize={21} />}
-            >
-              Buy Now
-            </DropdownItem> */}
-          </DropdownMenu>
-        </Dropdown>
+                .catch((e) => {
+                  toast.error(e.message);
+                });
+            }}
+          >
+            <Icon icon="solar:undo-right-bold" fontSize={18} />
+          </Button>
+        )}
         <div className="flex justify-center items-center overflow-hidden ">
           <Image
             alt="products"
@@ -197,6 +158,7 @@ const ProductCard: FC<ProductCardProps> = ({
           <h2 className="text-black font-medium text-sm sm:text-sm lg:text-lg line-clamp-2">
             {title}
           </h2>
+          <Divider className="mt-2" />
           <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-9 whitespace-pre-line mt-2 sm:mt-2 lg:mt-3 fontSizeTextEditor">
             {desc ? <LexicalReader data={desc.toString()} /> : null}
           </p>
@@ -237,43 +199,45 @@ const ProductCard: FC<ProductCardProps> = ({
         </div>
 
         <div>
-          <Button
-            isIconOnly
-            variant="light"
-            radius="full"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              addWishlist({
-                variables: {
-                  wishlistType: "FAVORITE",
-                  productId: id,
-                },
-              })
-                .then((res) => {
-                  toast.success(res.data.storeAddWishlist.message);
-                  refetch();
-                  setIsFavorite(!isFavorite);
+          {user && (
+            <Button
+              isIconOnly
+              variant="light"
+              radius="full"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                addWishlist({
+                  variables: {
+                    wishlistType: "FAVORITE",
+                    productId: id,
+                  },
                 })
-                .catch((e) => {
-                  toast.error(e.message);
-                });
-            }}
-          >
-            {isFavorite ? (
-              <Icon
-                icon="solar:heart-bold"
-                fontSize={30}
-                className="text-danger"
-              />
-            ) : (
-              <Icon
-                icon="solar:heart-outline"
-                fontSize={30}
-                className="text-gray-500"
-              />
-            )}
-          </Button>
+                  .then((res) => {
+                    toast.success(res.data.storeAddWishlist.message);
+                    refetch();
+                    setIsFavorite(!isFavorite);
+                  })
+                  .catch((e) => {
+                    toast.error(e.message);
+                  });
+              }}
+            >
+              {isFavorite ? (
+                <Icon
+                  icon="solar:heart-bold"
+                  fontSize={30}
+                  className="text-danger"
+                />
+              ) : (
+                <Icon
+                  icon="solar:heart-outline"
+                  fontSize={30}
+                  className="text-gray-500"
+                />
+              )}
+            </Button>
+          )}
           {/* <Button
             isIconOnly
             variant="light"

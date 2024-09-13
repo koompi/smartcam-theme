@@ -83,6 +83,8 @@ export default function PageLocation() {
       photos: photo.length > 0 ? [photo] : null,
     };
 
+    // console.log("var", addressName);
+
     storeCreateLocation({
       variables: {
         bodyLocation: bodyLocation,
@@ -91,7 +93,9 @@ export default function PageLocation() {
     })
       .then(() => {
         toast.success("Successfully added location!");
-        router.back();
+        setTimeout(() => {
+          router.back();
+        }, 500);
       })
       .catch((err) => {
         toast.error(err.message);

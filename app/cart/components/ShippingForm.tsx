@@ -5,14 +5,14 @@ import React, { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionItem,
+  Button,
   Chip,
   Divider,
   Image,
   Link,
   RadioGroup,
+  Spinner,
 } from "@nextui-org/react";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_LOCATIONS } from "@/graphql/location";
 import { LocationType } from "@/types/location";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import CustomRadio from "./CustomRadio";
@@ -39,6 +39,7 @@ export type ShippingFormProps = React.HTMLAttributes<HTMLDivElement> & {
   setMailShippingId: Function;
   ship: number;
   shippingProvider: Shipping;
+  customerAddress: LocationType[];
 };
 
 const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
@@ -49,6 +50,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
     ship,
     shippingProvider,
     setPosition,
+    customerAddress,
   }) => {
     const deliveryRadioClasses = {
       wrapper: "group-data-[selected=true]:border-primary",
@@ -56,17 +58,15 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
       control: "bg-primary",
     };
     const [shipping, setShipping] = useState([]);
-    const { data: locations, loading: loadingAddress } =
-      useQuery(GET_ALL_LOCATIONS);
 
     useEffect(() => {
-      if (!locations) {
+      if (!customerAddress) {
         return;
       }
-      if (locations?.storeLocations.length > 0) {
-        setLocation(locations?.storeLocations[0].id);
+      if (customerAddress?.length > 0) {
+        setLocation(customerAddress[0].id);
       }
-    }, [locations, setLocation]);
+    }, [customerAddress, setLocation]);
 
     useEffect(() => {
       let config = {
@@ -86,103 +86,88 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
         });
     }, []);
 
-    if (loadingAddress) {
-      return "Loading...";
-    }
-
-    const myLocation = locations?.storeLocations?.find(
+    const myLocation = customerAddress?.find(
       (l: LocationType) => l.id == location
     );
 
     return (
       <>
         <div>
-          <h1 className="font-semibold text-xl pb-4">Delivery address</h1>
-          {locations?.storeLocations?.length > 0 ? (
-            <Accordion>
-              <AccordionItem
-                key="delivery"
-                aria-label="Theme"
-                indicator={(_: any) => (
-                  <div className="flex items-center font-semibold cursor-pointer">
-                    <Icon
-                      icon="solar:alt-arrow-right-line-duotone"
-                      style={{ color: "#000", fontSize: "24px" }}
-                    />
-                  </div>
-                )}
-                title={
-                  <div>
-                    <div className="flex items-center gap-3">
-                      {myLocation?.address?.label && (
-                        <Chip size="sm" color="primary">
-                          {myLocation?.address?.label}
-                        </Chip>
-                      )}
-                      <p>{myLocation?.address?.addressName}</p>
-                    </div>
-                  </div>
-                }
-              >
-                <div className="my-4">
-                  <RadioGroup
-                    aria-label="Select existing payment method"
-                    classNames={{ wrapper: "gap-3" }}
-                    defaultValue={location}
-                    onValueChange={(value: string) => {
-                      setLocation(value);
-                    }}
-                  >
-                    {locations?.storeLocations?.map(
-                      (location: LocationType, idx: number) => {
-                        return (
-                          <CustomRadio
-                            key={idx}
-                            classNames={deliveryRadioClasses}
-                            icon={
-                              <Image
-                                alt="delivery logo"
-                                src={
-                                  !location?.address?.photos
-                                    ? "/images/shop.png"
-                                    : location?.address?.photos[0]
-                                }
-                                radius="none"
-                                className="w-24"
-                              />
-                            }
-                            label={location?.address?.addressName}
-                            chip={myLocation?.address?.label}
-                            description={
-                              <div className="leading-snug flex items-center gap-2">
-                                <div>{myLocation?.email}</div>
-                                <div>{myLocation?.phoneNumber}</div>
-                              </div>
-                            }
-                            value={location.id}
-                          />
-                        );
-                      }
-                    )}
-                  </RadioGroup>
+          <h1 className="font-semibold text-sm sm:text-sm lg:text-xl pb-4">
+            Delivery address
+          </h1>
+          <Accordion>
+            <AccordionItem
+              key="delivery"
+              aria-label="Theme"
+              indicator={(_: any) => (
+                <div className="flex items-center font-semibold cursor-pointer">
+                  <Icon
+                    icon="solar:alt-arrow-right-line-duotone"
+                    style={{ color: "#000", fontSize: "24px" }}
+                  />
                 </div>
-              </AccordionItem>
-            </Accordion>
-          ) : (
-            <Link
-              href="/locations/create"
-              className="w-full h-28 border border-dashed rounded-xl items-center justify-center "
-              underline="hover"
+              )}
+              title={
+                <div>
+                  <div className="flex items-center gap-3">
+                    {myLocation?.address?.label && (
+                      <Chip size="sm" color="primary">
+                        {myLocation?.address?.label}
+                      </Chip>
+                    )}
+                    <p>{myLocation?.address?.addressName}</p>
+                  </div>
+                </div>
+              }
             >
-              <div className="flex gap-3">
-                <Icon icon="solar:map-point-add-linear" fontSize={24} />
-                Add Location
+              <div className="my-4">
+                <RadioGroup
+                  aria-label="Select existing payment method"
+                  classNames={{ wrapper: "gap-3" }}
+                  defaultValue={location}
+                  onValueChange={(value: string) => {
+                    setLocation(value);
+                  }}
+                >
+                  {customerAddress?.map(
+                    (location: LocationType, idx: number) => {
+                      return (
+                        <CustomRadio
+                          key={idx}
+                          classNames={deliveryRadioClasses}
+                          icon={
+                            <Image
+                              alt="delivery logo"
+                              src={
+                                !location?.address?.photos
+                                  ? "/images/shop.png"
+                                  : location?.address?.photos[0]
+                              }
+                              radius="none"
+                              className="w-24"
+                            />
+                          }
+                          label={location?.address?.addressName}
+                          chip={myLocation?.address?.label}
+                          description={
+                            <div className="leading-snug flex items-center gap-2">
+                              <div>{myLocation?.email}</div>
+                              <div>{myLocation?.phoneNumber}</div>
+                            </div>
+                          }
+                          value={location.id}
+                        />
+                      );
+                    }
+                  )}
+                </RadioGroup>
               </div>
-            </Link>
-          )}
+            </AccordionItem>
+          </Accordion>
           <Divider className="mt-4" />
           <div className="mt-6 flex space-x-4 justify-between">
-            <Accordion defaultExpandedKeys={["delivery"]}>
+            <Accordion>
               <AccordionItem
                 key="delivery"
                 aria-label="Theme"
@@ -201,7 +186,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                         return (
                           <>
                             <Image
-                              src="/images/shop.png"
+                              src="/images/smartcam-only-icon.png"
                               className="h-12"
                               alt="PERSONAL delivery"
                             />
@@ -265,12 +250,15 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                     classNames={{ wrapper: "gap-3" }}
                     onValueChange={(value: string) => {
                       setPosition({
-                        lat: myLocation.lat,
-                        lng: myLocation.lng,
+                        lat: myLocation?.lat,
+                        lng: myLocation?.lng,
                       });
                       setDelivery(value);
                     }}
-                    defaultValue={shippingProvider[0]?.deliveryType}
+                    defaultValue={
+                      shippingProvider?.length > 0 &&
+                      shippingProvider[0]?.deliveryType
+                    }
                   >
                     {shippingProvider?.map((delivery: Shipping) => {
                       return (
@@ -280,7 +268,7 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                           isRecommended
                           description={
                             <div className="space-y-0.5">
-                              <div className="font-semibold text-black text-lg">
+                              <div className="font-semibold text-black text-sm sm:text-sm lg:text-lg">
                                 {delivery?.deliveryType === "PERSONAL"
                                   ? `Shop Delivery (${delivery?.freeDelivery ? "Free delivery" : delivery?.deliveryFee})`
                                   : delivery?.deliveryType}
@@ -301,10 +289,10 @@ const ShippingForm = React.forwardRef<HTMLDivElement, ShippingFormProps>(
                                   ? "/images/logo_v1.png"
                                   : delivery?.deliveryType === "L192"
                                     ? "/images/l192.png"
-                                    : "/images/shop.png"
+                                    : "/images/smartcam-only-icon.png"
                               }
                               radius="md"
-                              className="w-36"
+                              className="w-20"
                             />
                           }
                           value={delivery?.deliveryType}
