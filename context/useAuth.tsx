@@ -21,9 +21,9 @@ export const AppProvider: FC<Props> = (props) => {
     setLoading(true);
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND}/users/me`, {
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem("access_token") || ""}`
-          }
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("access_token") || ""}`
+        }
       })
       .then((res) => {
         setUser(res.data.data);
@@ -93,7 +93,7 @@ export const AppProvider: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const logout = () => {
+  const logout = async () => {
     localStorage.removeItem("access_token");
     setUser(null);
     if (typeof window !== "undefined") {
@@ -113,7 +113,7 @@ export const AppProvider: FC<Props> = (props) => {
     setTimeout(() => {
       setLoading(false)
     }, 500)
-  }  
+  }
 
   return (
     <AuthContext.Provider

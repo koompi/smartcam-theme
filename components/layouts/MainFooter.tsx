@@ -186,7 +186,7 @@ const MainFooter = () => {
                 <li>
                   {!user && (
                     <Link
-                      href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
+                      href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store?store_id=${process.env.NEXT_PUBLIC_ID_STORE}&redirect_url=${window.location.origin}&domain=${window.location.origin}`}
                       className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                     >
                       Login
