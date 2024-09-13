@@ -1,9 +1,10 @@
 "use client";
 
-import { createContext, useContext, JSX, FC, useState, useEffect } from "react";
+import { createContext, useContext, JSX, FC, useState, useEffect, use } from "react";
 import axios from "axios";
 import { UserType } from "@/types/user";
 import { ContextAuth } from "@/types/global";
+import { useRouter } from "next/navigation";
 
 export const AuthContext = createContext({});
 
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export const AppProvider: FC<Props> = (props) => {
+  const router = useRouter();
   const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -19,7 +21,9 @@ export const AppProvider: FC<Props> = (props) => {
     setLoading(true);
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND}/users/me`, {
-        withCredentials: true,
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("access_token") || ""}`
+        }
       })
       .then((res) => {
         setUser(res.data.data);
@@ -65,6 +69,7 @@ export const AppProvider: FC<Props> = (props) => {
             }
           )
           .then((response) => {
+            localStorage.setItem("access_token", response.data.token);
             setUser(response.data.data);
             setLoading(false);
           })
@@ -88,19 +93,34 @@ export const AppProvider: FC<Props> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const logout = () => {
-    axios.post(`${process.env.NEXT_PUBLIC_BACKEND}/sso/logout`).then((_) => {
-      if (typeof window !== "undefined") {
-        global && window.location.reload();
-      }
-    });
+  const logout = async () => {
+    localStorage.removeItem("access_token");
+    setUser(null);
+    if (typeof window !== "undefined") {
+      global && window.location.reload();
+    }
   };
+
+  const login = (code: string | null, state: string | null) => {
+    setLoading(true);
+    axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/sso/customer?code=${code}&state=${state}`).then((res) => {
+      localStorage.setItem("access_token", res.data.token);
+      setUser(res.data.user);
+      router.push(res.data.redirect_url)
+    }).catch(_ => {
+      setLoading(false)
+    })
+    setTimeout(() => {
+      setLoading(false)
+    }, 500)
+  }
 
   return (
     <AuthContext.Provider
       value={{
         user: user,
         loading: loading,
+        login: login,
         logout: logout,
       }}
     >

@@ -564,7 +564,7 @@ const CheckoutComponent = () => {
                 ) : (
                   <Button
                     as={Link}
-                    href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
+                    href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store?store_id=${process.env.NEXT_PUBLIC_ID_STORE}&redirect_url=${window.location.origin}&domain=${window.location.origin}`}
                     fullWidth
                     color="primary"
                     className="mt-8 text-background"
