@@ -535,7 +535,7 @@ export const MainNavbar = () => {
                 <Button
                   as={Link}
                   color="primary"
-                  href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store`}
+                  href={`${process.env.NEXT_PUBLIC_BACKEND}/sso/store?store_id=${process.env.NEXT_PUBLIC_ID_STORE}&redirect_url=${window.location.origin}&domain=${window.location.origin}`}
                   variant="flat"
                   radius="full"
                   className="px-10 font-semibold"
