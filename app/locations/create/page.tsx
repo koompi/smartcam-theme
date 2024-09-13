@@ -83,8 +83,6 @@ export default function PageLocation() {
       photos: photo.length > 0 ? [photo] : null,
     };
 
-    // console.log("var", addressName);
-
     storeCreateLocation({
       variables: {
         bodyLocation: bodyLocation,
@@ -115,13 +113,13 @@ export default function PageLocation() {
         (error) => {
           console.error("Error retrieving location:", error);
           // Fallback: set a default position (e.g., a city center or a specific location)
-          setPosition([11.5564, 104.9282]); // Olympic coordinates as an example
+          // setPosition([11.5564, 104.9282]); // Olympic coordinates as an example
         }
       );
     } else {
       console.error("Geolocation is not supported by this browser.");
       // Fallback: set a default position
-      setPosition([11.5564, 104.9282]); // Olympic coordinates as an example
+      // setPosition([11.5564, 104.9282]); // Olympic coordinates as an example
     }
   }, []);
 
@@ -238,13 +236,26 @@ export default function PageLocation() {
                 placeholder="eg. Phnom Penh ..."
                 size="lg"
                 isRequired
-                readOnly
                 minRows={3}
                 value={addressName}
-                onClick={(e: any) => {
-                  e.preventDefault();
-                  onOpen();
+                defaultValue={addressName}
+                onChange={(e) => {
+                  setAddressName(e.target.value);
                 }}
+                endContent={
+                  <Button
+                    variant="light"
+                    color="primary"
+                    radius="lg"
+                    isIconOnly
+                    onClick={(e: any) => {
+                      e.preventDefault();
+                      onOpen();
+                    }}
+                  >
+                    <Icon icon="solar:streets-map-point-bold" fontSize={36} />
+                  </Button>
+                }
               />
             </CardBody>
             <CardFooter>
