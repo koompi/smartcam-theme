@@ -85,7 +85,7 @@ const MainFooter = () => {
                 Products
               </p>
 
-              <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 lggrid-cols-4 gap-3">
+              <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {data.storeOwnerBrands.map((b: BrandsType, idx: number) => (
                   <Link
                     href={`/products?search=&brands=${b.title ? b.title?.en : ""}`}

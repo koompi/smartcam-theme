@@ -19,6 +19,7 @@ import {
   RadioGroup,
   useDisclosure,
   Image,
+  Spinner,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -32,7 +33,7 @@ import { useQuery } from "@apollo/client";
 import { useMutation } from "@apollo/client";
 import { CHECKOUT } from "@/graphql/mutation/checkout";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { PromotionType } from "@/types/promotion";
 import { ESTIMATION_PRICE } from "@/graphql/order";
@@ -40,6 +41,8 @@ import { ProductType } from "@/types/product";
 import { ESTIMATE_PRICE, SHIPPING_LIST } from "@/graphql/delivery";
 
 import { useBaray } from "@/hooks/baray";
+import { GET_ALL_LOCATIONS } from "@/graphql/location";
+import { isMobile } from "react-device-detect";
 
 interface OrderCart {
   product: ProductType;
@@ -51,6 +54,15 @@ const CheckoutComponent = () => {
   const { user } = useAuth();
   const router = useRouter();
   const baray = useBaray();
+  const search = useSearchParams();
+
+  // Get 'query' param from URL, default to "delivery" if not set
+  const stepFromQuery = search.get("query") || "items";
+  // Define the steps as strings
+  const stepNames = ["items", "delivery", "payment"];
+
+  // Map the string-based query to the corresponding page index
+  const stepIndex = stepNames.indexOf(stepFromQuery);
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -95,6 +107,13 @@ const CheckoutComponent = () => {
     },
   });
 
+  // customer locations address
+  const {
+    data: customerAddress,
+    loading: loadingCustmerAddress,
+    refetch: customerAddressRefetch,
+  } = useQuery(GET_ALL_LOCATIONS);
+
   // checkout orders product
   const onSubmitCheckout = async () => {
     const variables = {
@@ -137,7 +156,13 @@ const CheckoutComponent = () => {
       });
   };
 
-  const [[page, direction], setPage] = React.useState([0, 0]);
+  const searchParam = useSearchParams();
+  // const [[page, direction], setPage] = React.useState([0, 0]);
+  // Initialize page state using the query param or default to the first step
+  const [[page, direction], setPage] = useState([
+    stepIndex >= 0 ? stepIndex : 0,
+    0,
+  ]);
 
   const variants = {
     enter: (direction: number) => ({
@@ -169,9 +194,30 @@ const CheckoutComponent = () => {
 
   const paginate = (newDirection: number) => {
     if (page + newDirection < 0 || page + newDirection > 2) return;
-
     setPage([page + newDirection, newDirection]);
+
+    // Update the URL's 'query' parameter based on the new page
+    const params = new URLSearchParams(window.location.search);
+    params.set("query", stepNames[page + newDirection]);
+    router.replace(`${window.location.pathname}?${params.toString()}`);
   };
+
+  // Sync the page state with the 'query' param in the URL when it changes
+  useEffect(() => {
+    if (stepIndex !== page) {
+      setPage([stepIndex >= 0 ? stepIndex : 0, 0]); // Sync state with the URL
+    }
+  }, [stepIndex]);
+
+  // refetch customer location after they created
+  useEffect(() => {
+    if (searchParam.get("query") == "delivery") {
+      console.log("df");
+
+      customerAddressRefetch();
+      return;
+    }
+  }, [searchParam]);
 
   const ctaLabel = React.useMemo(() => {
     switch (page) {
@@ -228,14 +274,15 @@ const CheckoutComponent = () => {
       case 1:
         return (
           <div className="mt-0 sm:mt-0 lg:mt-4 flex flex-col gap-6">
-            {shippingLoading ? (
-              "Loading ..."
+            {loadingCustmerAddress ? (
+              <Spinner label="Loading ..." color="primary" />
             ) : (
               <ShippingForm
                 hideTitle
-                shippingProvider={
-                  shippingProvider && shippingProvider?.storeShippings
+                customerAddress={
+                  customerAddress && customerAddress?.storeLocations
                 }
+                shippingProvider={shippingProvider?.storeShippings}
                 setDelivery={setDelivery}
                 location={location}
                 setLocation={setLocation}
@@ -307,7 +354,104 @@ const CheckoutComponent = () => {
       default:
         return null;
     }
-  }, [page, orders, delivery, location, ship, loadingOrder]);
+  }, [page, orders, delivery, location, ship, loadingOrder, customerAddress]);
+
+  // condition for checking shipping form
+  if (page === 1 && shippingProvider?.storeShippings.length <= 0) {
+    return (
+      <div className="min-h-96 w-full mx-auto py-12 px-3">
+        <div className="flex flex-col gap-3 justify-center text-center items-center">
+          <Image
+            alt="Empty Delivery"
+            src="/images/delivery-man.png"
+            className="h-60 sm:h-60 lg:h-96"
+          />
+          <p className="text-center mb-9">
+            Unfortunately, we're unable to offer delivery right now. We
+            apologize for any inconvenience.
+          </p>
+          {isMobile ? (
+            <Button
+              fullWidth
+              variant="bordered"
+              color="primary"
+              onPress={() => {
+                paginate(-1);
+              }}
+              radius="full"
+              size="lg"
+              startContent={
+                <Icon icon="solar:arrow-left-outline" fontSize={20} />
+              }
+            >
+              Go Back
+            </Button>
+          ) : (
+            <Button
+              variant="bordered"
+              color="primary"
+              onPress={() => {
+                paginate(-1);
+              }}
+              radius="full"
+              size="lg"
+              startContent={
+                <Icon icon="solar:arrow-left-outline" fontSize={20} />
+              }
+            >
+              Go Back
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  } else if (page === 1 && customerAddress?.storeLocations <= 0) {
+    return (
+      <div className="min-h-96 w-full mx-auto py-12 px-3">
+        <div className="flex flex-col gap-3 justify-center text-center items-center">
+          <Image
+            alt="Empty Delivery"
+            src="/images/no-location.png"
+            className="h-60 sm:h-60 lg:h-96"
+          />
+          <p className="text-center mb-9">
+            We can’t deliver to your location right now. Please let us know
+            where you'd like your order shipped.
+          </p>
+          {isMobile ? (
+            <Button
+              fullWidth
+              variant="bordered"
+              color="primary"
+              as={Link}
+              href="/locations/create"
+              radius="full"
+              size="lg"
+              startContent={
+                <Icon icon="solar:streets-map-point-bold" fontSize={20} />
+              }
+            >
+              Add Locations
+            </Button>
+          ) : (
+            <Button
+              variant="bordered"
+              color="primary"
+              as={Link}
+              href="/locations/create"
+              radius="full"
+              size="lg"
+              startContent={
+                <Icon icon="solar:streets-map-point-bold" fontSize={20} />
+              }
+            >
+              Add Locations
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -539,28 +683,29 @@ const CheckoutComponent = () => {
                 </div>
                 {stepsContent}
                 {user ? (
-                  <Button
-                    fullWidth
-                    color="primary"
-                    className="mt-8 text-background"
-                    size="lg"
-                    radius="full"
-                    onPress={() => {
-                      if (page === 2) {
-                        onSubmitCheckout();
-                        // onOpen();
+                  <>
+                    <Button
+                      fullWidth
+                      color="primary"
+                      className="mt-8 text-background"
+                      size="lg"
+                      radius="full"
+                      onPress={() => {
+                        if (page === 2) {
+                          onSubmitCheckout();
+                        }
+                        router.push("?query=delivery");
+                        paginate(1);
+                      }}
+                      isDisabled={
+                        orders?.estimationOrders?.length <= 0 ||
+                        (page === 1 && !(delivery && location))
                       }
-                      router.push("?query=delivery");
-                      paginate(1);
-                    }}
-                    isDisabled={
-                      orders?.estimationOrders?.length <= 0 ||
-                      (page === 1 && !(delivery && location))
-                    }
-                    isLoading={loading}
-                  >
-                    {ctaLabel}
-                  </Button>
+                      isLoading={loading}
+                    >
+                      {ctaLabel}
+                    </Button>
+                  </>
                 ) : (
                   <Button
                     as={Link}

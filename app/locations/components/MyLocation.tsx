@@ -59,7 +59,7 @@ const MyLocation: FC<LocationType> = (props) => {
           <div className="relative col-span-1">
             <Image
               alt={props?.address?.addressName}
-              className="object-cover bg-gray-200 object-center w-full min-w-36 h-full min-h-36"
+              className="bg-gray-200 object-center w-36 h-36 object-fill"
               shadow="none"
               isZoomed
               src={
@@ -77,11 +77,11 @@ const MyLocation: FC<LocationType> = (props) => {
                     {props?.address?.label}
                   </Chip>
                 )}
-                {props?.address?.addressName && (
+                {/* {props?.address?.addressName && (
                   <Chip color="primary" variant="flat" size="sm">
                     {props?.address?.label}
                   </Chip>
-                )}
+                )} */}
                 <h3 className="font-semibold mt-2 line-clamp-3">
                   {props?.address?.addressName}
                 </h3>

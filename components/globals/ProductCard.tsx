@@ -158,7 +158,7 @@ const ProductCard: FC<ProductCardProps> = ({
           <h2 className="text-black font-medium text-sm sm:text-sm lg:text-lg line-clamp-2">
             {title}
           </h2>
-          <Divider className="mt-2 " />
+          <Divider className="mt-2" />
           <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-9 whitespace-pre-line mt-2 sm:mt-2 lg:mt-3 fontSizeTextEditor">
             {desc ? <LexicalReader data={desc.toString()} /> : null}
           </p>
