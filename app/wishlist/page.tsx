@@ -15,7 +15,7 @@ const WishListPage = () => {
     },
   });
 
-  if (loading || !data) {
+  if (loading) {
     return <Loading />;
   } else if (error) {
     return <Empty />;
