@@ -72,7 +72,6 @@ export const AppProvider: FC<Props> = (props) => {
             localStorage.setItem("access_token", response.data.token);
             setUser(response.data.data);
             setLoading(false);
-            window.location.href = "/";
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
