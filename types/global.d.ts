@@ -3,6 +3,7 @@ import { UserType } from "./user";
 export type ContextAuth = {
   user: UserType;
   loading: boolean;
+  login: (c: string | null, s: string | null) => void
   logout: Function;
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { ApolloLink, HttpLink } from "@apollo/client";
+import { ApolloLink, concat, HttpLink } from "@apollo/client";
 import {
   ApolloNextAppProvider,
   NextSSRApolloClient,
@@ -17,23 +17,24 @@ const ENDPOINT =
 const GRAPHQL_ENDPOINT = `${ENDPOINT}/graphql/store?store_id=${process.env.NEXT_PUBLIC_ID_STORE ?? "65a4a66033b9eda51233220c"
   }`;
 
+  console.log("token", token);
+  
 function makeClient() {
   const httpLink = new HttpLink({
     uri: GRAPHQL_ENDPOINT,
     credentials: 'include'
   });
 
-  // const authMiddleware = new ApolloLink((operation, forward) => {
-  //   const cookie = ctx?.req?.headers?.cookie;
-  //   operation.setContext(({ headers = {} }) => ({
-  //     headers: {
-  //       ...headers,
-  //       authorization: `Bearer ${token}`,
-  //     },
-  //   }));
+  const authMiddleware = new ApolloLink((operation, forward) => {
+    operation.setContext(({ headers = {} }) => ({
+      headers: {
+        ...headers,
+        authorization: `Bearer ${token}`,
+      },
+    }));
 
-  //   return forward(operation);
-  // });
+    return forward(operation);
+  });
 
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
@@ -43,9 +44,9 @@ function makeClient() {
           new SSRMultipartLink({
             stripDefer: true,
           }),
-          httpLink,
+          concat(authMiddleware, httpLink),
         ])
-        : httpLink,
+        : concat(authMiddleware, httpLink),
   });
 }
 
