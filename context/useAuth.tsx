@@ -72,7 +72,7 @@ export const AppProvider: FC<Props> = (props) => {
             localStorage.setItem("access_token", response.data.token);
             setUser(response.data.data);
             setLoading(false);
-            window.location.reload();
+            window.location.href = "/";
           })
           .catch((error) => {
             if (axios.isAxiosError(error)) {
@@ -107,10 +107,7 @@ export const AppProvider: FC<Props> = (props) => {
     axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/sso/customer?code=${code}&state=${state}&redirect_url=${window.location.origin}`).then((res) => {
       localStorage.setItem("access_token", res.data.token);
       setUser(res.data.user);
-      router.push(res.data.redirect_url);
-      if (typeof window !== "undefined") {
-        global && window.location.reload();
-      }
+      window.location.href = res.data.redirect_url;
     }).catch(_ => {
       setLoading(false)
     })
