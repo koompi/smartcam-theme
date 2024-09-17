@@ -277,7 +277,9 @@ export const MainNavbar = () => {
                 <DropdownMenu aria-label="User Actions" variant="flat">
                   <DropdownItem key="profile" className="h-14 gap-2">
                     <p className="font-bold">Signed in as</p>
-                    <p className="font-bold">{user?.email}</p>
+                    <p className="font-bold">
+                      {user?.email ? user?.email : user?.fullname}
+                    </p>
                   </DropdownItem>
                   <DropdownItem
                     as={Link}
@@ -476,7 +478,9 @@ export const MainNavbar = () => {
                   <DropdownMenu aria-label="User Actions" variant="flat">
                     <DropdownItem key="profile" className="h-14 gap-2">
                       <p className="font-bold">Signed in as</p>
-                      <p className="font-bold">{user?.email}</p>
+                      <p className="font-bold">
+                        {user?.email ? user?.email : user?.fullname}
+                      </p>
                     </DropdownItem>
                     <DropdownItem
                       as={Link}
