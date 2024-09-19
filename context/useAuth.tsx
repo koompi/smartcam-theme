@@ -106,7 +106,7 @@ export const AppProvider: FC<Props> = (props) => {
     axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/sso/customer?code=${code}&state=${state}&redirect_url=${window.location.origin}`).then((res) => {
       localStorage.setItem("access_token", res.data.token);
       setUser(res.data.user);
-      router.push(res.data.redirect_url)
+      window.location.href = res.data.redirect_url;
     }).catch(_ => {
       setLoading(false)
     })

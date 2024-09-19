@@ -53,9 +53,9 @@ function DraggableMarker({
         const marker = markerRef.current;
         if (marker != null) {
           setPosition(marker.getLatLng());
-          map.flyTo(marker.getLatLng(), map.getZoom());
           setLatitude(marker.getLatLng().lat);
           setLongitude(marker.getLatLng().lng);
+          map.flyTo(marker.getLatLng(), map.getZoom());
         }
       },
     }),
@@ -116,8 +116,8 @@ const Map: React.FC<MapProps> = ({
   setAddress,
   setMap,
 }) => {
-  const [latitude, setLatitude] = useState<number>(11.5564);
-  const [longitude, setLongitude] = useState<number>(104.9282);
+  const [latitude, setLatitude] = useState<number>(position[0]);
+  const [longitude, setLongitude] = useState<number>(position[1]);
   const center: L.LatLngExpression = [latitude, longitude];
 
   const [listPlace, setListPlace] = useState([]);
@@ -134,7 +134,6 @@ const Map: React.FC<MapProps> = ({
     const fetchData = async () => {
       if (isFetching.current || !searchText) {
         setSearchText("");
-        setPosition([11.5564, 104.9282]);
         return;
       }
 
@@ -185,7 +184,6 @@ const Map: React.FC<MapProps> = ({
           timeout
         );
         const result = await response.json();
-
         setListPlace(result);
       } catch (err) {
         console.log("err: ", err);

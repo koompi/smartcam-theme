@@ -2,8 +2,7 @@
 
 import { Loading } from "@/components/globals/Loading";
 import { useAuth } from "@/context/useAuth";
-import axios from "axios";
-import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function AuthPage() {
@@ -16,7 +15,8 @@ export default function AuthPage() {
       login(searchParam.get("code"), searchParam.get("state"))
     }
     setIsLoading(true)
-  }, [searchParam]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (isLoading) {
     return <Loading />;
