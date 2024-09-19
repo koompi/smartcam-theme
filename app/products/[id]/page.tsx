@@ -8,7 +8,7 @@ const ProductDetail = dynamic(() => import("./component/ProductDetail"));
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   return (
-    <section className="px-0 sm:px-0 lg:px-6 mx-auto py-3 sm:py-3 lg:py-6">
+    <section className="px-0 sm:px-0 lg:px-6 mx-auto py-0">
       <ProductDetail slug={params.id} />
     </section>
   );

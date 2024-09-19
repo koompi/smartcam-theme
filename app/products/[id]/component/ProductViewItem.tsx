@@ -63,6 +63,7 @@ import { AddCart } from "@/types/global";
 import { PRODUCT_SECTION_TYPE } from "@/graphql/product";
 import { CardLoading } from "@/components/globals/Loading";
 import RelatedProducts from "./RelatedProducts";
+import { useAuth } from "@/context/useAuth";
 
 type ProductViewInfoProps = Omit<React.HTMLAttributes<HTMLDivElement>, "id"> & {
   isPopular?: boolean;
@@ -116,6 +117,7 @@ export const ProductViewItem = React.forwardRef<
     const search = searchParams.get("search") || null;
     const sortParam = searchParams.get("sort") || null;
     const brands = searchParams.get("brands") || null;
+    const { user } = useAuth();
 
     const router = useRouter();
 
@@ -251,8 +253,7 @@ export const ProductViewItem = React.forwardRef<
             {title}
           </BreadcrumbItem>
         </Breadcrumbs>
-        <Spacer y={3} />
-        <div className="flex gap-6 px-3 sm:px-3 lg:px-0">
+        <div className="flex gap-6 px-0">
           <div className="w-full sm:w-full lg:w-3/4 h-full overflow-y-scroll hide-scroll-bar">
             <div className="grid grid-cols-12 gap-3 items-center ">
               {/* ---- swiper scroll galleries ---- */}
@@ -323,7 +324,7 @@ export const ProductViewItem = React.forwardRef<
                 pagination={{
                   type: "fraction",
                 }}
-                className="col-span-12 sm:col-span-12 lg:col-span-10 bg-background flex justify-center items-center px-0 rounded-3xl border-0 sm:border-0 lg:border "
+                className="col-span-12  sm:col-span-12 lg:col-span-10 bg-white flex justify-center items-center px-0 rounded-none sm:rounded-none lg:rounded-3xl border-0 sm:border-0 lg:border "
               >
                 {previews?.map((preview, index) => (
                   <SwiperSlide key={index}>
@@ -414,7 +415,7 @@ export const ProductViewItem = React.forwardRef<
               {/* desc info for small devices */}
 
               <div className="col-span-12 flex sm:flex lg:hidden w-full">
-                <div className="bg-white rounded-3xl shadow-sm p-3">
+                <div className="bg-white rounded-none sm:rounded-none lg:rounded-3xl shadow-sm p-3 w-full">
                   <h1 className="text-xl font-bold tracking-tight">{title}</h1>
                   <Spacer y={6} />
                   <h2 className="text-4xl font-bold">
@@ -496,7 +497,7 @@ export const ProductViewItem = React.forwardRef<
                   </div>
                   <div className="divide-y divide-dashed mt-3">
                     <p className="sr-only">Product desc</p>
-                    <p className="line-clamp-9 text-medium text-gray-500 whitespace-pre-line pt-3">
+                    <p className="line-clamp-9 text-medium text-gray-500 whitespace-pre-line pt-3 px-3">
                       <LexicalReader data={desc} />
                     </p>
                   </div>
@@ -607,36 +608,38 @@ export const ProductViewItem = React.forwardRef<
                         <Icon icon="material-symbols:add" fontSize={24} />
                       </Button>
                     </div>
-                    <Button
-                      isIconOnly
-                      variant="flat"
-                      color="primary"
-                      radius="full"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        addWishlist({
-                          variables: {
-                            wishlistType: "FAVORITE",
-                            productId: props.id,
-                          },
-                        })
-                          .then((res) => {
-                            toast.success(res.data.storeAddWishlist.message);
-                            refetch();
-                            setIsFavorite(!isFavorite);
+                    {user && (
+                      <Button
+                        isIconOnly
+                        variant="flat"
+                        color="primary"
+                        radius="full"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          addWishlist({
+                            variables: {
+                              wishlistType: "FAVORITE",
+                              productId: props.id,
+                            },
                           })
-                          .catch((e) => {
-                            toast.error(e.message);
-                          });
-                      }}
-                    >
-                      {isFavorite ? (
-                        <Icon icon="solar:heart-bold" fontSize={24} />
-                      ) : (
-                        <Icon icon="solar:heart-outline" fontSize={24} />
-                      )}
-                    </Button>
+                            .then((res) => {
+                              toast.success(res.data.storeAddWishlist.message);
+                              refetch();
+                              setIsFavorite(!isFavorite);
+                            })
+                            .catch((e) => {
+                              toast.error(e.message);
+                            });
+                        }}
+                      >
+                        {isFavorite ? (
+                          <Icon icon="solar:heart-bold" fontSize={24} />
+                        ) : (
+                          <Icon icon="solar:heart-outline" fontSize={24} />
+                        )}
+                      </Button>
+                    )}
                   </div>
                   <div className="mt-6">
                     {/* <Button
@@ -652,9 +655,8 @@ export const ProductViewItem = React.forwardRef<
                     >
                       Buy Now
                     </Button> */}
-                    <div className="grid grid-cols-12 place-items-center gap-3 mt-3">
+                    <div className="flex place-items-center gap-3 mt-3">
                       <Button
-                        className="col-span-6"
                         variant="flat"
                         size="lg"
                         radius="full"
@@ -679,42 +681,46 @@ export const ProductViewItem = React.forwardRef<
                       >
                         Add to Cart
                       </Button>
-                      <Button
-                        className="col-span-6"
-                        variant={isCompare ? "flat" : "bordered"}
-                        size="lg"
-                        radius="full"
-                        color={isCompare ? "danger" : "primary"}
-                        fullWidth
-                        startContent={
-                          isCompare ? (
-                            <Icon icon="icon-park-twotone:back" fontSize={20} />
-                          ) : (
-                            <Icon icon="fluent-mdl2:compare" fontSize={20} />
-                          )
-                        }
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          addWishlistCompare({
-                            variables: {
-                              wishlistType: "COMPARE",
-                              productId: props.id,
-                              categoryId: props.category.id,
-                            },
-                          })
-                            .then((res) => {
-                              toast.success(res.data.storeAddCompare.message);
-                              refetch();
-                              setIsCompare(!isCompare);
+                      {user && (
+                        <Button
+                          variant={isCompare ? "flat" : "bordered"}
+                          size="lg"
+                          radius="full"
+                          color={isCompare ? "danger" : "primary"}
+                          fullWidth
+                          startContent={
+                            isCompare ? (
+                              <Icon
+                                icon="icon-park-twotone:back"
+                                fontSize={20}
+                              />
+                            ) : (
+                              <Icon icon="fluent-mdl2:compare" fontSize={20} />
+                            )
+                          }
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            addWishlistCompare({
+                              variables: {
+                                wishlistType: "COMPARE",
+                                productId: props.id,
+                                categoryId: props.category.id,
+                              },
                             })
-                            .catch((e) => {
-                              toast.error(e.message);
-                            });
-                        }}
-                      >
-                        {isCompare ? "Undo" : "Compare"}
-                      </Button>
+                              .then((res) => {
+                                toast.success(res.data.storeAddCompare.message);
+                                refetch();
+                                setIsCompare(!isCompare);
+                              })
+                              .catch((e) => {
+                                toast.error(e.message);
+                              });
+                          }}
+                        >
+                          {isCompare ? "Undo" : "Compare"}
+                        </Button>
+                      )}
                     </div>
                   </div>
                   {/* <div className="grid grid-cols-12 place-items-center gap-3 mt-6">
@@ -866,10 +872,10 @@ export const ProductViewItem = React.forwardRef<
                   >
                     <Tab key="description" title="Decription">
                       <Card
-                        className="rounded-xl sm:rounded-xl lg:rounded-3xl"
+                        className="rounded-none sm:rounded-none lg:rounded-3xl"
                         shadow="none"
                       >
-                        <CardBody className="px-3 sm:px-3 lg:px-6 lg:py-6">
+                        <CardBody className="p-6">
                           <LexicalReader data={detail} />
                         </CardBody>
                       </Card>
@@ -1113,36 +1119,38 @@ export const ProductViewItem = React.forwardRef<
                     <Icon icon="material-symbols:add" fontSize={24} />
                   </Button>
                 </div>
-                <Button
-                  isIconOnly
-                  variant="flat"
-                  color="primary"
-                  radius="full"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    addWishlist({
-                      variables: {
-                        wishlistType: "FAVORITE",
-                        productId: props.id,
-                      },
-                    })
-                      .then((res) => {
-                        toast.success(res.data.storeAddWishlist.message);
-                        refetch();
-                        setIsFavorite(!isFavorite);
+                {user && (
+                  <Button
+                    isIconOnly
+                    variant="flat"
+                    color="primary"
+                    radius="full"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      addWishlist({
+                        variables: {
+                          wishlistType: "FAVORITE",
+                          productId: props.id,
+                        },
                       })
-                      .catch((e) => {
-                        toast.error(e.message);
-                      });
-                  }}
-                >
-                  {isFavorite ? (
-                    <Icon icon="solar:heart-bold" fontSize={24} />
-                  ) : (
-                    <Icon icon="solar:heart-outline" fontSize={24} />
-                  )}
-                </Button>
+                        .then((res) => {
+                          toast.success(res.data.storeAddWishlist.message);
+                          refetch();
+                          setIsFavorite(!isFavorite);
+                        })
+                        .catch((e) => {
+                          toast.error(e.message);
+                        });
+                    }}
+                  >
+                    {isFavorite ? (
+                      <Icon icon="solar:heart-bold" fontSize={24} />
+                    ) : (
+                      <Icon icon="solar:heart-outline" fontSize={24} />
+                    )}
+                  </Button>
+                )}
               </div>
 
               {/* <p className="text-sm text-gray-600 mt-3">
@@ -1161,9 +1169,8 @@ export const ProductViewItem = React.forwardRef<
                 >
                   Buy Now
                 </Button> */}
-                <div className="grid grid-cols-12 place-items-center gap-3 mt-3">
+                <div className="flex place-items-center gap-3 mt-3">
                   <Button
-                    className="col-span-6"
                     variant="flat"
                     size="lg"
                     radius="full"
@@ -1188,42 +1195,43 @@ export const ProductViewItem = React.forwardRef<
                   >
                     Add to Cart
                   </Button>
-                  <Button
-                    className="col-span-6"
-                    variant={isCompare ? "flat" : "bordered"}
-                    size="lg"
-                    radius="full"
-                    color={isCompare ? "danger" : "primary"}
-                    fullWidth
-                    startContent={
-                      isCompare ? (
-                        <Icon icon="icon-park-twotone:back" fontSize={20} />
-                      ) : (
-                        <Icon icon="fluent-mdl2:compare" fontSize={20} />
-                      )
-                    }
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      addWishlistCompare({
-                        variables: {
-                          wishlistType: "COMPARE",
-                          productId: props.id,
-                          categoryId: props.category.id,
-                        },
-                      })
-                        .then((res) => {
-                          toast.success(res.data.storeAddCompare.message);
-                          refetch();
-                          setIsCompare(!isCompare);
+                  {user && (
+                    <Button
+                      variant={isCompare ? "flat" : "bordered"}
+                      size="lg"
+                      radius="full"
+                      color={isCompare ? "danger" : "primary"}
+                      fullWidth
+                      startContent={
+                        isCompare ? (
+                          <Icon icon="icon-park-twotone:back" fontSize={20} />
+                        ) : (
+                          <Icon icon="fluent-mdl2:compare" fontSize={20} />
+                        )
+                      }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        addWishlistCompare({
+                          variables: {
+                            wishlistType: "COMPARE",
+                            productId: props.id,
+                            categoryId: props.category.id,
+                          },
                         })
-                        .catch((e) => {
-                          toast.error(e.message);
-                        });
-                    }}
-                  >
-                    {isCompare ? "Undo" : "Compare"}
-                  </Button>
+                          .then((res) => {
+                            toast.success(res.data.storeAddCompare.message);
+                            refetch();
+                            setIsCompare(!isCompare);
+                          })
+                          .catch((e) => {
+                            toast.error(e.message);
+                          });
+                      }}
+                    >
+                      {isCompare ? "Undo" : "Compare"}
+                    </Button>
+                  )}
                 </div>
               </div>
               <div className="flex items-center justify-end mt-6">
