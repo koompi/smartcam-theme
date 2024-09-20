@@ -28,7 +28,6 @@ import { useAuth } from "@/context/useAuth";
 import { useCart } from "@/context/useCart";
 import Link from "next/link";
 import { Search } from "./Search";
-import { Drawer } from "vaul";
 
 export const MainNavbar = () => {
   const router = useRouter();
@@ -36,105 +35,8 @@ export const MainNavbar = () => {
   const { user, loading, logout } = useAuth();
   const { cartItems, notifications } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [open, setOpen] = useState(false);
 
   const cartIconRef = useRef<HTMLDivElement>(null);
-
-  // const [isTelegramAuth, setIsTelegramAuth] = useState<boolean>(false);
-
-  // const searchParams = useSearchParams();
-  // const code = searchParams.get("code");
-  // const state = searchParams.get("state");
-
-  // const {data, refetch} = useQuery(WISHLIST_NOTIFICATION)
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       axios
-  //         .get(
-  //           `${process.env.NEXT_PUBLIC_BACKEND}/user/sel/callback?code=${code}&scope=default&state=${state}`
-  //         )
-  //         .then((res) => {
-  //           // setCookie("token", res.data.token, { maxAge: 60 * 60 * 24 * 7 });
-  //           localStorage.setItem("access_token", res.data.token);
-  //         })
-  //         .then(() => {
-  //           // window.location.href = "/";
-  //           // router.push();
-  //           return;
-  //         })
-  //         .catch((err) => {
-  //           console.log("auth err:", err);
-  //           return;
-  //         })
-  //         .finally(() => {
-  //           setIsTelegramAuth(false);
-  //           return;
-  //         });
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   if (!user && code && state) {
-  //     fetchData();
-  //   }
-  // }, [code, state, user]);
-
-  // if (isTelegramAuth) {
-  //   return <Loading />;
-  // }
-
-  const menuItems = [
-    {
-      url: "/",
-      title: "Home",
-      icon: "solar:home-2-bold",
-    },
-    {
-      url: "/products",
-      title: "Products",
-      icon: "solar:bag-3-bold",
-    },
-    {
-      url: "/promotions",
-      title: "Special Offer",
-      icon: "solar:tag-price-bold",
-    },
-    {
-      url: "/about",
-      title: "Who We Are?",
-      icon: "solar:question-circle-bold",
-    },
-    {
-      url: "/contact",
-      title: "Contact US",
-      icon: "mingcute:contacts-3-fill",
-    },
-    // {
-    //   url: "/events",
-    //   title: "Events",
-    // },
-
-    // {
-    //   url: "/careers",
-    //   title: "Careers",
-    // },
-
-    // {
-    //   url: "#",
-    //   title: "Video Support",
-    // },
-    // {
-    //   url: "#",
-    //   title: "Sofware Support",
-    // },
-    // {
-    //   url: "#",
-    //   title: "Helps",
-    // },
-  ];
 
   return (
     <>
@@ -146,57 +48,22 @@ export const MainNavbar = () => {
           onMenuOpenChange={setIsMenuOpen}
           className="bg-background flex flex-col h-14 sm:h-auto"
         >
-          <NavbarContent className="sm:hidden" justify="start">
-            <Drawer.Root
-              dismissible={true}
-              shouldScaleBackground
-              open={open}
-              onOpenChange={setOpen}
-            >
-              <Drawer.Trigger asChild onClick={() => setOpen(!open)}>
-                <Button isIconOnly variant="light" color="primary">
-                  <Icon icon="heroicons-outline:menu-alt-2" fontSize={24} />
-                </Button>
-              </Drawer.Trigger>
-              <Drawer.Portal>
-                <Drawer.Overlay className="fixed inset-0 z-10 bg-black/40 bg-clip-padding backdrop-filter backdrop-blur-md" />
-                <Drawer.Content className="bg-white flex flex-col rounded-t-3xl h-[45dvh] mt-24 fixed z-40 bottom-0 left-0 right-0">
-                  <div className="p-4 bg-white/30 rounded-t-3xl flex-1">
-                    <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-500 mb-8" />
-                    <div className="max-w-md mx-auto px-3">
-                      {menuItems.map((item, index) => (
-                        <div
-                          key={`${item}-${index}`}
-                          onClick={() => {
-                            router.push(item.url);
-                            setOpen(!open);
-                          }}
-                        >
-                          <div className="flex items-center gap-3">
-                            <Icon
-                              icon={item.icon}
-                              className="text-primary"
-                              fontSize={27}
-                            />
-                            <p className="my-3 text-xl font-medium">
-                              {item.title}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </Drawer.Content>
-              </Drawer.Portal>
-            </Drawer.Root>
-            <Link href="/">
+          <NavbarContent className="sm:hidden flex" justify="start">
+            <NavbarBrand as={Link} href="/">
               <Image
                 alt="logo"
                 src="/images/smartcam-logo.png"
                 className="h-8 sm:h-12"
                 radius="none"
               />
-            </Link>
+              <Spacer x={1} />
+              <Image
+                alt="logo"
+                src="/images/smartcam-solutions.png"
+                className="h-8"
+                radius="none"
+              />
+            </NavbarBrand>
           </NavbarContent>
           <NavbarContent className="hidden sm:flex" justify="start">
             <NavbarBrand as={Link} href="/">

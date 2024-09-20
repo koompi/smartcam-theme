@@ -13,7 +13,7 @@ import { BarayProvider } from "@/context/baray";
 import ChatToCustomer from "@/components/globals/ChatToCustomer";
 import { Providers } from "./providers";
 
-const inter = Inter({ subsets: ["latin"] });
+// const inter = Inter({ subsets: ["latin"] });
 
 const poppins = Poppins({
   subsets: ["latin"],

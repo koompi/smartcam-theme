@@ -106,21 +106,21 @@ const MainFooter = () => {
               <ul className="mt-6 space-y-4">
                 <li>
                   <Link
-                    href="#"
+                    href="/terms"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     Terms & Conditions
                   </Link>
                 </li>
 
-                <li>
+                {/* <li>
                   <Link
                     href="#"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600 hover:underline"
                   >
                     Privacy Policy
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
             {/* Company */}
