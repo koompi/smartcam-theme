@@ -536,6 +536,10 @@ const CheckoutComponent = () => {
                     </dd>
                   </div>
 
+                  <div className="flex justify-between">
+                    <Link href="/terms">Terms & Conditions</Link>
+                  </div>
+
                   <Divider />
                   <div className="flex justify-between">
                     <dt className="text-small font-semibold text-default-500">
@@ -723,6 +727,7 @@ const CheckoutComponent = () => {
             </AnimatePresence>
           </div>
         </div>
+        {/* Right */}
         <div className="col-span-2">
           <div className="sticky top-28 hidden sm:hidden lg:block">
             <Card shadow="sm" isBlurred>
@@ -801,6 +806,9 @@ const CheckoutComponent = () => {
                     <dd className="text-small font-semibold text-default-700">
                       $0.00
                     </dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <Link href="/terms">Terms & Conditions</Link>
                   </div>
 
                   <Divider />
