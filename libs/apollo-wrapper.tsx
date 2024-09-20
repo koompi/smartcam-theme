@@ -22,7 +22,7 @@ const GRAPHQL_ENDPOINT = `${ENDPOINT}/graphql/store?store_id=${process.env.NEXT_
 function makeClient() {
   const httpLink = new HttpLink({
     uri: GRAPHQL_ENDPOINT,
-    credentials: 'include'
+    // credentials: 'include'
   });
 
   const authMiddleware = new ApolloLink((operation, forward) => {

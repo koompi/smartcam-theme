@@ -23,12 +23,12 @@ export type OrderSummaryItemProps = React.HTMLAttributes<HTMLLIElement> &
 const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
   ({ children, product, promotion, qty, className, ...props }, ref) => {
     const { addToCart, minusCart, removeFromCart } = useCart();
-      
+
     let cart: AddCart = {
       product_id: product.id,
       variant_id: null
     };
-    
+
     return (
       <li
         ref={ref}
@@ -63,7 +63,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
           </h4>
 
           <div className="mt-2 flex items-center gap-2">
-            {promotion.discount ? (
+            {promotion ? promotion.discount ? (
               <div className="space-x-2 flex items-center">
                 {/* <div className="font-bold">
                   <div className="line-through text-sm">
@@ -90,7 +90,10 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
                 {product?.price.toFixed(2)}
                 <span className="text-danger"> x {qty}</span>
               </div>
-            )}
+            ) : <div>
+              {product?.price.toFixed(2)}
+              <span className="text-danger"> x {qty}</span>
+            </div>}
           </div>
 
           <div className="flex space-x-2 mt-2">
