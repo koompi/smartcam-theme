@@ -246,10 +246,7 @@ export const Menubar = () => {
                 <div className="bg-background rounded-tl-lg rounded-bl-lg col-span-2 p-6 ">
                   <h1 className="text-xl font-semibold">Support</h1>
                   <Spacer y={2} />
-                  <Image
-                    alt="support"
-                    src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=3428&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  />
+                  <Image alt="support" src="/images/support-menu.jpg" />
                   <Link
                     href="#"
                     className="text-primary flex items-center gap-1 hover:underline absolute bottom-3"

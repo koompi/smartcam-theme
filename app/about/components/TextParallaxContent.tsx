@@ -17,7 +17,7 @@ const TextParallaxContent = ({
 }) => {
   return (
     <div className="px-0 sm:px-0 lg:px-3">
-      <div className="relative h-[150dvh]">
+      <div className="relative h-dvh">
         <StickyImage imgUrl={imgUrl} />
         <OverlayCopy heading={heading} subheading={subheading} />
       </div>

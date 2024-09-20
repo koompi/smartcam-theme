@@ -2,7 +2,11 @@
 
 import React, { MouseEvent } from "react";
 import { useAnimate } from "framer-motion";
-import { Image, Spacer } from "@nextui-org/react";
+import { Image, Spacer, Spinner } from "@nextui-org/react";
+import { BRANDS } from "@/graphql/brands";
+import { useQuery } from "@apollo/client";
+import { BrandsType } from "@/types/product";
+import Link from "next/link";
 
 export const ClientGridCard = () => {
   return (
@@ -19,23 +23,57 @@ export const ClientGridCard = () => {
 };
 
 const ClipPathLinks = () => {
+  const { data, loading } = useQuery(BRANDS);
+
+  if (loading || !data) {
+    return (
+      <div className="w-full grid place-items-center">
+        <Spinner label="Loading ..." size="lg" color="primary" />
+      </div>
+    );
+  }
+
+  // Function to divide brands into rows of increasing sizes (pyramid structure)
+  const getPyramidRows = (brands: any) => {
+    const rows = [];
+    const pattern = [3, 4, 5]; // This pattern will repeat
+
+    let index = 0;
+    let patternIndex = 0;
+
+    while (index < brands?.length) {
+      const itemsInRow = pattern[patternIndex];
+      rows.push(brands.slice(index, index + itemsInRow));
+      index += itemsInRow;
+      patternIndex = (patternIndex + 1) % pattern.length; // Cycle through the pattern
+    }
+
+    return rows;
+  };
+
+  const rows = getPyramidRows(data?.storeOwnerBrands);
+
   return (
     <div className="divide-y divide-gray-300 border border-gray-300">
-      <div className="grid grid-cols-2 divide-x divide-gray-300">
-        <LinkBox Logo="/images/brands/epson.png" />
-        <LinkBox Logo="/images/brands/canon.png" />
-      </div>
-      <div className="grid grid-cols-4 divide-x divide-gray-300">
-        <LinkBox Logo="/images/brands/microsoft.png" />
-        <LinkBox Logo="/images/brands/lenovo.png" />
-        <LinkBox Logo="/images/brands/asus.png" />
-        <LinkBox Logo="/images/brands/acer.png" />
-      </div>
-      <div className="grid grid-cols-3 divide-x divide-gray-300">
-        <LinkBox Logo="/images/brands/apple.png" />
-        <LinkBox Logo="/images/brands/hp.png" />
-        <LinkBox Logo="/images/brands/dell.png" />
-      </div>
+      {rows.map((row, rowIndex) => {
+        return (
+          <div
+            key={rowIndex}
+            className={`grid grid-cols-${row?.length} gap-4 divide-x divide-gray-300`}
+          >
+            {row.map((brand: BrandsType) => (
+              <Link
+                key={brand?.id}
+                href={`/products?brands=${brand?.title?.en}`}
+              >
+                <LinkBox
+                  Logo={`${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${brand?.logo}`}
+                />
+              </Link>
+            ))}
+          </div>
+        );
+      })}
     </div>
   );
 };

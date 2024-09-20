@@ -14,11 +14,10 @@ const token =
 const ENDPOINT =
   process.env.NEXT_PUBLIC_BACKEND ?? "${process.env.NEXT_PUBLIC_BACKEND}";
 
-const GRAPHQL_ENDPOINT = `${ENDPOINT}/graphql/store?store_id=${process.env.NEXT_PUBLIC_ID_STORE ?? "65a4a66033b9eda51233220c"
-  }`;
+const GRAPHQL_ENDPOINT = `${ENDPOINT}/graphql/store?store_id=${
+  process.env.NEXT_PUBLIC_ID_STORE ?? "65a4a66033b9eda51233220c"
+}`;
 
-  console.log("token", token);
-  
 function makeClient() {
   const httpLink = new HttpLink({
     uri: GRAPHQL_ENDPOINT,
@@ -41,11 +40,11 @@ function makeClient() {
     link:
       typeof window === "undefined"
         ? ApolloLink.from([
-          new SSRMultipartLink({
-            stripDefer: true,
-          }),
-          concat(authMiddleware, httpLink),
-        ])
+            new SSRMultipartLink({
+              stripDefer: true,
+            }),
+            concat(authMiddleware, httpLink),
+          ])
         : concat(authMiddleware, httpLink),
   });
 }

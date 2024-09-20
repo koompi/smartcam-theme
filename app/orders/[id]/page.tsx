@@ -202,8 +202,16 @@ const OrderSinglePage = () => {
                 </ModalHeader>
                 <ModalBody>
                   <p>
-                    Canceling your order will prevent it from being successful.
-                    Please double-check your order before submitting.
+                    <p>
+                      All orders placed through the website are accepted by
+                      Smartcam Electronic Solution. We accept Cash on Delivery
+                      or Bank Transfer. after received the confirmation our
+                      service team will contact to you for detail required and
+                      process your order and delivery. it take 1-2 days or
+                      faster if our delivery team available to delivery your
+                      order.
+                    </p>
+                    <Link href="/terms">Read more: Terms & Conditions</Link>
                   </p>
                 </ModalBody>
                 <ModalFooter>

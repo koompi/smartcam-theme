@@ -19,7 +19,9 @@ export function CartProvider(props: { children: JSX.Element }) {
   const [cartItems, setCartItems] = useState<CartItem[] | []>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const { data: userStore, loading: loading_store } = useQuery(GET_CUSTOMER);
-  const { data:notify, refetch: refetch_notify } = useQuery(WISHLIST_NOTIFICATION);
+  const { data: notify, refetch: refetch_notify } = useQuery(
+    WISHLIST_NOTIFICATION
+  );
 
   useEffect(() => {
     const carts = localStorage.getItem("cartItems");
