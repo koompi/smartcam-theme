@@ -1,12 +1,11 @@
 "use client";
 
 import React from "react";
-import { Button, Divider, Image, Skeleton } from "@nextui-org/react";
+import { Divider, Image, Skeleton } from "@nextui-org/react";
 import OrderSummaryItem from "./OrderSummaryItem";
 import { Toaster } from "sonner";
 import { ProductType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
-import Link from "next/link";
 
 export type OrderSummaryProps = React.HTMLAttributes<HTMLDivElement> & {
   hideTitle?: boolean;
@@ -18,6 +17,7 @@ interface Product {
   product: ProductType;
   promotion: PromotionType;
   qty: number;
+  slug: string;
 }
 
 const OrderSummary = React.forwardRef<HTMLDivElement, OrderSummaryProps>(
@@ -45,9 +45,12 @@ const OrderSummary = React.forwardRef<HTMLDivElement, OrderSummaryProps>(
               </div>
             </div>
           ) : props?.orders?.length > 0 ? (
-            props?.orders?.map((item: Product, idx: number) => (
-              <OrderSummaryItem key={idx} {...item} />
-            ))
+            props?.orders
+              ?.slice()
+              ?.reverse()
+              ?.map((item: Product, idx: number) => (
+                <OrderSummaryItem key={idx} {...item} />
+              ))
           ) : (
             <div className="flex flex-col gap-3 justify-center items-center">
               <Image

@@ -139,6 +139,7 @@ export const ESTIMATION_PRICE = gql`
         title
         price
         thumbnail
+        slug
       }
       variant {
         price
