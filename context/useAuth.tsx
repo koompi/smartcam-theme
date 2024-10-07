@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useContext, JSX, FC, useState, useEffect, use } from "react";
+import {
+  createContext,
+  useContext,
+  JSX,
+  FC,
+  useState,
+  useEffect,
+  use,
+} from "react";
 import axios from "axios";
 import { UserType } from "@/types/user";
 import { ContextAuth } from "@/types/global";
@@ -22,8 +30,8 @@ export const AppProvider: FC<Props> = (props) => {
     axios
       .get(`${process.env.NEXT_PUBLIC_BACKEND}/users/me`, {
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("access_token") || ""}`
-        }
+          Authorization: `Bearer ${localStorage.getItem("access_token") || ""}`,
+        },
       })
       .then((res) => {
         setUser(res.data.data);
@@ -103,17 +111,22 @@ export const AppProvider: FC<Props> = (props) => {
 
   const login = (code: string | null, state: string | null) => {
     setLoading(true);
-    axios.get(`${process.env.NEXT_PUBLIC_BACKEND}/sso/customer?code=${code}&state=${state}&redirect_url=${window.location.origin}`).then((res) => {
-      localStorage.setItem("access_token", res.data.token);
-      setUser(res.data.user);
-      window.location.href = res.data.redirect_url;
-    }).catch(_ => {
-      setLoading(false)
-    })
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_BACKEND}/sso/customer?code=${code}&state=${state}&redirect_url=${window.location.origin}`
+      )
+      .then((res) => {
+        localStorage.setItem("access_token", res.data.token);
+        setUser(res.data.user);
+        window.location.href = res.data.redirect_url;
+      })
+      .catch((_) => {
+        setLoading(false);
+      });
     setTimeout(() => {
-      setLoading(false)
-    }, 500)
-  }
+      setLoading(false);
+    }, 500);
+  };
 
   return (
     <AuthContext.Provider

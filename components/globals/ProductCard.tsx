@@ -159,7 +159,7 @@ const ProductCard: FC<ProductCardProps> = ({
             {title}
           </h2>
           <Divider className="mt-2" />
-          <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-9 whitespace-pre-line mt-2 sm:mt-2 lg:mt-3 fontSizeTextEditor">
+          <p className="text-gray-500 text-xs sm:text-xs lg:text-sm pl-1 line-clamp-3 sm:line-clamp-3 lg:line-clamp-9 whitespace-pre-line mt-2 sm:mt-2 lg:mt-3 fontSizeTextEditor">
             {desc ? <LexicalReader data={desc.toString()} /> : null}
           </p>
           <div className="flex items-center gap-3 mt-2 sm:mt-2 lg:mt-3">

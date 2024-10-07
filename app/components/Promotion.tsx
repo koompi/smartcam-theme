@@ -5,7 +5,7 @@ import React from "react";
 import Link from "next/link";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import ProductCardImageOnly from "@/components/globals/ProductCardImageOnly";
-import { Loading } from "@/components/globals/Loading";
+import { CardLoading } from "@/components/globals/Loading";
 import {
   PROMOTIONS_BY_SPECIAL_SAVING,
   PROMOTIONS_BY_TYPE,
@@ -39,7 +39,7 @@ export const Promotion = () => {
   );
 
   if (promotionLoading || loadingSaving) {
-    return <Loading />;
+    return <CardLoading />;
   } else if (data?.promotionSpecialOffer?.products.length <= 0) {
     return null;
   }

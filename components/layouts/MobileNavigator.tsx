@@ -123,7 +123,7 @@ const MobileNavigator = () => {
         </Drawer.Trigger> */}
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 z-10 bg-black/40 bg-clip-padding backdrop-filter backdrop-blur-md" />
-          <Drawer.Content className="bg-white flex flex-col rounded-t-3xl h-[45dvh] mt-24 fixed z-40 bottom-0 left-0 right-0">
+          <Drawer.Content className="bg-white flex flex-col rounded-t-3xl h-[60vh] mt-24 fixed z-40 bottom-0 left-0 right-0">
             <div className="p-4 bg-white/30 rounded-t-3xl flex-1">
               <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-primary-900 mb-8" />
               <div className="max-w-md mx-auto px-3">

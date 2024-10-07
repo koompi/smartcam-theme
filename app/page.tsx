@@ -10,13 +10,14 @@ import Link from "next/link";
 import { useQuery } from "@apollo/client";
 import { BRANDS } from "@/graphql/brands";
 import { BrandsType } from "@/types/product";
+import { isDesktop } from "react-device-detect";
 
 export default function Home() {
   return (
     <main className="min-h-96">
       <Banner />
       <BrandsScrolling />
-      <Promotion />
+      <>{isDesktop && <Promotion />}</>
 
       {/* most popular */}
       <SectionListProducts title="Most Popular" type="MOST POPULAR" />
