@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const CONFIRM_ORDER = gql`
-  mutation ($orderId: String!) {
-    customerConfirmOrder(orderId: $orderId)
+  mutation StoreConfirmOrder($orderId: String!) {
+    storeConfirmOrder(orderId: $orderId)
   }
 `;
 
