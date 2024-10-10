@@ -131,7 +131,7 @@ export const ProductViewItem = React.forwardRef<
     const [addWishlistCompare] = useMutation(ADD_COMPARE_WISHLIST);
     const [addWishlist] = useMutation(ADD_WISHLIST);
 
-    const { addToCart, refetch } = useCart();
+    const { addToCart, refetch, membershipId } = useCart();
 
     // related products
     const { data: relatedProducts, loading: relatedProductsLoading } = useQuery(
@@ -139,6 +139,7 @@ export const ProductViewItem = React.forwardRef<
       {
         variables: {
           statusType: "SUGGESTION",
+          membershipId: membershipId,
           category: props?.category?.id,
           filter: {
             limit: 10,

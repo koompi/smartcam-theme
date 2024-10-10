@@ -451,11 +451,13 @@ export const PRODUCT_SECTION_TYPE = gql`
     $statusType: ProductSort!
     $category: String
     $filter: OrderBy
+    $membershipId: String
   ) {
     storeSortProducts(
       statusType: $statusType
       category: $category
       filter: $filter
+      membershipId: $membershipId
     ) {
       products {
         compare

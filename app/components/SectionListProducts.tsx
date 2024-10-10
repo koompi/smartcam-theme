@@ -5,6 +5,7 @@ import React, { FC, useRef } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Button, Spacer } from "@nextui-org/react";
 import ProductCard from "@/components/globals/ProductCard";
+import { useCart } from "@/context/useCart";
 
 import { ProductType } from "@/types/product";
 import { PromotionType } from "@/types/promotion";
@@ -30,6 +31,8 @@ interface Props {
 export const dynamic = "force-dyanmic";
 
 const SectionListProducts: FC<Props> = ({ title, type }) => {
+  const { membershipId } = useCart();
+
   const { data: products, loading } = useQuery(GLOBAL_PRODUCT_FILTERING, {
     variables: {
       filter: {
@@ -46,6 +49,7 @@ const SectionListProducts: FC<Props> = ({ title, type }) => {
     {
       variables: {
         statusType: type === "MOST POPULAR" ? "BESTSELLER" : "ARRIVAL",
+        membershipId: membershipId,
         category: null,
         filter: {
           limit: 10,
