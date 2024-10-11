@@ -99,7 +99,7 @@ export const AppProvider: FC<Props> = (props) => {
       handleTelegramLogin();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   const logout = async () => {
     localStorage.removeItem("access_token");
