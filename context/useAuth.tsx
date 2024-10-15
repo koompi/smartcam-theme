@@ -113,7 +113,7 @@ export const AppProvider: FC<Props> = (props) => {
     setLoading(true);
     axios
       .get(
-        `${process.env.NEXT_PUBLIC_BACKEND}/sso/customer?code=${code}&state=${state}&redirect_url=${window.location.origin}`
+        `${process.env.NEXT_PUBLIC_BACKEND}/sso/customer?code=${code}&state=${state}&redirect_url=${window.location.origin}&store_id=${process.env.NEXT_PUBLIC_ID_STORE ?? null}`
       )
       .then((res) => {
         localStorage.setItem("access_token", res.data.token);
