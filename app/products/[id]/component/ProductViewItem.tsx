@@ -127,6 +127,7 @@ export const ProductViewItem = React.forwardRef<
     const [isFavorite, setIsFavorite] = useState(favorite);
     const [isCompare, setIsCompare] = useState(compare);
     const [qty, setQty] = useState<number>(1);
+    const [isZoomed, setIsZoomed] = useState<boolean>(false);
 
     const [addWishlistCompare] = useMutation(ADD_COMPARE_WISHLIST);
     const [addWishlist] = useMutation(ADD_WISHLIST);
@@ -151,30 +152,24 @@ export const ProductViewItem = React.forwardRef<
       }
     );
 
-    useEffect(() => {
-      const zoomButton = document.getElementById("zoom-button");
-      const handleZoom = () => {
-        if (swiperRef.current) {
-          const swiper = swiperRef.current;
-          if (swiper?.zoom.scale === 1) {
-            swiper?.zoom.in();
-          } else {
-            swiper?.zoom.out();
-          }
-        }
-      };
+    const handleZoom = () => {
+      if (swiperRef.current) {
+        const swiper = swiperRef.current;
+        const currentScale = swiper.zoom.scale ?? 1;
 
-      if (zoomButton) {
-        zoomButton.addEventListener("click", handleZoom);
+        if (currentScale < 1.1) {
+          // Zoom in and stop autoplay
+          swiper.zoom.in();
+          swiper.autoplay.stop();
+          setIsZoomed(!isZoomed);
+        } else {
+          // Zoom out and restart autoplay
+          swiper.zoom.out();
+          swiper.autoplay.start();
+          setIsZoomed(!isZoomed);
+        }
       }
-
-      // Cleanup function to remove the event listener
-      return () => {
-        if (zoomButton) {
-          zoomButton.removeEventListener("click", handleZoom);
-        }
-      };
-    }, []);
+    };
 
     const video_files = ["video/mp4", "video/mov", "video/webm"];
     const cartVariants = [
@@ -218,6 +213,44 @@ export const ProductViewItem = React.forwardRef<
 
     return (
       <main>
+        {/* nav */}
+        <div className="flex sm:flex lg:hidden items-center justify-between p-3 bg-white">
+          <Button
+            isIconOnly
+            variant="flat"
+            radius="full"
+            onPress={() => router.back()}
+          >
+            <Icon
+              icon="ic:outline-arrow-back-ios"
+              className="text-primary-900"
+              fontSize={18}
+            />
+          </Button>
+          <p>Details</p>
+          <Button
+            variant="shadow"
+            isIconOnly
+            radius="full"
+            color="primary"
+            isDisabled={stocks?.status === "OUT-STOCK"}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              addToCart(
+                {
+                  product_id: props.id,
+                  variant_id: variant.id,
+                } as AddCart,
+                qty
+              );
+              toast.success("The product is added into the cart!");
+            }}
+          >
+            <Icon icon="solar:cart-large-2-bold" fontSize={24} />
+          </Button>
+        </div>
+
         <Breadcrumbs
           size="lg"
           className="my-3 hidden sm:hidden lg:inline-flex"
@@ -331,7 +364,7 @@ export const ProductViewItem = React.forwardRef<
                   <SwiperSlide key={index}>
                     {video_files?.includes(preview?.split(".")[1]) ? (
                       <video
-                        className="h-[45dvh] sm:h-[45dvh] lg:h-[60dvh] w-full grid place-items-center mx-auto"
+                        className="h-[36dvh] sm:h-[36dvh] lg:h-[60dvh] w-full grid place-items-center mx-auto"
                         autoPlay
                         loop
                         muted
@@ -351,8 +384,8 @@ export const ProductViewItem = React.forwardRef<
                           src={`${
                             process.env.NEXT_PUBLIC_DRIVE ??
                             "https://drive.backend.riverbase.org"
-                          }/api/drive?hash=${preview}&max=true`}
-                          className="h-[45dvh] sm:h-[45dvh] lg:h-[60dvh]"
+                          }/api/drive?hash=${preview}&max=${isZoomed}`}
+                          className="h-[36dvh] sm:h-[36dvh] lg:h-[60dvh] object-contain object-center"
                         />
                       </div>
                     )}
@@ -362,6 +395,7 @@ export const ProductViewItem = React.forwardRef<
                   radius="full"
                   isIconOnly
                   id="zoom-button"
+                  onClick={() => handleZoom()}
                   variant="flat"
                   color="primary"
                   className="absolute z-50 bottom-3 right-3"

@@ -242,7 +242,7 @@ const MainFooter = () => {
           {/* <hr className="mt-16 mb-10 border-gray-200" /> */}
         </div>
       </footer>
-      <div className="bg-gradient-to-r from-primary to-primary-800 py-3">
+      <div className="bg-gradient-to-r from-primary to-primary-800 py-3 mb-16 sm:mb-16 lg:mb-0">
         <p className="text-sm text-center text-white">
           © Copyright 2024, All Rights Reserved by Smartcam Eletronics
         </p>
