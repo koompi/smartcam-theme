@@ -192,7 +192,7 @@ const WishingListCard: FC<WishListProps> = ({
           alt="products"
           src={
             thumbnail
-              ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${thumbnail}`
+              ? `${process.env.NEXT_PUBLIC_S3}/${thumbnail}`
               : "/images/default-thumbnail.png"
           }
           isZoomed

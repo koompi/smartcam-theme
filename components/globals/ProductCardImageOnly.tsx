@@ -20,7 +20,7 @@ const ProductCardImageOnly: FC<ProductCardImageOnlyType> = (props) => {
         alt={props.product?.title}
         src={
           props.product
-            ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${props.product?.thumbnail}`
+            ? `${process.env.NEXT_PUBLIC_S3}/${props.product?.thumbnail}`
             : "/images/default-thumbnail.png"
         }
         radius="none"

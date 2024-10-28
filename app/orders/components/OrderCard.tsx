@@ -212,10 +212,7 @@ const OrderCard: FC<OrdersType> = (props) => {
               <div className="flex flex-wrap items-center gap-6">
                 <Image
                   alt={props.carts[0]?.product?.title}
-                  src={`${
-                    process.env.NEXT_PUBLIC_DRIVE ??
-                    "https://drive.backend.riverbase.org"
-                  }/api/drive?hash=${props?.carts[0]?.product?.thumbnail}`}
+                  src={`${process.env.NEXT_PUBLIC_S3}/${props?.carts[0]?.product?.thumbnail}`}
                   isBlurred
                   className="border-2 h-16 w-16 sm:h-16 sm:w-16 lg:h-36 lg:w-36 object-contain object-center"
                 />
@@ -259,10 +256,7 @@ const OrderCard: FC<OrdersType> = (props) => {
                   <Image
                     key={idx}
                     alt={props.carts[0]?.product?.title}
-                    src={`${
-                      process.env.NEXT_PUBLIC_DRIVE ??
-                      "https://drive.backend.riverbase.org"
-                    }/api/drive?hash=${res?.product?.thumbnail}`}
+                    src={`${process.env.NEXT_PUBLIC_S3}/${res?.product?.thumbnail}`}
                     isBlurred
                     className="border-2 col-span-1 h-16 w-16 sm:h-16 sm:w-16 lg:h-24 lg:w-24 object-cover bg-white object-center"
                   />

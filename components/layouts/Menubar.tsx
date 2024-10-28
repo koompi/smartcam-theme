@@ -391,7 +391,7 @@ export const Menubar = () => {
                       alt={res.title.en}
                       src={
                         res.logo
-                          ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${res.logo}`
+                          ? `${process.env.NEXT_PUBLIC_S3}/${res.logo}`
                           : "/images/default-thumbnail.png"
                       }
                       className="h-9 w-9 object-contain bg-background rounded-full p-1"

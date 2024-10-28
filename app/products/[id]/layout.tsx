@@ -50,7 +50,7 @@ export async function generateMetadata(
         description: product.product.brand || "Default Description",
         images: [
           {
-            url: `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${product.product.thumbnail}`,
+            url: `${process.env.NEXT_PUBLIC_S3}/${product.product.thumbnail}`,
             width: 1200,
             height: 630,
           },

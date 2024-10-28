@@ -67,7 +67,7 @@ const ClipPathLinks = () => {
                 href={`/products?brands=${brand?.title?.en}`}
               >
                 <LinkBox
-                  Logo={`${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${brand?.logo}`}
+                  Logo={`${process.env.NEXT_PUBLIC_S3}/${brand?.logo}`}
                 />
               </Link>
             ))}
