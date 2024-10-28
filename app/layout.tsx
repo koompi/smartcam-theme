@@ -12,6 +12,8 @@ import ThemeProvider from "@/context/useTheme";
 import { BarayProvider } from "@/context/baray";
 import ChatToCustomer from "@/components/globals/ChatToCustomer";
 import { Providers } from "./providers";
+import Carts from "@/components/globals/Cart";
+import CompareBottun from "@/components/globals/CompareBottun";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -77,6 +79,8 @@ export default function RootLayout({
                   <ThemeProvider>
                     <MainNavbar />
                     {children}
+                    <CompareBottun />
+                    <Carts />
                     <ChatToCustomer />
                     <BackToTop />
                     <MainFooter />

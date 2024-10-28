@@ -49,6 +49,8 @@ const Banner = () => {
     );
   }
 
+  const reverseBanner = [...data?.bannerSpacialOffer]?.reverse();
+
   return (
     <section>
       <div className="h-[12rem] sm:h-[12rem] lg:h-[45rem] relative">
@@ -82,14 +84,14 @@ const Banner = () => {
             }
           }}
         >
-          {data?.bannerSpacialOffer.map((res: any, idx: number) => (
+          {reverseBanner?.map((res: any, idx: number) => (
             <SwiperSlide key={idx}>
               <Image
                 alt="banner"
                 radius="none"
                 src={
                   res.thumbnail
-                    ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${res.thumbnail}`
+                    ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${res.thumbnail}&max=true`
                     : "/images/banner/default-banner.jpg"
                 }
                 className="h-[12rem] sm:h-[12rem] lg:h-[45rem] object-fill object-center w-screen"
