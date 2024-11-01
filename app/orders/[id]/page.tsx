@@ -395,10 +395,7 @@ const OrderSinglePage = () => {
                           <div className="col-span-3 sm:col-span-3 lg:col-span-1">
                             <Image
                               alt={res?.product?.title}
-                              src={`${
-                                process.env.NEXT_PUBLIC_DRIVE ??
-                                "https://drive.backend.riverbase.org"
-                              }/api/drive?hash=${res?.product?.thumbnail}`}
+                              src={`${process.env.NEXT_PUBLIC_S3}/${res?.product?.thumbnail}`}
                               isBlurred
                               className=" border-2 h-16 w-16 object-contain object-center"
                             />

@@ -218,7 +218,7 @@ const ProductsComparisonTable: FC<ProductsComparisonTableProps> = (props) => {
                         alt={product.title}
                         src={
                           product?.thumbnail
-                            ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${product?.thumbnail}`
+                            ? `${process.env.NEXT_PUBLIC_S3}/${product?.thumbnail}`
                             : "/images/default-thumbnail.png"
                         }
                         className="h-30 sm:h-30 lg:h-60 mx-auto"

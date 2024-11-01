@@ -171,7 +171,7 @@ export const ProductViewItem = React.forwardRef<
       }
     };
 
-    const video_files = ["video/mp4", "video/mov", "video/webm"];
+    const video_files = ["mp4", "mov", "webm"];
     const cartVariants = [
       {
         id: null,
@@ -322,10 +322,7 @@ export const ProductViewItem = React.forwardRef<
                           <Image
                             alt="image"
                             radius="lg"
-                            src={`${
-                              process.env.NEXT_PUBLIC_DRIVE ??
-                              "https://drive.backend.riverbase.org"
-                            }/api/drive?hash=${preview}`}
+                            src={`${process.env.NEXT_PUBLIC_S3}/${preview}`}
                             className="h-full max-h-[11.5rem] relative w-[30rem] cursor-pointer object-cover object-center"
                           />
                         </div>
@@ -370,10 +367,7 @@ export const ProductViewItem = React.forwardRef<
                         muted
                       >
                         <source
-                          src={`${
-                            process.env.NEXT_PUBLIC_DRIVE ??
-                            "https://drive.backend.riverbase.org"
-                          }/api/drive?hash=${preview}&max=true`}
+                          src={`${process.env.NEXT_PUBLIC_S3}/${preview}`}
                           type="video/mp4"
                         />
                       </video>
@@ -381,10 +375,7 @@ export const ProductViewItem = React.forwardRef<
                       <div className="swiper-zoom-container grid place-items-center place-content-center h-full object-contain object-center">
                         <Image
                           alt="Product thumbnail"
-                          src={`${
-                            process.env.NEXT_PUBLIC_DRIVE ??
-                            "https://drive.backend.riverbase.org"
-                          }/api/drive?hash=${preview}&max=${isZoomed}`}
+                          src={isZoomed ? `${process.env.NEXT_PUBLIC_S3}/${preview.split(".")[0] + "_max." + preview.split(".")[1]}` : `${process.env.NEXT_PUBLIC_S3}/${preview}`}
                           className="h-[36dvh] sm:h-[36dvh] lg:h-[60dvh] object-contain object-center"
                         />
                       </div>
@@ -558,10 +549,7 @@ export const ProductViewItem = React.forwardRef<
                                   <div className="grid items-center grid-cols-5 justify-between">
                                     <Image
                                       alt="variants"
-                                      src={`${
-                                        process.env.NEXT_PUBLIC_DRIVE ??
-                                        "https://drive.backend.riverbase.org"
-                                      }/api/drive?hash=${item?.previews}`}
+                                      src={`${process.env.NEXT_PUBLIC_S3}/${item?.previews}`}
                                       className="h-12 col-span-1"
                                       radius="md"
                                     />
@@ -1071,10 +1059,7 @@ export const ProductViewItem = React.forwardRef<
                               <div className="grid items-center grid-cols-5 justify-between">
                                 <Image
                                   alt="variants"
-                                  src={`${
-                                    process.env.NEXT_PUBLIC_DRIVE ??
-                                    "https://drive.backend.riverbase.org"
-                                  }/api/drive?hash=${item?.previews}`}
+                                  src={`${process.env.NEXT_PUBLIC_S3}/${item?.previews}`}
                                   className="h-12 col-span-1"
                                   radius="md"
                                 />

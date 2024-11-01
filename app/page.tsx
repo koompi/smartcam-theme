@@ -119,7 +119,7 @@ const BrandsScrolling = () => {
               radius="none"
               src={
                 b.logo
-                  ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${b.logo}`
+                  ? `${process.env.NEXT_PUBLIC_S3}/${b.logo}`
                   : "/images/default-thumbnail.png"
               }
               className="w-full h-full "

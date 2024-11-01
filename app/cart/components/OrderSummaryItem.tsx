@@ -56,7 +56,7 @@ const OrderSummaryItem = React.forwardRef<HTMLLIElement, OrderSummaryItemProps>(
             alt={product?.title}
             src={
               product?.thumbnail
-                ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${product?.thumbnail}`
+                ? `${process.env.NEXT_PUBLIC_S3}/${product?.thumbnail}`
                 : "/images/default-thumbnail.png"
             }
             isZoomed

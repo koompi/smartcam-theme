@@ -91,7 +91,7 @@ const Banner = () => {
                 radius="none"
                 src={
                   res.thumbnail
-                    ? `${process.env.NEXT_PUBLIC_DRIVE}/api/drive?hash=${res.thumbnail}&max=true`
+                    ? `${process.env.NEXT_PUBLIC_S3}/${res.thumbnail.split(".")[0] + "_max." + res.thumbnail.split(".")[1]}`
                     : "/images/banner/default-banner.jpg"
                 }
                 className="h-[12rem] sm:h-[12rem] lg:h-[45rem] object-fill object-center w-screen"

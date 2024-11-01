@@ -47,10 +47,7 @@ const RecommendCard: FC<{ props: Props }> = ({ props }) => {
                   width="100%"
                   shadow="none"
                   isBlurred
-                  src={`${
-                    process.env.NEXT_PUBLIC_DRIVE ??
-                    "https://drive.backend.riverbase.org"
-                  }/api/drive?hash=${props.product?.thumbnail}`}
+                  src={`${process.env.NEXT_PUBLIC_S3}/${props.product?.thumbnail}`}
                 />
               </div>
 
@@ -66,11 +63,10 @@ const RecommendCard: FC<{ props: Props }> = ({ props }) => {
                     <RatingRadioGroup
                       hideStarsText
                       size="sm"
-                      value={`${
-                        props.product?.rating <= 0 || !props.product?.rating
+                      value={`${props.product?.rating <= 0 || !props.product?.rating
                           ? "4"
                           : props.product?.rating
-                      }`}
+                        }`}
                     />
                   </div>
                 </div>
