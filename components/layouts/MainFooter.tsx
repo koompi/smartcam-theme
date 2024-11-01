@@ -81,11 +81,11 @@ const MainFooter = () => {
             </div>
             {/* Products */}
             <div className="col-span-4">
-              <p className="text-md underline font-semibold tracking-widest uppercase">
+              <p className="text-md text-white bg-primary-600 py-2 px-3 rounded-sm font-semibold tracking-widest uppercase">
                 Products
               </p>
 
-              <div className="mt-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="mt-6 grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {data.storeOwnerBrands.map((b: BrandsType, idx: number) => (
                   <Link
                     href={`/products?search=&brands=${b.title ? b.title?.en : ""}`}
@@ -99,7 +99,7 @@ const MainFooter = () => {
             </div>
             {/* Terms */}
             <div className="col-span-1">
-              <p className="text-md underline font-semibold tracking-widest uppercase">
+              <p className="text-md text-white bg-primary-600 py-2 px-3 rounded-sm font-semibold tracking-widest uppercase">
                 Terms
               </p>
 
@@ -125,7 +125,7 @@ const MainFooter = () => {
             </div>
             {/* Company */}
             <div className="col-span-1">
-              <p className="text-md underline font-semibold tracking-widest uppercase">
+              <p className="text-md text-white bg-primary-600 py-2 px-3 rounded-sm font-semibold tracking-widest uppercase">
                 Company
               </p>
 
@@ -178,7 +178,7 @@ const MainFooter = () => {
             </div>
             {/* Account */}
             <div className="col-span-1">
-              <p className="text-md underline font-semibold tracking-widest uppercase">
+              <p className="text-md text-white bg-primary-600 py-2 px-3 rounded-sm font-semibold tracking-widest uppercase">
                 Account
               </p>
 
