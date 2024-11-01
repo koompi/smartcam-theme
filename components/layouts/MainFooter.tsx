@@ -33,7 +33,7 @@ const MainFooter = () => {
         <div className="px-4 mx-auto sm:px-6 lg:px-8 max-full relative">
           <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-12 gap-y-16 gap-x-3">
             {/* main */}
-            <div className="col-span-2 md:col-span-3 lg:col-span-5 lg:pr-8">
+            <div className="col-span-2 md:col-span-3 lg:col-span-3 lg:pr-8 flex flex-col items-center">
               <Image
                 alt="logo"
                 src="/images/smartcam-logo.png"
@@ -80,12 +80,12 @@ const MainFooter = () => {
               </ul>
             </div>
             {/* Products */}
-            <div className="col-span-4">
+            <div className="col-span-6">
               <p className="text-md text-white bg-primary-600 py-2 px-3 rounded-sm font-semibold tracking-widest uppercase">
                 Products
               </p>
 
-              <div className="mt-6 grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              <div className="mt-6 grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {data.storeOwnerBrands.map((b: BrandsType, idx: number) => (
                   <Link
                     href={`/products?search=&brands=${b.title ? b.title?.en : ""}`}
@@ -124,7 +124,7 @@ const MainFooter = () => {
               </ul>
             </div>
             {/* Company */}
-            <div className="col-span-1">
+            <div className="col-span-2 sm:col-span-2 lg:col-span-1">
               <p className="text-md text-white bg-primary-600 py-2 px-3 rounded-sm font-semibold tracking-widest uppercase">
                 Company
               </p>
