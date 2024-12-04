@@ -43,6 +43,7 @@ import { ESTIMATE_PRICE, SHIPPING_LIST } from "@/graphql/delivery";
 import { useBaray } from "@/hooks/baray";
 import { GET_ALL_LOCATIONS } from "@/graphql/location";
 import { isMobile } from "react-device-detect";
+import { sent_notification_telegram } from "@/api/notification";
 
 interface OrderCart {
   product: ProductType;
@@ -129,19 +130,62 @@ const CheckoutComponent = () => {
 
     setLoading(true);
 
+    // customerCheckout({ variables: variables })
+    //   .then((res) => {
+    //     if (paymentOption === "ONLINE") {
+    //       const intentId = res.data.customerCheckout["intentId"];
+    //       if (intentId) {
+    //         onOpen();
+    //         setPayLink(baray!.getPayLink(intentId));
+    //         setLoading(false);
+    //       }
+    //     } else {
+    //       toast.success(
+    //         "Congratulation! you've been order the product(s) successfully!"
+    //       );
+    //       onClose();
+    //       cleanCartItems();
+    //       setTimeout(() => {
+    //         setLoading(false);
+    //         router.push("/orders");
+    //       }, 500);
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     toast.error(e.message);
+    //     setLoading(false);
+    //   });
+
     customerCheckout({ variables: variables })
       .then((res) => {
+        let message_to_telegram = `🎉 Your order has been received!\n\nOrder Code: ${res.data.customerCheckout["order_code"]}\nQuality: ${res.data.customerCheckout["items"]}\nTotal: ${res.data.customerCheckout["total_price"]}\nPayment Method: ${res.data.customerCheckout["payment_method"]}\n\nWe will process your order soon.\nThank you for your purchase! 🚚`
         if (paymentOption === "ONLINE") {
           const intentId = res.data.customerCheckout["intentId"];
           if (intentId) {
             onOpen();
             setPayLink(baray!.getPayLink(intentId));
+            let data = {
+              "channel": "telegram",
+              "recipient": res.data.customerCheckout["chat_id"],
+              "subject": null,
+              "message": message_to_telegram,
+              "bot_name": `${process.env.BOT_NAME}`
+            };
+            sent_notification_telegram(data);
             setLoading(false);
           }
         } else {
           toast.success(
             "Congratulation! you've been order the product(s) successfully!"
           );
+          let data = {
+            "channel": "telegram",
+            "recipient": res.data.customerCheckout["chat_id"],
+            "subject": null,
+            "message": message_to_telegram,
+            "bot_name": "camprotec"
+          };
+          sent_notification_telegram(data);
           onClose();
           cleanCartItems();
           setTimeout(() => {
@@ -229,7 +273,7 @@ const CheckoutComponent = () => {
               (currentObject?.promotion?.discount
                 ? currentObject?.promotion?.discount?.totalDiscount
                 : currentObject?.product?.price) *
-                currentObject?.qty
+              currentObject?.qty
             );
           }, 0)
           .toFixed(2)})`;
@@ -473,9 +517,9 @@ const CheckoutComponent = () => {
                               accumulator +
                               (currentObject?.promotion?.discount
                                 ? currentObject?.promotion?.discount
-                                    ?.originalPrice
+                                  ?.originalPrice
                                 : currentObject?.product?.price) *
-                                currentObject?.qty
+                              currentObject?.qty
                             );
                           },
                           0
@@ -494,14 +538,14 @@ const CheckoutComponent = () => {
                               accumulator +
                               ((currentObject?.promotion?.discount
                                 ? currentObject?.promotion?.discount
-                                    ?.originalPrice
+                                  ?.originalPrice
                                 : currentObject?.product?.price) *
                                 currentObject?.qty -
                                 (currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
-                                      ?.totalDiscount
+                                    ?.totalDiscount
                                   : currentObject?.product?.price) *
-                                  currentObject?.qty)
+                                currentObject?.qty)
                             );
                           },
                           0
@@ -555,9 +599,9 @@ const CheckoutComponent = () => {
                                 accumulator +
                                 (currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
-                                      ?.totalDiscount
+                                    ?.totalDiscount
                                   : currentObject?.product?.price) *
-                                  currentObject?.qty
+                                currentObject?.qty
                               );
                             },
                             0
@@ -574,9 +618,9 @@ const CheckoutComponent = () => {
                                 accumulator +
                                 (currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
-                                      ?.totalDiscount
+                                    ?.totalDiscount
                                   : currentObject?.product?.price) *
-                                  currentObject?.qty
+                                currentObject?.qty
                               );
                             },
                             0
@@ -746,9 +790,9 @@ const CheckoutComponent = () => {
                                 accumulator +
                                 (currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
-                                      ?.originalPrice
+                                    ?.originalPrice
                                   : currentObject?.product?.price) *
-                                  currentObject?.qty
+                                currentObject?.qty
                               );
                             },
                             0
@@ -767,14 +811,14 @@ const CheckoutComponent = () => {
                                 accumulator +
                                 ((currentObject?.promotion?.discount
                                   ? currentObject?.promotion?.discount
-                                      ?.originalPrice
+                                    ?.originalPrice
                                   : currentObject?.product?.price) *
                                   currentObject?.qty -
                                   (currentObject?.promotion?.discount
                                     ? currentObject?.promotion?.discount
-                                        ?.totalDiscount
+                                      ?.totalDiscount
                                     : currentObject?.product?.price) *
-                                    currentObject?.qty)
+                                  currentObject?.qty)
                               );
                             },
                             0
@@ -830,9 +874,9 @@ const CheckoutComponent = () => {
                                   accumulator +
                                   (currentObject?.promotion?.discount
                                     ? currentObject?.promotion?.discount
-                                        ?.totalDiscount
+                                      ?.totalDiscount
                                     : currentObject?.product?.price) *
-                                    currentObject?.qty
+                                  currentObject?.qty
                                 );
                               },
                               0
@@ -852,9 +896,9 @@ const CheckoutComponent = () => {
                                   accumulator +
                                   (currentObject?.promotion?.discount
                                     ? currentObject?.promotion?.discount
-                                        ?.totalDiscount
+                                      ?.totalDiscount
                                     : currentObject?.product?.price) *
-                                    currentObject?.qty
+                                  currentObject?.qty
                                 );
                               },
                               0
