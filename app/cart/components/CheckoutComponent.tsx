@@ -169,7 +169,7 @@ const CheckoutComponent = () => {
               "recipient": res.data.customerCheckout["chat_id"],
               "subject": null,
               "message": message_to_telegram,
-              "bot_name": `${process.env.BOT_NAME}`
+              "bot_name": `${process.env.NEXT_PUBLIC_BOT_NAME}`
             };
             sent_notification_telegram(data);
             setLoading(false);
@@ -183,7 +183,7 @@ const CheckoutComponent = () => {
             "recipient": res.data.customerCheckout["chat_id"],
             "subject": null,
             "message": message_to_telegram,
-            "bot_name": "camprotec"
+            "bot_name": `${process.env.NEXT_PUBLIC_BOT_NAME}`
           };
           sent_notification_telegram(data);
           onClose();
