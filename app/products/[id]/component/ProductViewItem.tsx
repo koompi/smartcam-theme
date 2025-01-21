@@ -375,7 +375,11 @@ export const ProductViewItem = React.forwardRef<
                       <div className="swiper-zoom-container grid place-items-center place-content-center h-full object-contain object-center">
                         <Image
                           alt="Product thumbnail"
-                          src={isZoomed ? `${process.env.NEXT_PUBLIC_S3}/${preview.split(".")[0] + "_max." + preview.split(".")[1]}` : `${process.env.NEXT_PUBLIC_S3}/${preview}`}
+                          src={
+                            isZoomed
+                              ? `${process.env.NEXT_PUBLIC_S3}/${preview.split(".")[0] + "_max." + preview.split(".")[1]}`
+                              : `${process.env.NEXT_PUBLIC_S3}/${preview}`
+                          }
                           className="h-[36dvh] sm:h-[36dvh] lg:h-[60dvh] object-contain object-center"
                         />
                       </div>

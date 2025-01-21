@@ -322,87 +322,95 @@ const FiltersWrapper = React.forwardRef<HTMLDivElement, FiltersWrapperProps>(
                 <h3 className="text-lg font-semibold leading-8 text-default-600">
                   Categories
                 </h3>
-                <div className="flex flex-col gap-0 my-3">
-                  {categories
-                    ?.filter((t: Category) => t?.products > 0)
-                    ?.map((cat: Category, idx: number) => {
-                      return (
-                        <Button
-                          key={idx}
-                          variant={selectedCat === cat?.id ? "solid" : "light"}
-                          size="md"
-                          radius="lg"
-                          color={
-                            selectedCat === cat?.id ? "primary" : "default"
-                          }
-                          className="text-start w-full justify-start"
-                          onClick={() => {
-                            setSelectedCat(cat?.id);
-                            router.push(
-                              `?brands=&category=${
-                                cat?.id ? cat?.id : ""
-                              }&sort=${sortParam ? sortParam : ""}`
-                            );
+                <div className=" max-h-96 overflow-y-auto">
+                  <div className="flex flex-col gap-0 my-3">
+                    {categories
+                      ?.filter((t: Category) => t?.products > 0)
+                      ?.map((cat: Category, idx: number) => {
+                        return (
+                          <Button
+                            key={idx}
+                            variant={
+                              selectedCat === cat?.id ? "solid" : "light"
+                            }
+                            size="md"
+                            radius="lg"
+                            color={
+                              selectedCat === cat?.id ? "primary" : "default"
+                            }
+                            className="text-start w-full justify-start"
+                            onClick={() => {
+                              setSelectedCat(cat?.id);
+                              router.push(
+                                `?brands=&category=${
+                                  cat?.id ? cat?.id : ""
+                                }&sort=${sortParam ? sortParam : ""}`
+                              );
 
-                            setSubCat(cat?.children);
-                          }}
-                        >
-                          <span className="w-full flex items-center justify-between gap-3">
-                            <span className="text-medium">
-                              {cat?.title?.en}
+                              setSubCat(cat?.children);
+                            }}
+                          >
+                            <span className="w-full flex items-center justify-between gap-3">
+                              <span className="text-medium">
+                                {cat?.title?.en}
+                              </span>
+                              {cat?.products > 0 && (
+                                <div className="w-6 h-6 bg-primary-100 rounded-full text-primary flex justify-center items-center">
+                                  {cat?.products}
+                                </div>
+                              )}
                             </span>
-                            {cat?.products > 0 && (
-                              <div className="w-6 h-6 bg-primary-100 rounded-full text-primary flex justify-center items-center">
-                                {cat?.products}
-                              </div>
-                            )}
-                          </span>
-                        </Button>
-                      );
-                    })}
+                          </Button>
+                        );
+                      })}
+                  </div>
                 </div>
               </div>
               <div className="block sm:block lg:hidden">
                 <h3 className="text-lg font-semibold leading-8 text-default-600">
                   Categories
                 </h3>
-                <div className="flex flex-col gap-1 my-3">
-                  {categories
-                    ?.filter((t: Category) => t?.products > 0)
-                    ?.map((cat: Category, idx: number) => {
-                      return (
-                        <Button
-                          key={idx}
-                          variant={selectedCat === cat?.id ? "solid" : "light"}
-                          color={
-                            selectedCat === cat?.id ? "primary" : "default"
-                          }
-                          size="md"
-                          radius="lg"
-                          className="text-start w-full justify-start"
-                          onClick={() => {
-                            onOpen();
-                            router.push(
-                              `?brands=&category=${
-                                cat?.id ? cat?.id : ""
-                              }&sort=${sortParam ? sortParam : ""}`
-                            );
-                            setSubCat(cat?.children);
-                          }}
-                        >
-                          <span className="text-sm w-full flex items-center justify-between gap-3">
-                            <span className="text-medium">
-                              {cat?.title?.en}
+                <div className="max-h-[60dvh] overflow-y-auto">
+                  <div className="flex flex-col gap-1 my-3">
+                    {categories
+                      ?.filter((t: Category) => t?.products > 0)
+                      ?.map((cat: Category, idx: number) => {
+                        return (
+                          <Button
+                            key={idx}
+                            variant={
+                              selectedCat === cat?.id ? "solid" : "light"
+                            }
+                            color={
+                              selectedCat === cat?.id ? "primary" : "default"
+                            }
+                            size="md"
+                            radius="lg"
+                            className="text-start w-full justify-start"
+                            onClick={() => {
+                              onOpen();
+                              router.push(
+                                `?brands=&category=${
+                                  cat?.id ? cat?.id : ""
+                                }&sort=${sortParam ? sortParam : ""}`
+                              );
+                              setSubCat(cat?.children);
+                            }}
+                          >
+                            <span className="text-sm w-full flex items-center justify-between gap-3">
+                              <span className="text-medium">
+                                {cat?.title?.en}
+                              </span>
+                              {cat?.products > 0 && (
+                                <div className="w-6 h-6 bg-primary-100 rounded-full text-primary flex justify-center items-center">
+                                  {cat?.products}
+                                </div>
+                              )}
                             </span>
-                            {cat?.products > 0 && (
-                              <div className="w-6 h-6 bg-primary-100 rounded-full text-primary flex justify-center items-center">
-                                {cat?.products}
-                              </div>
-                            )}
-                          </span>
-                        </Button>
-                      );
-                    })}
+                          </Button>
+                        );
+                      })}
+                  </div>
                 </div>
               </div>
             </div>

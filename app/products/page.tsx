@@ -52,7 +52,9 @@ export default function ProductsPage() {
 
   const { data: categories } = useQuery(CATEGORIES, {
     variables: {
-      filter: null,
+      filter: {
+        paginate: false,
+      },
     },
   });
 
