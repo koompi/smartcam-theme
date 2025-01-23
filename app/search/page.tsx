@@ -114,6 +114,7 @@ export default function SearchPage() {
                   currencyPrice,
                   stocks,
                   category,
+                  remark,
                 } = res?.product;
 
                 return (
@@ -142,6 +143,7 @@ export default function SearchPage() {
                       slug={slug}
                       stocks={stocks}
                       currencyPrice={currencyPrice}
+                      remark={remark}
                     />
                   </div>
                 );

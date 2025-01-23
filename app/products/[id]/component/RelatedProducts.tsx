@@ -89,6 +89,7 @@ const RelatedProducts = ({
                 stocks,
                 currencyPrice,
                 category,
+                remark,
               } = res?.product;
               return (
                 <div
@@ -119,6 +120,7 @@ const RelatedProducts = ({
                     slug={slug}
                     stocks={stocks}
                     currencyPrice={currencyPrice}
+                    remark={remark}
                   />
                 </div>
               );

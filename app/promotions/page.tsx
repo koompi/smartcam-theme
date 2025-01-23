@@ -59,10 +59,12 @@ const PromotionPage = () => {
                 stocks,
                 currencyPrice,
                 category,
+                remark,
               } = res?.product;
 
               return (
                 <ProductCard
+                  remark={remark}
                   key={idx}
                   id={id}
                   favorite={res?.favorite}

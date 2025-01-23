@@ -300,6 +300,7 @@ export const PROMOTIONS_BY_TYPE = gql`
         compare
         product {
           id
+          remark
           ownerId
           title
           thumbnail
