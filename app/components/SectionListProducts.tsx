@@ -144,7 +144,9 @@ const SectionListProducts: FC<Props> = ({ title, type }) => {
                     stocks,
                     currencyPrice,
                     category,
+                    remark,
                   } = res?.product;
+
                   return (
                     <div
                       key={idx}
@@ -177,6 +179,7 @@ const SectionListProducts: FC<Props> = ({ title, type }) => {
                         slug={slug}
                         stocks={stocks}
                         currencyPrice={currencyPrice}
+                        remark={remark}
                       />
                     </div>
                   );
@@ -197,6 +200,7 @@ const SectionListProducts: FC<Props> = ({ title, type }) => {
                   stocks,
                   currencyPrice,
                   category,
+                  remark,
                 } = res?.product;
                 return (
                   <div
@@ -227,6 +231,7 @@ const SectionListProducts: FC<Props> = ({ title, type }) => {
                       slug={slug}
                       stocks={stocks}
                       currencyPrice={currencyPrice}
+                      remark={remark}
                     />
                   </div>
                 );

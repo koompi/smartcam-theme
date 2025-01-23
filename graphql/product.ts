@@ -7,6 +7,7 @@ export const GET_PRODUCT = gql`
       favorite
       product {
         id
+        remark
         ownerId
         title
         thumbnail
@@ -98,6 +99,7 @@ export const GET_ALL_PRODUCTS = gql`
       }
       products {
         product {
+          remark
           id
           ownerId
           storeId
@@ -151,6 +153,7 @@ export const PRODUCTS = gql`
   query ($keyword: String, $id: [String!], $filter: OrderBy) {
     storeFilterSearchProducts(keyword: $keyword, id: $id, filter: $filter) {
       id
+      remark
       ownerId
       storeId
       title
@@ -211,6 +214,7 @@ export const GLOBAL_PRODUCT_FILTERING = gql`
         favorite
         product {
           id
+          remark
           createdAt
           thumbnail
           title
@@ -381,6 +385,7 @@ export const PROMOTIONS_BY_SPECIAL_SAVING = gql`
           }
         }
         product {
+          remark
           id
           ownerId
           title
@@ -463,6 +468,7 @@ export const PRODUCT_SECTION_TYPE = gql`
         compare
         favorite
         product {
+          remark
           id
           createdAt
           thumbnail

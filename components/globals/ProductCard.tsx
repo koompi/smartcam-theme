@@ -45,6 +45,7 @@ interface ProductCardProps {
     khr: number;
     usd: number;
   };
+  remark: string;
 }
 
 const ProductCard: FC<ProductCardProps> = ({
@@ -59,6 +60,7 @@ const ProductCard: FC<ProductCardProps> = ({
   categoryId,
   favorite,
   compare,
+  remark,
 }) => {
   const { addToCart, refetch } = useCart();
   const { user } = useAuth();
@@ -76,19 +78,15 @@ const ProductCard: FC<ProductCardProps> = ({
       href={`/products/${slug}`}
       className="group flex flex-col flex-grow col-span-1 h-full group items-stretch"
     >
-      {promotion?.discount?.discountType && (
+      {remark && (
         <Chip
           size="sm"
           color="danger"
-          className="rounded-br-lg absolute top-0 left-0 z-10"
+          className="rounded-br-lg absolute top-0 left-0 z-20"
           radius="none"
           variant="shadow"
         >
-          OFF{" "}
-          {promotion?.discount?.discountType === "PRICE" &&
-            usd(promotion?.discount?.discountPrice)}
-          {promotion?.discount?.discountType === "PERCENTAGE" &&
-            promotion?.discount?.discountPercentage + "%"}
+          {remark}
         </Chip>
       )}
       <CardBody className="flex flex-col flex-grow">
@@ -137,21 +135,32 @@ const ProductCard: FC<ProductCardProps> = ({
           />
         </div>
         <Spacer y={2} />
-        <div className="flex items-center gap-1">
-          {Array.from({ length: 5 }, (_, i) => {
-            const isSelected = i + 1 <= 4;
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-1">
+            {Array.from({ length: 5 }, (_, i) => {
+              const isSelected = i + 1 <= 4;
 
-            return (
-              <Icon
-                key={i}
-                className={cn(
-                  "text-sm sm:text-sm lg:text-lg",
-                  isSelected ? "text-primary" : "text-gray-300"
-                )}
-                icon="solar:star-bold"
-              />
-            );
-          })}
+              return (
+                <Icon
+                  key={i}
+                  className={cn(
+                    "text-sm sm:text-sm lg:text-lg",
+                    isSelected ? "text-primary" : "text-gray-300"
+                  )}
+                  icon="solar:star-bold"
+                />
+              );
+            })}
+          </div>
+          {promotion?.discount?.discountType && (
+            <Chip size="sm" color="danger" radius="sm" variant="shadow">
+              OFF{" "}
+              {promotion?.discount?.discountType === "PRICE" &&
+                usd(promotion?.discount?.discountPrice)}
+              {promotion?.discount?.discountType === "PERCENTAGE" &&
+                promotion?.discount?.discountPercentage + "%"}
+            </Chip>
+          )}
         </div>
         <Spacer y={2} />
         <div className="flex flex-col flex-grow">

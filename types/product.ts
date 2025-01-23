@@ -49,6 +49,7 @@ export type MessageProduct = {
 
 export type ProductType = {
   id: string;
+  remark: string;
   status: boolean;
   title: string;
   thumbnail: string;

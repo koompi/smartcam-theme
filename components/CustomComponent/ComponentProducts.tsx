@@ -120,6 +120,7 @@ export default function ComponentProducts({
               stocks,
               currencyPrice,
               category,
+              remark,
             } = res?.product;
             return (
               <ProductCard
@@ -147,6 +148,7 @@ export default function ComponentProducts({
                 }}
                 stocks={stocks}
                 currencyPrice={currencyPrice}
+                remark={remark}
               />
             );
           })}
@@ -168,6 +170,7 @@ export default function ComponentProducts({
               stocks,
               currencyPrice,
               category,
+              remark,
             } = res?.product;
 
             // console.log("res", res);
@@ -198,6 +201,7 @@ export default function ComponentProducts({
                 }}
                 stocks={stocks}
                 currencyPrice={currencyPrice}
+                remark={remark}
               />
             );
           })}
@@ -219,6 +223,7 @@ export default function ComponentProducts({
               stocks,
               currencyPrice,
               category,
+              remark,
             } = res?.product;
             return (
               <ProductCard
@@ -246,6 +251,7 @@ export default function ComponentProducts({
                 }}
                 stocks={stocks}
                 currencyPrice={currencyPrice}
+                remark={remark}
               />
             );
           })}
@@ -267,6 +273,7 @@ export default function ComponentProducts({
               stocks,
               currencyPrice,
               category,
+              remark,
             } = res?.product;
             return (
               <ProductCard
@@ -294,6 +301,7 @@ export default function ComponentProducts({
                 }}
                 stocks={stocks}
                 currencyPrice={currencyPrice}
+                remark={remark}
               />
             );
           })}
@@ -314,6 +322,7 @@ export default function ComponentProducts({
               stocks,
               currencyPrice,
               category,
+              remark,
             } = res?.product;
             return (
               <ProductCard
@@ -341,6 +350,7 @@ export default function ComponentProducts({
                 }}
                 stocks={stocks}
                 currencyPrice={currencyPrice}
+                remark={remark}
               />
             );
           })}
