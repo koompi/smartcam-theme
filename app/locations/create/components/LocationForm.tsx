@@ -212,7 +212,7 @@ export const LocationForm: FC<{
             placeholder="0xxxxxxxx"
           />
         </div>
-        <div className="col-span-6 sm:col-span-6 lg:col-span-3">
+        {/* <div className="col-span-6 sm:col-span-6 lg:col-span-3">
           <Select
             {...register("countryId", {
               required: "Country is required",
@@ -243,7 +243,7 @@ export const LocationForm: FC<{
             id={watch("districtId")}
             active=""
           />
-        </div>
+        </div> */}
       </div>
     </>
   );

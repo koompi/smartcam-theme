@@ -63,10 +63,10 @@ export default function PageLocation() {
   //  onSubmit to create location
   const onSubmit = (values: FormCreateLocation) => {
     let bodyLocation = {
-      communeId: values.communeId,
       countryId: "1",
       districtId: values.districtId,
-      provinceId: values.provinceId,
+      communeId: "",
+      provinceId: "",
       phoneNumber: values.phoneNumber,
       email: values.email,
       firstName: values.firstName,
@@ -239,6 +239,7 @@ export default function PageLocation() {
                 minRows={3}
                 value={addressName}
                 defaultValue={addressName}
+                required
                 onChange={(e) => {
                   setAddressName(e.target.value);
                 }}

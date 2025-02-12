@@ -14,7 +14,6 @@ export default function ProductDetail(props: { slug: string }) {
   if (error) {
     return <div>Error</div>;
   }
-
   return (
     <>
       {loading || !data ? (
