@@ -86,7 +86,11 @@ const ProductCard: FC<ProductCardProps> = ({
           radius="none"
           variant="shadow"
         >
-          {remark}
+          {remark === "BESTSELLER"
+            ? "BEST SELLER"
+            : remark === "ARRIVAL"
+              ? "NEW ARRIVAL"
+              : remark}
         </Chip>
       )}
       <CardBody className="flex flex-col flex-grow">
