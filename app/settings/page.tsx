@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -33,17 +33,45 @@ interface FormUpdateUserProfile {
 
 export default function Component() {
   const { user } = useAuth();
-  const { register, handleSubmit, watch } = useForm<FormUpdateUserProfile>();
-  const [value, setValue] = useState<string | null>(null);
-  const [photo, setPhoto] = useState<string | null>(null);
+  const { register, handleSubmit, watch } = useForm<FormUpdateUserProfile>({
+    defaultValues: {
+      firstName: user?.first_name,
+      lastName: user?.last_name,
+      username: user?.username || user?.fullname,
+      phoneNumber: user?.phone_number,
+      email: user?.email,
+      gender: user?.gender,
+      avatar: user?.avatar,
+    },
+  });
 
-  const [updateUser, { loading }] = useMutation(UPDATE_USER);
+  const [value, setValue] = useState<string | null>(user?.gender || null);
+  const [photo, setPhoto] = useState<string | null>(user?.avatar || null);
+  const [initialUserData, setInitialUserData] =
+    useState<FormUpdateUserProfile | null>(null);
+
+  const [updateUser] = useMutation(UPDATE_USER);
+
+  // Set initial user data when the component mounts
+  useEffect(() => {
+    if (user) {
+      setInitialUserData({
+        avatar: user.avatar,
+        firstName: user.first_name,
+        lastName: user.last_name,
+        gender: user.gender,
+        phoneNumber: user.phone_number,
+        username: user.username || user.fullname,
+        email: user.email,
+      });
+    }
+  }, [user]);
 
   const onSubmit = async (data: FormUpdateUserProfile) => {
     const input = {
       ...data,
-      gender: !value ? user?.gender : value,
-      avatar: !photo ? user?.avatar : photo,
+      gender: value || user?.gender,
+      avatar: photo || user?.avatar,
     };
 
     updateUser({ variables: { input } })
@@ -55,32 +83,64 @@ export default function Component() {
       });
   };
 
-  //  function to upload img
-  async function handleChange(e: any) {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    const body = {
-      upload: e.target?.files[0],
-    };
+    if (e.target.files && e.target.files[0]) {
+      const body = {
+        upload: e.target.files[0],
+      };
 
-    axios
-      .post(
-        `${process.env.NEXT_PUBLIC_BACKEND}/api/upload/image/${user?.id}`,
-        body,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then((res: AxiosResponse<any, any>) => {
-        setPhoto(res.data.path);
-        toast.success("File has been added");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
+      axios
+        .post(
+          `${process.env.NEXT_PUBLIC_BACKEND}/api/upload/image/${user?.id}`,
+          body,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
+        .then((res: AxiosResponse<any, any>) => {
+          setPhoto(res.data.path);
+          toast.success("File has been added");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  // Check if the form has changed
+  const isFormChanged = () => {
+    const currentValues = watch();
+    if (!initialUserData) return false;
+
+    return (
+      currentValues.firstName !== initialUserData.firstName ||
+      currentValues.lastName !== initialUserData.lastName ||
+      currentValues.username !== initialUserData.username ||
+      currentValues.phoneNumber !== initialUserData.phoneNumber ||
+      currentValues.email !== initialUserData.email ||
+      value !== initialUserData.gender ||
+      photo !== initialUserData.avatar
+    );
+  };
+
+  // Check if the form is valid
+  const isFormValid = () => {
+    const currentValues = watch();
+    return (
+      currentValues.firstName &&
+      currentValues.lastName &&
+      currentValues.username &&
+      currentValues.phoneNumber &&
+      currentValues.email
+    );
+  };
+
+  // Disable the button if the form is unchanged or invalid
+  const isButtonDisabled = !isFormChanged() || !isFormValid();
 
   return (
     <>
@@ -168,7 +228,7 @@ export default function Component() {
                 label="Username"
                 labelPlacement="outside"
                 placeholder="Enter username"
-                defaultValue={user?.fullname}
+                defaultValue={user?.username ? user?.username : user?.fullname}
                 {...register("username")}
               />
 
@@ -203,22 +263,13 @@ export default function Component() {
             </CardBody>
 
             <CardFooter className="mt-4 justify-end gap-2">
-              {/* <Button radius="full" variant="bordered">
-                Cancel
-              </Button> */}
               <Button
                 color="primary"
                 type="submit"
                 radius="full"
                 fullWidth
                 className="text-background"
-                isDisabled={
-                  watch("firstName") === user?.first_name &&
-                  watch("lastName") === user?.last_name &&
-                  watch("username") === user?.fullname &&
-                  watch("phoneNumber") === user?.phone_number &&
-                  watch("email") === user?.email
-                }
+                isDisabled={isButtonDisabled}
               >
                 Save Changes
               </Button>
