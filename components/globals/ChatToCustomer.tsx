@@ -42,7 +42,7 @@ const ChatToCustomer = () => {
               <div className="text-lg font-bold">Helps</div>
               <div className="flex flex-col gap-3 mt-3">
                 <Link
-                  href="https://t.me/smartcam_printer"
+                  href="https://t.me/smartcam1234"
                   target="_blank"
                   rel="noreferer"
                   className="col-span-1 min-h-[5rem] flex items-center text-start justify-between rounded-md border-2 border-background transition-all hover:border-primary hover:bg-background p-3"
@@ -110,7 +110,7 @@ const ChatToCustomer = () => {
                 </ModalHeader>
                 <ModalBody>
                   <Link
-                    href="https://t.me/smartcam_printer"
+                    href="https://t.me/smartcam1234"
                     target="_blank"
                     rel="noreferer"
                     className="col-span-1 min-h-[6rem] flex items-center text-start justify-between rounded-md border-2 border-background transition-all hover:border-primary hover:bg-background p-3"

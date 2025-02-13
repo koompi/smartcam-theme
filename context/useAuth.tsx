@@ -105,7 +105,7 @@ export const AppProvider: FC<Props> = (props) => {
     localStorage.removeItem("access_token");
     setUser(null);
     if (typeof window !== "undefined") {
-      global && window.location.reload();
+      router.push("/");
     }
   };
 

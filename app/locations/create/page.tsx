@@ -192,7 +192,7 @@ export default function PageLocation() {
           )}
         </ModalContent>
       </Modal>
-      <div className="container max-w-4xl mx-auto px-6 w-full pt-9 pb-36">
+      <div className="container max-w-4xl mx-auto px-3 w-full pt-9 pb-36">
         <div className="mb-4">
           <Button
             className="-ml-2"

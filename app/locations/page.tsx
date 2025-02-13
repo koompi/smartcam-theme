@@ -37,7 +37,7 @@ export default function Page() {
   }
 
   return (
-    <section className="container mx-auto px-6 py-12">
+    <section className="container mx-auto px-3 py-12">
       <h1 className="text-xl font-medium">My Locations</h1>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-3 mt-3">
         {data?.storeLocations?.map((location: LocationType, idx: number) => {

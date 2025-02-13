@@ -215,7 +215,10 @@ export const MainNavbar = () => {
                     <DropdownItem
                       key="logout"
                       color="danger"
-                      onPress={() => logout()}
+                      onPress={() => {
+                        logout();
+                        router.push("/");
+                      }}
                       startContent={
                         <Icon icon="solar:logout-outline" fontSize={21} />
                       }
@@ -399,7 +402,10 @@ export const MainNavbar = () => {
                       <DropdownItem
                         key="logout"
                         color="danger"
-                        onPress={() => logout()}
+                        onPress={() => {
+                          logout();
+                          router.push("/");
+                        }}
                         startContent={
                           <Icon icon="solar:logout-outline" fontSize={21} />
                         }
@@ -606,7 +612,10 @@ export const MainNavbar = () => {
                       <DropdownItem
                         key="logout"
                         color="danger"
-                        onPress={() => logout()}
+                        onPress={() => {
+                          logout();
+                          router.push("/");
+                        }}
                         startContent={
                           <Icon icon="solar:logout-outline" fontSize={21} />
                         }
@@ -790,7 +799,10 @@ export const MainNavbar = () => {
                         <DropdownItem
                           key="logout"
                           color="danger"
-                          onPress={() => logout()}
+                          onPress={() => {
+                            logout();
+                            router.push("/");
+                          }}
                           startContent={
                             <Icon icon="solar:logout-outline" fontSize={21} />
                           }

@@ -107,14 +107,24 @@ const OrderSinglePage = () => {
       });
   };
 
+  // const isCashPaymentPending =
+  //   data?.storeOrder?.checkout?.payment === "CASH" &&
+  //   data?.storeOrder?.checkout?.orderStatus === "PENDING";
+
+  // const isOnlinePaymentPaid =
+  //   data?.storeOrder?.checkout?.payment === "ONLINE" &&
+  //   (data?.storeOrder?.checkout?.paymentStatus !== "PAID" ||
+  //     data?.storeOrder?.checkout?.paymentStatus !== "REFUNDED");
+
   const isCashPaymentPending =
     data?.storeOrder?.checkout?.payment === "CASH" &&
     data?.storeOrder?.checkout?.orderStatus === "PENDING";
 
-  const isOnlinePaymentPaid =
+  const isOnlinePaymentPending =
     data?.storeOrder?.checkout?.payment === "ONLINE" &&
-    (data?.storeOrder?.checkout?.paymentStatus !== "PAID" ||
-      data?.storeOrder?.checkout?.paymentStatus !== "REFUNDED");
+    (data?.storeOrder?.checkout?.paymentStatus === "UNPAID" ||
+      data?.storeOrder?.checkout?.paymentStatus === "FAIL") &&
+    data?.storeOrder?.checkout?.orderStatus === "PENDING";
 
   const isOnlinePaymentFailed =
     data?.storeOrder?.checkout?.payment === "ONLINE" &&
@@ -142,6 +152,8 @@ const OrderSinglePage = () => {
         <Spinner label="Loading..." />
       </section>
     );
+
+  console.log("data", data);
 
   return (
     <section className="bg-white">
@@ -251,7 +263,10 @@ const OrderSinglePage = () => {
               View your order history and check the delivery status for items.
             </p>
           </div>
-          {(isCashPaymentPending || isOnlinePaymentPaid) && (
+
+          {(isCashPaymentPending ||
+            isOnlinePaymentPending ||
+            isOnlinePaymentFailed) && (
             <Button
               size="lg"
               variant="flat"
@@ -265,7 +280,7 @@ const OrderSinglePage = () => {
               Cancel Order
             </Button>
           )}
-          {data?.storeOrder?.checkout?.orderStatus === "DELIVERY" && (
+          {/* {data?.storeOrder?.checkout?.orderStatus === "DELIVERED" && (
             <Button
               size="lg"
               variant="flat"
@@ -278,7 +293,7 @@ const OrderSinglePage = () => {
             >
               Confirm
             </Button>
-          )}
+          )} */}
         </div>
         {/*  -------- steps ---------- */}
         {data?.storeOrder?.checkout?.orderStatus !== "CANCELLED" ? (
@@ -551,7 +566,7 @@ const OrderSinglePage = () => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {(isCashPaymentPending || isOnlinePaymentPaid) && (
+          {(isCashPaymentPending || isOnlinePaymentPending) && (
             <Button
               size="lg"
               variant="bordered"
@@ -582,7 +597,7 @@ const OrderSinglePage = () => {
             </Button>
           )}
         </div>
-        {data?.storeOrder?.checkout?.orderStatus === "DELIVERY" && (
+        {data?.storeOrder?.checkout?.orderStatus === "DELIVERED" && (
           <Button
             size="lg"
             variant="flat"
