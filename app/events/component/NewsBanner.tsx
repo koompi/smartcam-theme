@@ -1,42 +1,46 @@
 "use client";
 
 import { Spacer } from "@nextui-org/react";
-import React from "react";
-import NewsCard from "./NewsCard";
+import React, { FC } from "react";
+import NewsCard, { CardItems } from "./NewsCard";
 
-const NewsBanner = () => {
+const NewsBanner: FC<CardItems> = (props) => {
+  console.log("prps", props);
+
+  const blogs = Object.values(props); // Convert object to array
+
+  if (blogs.length <= 0) return null;
+
+  const mainBlog: any = blogs[0]; // First blog post for the banner
+  const subBlogs = blogs.slice(1); // Remaining blog posts
+
   return (
     <div className="grid grid-cols-12 gap-6">
       <NewsCard
         classNames="col-span-9"
-        title="Lorem ipsum dolor sit amet consectetur. Massa consequat risus eu lobortis turpis arcu elementum. Imperdiet eget purus convallis curabitur aliquam vitae etiam lorem. Id id vehicula"
-        href={"#"}
-        imageSrc="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=3732&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        isLoading={false}
+        title={mainBlog?.title}
+        href={`/events/${mainBlog?.id}`}
+        thumbnail={mainBlog?.thumbnail}
         isBanner={true}
-        author="Smartcam"
-        createdAt="09/09/2024"
+        isLoading={false}
+        owner={mainBlog?.owner}
+        createdAt={new Date(mainBlog?.createdAt).toLocaleDateString()}
       />
-      <div className="col-span-3">
-        <NewsCard
-          title="Lorem ipsum dolor sit amet consectetur. Massa consequat risus eu lobortis turpis arcu elementum. Imperdiet eget purus convallis curabitur aliquam vitae etiam lorem. Id id vehicula"
-          href={"#"}
-          imageSrc="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          isLoading={false}
-          isBanner={false}
-          author="Smartcam"
-          createdAt="09/09/2024"
-        />
-        <Spacer y={6} />
-        <NewsCard
-          title="Lorem ipsum dolor sit amet consectetur. Massa consequat risus eu lobortis turpis arcu elementum. Imperdiet eget purus convallis curabitur aliquam vitae etiam lorem. Id id vehicula"
-          href={"#"}
-          imageSrc="https://images.unsplash.com/photo-1560523160-754a9e25c68f?q=80&w=3836&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          isLoading={false}
-          isBanner={false}
-          author="Smartcam"
-          createdAt="09/09/2024"
-        />
+      <div className="col-span-3 flex flex-col gap-6">
+        {subBlogs?.map((blog: any, idx) => {
+          return (
+            <NewsCard
+              key={idx}
+              title={blog?.title}
+              href={`/events/${blog?.id}`}
+              thumbnail={blog?.thumbnail}
+              isBanner={false}
+              isLoading={false}
+              owner={blog?.owner}
+              createdAt={new Date(blog?.createdAt).toLocaleDateString()}
+            />
+          );
+        })}
       </div>
     </div>
   );

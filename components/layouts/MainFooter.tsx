@@ -148,14 +148,14 @@ const MainFooter = () => {
                   </Link>
                 </li>
 
-                {/* <li>
+                <li>
                   <Link
-                    href="#"
+                    href="/events"
                     className="flex text-base text-black transition-all duration-200 hover:text-blue-600 focus:text-blue-600"
                   >
                     Events
                   </Link>
-                </li> */}
+                </li>
 
                 <li>
                   <Link

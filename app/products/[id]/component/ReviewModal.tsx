@@ -3,7 +3,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import {
-  Divider,
   Input,
   Modal,
   ModalBody,
@@ -57,7 +56,7 @@ const ModalReview = React.forwardRef<
             label="Comment"
             placeholder="Enter your comment"
           />
-          <Button color="primary" type="submit" radius="full">
+          <Button color="primary" type="submit" radius="full" size="lg">
             Send review
           </Button>
         </form>

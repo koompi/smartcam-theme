@@ -1,21 +1,21 @@
-import { GET_PRODUCT } from "@/graphql/product";
+import { BLOG } from "@/graphql/cms";
 import { getClient } from "@/libs/client";
 import { InMemoryCache } from "@apollo/client";
 import { ResolvingMetadata, Metadata } from "next";
 import React from "react";
 
 interface Props {
-  params: { id: string };
+  params: { eventId: string };
 }
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const id = params.id;
+  const id = params.eventId;
 
   if (!id) {
-    console.error("Product ID is undefined in route params");
+    console.error("Blog ID is undefined in route params");
     return {};
   }
 
@@ -24,33 +24,33 @@ export async function generateMetadata(
 
   try {
     const { data } = await client.query({
-      query: GET_PRODUCT,
-      variables: { slug: id },
+      query: BLOG,
+      variables: { storeBlogByIdId: id },
       fetchPolicy: "no-cache", // Ensure fresh data fetch
     });
 
-    if (!data || !data.storeProduct) {
-      console.error("Product data not found for ID:", id);
+    if (!data || !data.storeBlogById) {
+      console.error("Blog data not found for ID:", id);
       return {};
     }
 
-    const product = data.storeProduct;
+    const blog = data.storeBlogById;
 
     const previousImages = (await parent).openGraph?.images || [];
 
     return {
-      title: product.product.title || "Default Title",
-      description: product.product.brand || "Default Description",
+      title: blog.title || "Default Title",
+      description: blog?.owner?.username,
       metadataBase: new URL("https://smartcam-electronic.com.kh/"),
       openGraph: {
         title: {
-          default: product.product.title || "Default Title",
-          template: `%s - ${product.product.title || "Default Title"}`,
+          default: blog.title || "Default Title",
+          template: `%s - ${blog.title || "Default Title"}`,
         },
-        description: product.product.brand || "Default Description",
+        description: blog?.owner?.username,
         images: [
           {
-            url: `${process.env.NEXT_PUBLIC_S3}/${product.product.thumbnail}`,
+            url: `${process.env.NEXT_PUBLIC_S3}/${blog.thumbnail}`,
             width: 1200,
             height: 630,
           },
@@ -61,15 +61,15 @@ export async function generateMetadata(
       },
     };
   } catch (error) {
-    console.error("Error fetching product data:", error);
+    console.error("Error fetching blog data:", error);
     return {
       title: "Error",
-      description: "Unable to fetch product data",
+      description: "Unable to fetch blog data",
     };
   }
 }
 
-export default async function ProductDetailLayout({
+export default async function BlogDetailLayout({
   children,
 }: {
   children: React.ReactNode;

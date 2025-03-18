@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -20,6 +20,7 @@ import { UPDATE_USER } from "@/graphql/mutation/user";
 import { Toaster, toast } from "sonner";
 import { useForm } from "react-hook-form";
 import axios, { AxiosResponse } from "axios";
+import { useRouter } from "next/navigation";
 
 interface FormUpdateUserProfile {
   avatar?: string;
@@ -33,6 +34,8 @@ interface FormUpdateUserProfile {
 
 export default function Component() {
   const { user } = useAuth();
+  const router = useRouter();
+
   const { register, handleSubmit, watch } = useForm<FormUpdateUserProfile>({
     defaultValues: {
       firstName: user?.first_name,
@@ -103,7 +106,7 @@ export default function Component() {
         )
         .then((res: AxiosResponse<any, any>) => {
           setPhoto(res.data.path);
-          toast.success("File has been added");
+          console.log("File has been added");
         })
         .catch((error) => {
           console.log(error);
@@ -141,6 +144,12 @@ export default function Component() {
 
   // Disable the button if the form is unchanged or invalid
   const isButtonDisabled = !isFormChanged() || !isFormValid();
+
+  useEffect(() => {
+    if (!user) {
+      router.push("/");
+    }
+  }, [user]);
 
   return (
     <>

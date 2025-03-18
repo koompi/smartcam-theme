@@ -133,35 +133,21 @@ const SectionListProducts: FC<Props> = ({ title, type }) => {
             <div className="flex flex-nowrap gap-2">
               {productsBy?.storeSortProducts?.products?.map(
                 (res: ProductProps, idx: number) => {
-                  const {
-                    thumbnail,
-                    title,
-                    desc,
-                    rating,
-                    price,
-                    id,
-                    slug,
-                    stocks,
-                    currencyPrice,
-                    category,
-                    remark,
-                  } = res?.product;
-
                   return (
                     <div
                       key={idx}
                       className="flex-shrink-0 w-64 sm:w-64 lg:w-[21rem] h-full snap-center"
                     >
                       <ProductCard
-                        id={id}
+                        id={res?.product?.id}
                         favorite={res?.favorite}
                         compare={res?.compare}
-                        categoryId={category?.id}
-                        thumbnail={thumbnail}
+                        categoryId={res?.product?.category?.id}
+                        thumbnail={res?.product?.thumbnail}
                         title={title}
-                        desc={desc}
-                        rating={rating ? rating : 4}
-                        price={price}
+                        desc={res?.product?.desc}
+                        rating={res?.product?.rating ? res?.product?.rating : 4}
+                        price={res?.product?.price}
                         promotion={{
                           isMembership: res.promotion?.isMembership,
                           discount: {
@@ -176,10 +162,10 @@ const SectionListProducts: FC<Props> = ({ title, type }) => {
                               res.promotion?.discount?.totalDiscount,
                           },
                         }}
-                        slug={slug}
-                        stocks={stocks}
-                        currencyPrice={currencyPrice}
-                        remark={remark}
+                        slug={res?.product?.slug}
+                        stocks={res?.product?.stocks}
+                        currencyPrice={res?.product?.currencyPrice}
+                        remark={res?.product?.remark}
                       />
                     </div>
                   );

@@ -28,6 +28,7 @@ import { FINISH_PAYMENT_PROCESS } from "@/graphql/mutation/checkout";
 import { useBaray } from "@/hooks/baray";
 import { useRouter } from "next/navigation";
 import { isMobile } from "react-device-detect";
+import ModalReview from "@/app/products/[id]/component/ReviewModal";
 
 const OrderCard: FC<OrdersType> = (props) => {
   const baray = useBaray();
@@ -35,6 +36,7 @@ const OrderCard: FC<OrdersType> = (props) => {
   const [payLink, setPayLink] = useState<string>("");
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const reviewModal = useDisclosure();
 
   const [storeConfirmOrder] = useMutation(CONFIRM_ORDER);
   const [customerCheckoutPayment] = useMutation(FINISH_PAYMENT_PROCESS);
@@ -128,6 +130,11 @@ const OrderCard: FC<OrdersType> = (props) => {
           )}
         </ModalContent>
       </Modal>
+      <ModalReview
+        isOpen={reviewModal.isOpen}
+        onOpenChange={reviewModal.onOpenChange}
+        onClose={reviewModal.onClose}
+      />
       <Card
         className="w-full border-2 border-spacing-1 border-dashed bg-none"
         shadow="none"
@@ -156,6 +163,19 @@ const OrderCard: FC<OrdersType> = (props) => {
                     }}
                   >
                     Finish Payment Process
+                  </Button>
+                )}
+                {props?.checkout?.orderStatus === "CLOSED" && (
+                  <Button
+                    color="primary"
+                    variant="bordered"
+                    radius="full"
+                    startContent={
+                      <Icon icon="mdi:like" width="18" height="18" />
+                    }
+                    onPress={reviewModal.onOpen}
+                  >
+                    Review
                   </Button>
                 )}
                 <Button
@@ -188,6 +208,20 @@ const OrderCard: FC<OrdersType> = (props) => {
                     }}
                   >
                     Pay Now
+                  </Button>
+                )}
+                {props?.checkout?.orderStatus === "CLOSED" && (
+                  <Button
+                    color="primary"
+                    variant="bordered"
+                    radius="full"
+                    size="sm"
+                    startContent={
+                      <Icon icon="mdi:like" width="16" height="16" />
+                    }
+                    onPress={reviewModal.onOpen}
+                  >
+                    Review
                   </Button>
                 )}
                 <Button

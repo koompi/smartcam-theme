@@ -16,7 +16,7 @@ const RatingRadioGroup = React.forwardRef<
   HTMLDivElement,
   RatingRadioGroupProps
 >(({ className, label, hideStarsText, ...props }, ref) => {
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = React.useState("4");
   const starsText = React.useMemo(() => {
     // Special case for 5 stars
     if (value === "5") {
