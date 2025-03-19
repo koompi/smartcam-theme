@@ -84,6 +84,11 @@ const MobileNavigator = () => {
       title: "Terms & Conditions",
       icon: "lets-icons:paper-fill",
     },
+    {
+      url: "/events",
+      title: "Events",
+      icon: "bxl:blogger",
+    },
     // {
     //   url: "/events",
     //   title: "Events",

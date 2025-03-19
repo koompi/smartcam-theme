@@ -62,7 +62,7 @@ const EventsPage = () => {
     <section className="container py-6 px-3">
       <NewsBanner {...filterBlogs} />
       <Spacer y={12} />
-      <h1 className="font-bold text-2xl">All Events</h1>
+      <h1 className="font-bold text-2xl">All News</h1>
       <Spacer y={3} />
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-y-12 gap-3 sm:gap-x-3 lg:gap-6">
         {data?.storeBlogs?.blogs.map((res: CardItems, idx: number) => (
@@ -78,16 +78,18 @@ const EventsPage = () => {
           />
         ))}
       </div>
-      <div className="flex justify-center">
-        <Button
-          onPress={loadMore}
-          disabled={loading}
-          color="primary"
-          isLoading={isLoadingMore}
-        >
-          Load More
-        </Button>
-      </div>
+      {data?.storeBlogs?.total > limit && (
+        <div className="flex justify-center mt-6">
+          <Button
+            onPress={loadMore}
+            disabled={loading}
+            color="primary"
+            isLoading={isLoadingMore}
+          >
+            Load More
+          </Button>
+        </div>
+      )}
     </section>
   );
 };

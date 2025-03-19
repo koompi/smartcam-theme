@@ -45,7 +45,7 @@ const NewsCard: FC<CardItems> = ({
       {isBanner ? (
         <Image
           alt={title}
-          className="h-[60dvh] w-screen overflow-hidden object-cover object-center"
+          className="h-[26dvh] sm:h-[26dvh] lg:h-[60dvh] w-screen overflow-hidden object-cover object-center"
           isLoading={isLoading}
           isBlurred
           isZoomed
@@ -86,10 +86,10 @@ const NewsCard: FC<CardItems> = ({
         ) : (
           <>
             <div className="flex items-start justify-between">
-              <p className="text-sm text-gray-400">
-                {owner?.username ? owner?.username : owner?.first_name}
+              <p className="text-xs sm:text-xs lg:text-sm text-gray-400">
+                Author: {owner?.username ? owner?.username : owner?.first_name}
               </p>
-              <p className="text-sm text-gray-400">
+              <p className="text-xs sm:text-xs lg:text-sm text-gray-400">
                 {dayjs(createdAt?.split(" ")[0]).fromNow()}
               </p>
             </div>

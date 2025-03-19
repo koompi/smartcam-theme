@@ -1,12 +1,9 @@
 "use client";
 
-import { Spacer } from "@nextui-org/react";
 import React, { FC } from "react";
 import NewsCard, { CardItems } from "./NewsCard";
 
 const NewsBanner: FC<CardItems> = (props) => {
-  console.log("prps", props);
-
   const blogs = Object.values(props); // Convert object to array
 
   if (blogs.length <= 0) return null;
@@ -15,21 +12,22 @@ const NewsBanner: FC<CardItems> = (props) => {
   const subBlogs = blogs.slice(1); // Remaining blog posts
 
   return (
-    <div className="grid grid-cols-12 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-12 gap-y-12 gap-0 sm:gap-0 lg:gap-6">
       <NewsCard
-        classNames="col-span-9"
+        classNames="col-span-1 sm:col-span-1 lg:col-span-9"
         title={mainBlog?.title}
         href={`/events/${mainBlog?.id}`}
         thumbnail={mainBlog?.thumbnail}
         isBanner={true}
         isLoading={false}
         owner={mainBlog?.owner}
-        createdAt={new Date(mainBlog?.createdAt).toLocaleDateString()}
+        createdAt={mainBlog?.createdAt}
       />
-      <div className="col-span-3 flex flex-col gap-6">
+      <div className="col-span-3 flex flex-row sm:flex-row lg:flex-col gap-1 sm:gap-1 lg:gap-6 ">
         {subBlogs?.map((blog: any, idx) => {
           return (
             <NewsCard
+              classNames="w-1/2 sm:w-1/2 lg:w-full"
               key={idx}
               title={blog?.title}
               href={`/events/${blog?.id}`}
@@ -37,7 +35,7 @@ const NewsBanner: FC<CardItems> = (props) => {
               isBanner={false}
               isLoading={false}
               owner={blog?.owner}
-              createdAt={new Date(blog?.createdAt).toLocaleDateString()}
+              createdAt={mainBlog?.createdAt}
             />
           );
         })}

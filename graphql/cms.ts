@@ -20,6 +20,7 @@ export const BLOGS = gql`
         createdAt
         updatedAt
       }
+      total
     }
   }
 `;
